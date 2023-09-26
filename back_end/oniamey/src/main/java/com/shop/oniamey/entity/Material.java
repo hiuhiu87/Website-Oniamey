@@ -1,5 +1,6 @@
 package com.shop.oniamey.entity;
 
+import com.shop.oniamey.entity.base.AuditEntity;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Material {
+public class Material extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,13 +36,5 @@ public class Material {
 
     @Column(name = "status", nullable = false)
     private Integer status;
-
-    @Column(name = "created_date", nullable = false)
-    @CreatedDate
-    private Date createdDate;
-
-    @Column(name = "last_modified_date", nullable = false)
-    @LastModifiedDate
-    private Date lastModifiedDate;
 
 }

@@ -45,6 +45,9 @@ public class ProductDetail {
     @Column(name = "status", nullable = false)
     private Long status;
 
+    @Column(name = "quantity", nullable = false)
+    private Long quantity;
+
     @CreatedDate
     @Column(name = "create_date", nullable = false)
     private Date createDate;
@@ -52,9 +55,6 @@ public class ProductDetail {
     @LastModifiedDate
     @Column(name = "last_modified_date", nullable = false)
     private Date lastModifiedDate;
-
-//    @Column(name = "create_by", nullable = false)
-//    private
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_category", nullable = false)

@@ -1,5 +1,6 @@
 package com.shop.oniamey.entity;
 
+import com.shop.oniamey.entity.base.AuditEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +23,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDetail {
+public class CartDetail extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +37,6 @@ public class CartDetail {
 
     @Column(name = "status", nullable = false)
     private Integer status;
-
-    @CreatedDate
-    @Column(name = "create_date", nullable = false)
-    private Date createDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date", nullable = false)
-    private Date lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_product_detail", nullable = false)
