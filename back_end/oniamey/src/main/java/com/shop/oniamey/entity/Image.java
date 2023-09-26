@@ -29,7 +29,6 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_image", nullable = false)
     private Long id;
 
     @Column(name = "image_name", length = 1000, nullable = false)
@@ -46,8 +45,8 @@ public class Image {
     @Column(name = "last_modified_date", nullable = false)
     private Date lastModifiedDate;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "id_product_detail", nullable = false)
-//    private Produ;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_product_detail", nullable = false)
+    private ProductDetail productDetail;
 
 }
