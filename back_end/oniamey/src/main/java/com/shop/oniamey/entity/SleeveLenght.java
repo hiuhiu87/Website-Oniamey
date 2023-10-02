@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "color")
+@Table(name = "sleeve_lenght")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Color extends BaseModel {
+public class SleeveLenght extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,35 +1,30 @@
 package com.shop.oniamey.entity;
 
-import com.shop.oniamey.entity.base.AuditEntity;
+import com.shop.oniamey.entity.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
-
-@Entity(name = "category")
+@Entity
+@Table(name = "category")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category extends AuditEntity {
+public class Category extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_name", length = 100, nullable = false)
-    private String categoryName;
-
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @Column(name = "name")
+    private String name;
 
 }

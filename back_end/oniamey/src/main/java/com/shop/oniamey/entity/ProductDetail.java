@@ -1,8 +1,8 @@
 package com.shop.oniamey.entity;
 
+import com.shop.oniamey.entity.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,70 +13,67 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "product_detail")
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDetail {
+public class ProductDetail extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "description", nullable = false, length = 1000)
-    private String description;
-
-    @Column(name = "gender", nullable = false)
-    private Integer gender;
-
-    @Column(name = "sell_price", nullable = false)
-    private Double sellPrice;
-
-    @Column(name = "origin_price", nullable = false)
-    private Double originPrice;
-
-    @Column(name = "status", nullable = false)
-    private Long status;
-
-    @Column(name = "quantity", nullable = false)
-    private Long quantity;
-
-    @CreatedDate
-    @Column(name = "create_date", nullable = false)
-    private Date createDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date", nullable = false)
-    private Date lastModifiedDate;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_category", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_category")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_size", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_size")
     private Size size;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_product", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_product")
     private Product product;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_material", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_material")
     private Material material;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_brand", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_brand")
     private Brand brand;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_color", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_color")
     private Color color;
+
+    @ManyToOne
+    @JoinColumn(name = "id_collar")
+    private Collar collar;
+
+    @ManyToOne
+    @JoinColumn(name = "id_sleeve_lenght")
+    private SleeveLenght sleeveLenght;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "gender")
+    private Boolean gender;
+
+    @Column(name = "price")
+    private Float price;
+
+    @Column(name = "quantity")
+    private Long quantity;
+
+    @Column(name = "weight")
+    private Float weight;
+
 }
