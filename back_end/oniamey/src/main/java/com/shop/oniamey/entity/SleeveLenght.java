@@ -20,10 +20,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SleeveLenght extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "name")
     private String name;
 

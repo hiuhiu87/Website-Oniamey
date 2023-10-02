@@ -20,10 +20,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Product extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "code")
     private String code;
 

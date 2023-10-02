@@ -24,10 +24,6 @@ public class Image extends BaseModel {
 
     public static final Integer MAXIMUM_IMAGE_PER_PRODUCT = 5;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne
     @JoinColumn(name = "id_product_detail")
     private ProductDetail productDetail;

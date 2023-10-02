@@ -22,10 +22,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductDetail extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne
     @JoinColumn(name = "id_category")
     private Category category;
