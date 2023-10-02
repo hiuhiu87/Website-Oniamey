@@ -26,7 +26,7 @@ public abstract class BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_date", updatable = false)
+    @Column(name = "createdby_date", updatable = false)
     @CreatedDate
     private Date createdDate;
 
@@ -43,6 +43,6 @@ public abstract class BaseModel {
 
     @Column(name = "updated_by")
     @LastModifiedBy
-    private Long lastModifiedBy;
+    private Long updated_;
 
 }
