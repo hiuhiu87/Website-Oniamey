@@ -1,11 +1,19 @@
 package com.shop.oniamey.entity;
 
+import com.shop.oniamey.entity.base.BaseModel;
+import com.shop.oniamey.infrastructure.constant.RoleName;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "role")
@@ -13,5 +21,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Role {
+public class Role extends BaseModel {
+
+    @Column(name = "name", unique = true, nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
+
+    @OneToMany(mappedBy = "role", targetEntity = User.class)
+    private List<User> users;
+
 }

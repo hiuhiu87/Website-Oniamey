@@ -12,20 +12,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "image")
+@Table(name = "address")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image extends BaseModel {
+public class Address extends BaseModel {
 
-    public static final Integer MAXIMUM_IMAGE_PER_PRODUCT = 5;
+    @Column(name = "line", nullable = false)
+    private String line;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "province", nullable = false)
+    private String province;
+
+    @Column(name = "country", nullable = false)
+    private String country;
 
     @ManyToOne
-    @JoinColumn(name = "id_product_detail")
-    private ProductDetail productDetail;
-
-    @Column(name = "image_url")
-    private String imageUrl;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 }
