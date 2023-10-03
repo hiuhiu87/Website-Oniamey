@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class git Collar extends BaseModel {
+public class Collar extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
