@@ -2,6 +2,9 @@ package com.shop.oniamey.entity.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +22,17 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseModel {
 
-    @Column(name = "created_date", updatable = false)
-    @CreatedDate
-    private Date createdDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "last_modified_date")
+    @Column(name = "created_at", updatable = false)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(name = "updated_at")
     @LastModifiedDate
-    private Date lastModifiedDate;
+    private Date updatedAt;
 
     @Column(name = "status")
     private Integer status;
@@ -36,6 +43,6 @@ public abstract class BaseModel {
 
     @Column(name = "updated_by")
     @LastModifiedBy
-    private Long lastModifiedBy;
+    private Long updatedBy;
 
 }
