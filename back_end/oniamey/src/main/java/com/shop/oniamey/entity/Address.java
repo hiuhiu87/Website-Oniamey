@@ -20,16 +20,16 @@ import lombok.Setter;
 public class Address extends BaseModel {
 
     @Column(name = "line", nullable = false)
-    private String line;
+    private String line; // số nhà, tên đường
 
     @Column(name = "city", nullable = false)
-    private String city;
+    private String city; // thành phố
 
     @Column(name = "province", nullable = false)
-    private String province;
+    private String province; // tỉnh
 
     @Column(name = "country", nullable = false)
-    private String country;
+    private String country; // quốc gia
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

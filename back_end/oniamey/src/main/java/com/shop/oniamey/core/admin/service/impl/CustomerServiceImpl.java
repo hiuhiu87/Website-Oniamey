@@ -3,10 +3,12 @@ package com.shop.oniamey.core.admin.service.impl;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
-import com.shop.oniamey.core.admin.service.UserService;
+import com.shop.oniamey.core.admin.service.CustomerService;
+import com.shop.oniamey.entity.Customer;
 import com.shop.oniamey.entity.Role;
 import com.shop.oniamey.entity.User;
 import com.shop.oniamey.infrastructure.constant.RoleName;
+import com.shop.oniamey.repository.CustomerRepository;
 import com.shop.oniamey.repository.RoleRepository;
 import com.shop.oniamey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class CustomerServiceImpl implements CustomerService {
 
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
+
+    private CustomerRepository customerRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -33,21 +37,26 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
-    @Override
-    public List<UserResponse> getAllStaffs(Pageable pageable) {
-        return userRepository.getAllUsers(pageable);
+    @Autowired
+    public void setCustomerRepository(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
     @Override
-    public UserDetailResponse getUserById(Long id) {
-        return userRepository.getUserDetailById(id);
+    public List<UserResponse> getAllCustomers(Pageable pageable) {
+        return customerRepository.getAllUsers(pageable);
     }
 
     @Override
-    public String createStaff(ModifyUserRequest modifyUserRequest) {
+    public UserDetailResponse getCustomerById(Long id) {
+        return null;
+    }
+
+    @Override
+    public String createCustomer(ModifyUserRequest modifyUserRequest) {
         Optional<User> optionalUser = userRepository.findByEmail(modifyUserRequest.getEmail());
         Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
-        Role role = roleRepository.findByName(RoleName.ROLE_USER);
+        Role role = roleRepository.findByName(RoleName.ROLE_CUSTOMER);
 
         if (optionalUser.isPresent()) {
             return "Email is already exist";
@@ -68,14 +77,19 @@ public class UserServiceImpl implements UserService {
         user.setRole(role);
         user.setPassword(modifyUserRequest.getPassword());
         user.setStatus(modifyUserRequest.getStatus());
+        Customer customer = new Customer();
+        customer.setUser(user);
+        customer.setStatus(modifyUserRequest.getStatus());
         userRepository.save(user);
-        return "Create user success";
+        customerRepository.save(customer);
+        return "Create customer success";
     }
 
     @Override
-    public String updateStaff(Long id, ModifyUserRequest modifyUserRequest) {
+    public String updateCustomer(Long id, ModifyUserRequest modifyUserRequest) {
         Optional<User> optionalUser = userRepository.findById(id);
         Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             return "User not found";
@@ -83,6 +97,10 @@ public class UserServiceImpl implements UserService {
 
         if (optionalUserByPhoneNumber.isPresent()) {
             return "Phone number is already exist";
+        }
+
+        if (optionalCustomer.isEmpty()) {
+            return "Customer not found";
         }
 
         User user = optionalUser.get();
@@ -96,25 +114,36 @@ public class UserServiceImpl implements UserService {
         user.setPassword(modifyUserRequest.getPassword());
         user.setStatus(modifyUserRequest.getStatus());
         userRepository.save(user);
-        return "Update staff success";
+        Customer customer = optionalCustomer.get();
+        customer.setStatus(modifyUserRequest.getStatus());
+        customerRepository.save(customer);
+        return "Update customer success";
     }
 
     @Override
     public String updateStatus(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             return "User not found";
         }
 
+        if (optionalCustomer.isEmpty()) {
+            return "Customer not found";
+        }
+
         User user = optionalUser.get();
-        Integer currentStatus = user.getStatus();
-        if (currentStatus == 0) {
-            user.setStatus(1);
-        } else {
+        Customer customer = optionalCustomer.get();
+        if (user.getStatus() == 1) {
             user.setStatus(0);
+            customer.setStatus(0);
+        } else {
+            user.setStatus(1);
+            customer.setStatus(1);
         }
         userRepository.save(user);
+        customerRepository.save(customer);
         return "Update status success";
     }
 

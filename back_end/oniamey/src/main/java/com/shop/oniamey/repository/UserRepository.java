@@ -3,6 +3,7 @@ package com.shop.oniamey.repository;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
 import com.shop.oniamey.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -35,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """,
             nativeQuery = true
     )
-    List<UserResponse> getAllUsers();
+    List<UserResponse> getAllUsers(Pageable pageable);
 
     Optional<User> findByEmail(String email);
 

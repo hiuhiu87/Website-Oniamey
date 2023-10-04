@@ -27,7 +27,4 @@ public class Role extends BaseModel {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    @OneToMany(mappedBy = "role", targetEntity = User.class)
-    private List<User> users;
-
 }

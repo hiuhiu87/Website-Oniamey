@@ -19,7 +19,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequest {
+public class ModifyUserRequest {
 
     @NotEmpty(message = "Full name is required")
     private String fullName;
@@ -50,9 +50,6 @@ public class UserRequest {
 
     private String avatar;
 
-    @NotNull
-    @Min(value = 0)
-    @Max(value = 2)
-    private Integer role;
+    private Integer status;
 
 }
