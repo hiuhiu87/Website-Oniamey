@@ -1,10 +1,7 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +22,7 @@ public class OrderPaymentMethod extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "id_order")
     private Orders order;
+    @Column(name = "trading_code",nullable = false,length = 100)
+    private String tradingCode;
+
 }
