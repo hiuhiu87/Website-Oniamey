@@ -6,7 +6,6 @@ import com.shop.oniamey.core.admin.model.response.UserResponse;
 import com.shop.oniamey.core.admin.service.UserService;
 import com.shop.oniamey.entity.Role;
 import com.shop.oniamey.entity.User;
-import com.shop.oniamey.infrastructure.constant.RoleName;
 import com.shop.oniamey.repository.RoleRepository;
 import com.shop.oniamey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,74 +44,89 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String createStaff(ModifyUserRequest modifyUserRequest) {
-        Optional<User> optionalUser = userRepository.findByEmail(modifyUserRequest.getEmail());
-        Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
-        Role role = roleRepository.findByName(RoleName.ROLE_USER);
+        Optional<User> checkUser = userRepository.findByEmail(modifyUserRequest.getEmail());
+        Optional<Role> role = roleRepository.findById(modifyUserRequest.getRoleId());
 
-        if (optionalUser.isPresent()) {
-            return "Email is already exist";
+        if (checkUser.isPresent()) {
+            return "Email already exists";
         }
 
-        if (optionalUserByPhoneNumber.isPresent()) {
-            return "Phone number is already exist";
+        if (modifyUserRequest.getPhoneNumber() != null) {
+            checkUser = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
+            if (checkUser.isPresent()) {
+                return "Phone number already exists";
+            }
+        }
+
+        if (!role.isPresent()) {
+            return "Role not found";
         }
 
         User user = new User();
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
-        user.setAddress(modifyUserRequest.getAddress());
-        user.setAvatar(modifyUserRequest.getAvatar());
-        user.setBirthDate(modifyUserRequest.getBirthDate());
-        user.setGender(modifyUserRequest.getGender());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
-        user.setRole(role);
+        user.setGender(modifyUserRequest.getGender());
         user.setPassword(modifyUserRequest.getPassword());
+        user.setAddress(modifyUserRequest.getAddress());
+        user.setBirthDate(modifyUserRequest.getBirthDate());
+        user.setAvatar(modifyUserRequest.getAvatar());
+        user.setRole(role.get());
         user.setStatus(modifyUserRequest.getStatus());
         userRepository.save(user);
-        return "Create user success";
+        return "Create staff success";
     }
 
     @Override
     public String updateStaff(Long id, ModifyUserRequest modifyUserRequest) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
+        Optional<User> checkUser = userRepository.findById(id);
+        Optional<Role> role = roleRepository.findById(modifyUserRequest.getRoleId());
 
-        if (optionalUser.isEmpty()) {
+        if (checkUser.isEmpty()) {
             return "User not found";
         }
 
-        if (optionalUserByPhoneNumber.isPresent()) {
-            return "Phone number is already exist";
+        if (role.isEmpty()) {
+            return "Role not found";
         }
 
-        User user = optionalUser.get();
+        User user = checkUser.get();
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
-        user.setAddress(modifyUserRequest.getAddress());
-        user.setAvatar(modifyUserRequest.getAvatar());
-        user.setBirthDate(modifyUserRequest.getBirthDate());
-        user.setGender(modifyUserRequest.getGender());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
-        user.setPassword(modifyUserRequest.getPassword());
+        user.setGender(modifyUserRequest.getGender());
+        user.setAddress(modifyUserRequest.getAddress());
+        user.setBirthDate(modifyUserRequest.getBirthDate());
+        user.setAvatar(modifyUserRequest.getAvatar());
+        user.setRole(role.get());
         user.setStatus(modifyUserRequest.getStatus());
         userRepository.save(user);
         return "Update staff success";
     }
 
     @Override
-    public String updateStatus(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
+    public String changePassword(Long id, String password) {
+        Optional<User> checkUser = userRepository.findById(id);
+        if (checkUser.isEmpty()) {
             return "User not found";
         }
+        User user = checkUser.get();
+        user.setPassword(password);
+        userRepository.save(user);
+        return "Change password success";
+    }
 
-        User user = optionalUser.get();
-        Integer currentStatus = user.getStatus();
-        if (currentStatus == 0) {
-            user.setStatus(1);
-        } else {
+    @Override
+    public String updateStatus(Long id) {
+        Optional<User> checkUser = userRepository.findById(id);
+        if (checkUser.isEmpty()) {
+            return "User not found";
+        }
+        User user = checkUser.get();
+        if (user.getStatus() == 1) {
             user.setStatus(0);
+        } else {
+            user.setStatus(1);
         }
         userRepository.save(user);
         return "Update status success";

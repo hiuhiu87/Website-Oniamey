@@ -22,6 +22,9 @@ public class Address extends BaseModel {
     @Column(name = "line", nullable = false)
     private String line; // số nhà, tên đường
 
+    @Column(name = "ward", nullable = false)
+    private String ward; // phường
+
     @Column(name = "city", nullable = false)
     private String city; // thành phố
 
@@ -30,6 +33,9 @@ public class Address extends BaseModel {
 
     @Column(name = "country", nullable = false)
     private String country; // quốc gia
+
+    @Column(name = "is_default", nullable = false)
+    private Boolean isDefault; // địa chỉ mặc định
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

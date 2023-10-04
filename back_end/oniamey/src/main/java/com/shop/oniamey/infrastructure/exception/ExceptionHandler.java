@@ -1,4 +1,4 @@
-package com.shop.oniamey.infrastructure;
+package com.shop.oniamey.infrastructure.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

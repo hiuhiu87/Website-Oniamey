@@ -1,16 +1,14 @@
 package com.shop.oniamey.core.admin.service.impl;
 
+import com.shop.oniamey.core.admin.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
+import com.shop.oniamey.core.admin.model.response.CustomerDetailResponse;
+import com.shop.oniamey.core.admin.model.response.CustomerResponse;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
 import com.shop.oniamey.core.admin.service.CustomerService;
 import com.shop.oniamey.entity.Customer;
-import com.shop.oniamey.entity.Role;
-import com.shop.oniamey.entity.User;
-import com.shop.oniamey.infrastructure.constant.RoleName;
 import com.shop.oniamey.repository.CustomerRepository;
-import com.shop.oniamey.repository.RoleRepository;
-import com.shop.oniamey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,21 +19,7 @@ import java.util.Optional;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private UserRepository userRepository;
-
-    private RoleRepository roleRepository;
-
     private CustomerRepository customerRepository;
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @Autowired
     public void setCustomerRepository(CustomerRepository customerRepository) {
@@ -43,108 +27,101 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<UserResponse> getAllCustomers(Pageable pageable) {
-        return customerRepository.getAllUsers(pageable);
+    public List<CustomerResponse> getAllCustomers(Pageable pageable) {
+        return customerRepository.getAllCustomers(pageable);
     }
 
     @Override
-    public UserDetailResponse getCustomerById(Long id) {
-        return null;
+    public CustomerDetailResponse getCustomerById(Long id) {
+        return customerRepository.getCustomerById(id);
     }
 
     @Override
-    public String createCustomer(ModifyUserRequest modifyUserRequest) {
-        Optional<User> optionalUser = userRepository.findByEmail(modifyUserRequest.getEmail());
-        Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
-        Role role = roleRepository.findByName(RoleName.ROLE_CUSTOMER);
+    public String createCustomer(ModifyCustomerRequest modifyUserRequest) {
 
-        if (optionalUser.isPresent()) {
-            return "Email is already exist";
+        Optional<Customer> checkUser = customerRepository.findByEmail(modifyUserRequest.getEmail());
+
+        if (checkUser.isPresent()) {
+            return "Email already exists";
         }
 
-        if (optionalUserByPhoneNumber.isPresent()) {
-            return "Phone number is already exist";
+        if (modifyUserRequest.getPhoneNumber() != null) {
+            checkUser = customerRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
+            if (checkUser.isPresent()) {
+                return "Phone number already exists";
+            }
         }
 
-        User user = new User();
-        user.setFullName(modifyUserRequest.getFullName());
-        user.setEmail(modifyUserRequest.getEmail());
-        user.setAddress(modifyUserRequest.getAddress());
-        user.setAvatar(modifyUserRequest.getAvatar());
-        user.setBirthDate(modifyUserRequest.getBirthDate());
-        user.setGender(modifyUserRequest.getGender());
-        user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
-        user.setRole(role);
-        user.setPassword(modifyUserRequest.getPassword());
-        user.setStatus(modifyUserRequest.getStatus());
+
         Customer customer = new Customer();
-        customer.setUser(user);
+        customer.setFullName(modifyUserRequest.getFullName());
+        customer.setEmail(modifyUserRequest.getEmail());
+        customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
+        customer.setGender(modifyUserRequest.getGender());
+        customer.setAvatar(modifyUserRequest.getAvatar());
+        customer.setBirthDate(modifyUserRequest.getBirthDate());
         customer.setStatus(modifyUserRequest.getStatus());
-        userRepository.save(user);
+        customer.setPassword(modifyUserRequest.getPassword());
         customerRepository.save(customer);
-        return "Create customer success";
+        return "Create customer successfully";
     }
 
     @Override
-    public String updateCustomer(Long id, ModifyUserRequest modifyUserRequest) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        Optional<User> optionalUserByPhoneNumber = userRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+    public String updateCustomer(Long id, ModifyCustomerRequest modifyUserRequest) {
+        Optional<Customer> checkUser = customerRepository.findById(id);
 
-        if (optionalUser.isEmpty()) {
-            return "User not found";
-        }
-
-        if (optionalUserByPhoneNumber.isPresent()) {
-            return "Phone number is already exist";
-        }
-
-        if (optionalCustomer.isEmpty()) {
+        if (checkUser.isEmpty()) {
             return "Customer not found";
         }
 
-        User user = optionalUser.get();
-        user.setFullName(modifyUserRequest.getFullName());
-        user.setEmail(modifyUserRequest.getEmail());
-        user.setAddress(modifyUserRequest.getAddress());
-        user.setAvatar(modifyUserRequest.getAvatar());
-        user.setBirthDate(modifyUserRequest.getBirthDate());
-        user.setGender(modifyUserRequest.getGender());
-        user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
-        user.setPassword(modifyUserRequest.getPassword());
-        user.setStatus(modifyUserRequest.getStatus());
-        userRepository.save(user);
-        Customer customer = optionalCustomer.get();
+        if (modifyUserRequest.getPhoneNumber() != null) {
+            checkUser = customerRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
+            if (checkUser.isPresent()) {
+                return "Phone number already exists";
+            }
+        }
+
+        Customer customer = checkUser.get();
+        customer.setFullName(modifyUserRequest.getFullName());
+        customer.setEmail(modifyUserRequest.getEmail());
+        customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
+        customer.setGender(modifyUserRequest.getGender());
+        customer.setAvatar(modifyUserRequest.getAvatar());
+        customer.setBirthDate(modifyUserRequest.getBirthDate());
         customer.setStatus(modifyUserRequest.getStatus());
         customerRepository.save(customer);
-        return "Update customer success";
+        return "Update customer successfully";
     }
+
 
     @Override
     public String updateStatus(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            return "User not found";
-        }
-
-        if (optionalCustomer.isEmpty()) {
+        Optional<Customer> checkUser = customerRepository.findById(id);
+        if (!checkUser.isPresent()) {
             return "Customer not found";
         }
+        Customer customer = checkUser.get();
+        Integer status = customer.getStatus();
 
-        User user = optionalUser.get();
-        Customer customer = optionalCustomer.get();
-        if (user.getStatus() == 1) {
-            user.setStatus(0);
+        if (status == 1) {
             customer.setStatus(0);
         } else {
-            user.setStatus(1);
             customer.setStatus(1);
         }
-        userRepository.save(user);
         customerRepository.save(customer);
-        return "Update status success";
+        return "Update status successfully";
+    }
+
+    @Override
+    public String changePassword(Long id, String password) {
+        Optional<Customer> checkUser = customerRepository.findById(id);
+        if (!checkUser.isPresent()) {
+            return "Customer not found";
+        }
+        Customer customer = checkUser.get();
+        customer.setPassword(password);
+        customerRepository.save(customer);
+        return "Change password successfully";
     }
 
 }

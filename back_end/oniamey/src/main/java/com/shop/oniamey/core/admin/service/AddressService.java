@@ -10,9 +10,9 @@ public interface AddressService {
 
     String updateAddress(ModifyAddressRequest modifyAddressRequest);
 
-    String getAddress(Long id);
+    String getAddressById(Long id);
 
-    String getAllAddress(Long idCustomer);
+    String getAllAddressByCustomerId(Long idCustomer);
 
     String getAllAddress();
 

@@ -19,4 +19,6 @@ public interface UserService {
 
     String updateStatus(Long id);
 
+    String changePassword(Long id, String password);
+
 }

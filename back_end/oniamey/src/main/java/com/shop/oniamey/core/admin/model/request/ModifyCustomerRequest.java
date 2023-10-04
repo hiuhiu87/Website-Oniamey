@@ -17,16 +17,15 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ModifyUserRequest {
+@AllArgsConstructor
+public class ModifyCustomerRequest {
 
     @NotEmpty(message = "Full name is required")
     private String fullName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Birth date must be in the past")
-    @NotNull(message = "Birth date is required")
     private Date birthDate;
 
     @NotEmpty(message = "Email is required")
@@ -40,10 +39,6 @@ public class ModifyUserRequest {
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phoneNumber;
 
-    @NotEmpty(message = "Address is required")
-    private String address;
-
-    @NotNull
     @Min(value = 0)
     @Max(value = 2)
     private Integer gender;
@@ -51,8 +46,5 @@ public class ModifyUserRequest {
     private String avatar;
 
     private Integer status;
-
-    @NotNull(message = "Role is required")
-    private Long roleId;
 
 }
