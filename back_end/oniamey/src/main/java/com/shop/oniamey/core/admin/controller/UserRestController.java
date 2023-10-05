@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.controller;
 
 import com.shop.oniamey.core.admin.model.request.ModifyAddressRequest;
+import com.shop.oniamey.core.admin.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.service.AddressService;
 import com.shop.oniamey.core.admin.service.CustomerService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,26 +60,26 @@ public class ManageUserRestController {
     public ResponseEntity<?> createStaff(@Valid @RequestBody ModifyUserRequest modifyUserRequest) {
         return new ResponseEntity<>(userService.createStaff(modifyUserRequest), HttpStatus.CREATED);
     }
-//
-//    @PostMapping("/create-user-customer")
-//    public ResponseEntity<?> createCustomer(@Valid @RequestBody ModifyUserRequest modifyUserRequest) {
-//        return new ResponseEntity<>(customerService.createCustomer(modifyUserRequest), HttpStatus.CREATED);
-//    }
-//
-//    @GetMapping("/get-staff-by-id/{id}")
-//    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-//        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/get-customer-by-id/{id}")
-//    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
-//        return new ResponseEntity<>(customerService.getCustomerById(id), HttpStatus.OK);
-//    }
-//
-//    @PostMapping("/update-staff/{id}")
-//    public ResponseEntity<?> updateStaff(@PathVariable Long id) {
-//        return new ResponseEntity<>(userService.updateStatus(id), HttpStatus.OK);
-//    }
+
+    @PostMapping("/create-user-customer")
+    public ResponseEntity<?> createCustomer(@Valid @RequestBody ModifyCustomerRequest modifyCustomerRequest) {
+        return new ResponseEntity<>(customerService.createCustomer(modifyCustomerRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/get-staff-by-id/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-customer-by-id/{id}")
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+        return new ResponseEntity<>(customerService.getCustomerById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/update-staff-status/{id}")
+    public ResponseEntity<?> updateStaff(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.updateStatus(id), HttpStatus.OK);
+    }
 //
 //    @PostMapping("/add-address-customer")
 //    public ResponseEntity<?> addAddressCustomer(@Valid @RequestBody ModifyAddressRequest modifyAddressRequest) {
