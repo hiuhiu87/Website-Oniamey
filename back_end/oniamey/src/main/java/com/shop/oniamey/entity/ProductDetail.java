@@ -49,7 +49,7 @@ public class ProductDetail extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "id_sleeve_lenght")
-    private SleeveLenght sleeveLenght;
+    private SleeveLength sleeveLength;
 
     @Column(name = "thumbnail")
     private String thumbnail;

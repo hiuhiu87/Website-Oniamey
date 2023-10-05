@@ -1,6 +1,7 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,10 @@ import lombok.Setter;
 @Setter
 public class OrderPaymentMethod extends BaseModel {
 
+
+    @Column(name = "trading_code",nullable = false,length = 100)
+    private String tradingCode;
+
     @ManyToOne
     @JoinColumn(name = "id_payment_method")
     private PaymentMethod paymentMethod;
@@ -25,4 +30,5 @@ public class OrderPaymentMethod extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "id_order")
     private Orders order;
+
 }
