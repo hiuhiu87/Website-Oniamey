@@ -31,4 +31,10 @@ public class ModifyAddressRequest {
     @NotNull(message = "Customer id is required")
     private Long customerId;
 
+    @NotNull(message = "Is default is required")
+    private Boolean isDefault;
+
+    @NotNull(message = "Status is required")
+    private Integer status;
+
 }

@@ -1,11 +1,9 @@
 package com.shop.oniamey.core.admin.service.impl;
 
+import com.shop.oniamey.core.admin.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyCustomerRequest;
-import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.model.response.CustomerDetailResponse;
 import com.shop.oniamey.core.admin.model.response.CustomerResponse;
-import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
-import com.shop.oniamey.core.admin.model.response.UserResponse;
 import com.shop.oniamey.core.admin.service.CustomerService;
 import com.shop.oniamey.entity.Customer;
 import com.shop.oniamey.repository.CustomerRepository;
@@ -113,13 +111,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public String changePassword(Long id, String password) {
+    public String changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
         Optional<Customer> checkUser = customerRepository.findById(id);
-        if (!checkUser.isPresent()) {
+        if (checkUser.isEmpty()) {
             return "Customer not found";
         }
+
+        String oldPassword = changePasswordRequest.getOldPassword();
+        if (!checkUser.get().getPassword().equals(oldPassword)) {
+            return "Old password is incorrect";
+        }
+        String newPassword = changePasswordRequest.getNewPassword();
         Customer customer = checkUser.get();
-        customer.setPassword(password);
+        customer.setPassword(newPassword);
         customerRepository.save(customer);
         return "Change password successfully";
     }

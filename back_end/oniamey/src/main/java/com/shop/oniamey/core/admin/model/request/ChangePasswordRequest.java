@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerChangePasswordRequest {
+public class ChangePasswordRequest {
 
     @NotEmpty(message = "Old password is required")
     private String oldPassword;

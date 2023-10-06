@@ -1,6 +1,6 @@
-package com.articlesproject.infrastructure.configemail;
+package com.shop.oniamey.infrastructure.mailconfig;
 
-import com.articlesproject.infrastructure.constant.MailConstant;
+import com.shop.oniamey.infrastructure.constant.MailConstant;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -25,11 +26,14 @@ public class EmailSender {
 
     @Async
     public void sendEmail(String[] toEmails, String subject, String titleEmail, String bodyEmail) {
-        String htmlBody = MailConstant.BODY_STARTS +
-                titleEmail +
-                MailConstant.BODY_BODY +
-                bodyEmail +
-                MailConstant.BODY_END;
+//        String htmlBody = MailConstant.BODY_STARTS +
+//                titleEmail +
+//                MailConstant.BODY_BODY +
+//                bodyEmail +
+//                MailConstant.BODY_END;
+        String htmlBody = "<b>Chào Mừng bạn đến với shop bán hàng phông Oniemay</b>" +
+                "<p>Chúng tôi rất vui khi bạn đã đăng ký tài khoản thành công trên hệ thống của chúng tôi</p>" +
+                "<p>Chúng tôi sẽ gửi đến bạn những thông tin mới nhất về sản phẩm của chúng tôi</p>";
         sendSimpleMail(toEmails, htmlBody, subject);
     }
 

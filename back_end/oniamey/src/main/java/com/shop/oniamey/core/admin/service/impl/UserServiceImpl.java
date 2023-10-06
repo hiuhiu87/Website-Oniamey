@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.service.impl;
 
+import com.shop.oniamey.core.admin.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
@@ -105,13 +106,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changePassword(Long id, String password) {
+    public String changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
         Optional<User> checkUser = userRepository.findById(id);
         if (checkUser.isEmpty()) {
             return "User not found";
         }
         User user = checkUser.get();
-        user.setPassword(password);
+        if (!user.getPassword().equals(changePasswordRequest.getOldPassword())) {
+            return "Old password is incorrect";
+        }
+        user.setPassword(changePasswordRequest.getNewPassword());
         userRepository.save(user);
         return "Change password success";
     }
