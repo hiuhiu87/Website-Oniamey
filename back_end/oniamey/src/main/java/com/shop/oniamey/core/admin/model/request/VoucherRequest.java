@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -21,18 +22,19 @@ public class VoucherRequest {
     private String voucherName;
 
     @NotEmpty(message = "Voucher Code is required")
+//    @UniqueElements(message = "Voucher Code is exits!")
     private String voucherCode;
 
-    @NotEmpty(message = "Quantity is required")
+    @NotNull(message = "Quantity is not null")
     private Long quantity;
 
     @NotEmpty(message = "Type is required")
     private String type;
 
-    @NotEmpty(message = "Minimum Discount is required")
+    @NotNull(message = "Minimum Discount is not null")
     private Double minimumDiscount;
 
-    @NotEmpty(message = "Maximum Discount is required")
+    @NotNull(message = "Maximum Discount is not null")
     private Double maximumDiscount;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

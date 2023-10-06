@@ -16,21 +16,17 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     @Query(
             value = """
                     select v.id
-                    ,v.voucher_name as voucherName
-                    ,v.voucher_code as voucherCode
-                    ,v.quantity as quantity
-                    ,v.type as type
-                    ,v.minimum_discount as minimumDiscount
-                    ,v.maximum_discount as maximumDiscount
-                    ,date_format(v.start_date, '%m-%d-%Y') as startDate
-                    ,date_format(v.end_date, '%m-%d-%Y') as endDate
-                    ,date_format(v.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-                    ,date_format(v.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
-                    ,uc.full_name AS createdBy
-                    ,uu.full_name AS updatedBy
-                    from voucher as v
-                    left JOIN voucher AS uc ON v.created_by = uc.id
-                    left JOIN voucher AS uu ON v.updated_by = uu.id 
+                        ,v.voucher_name as voucherName
+                        ,v.voucher_code as voucherCode
+                        ,v.quantity as quantity
+                        ,v.type as type
+                        ,v.start_date as startDate
+                        ,v.end_date as endDate
+                        ,v.minimum_discount as minimumDiscount
+                        ,v.maximum_discount as maximumDiscount
+                        ,v.created_at as createAt
+                        ,v.updated_at as updateAt
+                    from banquanaooniamey.voucher as v
                     """,
             nativeQuery = true
     )
@@ -39,21 +35,17 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     @Query(
             value = """
                     select v.id
-                    ,v.voucher_name as voucherName
-                    ,v.voucher_code as voucherCode
-                    ,v.quantity as quantity
-                    ,v.type as type
-                    ,v.minimum_discount as minimumDiscount
-                    ,v.maximum_discount as maximumDiscount
-                    ,date_format(v.start_date, '%m-%d-%Y') as startDate
-                    ,date_format(v.end_date, '%m-%d-%Y') as endDate
-                    ,date_format(v.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-                    ,date_format(v.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
-                    ,uc.full_name AS createdBy
-                    ,uu.full_name AS updatedBy
-                    from voucher as v
-                    left JOIN voucher AS uc ON v.created_by = uc.id
-                    left JOIN voucher AS uu ON v.updated_by = uu.id 
+                        ,v.voucher_name as voucherName
+                        ,v.voucher_code as voucherCode
+                        ,v.quantity as quantity
+                        ,v.type as type
+                        ,v.start_date as startDate
+                        ,v.end_date as endDate
+                        ,v.minimum_discount as minimumDiscount
+                        ,v.maximum_discount as maximumDiscount
+                        ,v.created_at as createAt
+                        ,v.updated_at as updateAt
+                    from banquanaooniamey.voucher as v
                     where v.id = :id
                     """,
             nativeQuery = true

@@ -1,5 +1,7 @@
 package com.shop.oniamey.core.admin.model.response;
 
+import java.util.Date;
+
 public interface VoucherDetailResponse {
 
     Long getId();
@@ -15,6 +17,10 @@ public interface VoucherDetailResponse {
     Double getMinimumDiscount();
 
     Double getMaximumDiscount();
+
+    Date getStartDate();
+
+    Date getEndDate();
 
     String getCreatedAt();
 

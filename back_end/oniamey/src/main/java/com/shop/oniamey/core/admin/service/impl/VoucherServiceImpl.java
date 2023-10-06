@@ -32,7 +32,7 @@ public class VoucherServiceImpl implements VoucherService {
     public String createVoucher(VoucherRequest voucherRequest) {
         Optional<Voucher> optionalVoucher = voucherRepository.findByVoucherCode(voucherRequest.getVoucherCode());
         Optional<Voucher> optionalVoucherType = voucherRepository.findByType(voucherRequest.getType());
-        if(optionalVoucher.isPresent()){
+        if(!optionalVoucher.isPresent()){
             return "Voucher Code is already exist";
         }
         if(optionalVoucherType.isEmpty()){
