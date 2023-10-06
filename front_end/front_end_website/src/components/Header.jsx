@@ -3,11 +3,11 @@ import { Navbar, Container, Form, Button } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 
 import "../assets/style/Header.css";
-import logoShop from "../assets/img/ONIEMAY.png";
+import logoShop from "../assets/img/ONIEMAY_1.png";
 
 const Header = () => {
   return (
-    <Navbar className="bg-body-tertiary">
+    <Navbar className="bg-link-body-emphasis nav-header">
       <Container>
         <Navbar.Brand href="#home">
           <Image src={logoShop} roundedCircle id="image-shop" />
@@ -21,11 +21,12 @@ const Header = () => {
           />
           <Button variant="outline-success">Search</Button>
         </Navbar>
-        <Navbar.Collapse className="justify-content-end">
+        <Navbar className="justify-content-end">
           <Navbar.Text>
-            Signed in as: <a href="#login">Mark Otto</a>
+            Signed in as: <a href="#login">Nghĩa Pé Oniemay</a>
+            <Image src="#" id="user-avatar" roundedCircle/>
           </Navbar.Text>
-        </Navbar.Collapse>
+        </Navbar>
       </Container>
     </Navbar>
   );

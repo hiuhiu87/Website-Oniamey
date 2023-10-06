@@ -1,76 +1,128 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
+import { Nav, Collapse } from "react-bootstrap";
 import {
-  faHome,
-  faBriefcase,
-  faPaperPlane,
-  faQuestion,
-  faImage,
-  faCopy,
-  faTimes
+  faCartShopping,
+  faMoneyBillTrendUp,
+  faUsers,
+  faMoneyBill,
+  faShirt,
+  faTag,
+  faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
-import SubMenu from "./SubMenu.jsx";
-import { Nav, Button } from "react-bootstrap";
-import classNames from "classnames";
+import "../assets/style/Sidemenu.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NavLink } from "react-router-dom";
 
+function Sidebar() {
+  const [submenu1Open, setSubmenu1Open] = useState(false);
+  const [submenu2Open, setSubmenu2Open] = useState(false);
 
-const SideMenu = (props) => {
+  const toggleSubmenu1 = () => setSubmenu1Open(!submenu1Open);
+  const toggleSubmenu2 = () => setSubmenu2Open(!submenu2Open);
+
   return (
-    <div className={classNames("sidebar", { "is-open": props.isOpen })}>
-      <div className="sidebar-header">
-        <Button
-          variant="link"
-          onClick={props.toggle}
-          style={{ color: "#fff" }}
-          className="mt-4"
-        >
-          <FontAwesomeIcon icon={faTimes} pull="right" size="xs" />
-        </Button>
-        <h3>react-bootstrap sidebar</h3>
-      </div>
+    <Nav className="sidebar card py-2 mb-4 pt-3" id="nav_accordion">
+      <Nav.Item className="nav-main">
+        <Nav.Link href="#">
+          <FontAwesomeIcon icon={faCartShopping} className="me-1" />
+          Bán Hàng Tại Quầy
+        </Nav.Link>
+      </Nav.Item>
 
-      <Nav className="flex-column pt-2">
-        <p className="ml-3">Heading</p>
+      <Nav.Item className="nav-main">
+        <Nav.Link onClick={toggleSubmenu1}>
+          <FontAwesomeIcon icon={faShirt} className="me-1" />
+          Quản Lý Sản Phẩm{" "}
+          <i
+            className={`bi small ${
+              submenu1Open ? "bi-caret-up-fill" : "bi-caret-down-fill"
+            }`}
+          ></i>
+        </Nav.Link>
+        <Collapse in={submenu1Open}>
+          <Nav className="submenu" data-parent="#nav_accordion">
+            <Nav.Item>
+              <Nav.Link href="#">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Sản Phẩm
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="#">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Thương Hiệu
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="#">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Kích Cỡ
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="#">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Màu Sắc
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Collapse>
+      </Nav.Item>
 
-        <Nav.Item className="active">
-          <Nav.Link href="/">
-            <FontAwesomeIcon icon={faHome} className="mr-2" />
-            Home
-          </Nav.Link>
-        </Nav.Item>
+      <Nav.Item className="nav-main">
+        <Nav.Link href="#">
+          <FontAwesomeIcon icon={faMoneyBill} className="me-1" />
+          Quản Lý Hóa Đơn
+        </Nav.Link>
+      </Nav.Item>
 
-        <SubMenu title="Pages" icon={faCopy} items={["Link", "Link2"]} />
+      <Nav.Item className="nav-main">
+        <Nav.Link href="#">
+          <FontAwesomeIcon icon={faTag} className="me-1" />
+          Khuyến Mãi
+        </Nav.Link>
+      </Nav.Item>
 
-        <Nav.Item>
-          <Nav.Link href="/">
-            <FontAwesomeIcon icon={faBriefcase} className="mr-2" />
-            About
-          </Nav.Link>
-        </Nav.Item>
+      <Nav.Item className="nav-main">
+        <Nav.Link onClick={toggleSubmenu2}>
+          <FontAwesomeIcon icon={faUsers} className="me-1" />
+          Quản Lý Tài Khoản{" "}
+          <i
+            className={`bi small ${
+              submenu2Open ? "bi-caret-up-fill" : "bi-caret-down-fill"
+            }`}
+          ></i>
+        </Nav.Link>
+        <Collapse in={submenu2Open}>
+          <Nav className="submenu" data-parent="#nav_accordion">
+          <Nav.Item>
+              {/* <Nav.Link>
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Khách Hàng
+              </Nav.Link> */}
+              <NavLink to="/manage-customer" className="nav-link">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Khách Hàng
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="#">
+                <FontAwesomeIcon icon={faCaretRight} className="me-1" />
+                Nhân Viên
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Collapse>
+      </Nav.Item>
 
-        <Nav.Item>
-          <Nav.Link href="/">
-            <FontAwesomeIcon icon={faImage} className="mr-2" />
-            Portfolio
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link href="/">
-            <FontAwesomeIcon icon={faQuestion} className="mr-2" />
-            FAQ
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link href="/">
-            <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
-            Contact
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </div>
+      <Nav.Item className="nav-main">
+        <Nav.Link href="#">
+          <FontAwesomeIcon icon={faMoneyBillTrendUp} className="me-1" />
+          Thống Kê
+        </Nav.Link>
+      </Nav.Item>
+    </Nav>
   );
-};
+}
 
-export default SideMenu;
+export default Sidebar;

@@ -1,3 +1,10 @@
 #image-shop {
-  width: 120px;
+  width: 150px;
+  height: 130px;
+}
+
+#user-avatar {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }/*# sourceMappingURL=Header.css.map */
