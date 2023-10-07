@@ -7,4 +7,11 @@
   width: 20px;
   height: 20px;
   margin-right: 10px;
+}
+
+.nav-bar-search {
+  width: 50%;
+}
+.nav-bar-search .nav-bar-search-input {
+  width: 100%;
 }/*# sourceMappingURL=Header.css.map */

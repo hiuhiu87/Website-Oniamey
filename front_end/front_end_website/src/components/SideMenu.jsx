@@ -95,21 +95,21 @@ function Sidebar() {
         </Nav.Link>
         <Collapse in={submenu2Open}>
           <Nav className="submenu" data-parent="#nav_accordion">
-          <Nav.Item>
+            <Nav.Item>
               {/* <Nav.Link>
                 <FontAwesomeIcon icon={faCaretRight} className="me-1" />
                 Khách Hàng
               </Nav.Link> */}
-              <NavLink to="/manage-customer" className="nav-link">
+              <NavLink to="/manage-customer" className="nav-link nav-sub-menu ">
                 <FontAwesomeIcon icon={faCaretRight} className="me-1" />
                 Khách Hàng
               </NavLink>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="#">
+              <NavLink to="/manage-user" className="nav-link nav-sub-menu ">
                 <FontAwesomeIcon icon={faCaretRight} className="me-1" />
                 Nhân Viên
-              </Nav.Link>
+              </NavLink>
             </Nav.Item>
           </Nav>
         </Collapse>

@@ -10,6 +10,8 @@ import ManageUser from "./layout/ManageUser";
 import Header from "./components/Header";
 import SideMenu from "./components/SideMenu";
 import { Container, Row, Col } from "react-bootstrap";
+import Footer from "./components/Footer";
+import "../src/assets/style/GlobalStyle.css"
 
 function App() {
   return (
@@ -21,15 +23,14 @@ function App() {
           <SideMenu />
         </Col>
         <Col lg={10}>
-          
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route exact path="/home" element={<Home />} />
               <Route path="/manage-customer" element={<ManageUser />} />
             </Routes>
-          
         </Col>
       </Row>
+      <Footer />
     </Container>
     </Router>
   );

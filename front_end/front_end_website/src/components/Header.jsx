@@ -12,14 +12,14 @@ const Header = () => {
         <Navbar.Brand href="#home">
           <Image src={logoShop} roundedCircle id="image-shop" />
         </Navbar.Brand>
-        <Navbar href="#home">
+        <Navbar href="#home" className="nav-bar-search">
           <Form.Control
             type="search"
             placeholder="Search"
-            className="me-2"
+            className="me-2 nav-bar-search-input"
             aria-label="Search"
           />
-          <Button variant="outline-success">Search</Button>
+          <Button variant="outline-secondary">Search</Button>
         </Navbar>
         <Navbar className="justify-content-end">
           <Navbar.Text>

@@ -12,7 +12,7 @@ class CustomerService {
   }
 
   createCustomer(customer) {
-    return axios.post(BASE_API_URL, customer);
+    return axios.post(BASE_API_URL + "/create-user-customer", customer);
   }
 
   updateCustomer(customer, id) {
