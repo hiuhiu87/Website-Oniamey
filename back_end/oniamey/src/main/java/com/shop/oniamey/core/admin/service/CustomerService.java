@@ -12,6 +12,8 @@ public interface CustomerService {
 
     List<CustomerResponse> getAllCustomers(Pageable pageable);
 
+    List<CustomerResponse> getAllCustomers();
+
     CustomerDetailResponse getCustomerById(Long id);
 
     String createCustomer(ModifyCustomerRequest modifyUserRequest);
@@ -21,5 +23,7 @@ public interface CustomerService {
     String updateStatus(Long id);
 
     String changePassword(Long id, ChangePasswordRequest changePasswordRequest);
+
+    Long getTotalPage();
 
 }

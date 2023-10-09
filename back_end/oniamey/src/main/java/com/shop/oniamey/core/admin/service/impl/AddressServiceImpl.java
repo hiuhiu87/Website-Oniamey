@@ -51,7 +51,7 @@ public class AddressServiceImpl implements AddressService {
         address.setCountry(modifyAddressRequest.getCountry());
         address.setCustomer(checkCustomer.get());
         address.setIsDefault(modifyAddressRequest.getIsDefault());
-        address.setStatus(modifyAddressRequest.getStatus());
+        address.setIsDeleted(modifyAddressRequest.getIsDeleted());
         addressRepository.save(address);
         return "Add address success";
     }
@@ -87,7 +87,7 @@ public class AddressServiceImpl implements AddressService {
         address.setCountry(modifyAddressRequest.getCountry());
         address.setCustomer(checkCustomer.get());
         address.setIsDefault(modifyAddressRequest.getIsDefault());
-        address.setStatus(modifyAddressRequest.getStatus());
+        address.setIsDeleted(modifyAddressRequest.getIsDeleted());
         addressRepository.save(address);
         return "Update address success";
     }

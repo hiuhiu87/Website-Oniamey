@@ -58,8 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setGender(modifyUserRequest.getGender());
         customer.setAvatar(modifyUserRequest.getAvatar());
         customer.setBirthDate(modifyUserRequest.getBirthDate());
-        customer.setStatus(modifyUserRequest.getStatus());
-        customer.setPassword(modifyUserRequest.getPassword());
+        customer.setIsDeleted(modifyUserRequest.getIsDeleted());
         customerRepository.save(customer);
         return "Create customer successfully";
     }
@@ -72,21 +71,15 @@ public class CustomerServiceImpl implements CustomerService {
             return "Customer not found";
         }
 
-        if (modifyUserRequest.getPhoneNumber() != null) {
-            checkUser = customerRepository.findByPhoneNumber(modifyUserRequest.getPhoneNumber());
-            if (checkUser.isPresent()) {
-                return "Phone number already exists";
-            }
-        }
-
         Customer customer = checkUser.get();
+        customer.setId(id);
         customer.setFullName(modifyUserRequest.getFullName());
         customer.setEmail(modifyUserRequest.getEmail());
         customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
         customer.setGender(modifyUserRequest.getGender());
         customer.setAvatar(modifyUserRequest.getAvatar());
         customer.setBirthDate(modifyUserRequest.getBirthDate());
-        customer.setStatus(modifyUserRequest.getStatus());
+        customer.setIsDeleted(modifyUserRequest.getIsDeleted());
         customerRepository.save(customer);
         return "Update customer successfully";
     }
@@ -95,17 +88,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String updateStatus(Long id) {
         Optional<Customer> checkUser = customerRepository.findById(id);
-        if (!checkUser.isPresent()) {
+        if (checkUser.isEmpty()) {
             return "Customer not found";
         }
         Customer customer = checkUser.get();
-        Integer status = customer.getStatus();
-
-        if (status == 1) {
-            customer.setStatus(0);
-        } else {
-            customer.setStatus(1);
-        }
+        Boolean status = customer.getIsDeleted();
+        customer.setIsDeleted(!status);
         customerRepository.save(customer);
         return "Update status successfully";
     }
@@ -126,6 +114,22 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(newPassword);
         customerRepository.save(customer);
         return "Change password successfully";
+    }
+
+    @Override
+    public List<CustomerResponse> getAllCustomers() {
+        return customerRepository.getAllCustomers();
+    }
+
+    @Override
+    public Long getTotalPage() {
+        long totalPage = customerRepository.count();
+        Long endPage = totalPage / 5;
+        if (totalPage % 5 != 0) {
+            endPage = endPage + 1;
+        }
+        System.out.println(endPage);
+        return endPage;
     }
 
 }

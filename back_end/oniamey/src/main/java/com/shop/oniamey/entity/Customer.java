@@ -1,11 +1,8 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -24,11 +21,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class Customer extends BaseModel {
 
-
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
@@ -38,13 +34,10 @@ public class Customer extends BaseModel {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = true)
     private Integer gender;
 
     @Column(name = "avatar")

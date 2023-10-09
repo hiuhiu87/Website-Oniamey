@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (!role.isPresent()) {
+        if (role.isEmpty()) {
             return "Role not found";
         }
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
         user.setRole(role.get());
-        user.setStatus(modifyUserRequest.getStatus());
+        user.setIsDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Create staff success";
     }
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
         user.setRole(role.get());
-        user.setStatus(modifyUserRequest.getStatus());
+        user.setIsDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Update staff success";
     }
@@ -127,11 +127,8 @@ public class UserServiceImpl implements UserService {
             return "User not found";
         }
         User user = checkUser.get();
-        if (user.getStatus() == 1) {
-            user.setStatus(0);
-        } else {
-            user.setStatus(1);
-        }
+        Boolean status = user.getIsDeleted();
+        user.setIsDeleted(!status);
         userRepository.save(user);
         return "Update status success";
     }

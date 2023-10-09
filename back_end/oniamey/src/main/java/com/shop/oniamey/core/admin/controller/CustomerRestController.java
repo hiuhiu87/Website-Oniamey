@@ -61,4 +61,14 @@ public class CustomerRestController {
         return new ResponseEntity<>(customerService.changePassword(id, request), HttpStatus.OK);
     }
 
+    @GetMapping("/get-total-page")
+    public Long getTotalPage() {
+        return customerService.getTotalPage();
+    }
+
+    @GetMapping("/get-all-customers")
+    public ResponseEntity<?> getAllCustomers() {
+        return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
+    }
+
 }

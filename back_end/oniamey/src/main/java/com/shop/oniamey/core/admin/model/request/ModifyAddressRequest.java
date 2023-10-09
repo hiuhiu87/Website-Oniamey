@@ -35,6 +35,6 @@ public class ModifyAddressRequest {
     private Boolean isDefault;
 
     @NotNull(message = "Status is required")
-    private Integer status;
+    private Boolean isDeleted;
 
 }
