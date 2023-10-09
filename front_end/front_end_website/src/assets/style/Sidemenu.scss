@@ -1,4 +1,6 @@
 .sidebar {
+
+
 	li {
 		.submenu {
 			list-style: none;
@@ -32,4 +34,7 @@
 #nav_accordion{
 	background-color: #151a25;
 	color: white;
+	height: 100%;
+	display: flex;
+	justify-content: space-around;
 }

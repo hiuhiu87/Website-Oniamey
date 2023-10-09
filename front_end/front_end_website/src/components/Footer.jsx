@@ -6,18 +6,17 @@ import {
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
 
+
 const Footer = () => {
 
-  const styleFooter = {
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-    right: 0,
-  };
+  const styleCustome ={
+    height: "50px",
+    flexShrink: 0,
+  }
 
   return (
-    <div class="container" style={styleFooter}>
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="container">
+      <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top" style={styleCustome}>
         <div class="col-md-4 d-flex align-items-center">
           <a
             href="/"

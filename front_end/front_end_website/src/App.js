@@ -11,27 +11,27 @@ import Header from "./components/Header";
 import SideMenu from "./components/SideMenu";
 import { Container, Row, Col } from "react-bootstrap";
 import Footer from "./components/Footer";
-import "../src/assets/style/GlobalStyle.css"
+import "../src/assets/style/GlobalStyle.css";
 
 function App() {
   return (
     <Router>
-    <Container className="home-container">
-      <Header />
-      <Row>
-        <Col xs={2}>
-          <SideMenu />
-        </Col>
-        <Col lg={10}>
+      <Container className="home-container">
+        <Row>
+          <Header />
+          <Col xs={2}>
+            <SideMenu />
+          </Col>
+          <Col lg={10}>
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route exact path="/home" element={<Home />} />
               <Route path="/manage-customer" element={<ManageUser />} />
             </Routes>
-        </Col>
-      </Row>
-      <Footer />
-    </Container>
+          </Col>
+        </Row>
+        <Footer />
+      </Container>
     </Router>
   );
 }

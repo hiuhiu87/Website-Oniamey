@@ -8,7 +8,7 @@ class CustomerService {
   }
 
   getCustomerById(id) {
-    return axios.get(BASE_API_URL + "/" + id);
+    return axios.get(BASE_API_URL + "/get-customer-by-id/" + id);
   }
 
   createCustomer(customer) {
@@ -16,11 +16,19 @@ class CustomerService {
   }
 
   updateCustomer(customer, id) {
-    return axios.put(BASE_API_URL + "/" + id, customer);
+    return axios.put(BASE_API_URL + "/update-customer/" + id, customer);
   }
 
-  deleteCustomer(id) {
-    return axios.delete(BASE_API_URL + "/" + id);
+  changeStatusCustomer(id) {
+    return axios.put(BASE_API_URL + "/update-customer-status/" + id);
+  }
+
+  getTotalPages() {
+    return axios.get(BASE_API_URL + "/get-total-page");
+  }
+
+  getAllCustomerSearch() {
+    return axios.get(BASE_API_URL + "/get-all-customers");
   }
 }
 

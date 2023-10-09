@@ -4,20 +4,46 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import service from "../services/CustomerService";
-import { useParams } from "react-router-dom";
-// import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 
-const AddCustomerModal = ({ isOpen, onClose }) => {
-  const { id } = useParams();
+import formatDate from "../utils/FormatDate";
+
+const AddCustomerModal = ({ isOpen, onClose, id }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [status, setStatus] = useState(1);
+  const [status, setStatus] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDate, setBirthDate] = useState();
   const [gender, setGender] = useState();
   const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    if (id > 0) {
+      service
+        .getCustomerById(id)
+        .then((res) => {
+          setFullName(res.data.fullName);
+          setEmail(res.data.email);
+          setAvatar(res.data.avatar);
+          setBirthDate(formatDate(res.data.birthDate));
+          setGender(res.data.gender);
+          setPhoneNumber(res.data.phoneNumber);
+          setStatus(res.data.isActive);
+          console.log(res.data.gender);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setFullName("");
+      setEmail("");
+      setPhoneNumber("");
+      setStatus(true);
+      setBirthDate("");
+      setGender(3);
+      setAvatar("");
+    }
+  }, [id]);
 
   const showAlert = (title, message) => {
     Swal.fire({
@@ -27,6 +53,10 @@ const AddCustomerModal = ({ isOpen, onClose }) => {
       confirmButtonText: "Back to Home Page",
       showCancelButton: true,
       cancelButtonText: "Continue",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onClose();
+      }
     });
   };
 
@@ -35,22 +65,22 @@ const AddCustomerModal = ({ isOpen, onClose }) => {
       fullName,
       birthDate,
       email,
-      password,
       phoneNumber,
       gender,
       avatar,
       status,
     };
 
-    if (id) {
+    if (id > 0) {
       service
         .updateCustomer(customer, id)
         .then((res) => {
           console.log(res);
+          showAlert("Success", res.data);
           onClose();
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
         });
     } else {
       service
@@ -61,29 +91,46 @@ const AddCustomerModal = ({ isOpen, onClose }) => {
           onClose();
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
           showAlert("Error", "Create customer failed");
         });
     }
   };
 
-  const renderUpdateFields = () => {
-    return (
-      <Fragment>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Date of Birth</Form.Label>
-          <Form.Control type="date" />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Gender</Form.Label>
-          <Form.Select>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Another</option>
-          </Form.Select>
-        </Form.Group>
-      </Fragment>
-    );
+  const renderUpdateFields = (idCheck) => {
+    if (idCheck > 0) {
+      return (
+        <Fragment>
+          <Form.Group className="mb-3" controlId="formBasicDateOfBirth">
+            <Form.Label>Date of Birth</Form.Label>
+            <Form.Control
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Gender</Form.Label>
+            <Form.Select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option value={1}>Male</option>
+              <option value={2}>Female</option>
+              <option value={3}>Another</option>
+            </Form.Select>
+          </Form.Group>
+        </Fragment>
+      );
+    } else {
+      setFullName("");
+      setEmail("");
+      setPhoneNumber("");
+      setStatus(1);
+      setBirthDate("");
+      setGender(1);
+      setAvatar("");
+    }
   };
 
   const handleClose = () => {
@@ -98,7 +145,9 @@ const AddCustomerModal = ({ isOpen, onClose }) => {
     <Fragment>
       <Modal show={isOpen} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{id ? "Update Customer" : "Add Customer"}</Modal.Title>
+          <Modal.Title>
+            {id > 0 ? "Update Customer" : "Add Customer"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -129,24 +178,15 @@ const AddCustomerModal = ({ isOpen, onClose }) => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            {/* {renderUpdateFields()} */}
+            {id > 0 && renderUpdateFields(id)}
             <Form.Group className="mb-3">
               <Form.Label>Status</Form.Label>
               <Form.Select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option value={1}>Active</option>
-                <option value={0}>Deactivate</option>
+                <option value={true}>Active</option>
+                <option value={false}>Deactivate</option>
               </Form.Select>
             </Form.Group>
           </Form>
