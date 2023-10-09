@@ -17,15 +17,13 @@ import java.util.Date;
 @Setter
 public class Orders extends BaseModel {
 
-    //    @ManyToOne
-//    @JoinColumn(name = "id_user")
-//    @Column(name = "id_user")
-//    private Long user;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
-    //    @ManyToOne
-//    @JoinColumn(name = "id_customer")
-//    @Column(name = "id_customer")
-//    private Long customer;
+    @ManyToOne
+    @JoinColumn(name = "id_customer")
+    private Customer customer;
 
     @Column(name = "phone_number", nullable = false, length = 10)
     private String phoneNumber;
@@ -59,4 +57,5 @@ public class Orders extends BaseModel {
 
     @Column(name = "money_ship", nullable = false)
     private Double moneyShip;
+
 }

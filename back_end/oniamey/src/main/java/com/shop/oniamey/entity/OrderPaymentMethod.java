@@ -22,7 +22,10 @@ public class OrderPaymentMethod extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "id_order")
     private Orders order;
-    @Column(name = "trading_code",nullable = false,length = 100)
-    private String tradingCode;
 
+    @Column (name = "total_money",nullable = false)
+    private Double totalMoney;
+
+    @Column (name = "code",length = 100)
+    private String code;
 }

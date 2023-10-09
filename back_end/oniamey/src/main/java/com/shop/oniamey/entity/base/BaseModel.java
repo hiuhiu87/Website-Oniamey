@@ -45,4 +45,6 @@ public abstract class BaseModel {
     @LastModifiedBy
     private Long updatedBy;
 
+    @Column (name = "deleted" )
+    private Integer deleted;
 }
