@@ -1,52 +1,31 @@
 package com.shop.oniamey.entity;
 
-import jakarta.persistence.Basic;
+import com.shop.oniamey.entity.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
-
-@Entity(name = "image")
+@Entity
+@Table(name = "image")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class Image extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public static final Integer MAXIMUM_IMAGE_PER_PRODUCT = 5;
 
-    @Column(name = "image_name", length = 1000, nullable = false)
-    private String imageName;
-
-    @Column(name = "status", nullable = false)
-    private Long status;
-
-    @CreatedDate
-    @Column(name = "create_date", nullable = false)
-    private Date createDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date", nullable = false)
-    private Date lastModifiedDate;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_product_detail", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_product_detail")
     private ProductDetail productDetail;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
 }

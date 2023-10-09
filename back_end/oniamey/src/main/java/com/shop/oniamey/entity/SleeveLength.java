@@ -10,15 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "product")
+@Table(name = "sleeve_length")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product extends BaseModel {
 
-    @Column(name = "code")
-    private String code;
+public class SleeveLength extends BaseModel {
+
 
     @Column(name = "name")
     private String name;
