@@ -34,8 +34,8 @@ public abstract class BaseModel {
     @LastModifiedDate
     private Date updatedAt;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "deleted")
+    private Boolean isDeleted;
 
     @Column(name = "created_by", updatable = false)
     @CreatedBy

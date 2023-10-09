@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.service.impl;
 
+import com.shop.oniamey.core.admin.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (!role.isPresent()) {
+        if (role.isEmpty()) {
             return "Role not found";
         }
 
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
         user.setRole(role.get());
-        user.setStatus(modifyUserRequest.getStatus());
+        user.setIsDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Create staff success";
     }
@@ -99,19 +100,22 @@ public class UserServiceImpl implements UserService {
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
         user.setRole(role.get());
-        user.setStatus(modifyUserRequest.getStatus());
+        user.setIsDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Update staff success";
     }
 
     @Override
-    public String changePassword(Long id, String password) {
+    public String changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
         Optional<User> checkUser = userRepository.findById(id);
         if (checkUser.isEmpty()) {
             return "User not found";
         }
         User user = checkUser.get();
-        user.setPassword(password);
+        if (!user.getPassword().equals(changePasswordRequest.getOldPassword())) {
+            return "Old password is incorrect";
+        }
+        user.setPassword(changePasswordRequest.getNewPassword());
         userRepository.save(user);
         return "Change password success";
     }
@@ -123,11 +127,8 @@ public class UserServiceImpl implements UserService {
             return "User not found";
         }
         User user = checkUser.get();
-        if (user.getStatus() == 1) {
-            user.setStatus(0);
-        } else {
-            user.setStatus(1);
-        }
+        Boolean status = user.getIsDeleted();
+        user.setIsDeleted(!status);
         userRepository.save(user);
         return "Update status success";
     }

@@ -37,7 +37,7 @@ public class ModifyUserRequest {
     private String password;
 
     @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp = "(^$|[0-9]{10})")
     private String phoneNumber;
 
     @NotEmpty(message = "Address is required")
@@ -50,7 +50,7 @@ public class ModifyUserRequest {
 
     private String avatar;
 
-    private Integer status;
+    private Boolean isDeleted;
 
     @NotNull(message = "Role is required")
     private Long roleId;

@@ -12,7 +12,7 @@ public interface CustomerResponse {
 
     Integer getGender();
 
-    String getAvatar();
+    String getStatus();
 
     String getBirthDate();
 
