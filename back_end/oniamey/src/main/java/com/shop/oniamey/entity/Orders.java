@@ -59,6 +59,7 @@ public class Orders extends BaseModel {
     @Column(name = "money_ship", nullable = false)
     private Double moneyShip;
 
+    @Enumerated(EnumType.STRING)
     @Column( name = "status")
     private EnumStatus status;
 }
