@@ -1,5 +1,6 @@
 package com.shop.oniamey.entity.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -24,18 +25,16 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
-    @Column(name = "created_date", updatable = false)
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
-    private Date createdDate;
+    private Date createdAt;
 
     @Column(name = "updated_at")
     @LastModifiedDate
-    private Date updatedDate;
-
-    @Column(name = "status")
-    private Integer status;
+    private Date updatedAt;
 
     @Column(name = "created_by", updatable = false)
     @CreatedBy
@@ -43,6 +42,9 @@ public abstract class BaseModel {
 
     @Column(name = "updated_by")
     @LastModifiedBy
-    private Long lastModifiedBy;
+    private Long updatedBy;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

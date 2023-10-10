@@ -3,9 +3,6 @@ package com.shop.oniamey.entity;
 import com.shop.oniamey.entity.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -13,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "product_detail")
@@ -51,14 +50,11 @@ public class ProductDetail extends BaseModel {
     private Collar collar;
 
     @ManyToOne
-    @JoinColumn(name = "id_sleeve_lenght")
-    private SleeveLenght sleeveLenght;
+    @JoinColumn(name = "id_sleeve_length")
+    private SleeveLength sleeveLength;
 
-    @Column(name = "thumbnail")
-    private String thumbnail;
-
-    @Column(name = "description")
-    private String description;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "gender")
     private Boolean gender;
@@ -71,5 +67,8 @@ public class ProductDetail extends BaseModel {
 
     @Column(name = "weight")
     private Float weight;
+
+//    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<Image> images;
 
 }
