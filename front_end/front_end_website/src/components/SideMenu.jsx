@@ -24,7 +24,7 @@ const Sidebar = () => {
     <Nav className="sidebar card py-2 mb-4 pt-3" id="nav_accordion">
       <Nav.Item className="nav-main">
         <NavLink href="#" className="nav-link" >
-          <p className="text-nowrap">
+          <p className="text-wrap">
             <FontAwesomeIcon icon={faCartShopping} className="me-1" />
             Bán Hàng Tại Quầy
           </p>
@@ -33,7 +33,7 @@ const Sidebar = () => {
 
       <Nav.Item className="nav-main">
         <Nav.Link onClick={toggleSubmenu1}>
-          <p className="text-nowrap">
+          <p className="text-wrap">
             <FontAwesomeIcon icon={faShirt} className="me-1" />
             Quản Lý Sản Phẩm
           </p>

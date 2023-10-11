@@ -3,15 +3,15 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import service from "../services/CustomerService";
+import service from "../../services/CustomerService";
 import Swal from "sweetalert2";
 
-import formatDate from "../utils/FormatDate";
+import formatDate from "../../utils/FormatDate";
 
-const AddCustomerModal = ({ isOpen, onClose, id }) => {
+const ModifyCustomerModal = ({ isOpen, onClose, id }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState(true);
+  const [isDeleted, setIsDeleted] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDate, setBirthDate] = useState();
   const [gender, setGender] = useState();
@@ -25,10 +25,14 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
           setFullName(res.data.fullName);
           setEmail(res.data.email);
           setAvatar(res.data.avatar);
-          setBirthDate(formatDate(res.data.birthDate));
+          if (res.data.birthDate) {
+            setBirthDate(formatDate(res.data.birthDate));
+          } else {
+            setBirthDate("");
+          }
           setGender(res.data.gender);
           setPhoneNumber(res.data.phoneNumber);
-          setStatus(res.data.isActive);
+          setIsDeleted(res.data.isActive);
           console.log(res.data.gender);
         })
         .catch((err) => {
@@ -38,7 +42,7 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
       setFullName("");
       setEmail("");
       setPhoneNumber("");
-      setStatus(true);
+      setIsDeleted(true);
       setBirthDate("");
       setGender(3);
       setAvatar("");
@@ -68,8 +72,10 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
       phoneNumber,
       gender,
       avatar,
-      status,
+      isDeleted,
     };
+
+    console.log(customer);
 
     if (id > 0) {
       service
@@ -91,7 +97,7 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
           onClose();
         })
         .catch((err) => {
-          console.log(err.message);
+          console.log(err);
           showAlert("Error", "Create customer failed");
         });
     }
@@ -126,7 +132,7 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
       setFullName("");
       setEmail("");
       setPhoneNumber("");
-      setStatus(1);
+      setIsDeleted(true);
       setBirthDate("");
       setGender(1);
       setAvatar("");
@@ -182,8 +188,8 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
             <Form.Group className="mb-3">
               <Form.Label>Status</Form.Label>
               <Form.Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                value={isDeleted}
+                onChange={(e) => setIsDeleted(e.target.value)}
               >
                 <option value={true}>Active</option>
                 <option value={false}>Deactivate</option>
@@ -219,4 +225,4 @@ const AddCustomerModal = ({ isOpen, onClose, id }) => {
   );
 };
 
-export default AddCustomerModal;
+export default ModifyCustomerModal;
