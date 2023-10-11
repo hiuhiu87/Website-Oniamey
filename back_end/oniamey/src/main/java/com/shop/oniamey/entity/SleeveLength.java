@@ -15,10 +15,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class SleeveLength extends BaseModel {
-
-
+  
     @Column(name = "name")
     private String name;
 
