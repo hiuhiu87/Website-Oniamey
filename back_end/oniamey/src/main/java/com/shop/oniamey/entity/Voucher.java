@@ -3,8 +3,6 @@ package com.shop.oniamey.entity;
 import com.shop.oniamey.entity.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -32,6 +30,9 @@ public class Voucher extends BaseModel {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
+    @Column(name = "value", nullable = false)
+    private Double value;
+
     @Column(name = "minimum_discount", nullable = false)
     private Double minimumDiscount;
 
@@ -49,8 +50,4 @@ public class Voucher extends BaseModel {
     @Column(name = "type", nullable = false)
     private String type;
 
-//    @Column(name = "type", nullable = false)
-//    @ManyToOne
-//    @JoinColumn(name = "id_voucher_type")
-//    private VoucherType voucherType;
 }

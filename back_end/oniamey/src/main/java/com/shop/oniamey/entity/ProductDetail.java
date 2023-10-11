@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Table(name = "product_detail")
 @Getter
@@ -48,14 +49,14 @@ public class ProductDetail extends BaseModel {
     private Collar collar;
 
     @ManyToOne
-    @JoinColumn(name = "id_sleeve_lenght")
+    @JoinColumn(name = "id_sleeve_length")
     private SleeveLength sleeveLength;
 
     @Column(name = "thumbnail")
     private String thumbnail;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "gender")
     private Boolean gender;
@@ -68,5 +69,8 @@ public class ProductDetail extends BaseModel {
 
     @Column(name = "weight")
     private Float weight;
+
+//    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<Image> images;
 
 }

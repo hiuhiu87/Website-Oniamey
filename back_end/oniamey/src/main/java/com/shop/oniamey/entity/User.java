@@ -1,12 +1,10 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -53,8 +51,5 @@ public class User extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false, table = "user")
     private Role role;
-
-    @OneToOne(mappedBy = "user")
-    private Customer customer;
 
 }

@@ -1,5 +1,6 @@
 package com.shop.oniamey.entity.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -34,8 +35,8 @@ public abstract class BaseModel {
     @LastModifiedDate
     private Date updatedAt;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "deleted")
+    private Boolean deleted;
 
     @Column(name = "created_by", updatable = false)
     @CreatedBy

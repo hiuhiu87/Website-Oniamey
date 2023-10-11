@@ -1,0 +1,31 @@
+.sidebar li .submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.sidebar .nav-link {
+  font-weight: 600;
+  color: white;
+  width: 100%;
+  font-size: 15px;
+}
+.sidebar .nav-link:hover {
+  color: var(--bs-primary);
+}
+.sidebar .nav-main {
+  margin-bottom: 14px;
+}
+
+.nav-sub-menu {
+  margin-left: 12px;
+}
+
+#nav_accordion {
+  background-color: #151a25;
+  color: white;
+  height: 562px;
+  display: flex;
+  justify-content: space-around;
+}/*# sourceMappingURL=Sidemenu.css.map */

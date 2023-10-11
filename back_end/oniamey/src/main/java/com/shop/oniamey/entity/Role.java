@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "role")
 @NoArgsConstructor
@@ -23,7 +25,5 @@ public class Role extends BaseModel {
     @Column(name = "name", unique = true, nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private RoleName name;
-
-
 
 }

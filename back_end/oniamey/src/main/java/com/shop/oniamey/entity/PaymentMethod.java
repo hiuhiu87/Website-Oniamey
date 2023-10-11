@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "payments_method")
@@ -25,8 +22,6 @@ public class PaymentMethod extends BaseModel {
     @Column(name="description" ,nullable = false, length = 1000)
     private String description;
 
-    @Column (name = "total_money",nullable = false)
-    private Double totalMoney;
 
 
 }

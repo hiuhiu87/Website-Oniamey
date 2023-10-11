@@ -20,9 +20,6 @@ import lombok.Setter;
 public class OrderPaymentMethod extends BaseModel {
 
 
-    @Column(name = "trading_code",nullable = false,length = 100)
-    private String tradingCode;
-
     @ManyToOne
     @JoinColumn(name = "id_payment_method")
     private PaymentMethod paymentMethod;
@@ -31,4 +28,9 @@ public class OrderPaymentMethod extends BaseModel {
     @JoinColumn(name = "id_order")
     private Orders order;
 
+    @Column (name = "total_money",nullable = false)
+    private Double totalMoney;
+
+    @Column (name = "code",length = 100)
+    private String code;
 }
