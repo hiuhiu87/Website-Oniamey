@@ -36,6 +36,9 @@ public abstract class BaseModel {
     @LastModifiedDate
     private Date updatedAt;
 
+    @Column(name = "status")
+    private Integer status;
+
     @Column(name = "created_by", updatable = false)
     @CreatedBy
     private Long createdBy;
