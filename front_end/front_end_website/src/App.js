@@ -1,11 +1,12 @@
-// import logo from './logo.svg';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
-import Home from "./layout/Home";
+
+import DashBoard from "./layout/DashBoard";
+import ManageCustomer from "./layout/ManageCustomer";
 import ManageUser from "./layout/ManageUser";
 import Header from "./components/Header";
 import SideMenu from "./components/SideMenu";
@@ -15,22 +16,29 @@ import "../src/assets/style/GlobalStyle.css";
 import { StrictMode } from "react";
 
 function App() {
+  const style = {
+    flex: 1,
+  };
+
   return (
     <Router>
       <Container className="home-container">
-        <Row>
-          <Header />
-          <Col xs={2}>
-            <SideMenu />
-          </Col>
-          <Col lg={10}>
-            <Routes>
-              <Route path="/" element={<Navigate to="/home" />} />
-              <Route exact path="/home" element={<Home />} />
-              <Route path="/manage-customer" element={<ManageUser />} />
-            </Routes>
-          </Col>
-        </Row>
+        <Container style={style}>
+          <Row>
+            <Header />
+            <Col xs={2}>
+              <SideMenu />
+            </Col>
+            <Col lg={10}>
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route exact path="/dashboard" element={<DashBoard />} />
+                <Route path="/manage-customer" element={<ManageCustomer />} />
+                <Route path="/manage-user" element={<ManageUser />} />
+              </Routes>
+            </Col>
+          </Row>
+        </Container>
         <Footer />
       </Container>
     </Router>

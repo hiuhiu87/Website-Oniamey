@@ -12,6 +12,8 @@ public interface UserService {
 
     List<UserResponse> getAllStaffs(Pageable pageable);
 
+    List<UserResponse> getAllUsers();
+
     UserDetailResponse getUserById(Long id);
 
     String createStaff(ModifyUserRequest modifyUserRequest);
@@ -21,5 +23,7 @@ public interface UserService {
     String updateStatus(Long id);
 
     String changePassword(Long id, ChangePasswordRequest changePasswordRequest);
+
+    Long getTotalPage();
 
 }

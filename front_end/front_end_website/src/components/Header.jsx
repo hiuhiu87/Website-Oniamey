@@ -9,8 +9,8 @@ const Header = () => {
   return (
     <Navbar className="bg-link-body-emphasis nav-header">
       <Container>
-        <Navbar.Brand href="#home">
-          <Image src={logoShop} roundedCircle id="image-shop" />
+        <Navbar.Brand href="/">
+          <Image src={logoShop} rounded id="image-shop" />
         </Navbar.Brand>
         <Navbar href="#home" className="nav-bar-search">
           <Form.Control

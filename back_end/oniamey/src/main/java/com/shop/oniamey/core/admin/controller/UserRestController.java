@@ -1,15 +1,14 @@
 package com.shop.oniamey.core.admin.controller;
 
 import com.shop.oniamey.core.admin.model.request.ChangePasswordRequest;
-import com.shop.oniamey.core.admin.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
-import com.shop.oniamey.core.admin.service.CustomerService;
 import com.shop.oniamey.core.admin.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,28 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/admin/users")
+@CrossOrigin("*")
 public class UserRestController {
 
     private UserService userService;
-
-    private CustomerService customerService;
-//
-//    private AddressService addressService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-
-    @Autowired
-    public void setCustomerService(CustomerService customerService) {
-        this.customerService = customerService;
-    }
-//
-//    @Autowired
-//    public void setAddressService(AddressService addressService) {
-//        this.addressService = addressService;
-//    }
 
     @GetMapping("/get-all-staffs/{page}")
     public ResponseEntity<?> getAllUsers(@PathVariable int page) {
@@ -72,6 +58,16 @@ public class UserRestController {
     @PutMapping("/change-password-staff/{id}")
     public ResponseEntity<?> changePasswordStaff(@PathVariable Long id, @Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
         return new ResponseEntity<>(userService.changePassword(id, changePasswordRequest), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all-staffs")
+    public ResponseEntity<?> getAllCustomers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/total-page")
+    public ResponseEntity<?> getTotalPage() {
+        return new ResponseEntity<>(userService.getTotalPage(), HttpStatus.OK);
     }
 
 }
