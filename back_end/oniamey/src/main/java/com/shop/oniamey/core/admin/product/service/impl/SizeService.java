@@ -5,7 +5,7 @@ import com.shop.oniamey.core.admin.product.model.response.PropertyResponse;
 import com.shop.oniamey.core.admin.product.service.IPropertyService;
 import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.entity.Size;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import com.shop.oniamey.repository.product.ProductDetailRepository;
 import com.shop.oniamey.repository.product.SizeRepository;
 import lombok.RequiredArgsConstructor;

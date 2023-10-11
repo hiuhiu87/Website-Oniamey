@@ -3,7 +3,7 @@ package com.shop.oniamey.core.admin.product.controller;
 import com.shop.oniamey.core.admin.product.model.request.ImageRequest;
 import com.shop.oniamey.core.admin.product.service.IImageService;
 import com.shop.oniamey.entity.Image;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

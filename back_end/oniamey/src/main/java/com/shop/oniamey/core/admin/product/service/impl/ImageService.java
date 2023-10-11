@@ -4,7 +4,7 @@ import com.shop.oniamey.core.admin.product.model.request.ImageRequest;
 import com.shop.oniamey.core.admin.product.service.IImageService;
 import com.shop.oniamey.entity.Image;
 import com.shop.oniamey.entity.ProductDetail;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import com.shop.oniamey.repository.product.ImageRepository;
 import com.shop.oniamey.repository.product.ProductDetailRepository;
 import lombok.RequiredArgsConstructor;

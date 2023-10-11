@@ -4,7 +4,7 @@ import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
 import com.shop.oniamey.entity.ProductDetail;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 
 import java.io.IOException;
 import java.util.List;

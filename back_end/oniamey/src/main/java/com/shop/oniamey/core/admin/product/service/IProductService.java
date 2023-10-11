@@ -4,7 +4,7 @@ import com.google.zxing.WriterException;
 import com.shop.oniamey.core.admin.product.model.request.ProductRequest;
 import com.shop.oniamey.core.admin.product.model.response.ProductResponse;
 import com.shop.oniamey.entity.Product;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

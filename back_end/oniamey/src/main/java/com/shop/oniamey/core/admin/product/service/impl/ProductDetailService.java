@@ -14,7 +14,7 @@ import com.shop.oniamey.entity.Product;
 import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.entity.Size;
 import com.shop.oniamey.entity.SleeveLength;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import com.shop.oniamey.repository.product.BrandRepository;
 import com.shop.oniamey.repository.product.CategoryRepository;
 import com.shop.oniamey.repository.product.CollarRepository;

@@ -8,7 +8,7 @@ import com.shop.oniamey.core.admin.product.model.response.ProductResponse;
 import com.shop.oniamey.core.admin.product.service.IProductDetailService;
 import com.shop.oniamey.core.admin.product.service.IProductService;
 import com.shop.oniamey.entity.Product;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

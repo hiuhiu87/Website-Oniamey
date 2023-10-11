@@ -2,7 +2,7 @@ package com.shop.oniamey.core.admin.product.service;
 
 import com.shop.oniamey.core.admin.product.model.request.PropertyRequest;
 import com.shop.oniamey.core.admin.product.model.response.PropertyResponse;
-import com.shop.oniamey.exception.DataNotFoundException;
+import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 
 import java.util.List;
 
