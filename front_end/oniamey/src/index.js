@@ -13,7 +13,7 @@ import DashBoard from './components/Admin/Content/dashboard/DashBoard';
 import SalesAtTheCounter from './components/Admin/Content/sales-at-the-counter/SalesAtTheCounter';
 import ManageProduct from './components/Admin/Content/manage-product/product/Product'
 import ManageCategory from './components/Admin/Content/manage-product/category/Category';
-import ManageBrand from './components/Admin/Content/manage-product/brand/Brand';
+import ManageBrand from './components/Admin/Content/manage-product/brand/ManageBrand';
 import ManageMaterial from './components/Admin/Content/manage-product/material/Material';
 import ManageSize from './components/Admin/Content/manage-product/size/Size';
 import ManageColor from './components/Admin/Content/manage-product/color/Color';

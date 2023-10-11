@@ -45,6 +45,6 @@ public abstract class BaseModel {
     private Long updatedBy;
 
     @Column(name = "deleted")
-    private Boolean deleted = false;
+    private Boolean deleted;
 
 }

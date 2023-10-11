@@ -111,6 +111,7 @@ const SideBar = (props) => {
                     <Menu iconShape="circle">
                         <MenuItem
                             icon={<FaMoneyBill />}
+                            suffix={<span className='badge red'>New</span>}
                         >
                             Quản Lý Hóa Đơn
                             <Link to="/admins/manage-orders"></Link>

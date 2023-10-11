@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Table(name = "product_detail")
 @Getter
@@ -70,5 +68,4 @@ public class ProductDetail extends BaseModel {
 
 //    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private List<Image> images;
-
 }
