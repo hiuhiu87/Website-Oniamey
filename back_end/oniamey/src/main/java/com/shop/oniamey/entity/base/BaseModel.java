@@ -1,5 +1,6 @@
 package com.shop.oniamey.entity.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "created_at", updatable = false)
@@ -45,6 +47,7 @@ public abstract class BaseModel {
     @LastModifiedBy
     private Long updatedBy;
 
-    @Column (name = "deleted" )
-    private Integer deleted;
+    @Column(name = "deleted")
+    private Boolean deleted = false;
+
 }
