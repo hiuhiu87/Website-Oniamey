@@ -1,6 +1,9 @@
 package com.shop.oniamey.core.admin.service;
 
 import com.shop.oniamey.core.admin.model.request.ModifyAddressRequest;
+import com.shop.oniamey.core.admin.model.response.AddressResponse;
+
+import java.util.List;
 
 public interface AddressService {
 
@@ -10,10 +13,10 @@ public interface AddressService {
 
     String updateAddress(ModifyAddressRequest modifyAddressRequest);
 
-    String getAddressById(Long id);
+    AddressResponse getAddressById(Long id);
 
-    String getAllAddressByCustomerId(Long idCustomer);
+    List<AddressResponse> getAllAddressByCustomerId(Long idCustomer);
 
-    String getAllAddress();
+    List<AddressResponse>  getAllAddress();
 
 }

@@ -14,6 +14,8 @@ public interface CustomerDetailResponse {
 
     String getAvatar();
 
+    Boolean getIsActive();
+
     String getBirthDate();
 
     String getCreatedAt();

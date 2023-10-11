@@ -36,8 +36,8 @@ public abstract class BaseModel {
     @LastModifiedDate
     private Date updatedAt;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "deleted")
+    private Boolean isDeleted;
 
     @Column(name = "created_by", updatable = false)
     @CreatedBy
@@ -46,8 +46,5 @@ public abstract class BaseModel {
     @Column(name = "updated_by")
     @LastModifiedBy
     private Long updatedBy;
-
-    @Column(name = "deleted")
-    private Boolean deleted = false;
 
 }

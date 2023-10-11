@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.model.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,19 +33,17 @@ public class ModifyCustomerRequest {
     @Email(message = "Email is invalid")
     private String email;
 
-    @NotEmpty(message = "Password is required")
-    private String password;
-
     @NotEmpty(message = "Phone number is required")
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phoneNumber;
 
     @Min(value = 0)
     @Max(value = 2)
+    @Nullable
     private Integer gender;
 
     private String avatar;
 
-    private Integer status;
+    private Boolean isDeleted;
 
 }

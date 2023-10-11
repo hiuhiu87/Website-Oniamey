@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.service;
 
+import com.shop.oniamey.core.admin.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.model.response.UserResponse;
@@ -19,6 +20,6 @@ public interface UserService {
 
     String updateStatus(Long id);
 
-    String changePassword(Long id, String password);
+    String changePassword(Long id, ChangePasswordRequest changePasswordRequest);
 
 }

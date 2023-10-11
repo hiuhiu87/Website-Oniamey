@@ -1,6 +1,7 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
+import com.shop.oniamey.entity.base.EnumStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,4 +59,7 @@ public class Orders extends BaseModel {
     @Column(name = "money_ship", nullable = false)
     private Double moneyShip;
 
+    @Enumerated(EnumType.STRING)
+    @Column( name = "status" ,length = 50)
+    private EnumStatus status;
 }
