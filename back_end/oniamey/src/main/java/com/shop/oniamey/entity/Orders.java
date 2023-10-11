@@ -60,6 +60,6 @@ public class Orders extends BaseModel {
     private Double moneyShip;
 
     @Enumerated(EnumType.STRING)
-    @Column( name = "status")
+    @Column( name = "status" ,length = 50)
     private EnumStatus status;
 }
