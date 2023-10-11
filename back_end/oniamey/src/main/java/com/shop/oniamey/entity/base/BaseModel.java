@@ -25,6 +25,7 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "created_at", updatable = false)
@@ -35,9 +36,6 @@ public abstract class BaseModel {
     @LastModifiedDate
     private Date updatedAt;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
-
     @Column(name = "created_by", updatable = false)
     @CreatedBy
     private Long createdBy;
@@ -45,5 +43,8 @@ public abstract class BaseModel {
     @Column(name = "updated_by")
     @LastModifiedBy
     private Long updatedBy;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
 
 }

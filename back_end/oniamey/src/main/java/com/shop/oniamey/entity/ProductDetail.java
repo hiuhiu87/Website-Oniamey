@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Table(name = "product_detail")
 @Getter
@@ -52,9 +51,6 @@ public class ProductDetail extends BaseModel {
     @JoinColumn(name = "id_sleeve_length")
     private SleeveLength sleeveLength;
 
-    @Column(name = "thumbnail")
-    private String thumbnail;
-
     @Column(name = "name")
     private String name;
 
@@ -72,5 +68,4 @@ public class ProductDetail extends BaseModel {
 
 //    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private List<Image> images;
-
 }
