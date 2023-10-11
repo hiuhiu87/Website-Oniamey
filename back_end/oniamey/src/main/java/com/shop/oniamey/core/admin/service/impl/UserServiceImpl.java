@@ -39,6 +39,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponse> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+    @Override
     public UserDetailResponse getUserById(Long id) {
         return userRepository.getUserDetailById(id);
     }
@@ -131,6 +135,17 @@ public class UserServiceImpl implements UserService {
         user.setIsDeleted(!status);
         userRepository.save(user);
         return "Update status success";
+    }
+
+    @Override
+    public Long getTotalPage() {
+        long totalPage = userRepository.count();
+        Long endPage = totalPage / 5;
+        if (totalPage % 5 != 0) {
+            endPage = endPage + 1;
+        }
+        System.out.println(endPage);
+        return endPage;
     }
 
 }

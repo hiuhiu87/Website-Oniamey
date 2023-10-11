@@ -27,6 +27,7 @@ public class ModifyCustomerRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Birth date must be in the past")
+    @Nullable
     private Date birthDate;
 
     @NotEmpty(message = "Email is required")
@@ -37,8 +38,8 @@ public class ModifyCustomerRequest {
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phoneNumber;
 
-    @Min(value = 0)
-    @Max(value = 2)
+    @Min(value = 1)
+    @Max(value = 3)
     @Nullable
     private Integer gender;
 

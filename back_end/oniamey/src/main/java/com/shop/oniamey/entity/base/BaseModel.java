@@ -28,11 +28,11 @@ public abstract class BaseModel {
 
     @Column(name = "created_date", updatable = false)
     @CreatedDate
-    private Date createdDate;
+    private Date createdAt;
 
     @Column(name = "last_modified_date")
     @LastModifiedDate
-    private Date lastModifiedDate;
+    private Date updatedAt;
 
     @Column(name = "deleted")
     private Boolean isDeleted;
