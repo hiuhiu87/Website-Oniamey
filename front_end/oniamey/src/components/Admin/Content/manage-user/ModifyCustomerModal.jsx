@@ -203,7 +203,7 @@ const ModifyCustomerModal = ({ isOpen, onClose, id }) => {
             Close
           </Button>
           <Button
-            variant="primary"
+            variant="dark"
             onClick={(e) => {
               e.preventDefault();
               Swal.fire({

@@ -158,7 +158,7 @@ const Employee = (props) => {
   return (
     <Fragment>
       <Container>
-        <h4>Quản Lý Nhân Viên</h4>
+        <h4>Manager Staff</h4>
         <Container className="d-flex justify-content-between align-items-center mb-3 mt-3 p-0 table-container">
           <Col xs={4} className="d-flex">
             <Form.Control
@@ -187,7 +187,7 @@ const Employee = (props) => {
               to="/admins/add-employee"
               variant="primary"
               style={{ fontSize: "15px" }}
-              className="btn btn-primary"
+              className="btn btn-dark"
             >
               Add New
             </Link>
