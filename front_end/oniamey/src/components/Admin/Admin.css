@@ -1,0 +1,35 @@
+.admin-container {
+  display: flex;
+}
+.admin-container .admin-sidebar .pro-sidebar {
+  height: 100vh !important;
+}
+.admin-container .admin-content {
+  width: 100%;
+}
+.admin-container .admin-content .admin-header {
+  height: 40px;
+}
+.admin-container .admin-content .admin-main {
+  height: 60px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}/*# sourceMappingURL=Admin.css.map */
