@@ -24,34 +24,46 @@ import ManageVoucher from './components/Admin/Content/manage-voucher/Voucher';
 import ManageEmployee from './components/Admin/Content/manage-user/Employee';
 import ManageCustomer from './components/Admin/Content/manage-user/Customer';
 import ManageStatistical from './components/Admin/Content/manage-statistical/Statistical';
+import ModifyUserComponent from "./components/Admin/Content/manage-user/ModifyUserComponent";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     {/* <React.StrictMode> */}
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<App />}>
+        <Route path="/" element={<App />}>
           <Route index element={<HomePage />}></Route>
-          <Route path='users' element={<User />}></Route>
+          <Route path="users" element={<User />}></Route>
         </Route>
 
-        <Route path='/admins' element={<Admin />}>
+        <Route path="/admins" element={<Admin />}>
           <Route index element={<DashBoard />}></Route>
-          <Route path='sales-at-the-counter' element={<SalesAtTheCounter />}></Route>
-          <Route path='manage-products' element={<ManageProduct />}></Route>
-          <Route path='manage-categories' element={<ManageCategory />}></Route>
-          <Route path='manage-brands' element={<ManageBrand />}></Route>
-          <Route path='manage-materials' element={<ManageMaterial />}></Route>
-          <Route path='manage-sizes' element={<ManageSize />}></Route>
-          <Route path='manage-colors' element={<ManageColor />}></Route>
-          <Route path='manage-collars' element={<ManageCollar />}></Route>
-          <Route path='manage-sleeve-lengths' element={<ManageSleeveLength />}></Route>
-          <Route path='manage-orders' element={<ManageOrder />}></Route>
-          <Route path='manage-vouchers' element={<ManageVoucher />}></Route>
-          <Route path='manage-employees' element={<ManageEmployee />}></Route>
-          <Route path='manage-customers' element={<ManageCustomer />}></Route>
-          <Route path='manage-statisticals' element={<ManageStatistical />}></Route>
+          <Route
+            path="sales-at-the-counter"
+            element={<SalesAtTheCounter />}
+          ></Route>
+          <Route path="manage-products" element={<ManageProduct />}></Route>
+          <Route path="manage-categories" element={<ManageCategory />}></Route>
+          <Route path="manage-brands" element={<ManageBrand />}></Route>
+          <Route path="manage-materials" element={<ManageMaterial />}></Route>
+          <Route path="manage-sizes" element={<ManageSize />}></Route>
+          <Route path="manage-colors" element={<ManageColor />}></Route>
+          <Route path="manage-collars" element={<ManageCollar />}></Route>
+          <Route
+            path="manage-sleeve-lengths"
+            element={<ManageSleeveLength />}
+          ></Route>
+          <Route path="manage-orders" element={<ManageOrder />}></Route>
+          <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
+          <Route path="manage-employees" element={<ManageEmployee />}></Route>
+          <Route path="manage-customers" element={<ManageCustomer />}></Route>
+          <Route
+            path="manage-statisticals"
+            element={<ManageStatistical />}
+          ></Route>
+          <Route path="add-employee" element={<ModifyUserComponent />}></Route>
+          <Route path="update-employee" element={<ModifyUserComponent />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
