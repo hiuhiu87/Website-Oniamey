@@ -1,19 +1,19 @@
 import React from 'react';
-import './ManageBrand.scss';
-import { SiBrandfolder } from 'react-icons/si';
+import './ManageColor.scss';
+import { IoIosColorPalette } from 'react-icons/io';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
 
-const ManageBrand = (props) => {
+const ManageColor = (props) => {
     return (
-        <div class="manage-brand-container">
-            <div className='manage-brand-title'>
+        <div class="manage-color-container">
+            <div className='manage-color-title'>
                 <div className="title">
-                    <SiBrandfolder size={32} /> Quản Lý Thương Hiệu
+                    <IoIosColorPalette size={32} /> Quản Lý Màu Sắc
                 </div>
             </div>
-            <div className='manage-brand-search'>
-                <div className='search-brand-title'>
+            <div className='manage-color-search'>
+                <div className='search-color-title'>
                     <div className="title">
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
@@ -21,7 +21,7 @@ const ManageBrand = (props) => {
                 </div>
                 <form>
                     <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Thương Hiệu</label>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">Màu Sắc</label>
                         <div class="col-sm-6 d-flex">
                             <input type="text" class="form-control me-2" id="inputEmail3" />
                             <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
@@ -40,10 +40,10 @@ const ManageBrand = (props) => {
                     </div>
                 </form>
             </div>
-            <div className='manage-brand-table'>
-                <div className='list-brand-title'>
+            <div className='manage-color-table'>
+                <div className='list-color-title'>
                     <div className="title">
-                        <FaThList size={26} /> Danh Sách Thương Hiệu
+                        <FaThList size={26} /> Danh Sách Màu Sắc
                     </div>
                     <button type="button" class="btn btn-dark">
                         <MdLibraryAdd /> Thêm</button>
@@ -101,4 +101,4 @@ const ManageBrand = (props) => {
     );
 }
 
-export default ManageBrand;
+export default ManageColor;

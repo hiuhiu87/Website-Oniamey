@@ -1,49 +1,54 @@
 import React from 'react';
-import './ManageBrand.scss';
-import { SiBrandfolder } from 'react-icons/si';
+import './ManageSleeveLength.scss';
+import { CgDetailsLess } from 'react-icons/cg';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
+import { Container } from 'react-bootstrap';
 
-const ManageBrand = (props) => {
+const ManageSleeveLength = (props) => {
     return (
-        <div class="manage-brand-container">
-            <div className='manage-brand-title'>
+        <div class="manage-sleeve-length-container">
+            <div className='manage-sleeve-length-title'>
                 <div className="title">
-                    <SiBrandfolder size={32} /> Quản Lý Thương Hiệu
+                    <CgDetailsLess size={32} /> Quản Lý Chiều Dài Tay
                 </div>
             </div>
-            <div className='manage-brand-search'>
-                <div className='search-brand-title'>
+            <div className='manage-sleeve-length-search'>
+                <div className='search-sleeve-length-title'>
                     <div className="title">
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
-
                 </div>
-                <form>
-                    <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Thương Hiệu</label>
-                        <div class="col-sm-6 d-flex">
-                            <input type="text" class="form-control me-2" id="inputEmail3" />
-                            <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
+
+                <div className='main-container'>
+                    <div className='w-50'>
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Chiều Dài Tay</label>
+                            <div class="col d-flex align-content-between">
+                                <input type="text" class="form-control me-4" id="inputEmail3" />
+                                <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng Thái</label>
+                            <div class="col d-flex">
+                                <select class="form-select me-4" id="inputPassword3">
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <option value="option3">Option 3</option>
+                                </select>
+                                <button type="button" class="btn btn-secondary">Làm Mới</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label for="inputPassword3" class="col-sm-1 col-form-label">Trạng Thái</label>
-                        <div class="col-sm-6 d-flex">
-                            <select class="form-select me-2" id="inputPassword3">
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                            </select>
-                            <button type="button" class="btn btn-secondary">Làm Mới</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
+
+
             </div>
-            <div className='manage-brand-table'>
-                <div className='list-brand-title'>
+            <div className='manage-sleeve-length-table'>
+                <div className='list-sleeve-length-title'>
                     <div className="title">
-                        <FaThList size={26} /> Danh Sách Thương Hiệu
+                        <FaThList size={26} /> Danh Sách Chiều Dài Tay
                     </div>
                     <button type="button" class="btn btn-dark">
                         <MdLibraryAdd /> Thêm</button>
@@ -101,4 +106,4 @@ const ManageBrand = (props) => {
     );
 }
 
-export default ManageBrand;
+export default ManageSleeveLength;

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { DiReact } from 'react-icons/di';
 import { MdDashboard } from 'react-icons/md';
 import './SideBar.scss';
 import {
@@ -15,15 +14,16 @@ import {
 
 import { FaProductHunt, FaGithub, FaTshirt, FaMoneyBill, FaTag, FaUserTie, FaChartLine, FaUsersCog, FaUserFriends } from 'react-icons/fa';
 import { HiShoppingCart } from 'react-icons/hi';
+import { RiTShirt2Fill } from 'react-icons/ri';
 import { MdCategory } from 'react-icons/md';
 import { SiBrandfolder, SiZend } from 'react-icons/si';
 import { GiExplosiveMaterials, GiHeavyCollar } from 'react-icons/gi';
 import { IoIosColorPalette } from 'react-icons/io';
 import { CgDetailsLess } from 'react-icons/cg';
-import sidebarBg from '../../assets/bg1.jpeg';
+import sidebarBg from '../../assets/bg4.png';
 
 const SideBar = (props) => {
-    const { image, collapsed, toggled, handleToggleSidebar } = props;
+    const { collapsed, toggled, handleToggleSidebar } = props;
     return (
         <>
             <ProSidebar
@@ -46,15 +46,15 @@ const SideBar = (props) => {
                             whiteSpace: 'nowrap',
                         }}
                     >
-                        <DiReact size={'3em'} color={"00bfff"} />
-                        <span>Oniamey Shop</span>
+                        <RiTShirt2Fill size={'2em'} color={"#ff7f29"} />
+                        <span> Oniamey Shop</span>
                     </div>
                 </SidebarHeader>
 
                 <SidebarContent>
                     <Menu iconShape="circle">
                         <MenuItem
-                            icon={<MdDashboard />}
+                            icon={<MdDashboard color='#ff7f29' />}
                         >
                             Dashboard
                             <Link to="/admins"></Link>
@@ -62,7 +62,7 @@ const SideBar = (props) => {
                     </Menu>
                     <Menu iconShape="circle">
                         <MenuItem
-                            icon={<HiShoppingCart />}
+                            icon={<HiShoppingCart color='#ff7f29' />}
                         >
                             Bán Hàng Tại Quầy
                             <Link to="/admins/sales-at-the-counter"></Link>
@@ -70,38 +70,38 @@ const SideBar = (props) => {
                     </Menu>
                     <Menu iconShape="circle">
                         <SubMenu
-                            icon={<FaProductHunt />}
+                            icon={<FaProductHunt color='#ff7f29' />}
                             title="Quản Lý Sản Phẩm"
                         >
-                            <MenuItem icon={<FaTshirt />}>
+                            <MenuItem icon={<FaTshirt color='#ff7f29' />}>
                                 Sản Phẩm
                                 <Link to="/admins/manage-products"></Link>
                             </MenuItem>
-                            <MenuItem icon={<MdCategory />}>
+                            <MenuItem icon={<MdCategory color='#ff7f29' />}>
                                 Danh Mục
                                 <Link to="/admins/manage-categories"></Link>
                             </MenuItem>
-                            <MenuItem icon={<SiBrandfolder />}>
+                            <MenuItem icon={<SiBrandfolder color='#ff7f29' />}>
                                 Thương Hiệu
                                 <Link to="/admins/manage-brands"></Link>
                             </MenuItem>
-                            <MenuItem icon={<GiExplosiveMaterials />}>
+                            <MenuItem icon={<GiExplosiveMaterials color='#ff7f29' />}>
                                 Chất Liệu
                                 <Link to="/admins/manage-materials"></Link>
                             </MenuItem>
-                            <MenuItem icon={<SiZend />}>
+                            <MenuItem icon={<SiZend color='#ff7f29' />}>
                                 Kích Cỡ
                                 <Link to="/admins/manage-sizes"></Link>
                             </MenuItem>
-                            <MenuItem icon={<IoIosColorPalette />}>
+                            <MenuItem icon={<IoIosColorPalette color='#ff7f29' />}>
                                 Màu Sắc
                                 <Link to="/admins/manage-colors"></Link>
                             </MenuItem>
-                            <MenuItem icon={<GiHeavyCollar />}>
+                            <MenuItem icon={<GiHeavyCollar color='#ff7f29' />}>
                                 Cổ Áo
                                 <Link to="/admins/manage-collars"></Link>
                             </MenuItem>
-                            <MenuItem icon={<CgDetailsLess />}>
+                            <MenuItem icon={<CgDetailsLess color='#ff7f29' />}>
                                 Chiều Dài Tay Áo
                                 <Link to="/admins/manage-sleeve-lengths"></Link>
                             </MenuItem>
@@ -110,7 +110,7 @@ const SideBar = (props) => {
                     </Menu>
                     <Menu iconShape="circle">
                         <MenuItem
-                            icon={<FaMoneyBill />}
+                            icon={<FaMoneyBill color='#ff7f29' />}
                             suffix={<span className='badge red'>New</span>}
                         >
                             Quản Lý Hóa Đơn
@@ -119,7 +119,7 @@ const SideBar = (props) => {
                     </Menu>
                     <Menu iconShape="circle">
                         <MenuItem
-                            icon={<FaTag />}
+                            icon={<FaTag color='#ff7f29' />}
                         >
                             Khuyến Mãi
                             <Link to="/admins/manage-vouchers"></Link>
@@ -127,21 +127,21 @@ const SideBar = (props) => {
                     </Menu>
                     <Menu iconShape="circle">
                         <SubMenu
-                            icon={<FaUsersCog />}
+                            icon={<FaUsersCog color='#ff7f29' />}
                             title="Quản Lý Tài Khoản"
                         >
-                            <MenuItem icon={<FaUserTie />}>
+                            <MenuItem icon={<FaUserTie color='#ff7f29' />}>
                                 Nhân Viên
                                 <Link to="/admins/manage-employees"></Link>
                             </MenuItem>
-                            <MenuItem icon={<FaUserFriends />}>
+                            <MenuItem icon={<FaUserFriends color='#ff7f29' />}>
                                 Khách Hàng
                                 <Link to="/admins/manage-customers"></Link>
                             </MenuItem>
                         </SubMenu>
                     </Menu>
                     <Menu iconShape="circle">
-                        <MenuItem icon={<FaChartLine />}>
+                        <MenuItem icon={<FaChartLine color='#ff7f29' />}>
                             Thống Kê
                             <Link to="/admins/manage-statisticals"></Link>
                         </MenuItem>

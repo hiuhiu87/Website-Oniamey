@@ -1,19 +1,19 @@
 import React from 'react';
-import './ManageBrand.scss';
-import { SiBrandfolder } from 'react-icons/si';
+import './ManageCollar.scss';
+import { GiHeavyCollar } from 'react-icons/gi';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
 
-const ManageBrand = (props) => {
+const ManageCollar = (props) => {
     return (
-        <div class="manage-brand-container">
-            <div className='manage-brand-title'>
+        <div class="manage-collar-container">
+            <div className='manage-collar-title'>
                 <div className="title">
-                    <SiBrandfolder size={32} /> Quản Lý Thương Hiệu
+                    <GiHeavyCollar size={32} /> Quản Lý Cổ Áo
                 </div>
             </div>
-            <div className='manage-brand-search'>
-                <div className='search-brand-title'>
+            <div className='manage-collar-search'>
+                <div className='search-collar-title'>
                     <div className="title">
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
@@ -21,7 +21,7 @@ const ManageBrand = (props) => {
                 </div>
                 <form>
                     <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Thương Hiệu</label>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">Cổ Áo</label>
                         <div class="col-sm-6 d-flex">
                             <input type="text" class="form-control me-2" id="inputEmail3" />
                             <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
@@ -40,10 +40,10 @@ const ManageBrand = (props) => {
                     </div>
                 </form>
             </div>
-            <div className='manage-brand-table'>
-                <div className='list-brand-title'>
+            <div className='manage-collar-table'>
+                <div className='list-collar-title'>
                     <div className="title">
-                        <FaThList size={26} /> Danh Sách Thương Hiệu
+                        <FaThList size={26} /> Danh Sách Cổ Áo
                     </div>
                     <button type="button" class="btn btn-dark">
                         <MdLibraryAdd /> Thêm</button>
@@ -101,4 +101,4 @@ const ManageBrand = (props) => {
     );
 }
 
-export default ManageBrand;
+export default ManageCollar;
