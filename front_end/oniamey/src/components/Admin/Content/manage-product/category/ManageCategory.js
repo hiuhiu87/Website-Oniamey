@@ -1,19 +1,19 @@
 import React from 'react';
-import './ManageBrand.scss';
-import { SiBrandfolder } from 'react-icons/si';
+import './ManageCategory.scss';
+import { MdCategory } from 'react-icons/md';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
 
-const ManageBrand = (props) => {
+const ManageCategory = (props) => {
     return (
-        <div class="manage-brand-container">
-            <div className='manage-brand-title'>
+        <div class="manage-category-container">
+            <div className='manage-category-title'>
                 <div className="title">
-                    <SiBrandfolder size={32} /> Quản Lý Thương Hiệu
+                    <MdCategory size={32} /> Quản Lý Danh Mục
                 </div>
             </div>
-            <div className='manage-brand-search'>
-                <div className='search-brand-title'>
+            <div className='manage-category-search'>
+                <div className='search-category-title'>
                     <div className="title">
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
@@ -21,7 +21,7 @@ const ManageBrand = (props) => {
                 </div>
                 <form>
                     <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Thương Hiệu</label>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">Danh Mục</label>
                         <div class="col-sm-6 d-flex">
                             <input type="text" class="form-control me-2" id="inputEmail3" />
                             <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
@@ -40,10 +40,10 @@ const ManageBrand = (props) => {
                     </div>
                 </form>
             </div>
-            <div className='manage-brand-table'>
-                <div className='list-brand-title'>
+            <div className='manage-category-table'>
+                <div className='list-category-title'>
                     <div className="title">
-                        <FaThList size={26} /> Danh Sách Thương Hiệu
+                        <FaThList size={26} /> Danh Sách Danh Mục
                     </div>
                     <button type="button" class="btn btn-dark">
                         <MdLibraryAdd /> Thêm</button>
@@ -101,4 +101,4 @@ const ManageBrand = (props) => {
     );
 }
 
-export default ManageBrand;
+export default ManageCategory;

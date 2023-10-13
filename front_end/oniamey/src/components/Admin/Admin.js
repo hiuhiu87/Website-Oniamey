@@ -1,6 +1,6 @@
 import SideBar from "./SideBar";
 import './Admin.scss';
-import { FaBars } from 'react-icons/fa';
+import { BiSidebar } from 'react-icons/bi';
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
@@ -15,7 +15,7 @@ const Admin = () => {
             </div>
             <div className="admin-content">
                 <div className="admin-header">
-                    <FaBars onClick={() => setCollapsed(!collapsed)} />
+                    <BiSidebar size={25} onClick={() => setCollapsed(!collapsed)} />
                 </div>
                 <div className="admin-main">
                     <Outlet />
