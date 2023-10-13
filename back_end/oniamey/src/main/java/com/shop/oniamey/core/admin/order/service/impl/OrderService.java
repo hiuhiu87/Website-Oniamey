@@ -2,8 +2,7 @@ package com.shop.oniamey.core.admin.order.service.impl;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
-import com.shop.oniamey.core.admin.order.service.OrderService;
-import com.shop.oniamey.entity.Customer;
+import com.shop.oniamey.core.admin.order.service.IOrderService;
 import com.shop.oniamey.entity.Orders;
 import com.shop.oniamey.entity.base.EnumStatus;
 import com.shop.oniamey.infrastructure.exception.RestApiException;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderService implements IOrderService {
     @Autowired
     private OrderRepository orderRepository;
 
@@ -89,6 +88,40 @@ public class OrderServiceImpl implements OrderService {
         }
         orderRepository.deleteOrder(id);
          return "delete order success";
+    }
+
+    @Override
+    public String updateOrder(Long id, OrderRequest orderRequest) {
+        if (orderRepository.findById(id).isEmpty()){
+            return "order id not found";
+        }
+        Orders orders = orderRepository.findById(id).get();
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
+            return "user not found";
+        }
+        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+            return "customer not found";
+        }
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+            return "voucher not found";
+        }
+        orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
+        orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
+        orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());
+        orders.setPhoneNumber(orderRequest.getPhoneNumber());
+        orders.setAddress(orderRequest.getAddress());
+        orders.setUserName(orderRequest.getUserName());
+        orders.setTotalMoney(orderRequest.getTotalMoney());
+        orders.setConfirmationDate(orderRequest.getConfirmationDate());
+        orders.setShipDate(orderRequest.getShipDate());
+        orders.setReceiveDate(orderRequest.getReceiveDate());
+        orders.setCompletionDate(orderRequest.getCompletionDate());
+        orders.setType(orderRequest.getType());
+        orders.setNote(orderRequest.getNote());
+        orders.setMoneyShip(orderRequest.getMoneyShip());
+        orders.setStatus(EnumStatus.PENDING);
+        orderRepository.save(orders);
+        return "Update order success";
     }
 
 }

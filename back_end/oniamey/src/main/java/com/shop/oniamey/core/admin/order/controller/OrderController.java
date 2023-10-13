@@ -2,11 +2,9 @@ package com.shop.oniamey.core.admin.order.controller;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
-import com.shop.oniamey.core.admin.order.service.OrderService;
-import com.shop.oniamey.entity.Orders;
+import com.shop.oniamey.core.admin.order.service.IOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class OrderController {
     @Autowired
-    private OrderService orderService;
+    private IOrderService orderService;
 
     @GetMapping ("/all")
     public ResponseEntity<?> getAll(){
@@ -46,5 +44,8 @@ public class OrderController {
         return orderService.deleteOrder(id);
     }
 
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest){
+        return new ResponseEntity<>(orderService.updateOrder(id,orderRequest),HttpStatus.OK);
+    }
 }
