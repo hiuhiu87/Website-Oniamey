@@ -2,7 +2,8 @@
   box-shadow: none;
 }
 
-.active > .page-link, .page-link.active {
+.active > .page-link,
+.active .page-link.active {
   z-index: 3;
   color: white;
   background-color: black;
@@ -12,7 +13,6 @@
 .page-link {
   color: black;
 }
-
 .page-link:hover {
   color: black;
 }/*# sourceMappingURL=CustomerStyle.css.map */

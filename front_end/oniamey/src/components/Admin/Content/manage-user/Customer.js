@@ -7,13 +7,17 @@ import {
   faPencilSquare,
   faLock,
   faUnlock,
+  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-import ModifyCustomerModal from "./ModifyCustomerModal";
+import ModifyCustomerModal from "./components/ModifyCustomerModal";
+import BreadcrumbsPage from "../../BreadCrumbs/BreadcrumbsPage";
 import service from "../../../../services/CustomerService";
 import "../manage-user/style/Table.css";
 import "../manage-user/style/CustomerStyle.css";
+import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Customer = (props) => {
   const [customer, setCustomer] = useState([]);
@@ -236,7 +240,7 @@ const Customer = (props) => {
               openModal(row.id);
             }}
           >
-            <FontAwesomeIcon icon={faPencilSquare}/>
+            <FontAwesomeIcon icon={faPencilSquare} />
           </Button>
           {"     "}
           <Button
@@ -250,6 +254,13 @@ const Customer = (props) => {
               icon={row.status === "false" ? faLock : faUnlock}
             />
           </Button>
+          <Link
+            to={`/admins/manage-customers/detail-customer/${row.id}`}
+            className="btn btn-dark"
+            style={{ marginLeft: "10px" }}
+          >
+            <FontAwesomeIcon icon={faCircleInfo} />
+          </Link>
         </>
       ),
     },
@@ -309,7 +320,8 @@ const Customer = (props) => {
   return (
     <Container className="wrapper">
       <h3 className="ml-5">Manager Customer</h3>
-      <Container className="d-flex justify-content-between align-items-center mb-3 mt-3">
+      {/* <BreadcrumbsPage /> */}
+      <Container className="d-flex justify-content-between align-items-center mt-3">
         <Col xs={3} className="d-flex">
           <Form.Control
             type="search"
@@ -320,7 +332,7 @@ const Customer = (props) => {
             onChange={(e) => handleFilter(e)}
           />
         </Col>
-        <Col xs={6} className="d-flex justify-content-end align-items-center">
+        <Col sm={8} className="d-flex justify-content-end align-items-center">
           <Form>
             <Form.Group className="me-2 d-flex justify-content-center align-items-center">
               <Form.Label className="m-2">Status</Form.Label>
@@ -331,17 +343,17 @@ const Customer = (props) => {
               </Form.Select>
             </Form.Group>
           </Form>
+        </Col>
+        <Col>
           <Button
-            variant="dark"
-            style={{ fontSize: "15px" }}
-            onClick={openModal}
+            className="btn btn-dark w-100"
+            onClick={() => {
+              openModal();
+            }}
           >
-            Add New
+            <FontAwesomeIcon icon={faClipboardUser} /> Add
           </Button>
         </Col>
-        {/* <Col sm={3}>
-          
-        </Col> */}
       </Container>
       <Container className="table-container">
         <DataTable
@@ -353,9 +365,9 @@ const Customer = (props) => {
       </Container>
       <Row className="d-flex justify-content-center align-items-center">
         <Col xs={12} className="d-flex justify-content-center">
-          <Pagination
-            style={{ cursor: "pointer", color: "#cc9966" }}
-          >{renderButtonPage()}</Pagination>
+          <Pagination style={{ cursor: "pointer", color: "#cc9966" }}>
+            {renderButtonPage()}
+          </Pagination>
         </Col>
       </Row>
       <ModifyCustomerModal

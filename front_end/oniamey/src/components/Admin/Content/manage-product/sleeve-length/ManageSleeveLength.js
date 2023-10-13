@@ -4,6 +4,7 @@ import { CgDetailsLess } from 'react-icons/cg';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
 import { Container } from 'react-bootstrap';
+import BreadcrumbsPage from '../../../BreadCrumbs/BreadcrumbsPage';
 
 const ManageSleeveLength = (props) => {
     return (
@@ -13,6 +14,8 @@ const ManageSleeveLength = (props) => {
                     <CgDetailsLess size={32} /> Quản Lý Chiều Dài Tay
                 </div>
             </div>
+            <BreadcrumbsPage />
+
             <div className='manage-sleeve-length-search'>
                 <div className='search-sleeve-length-title'>
                     <div className="title">
