@@ -5,4 +5,5 @@ public enum EnumStatus {
     CANCEL,
     SUCCESS,
     SHIPPED
+
 }

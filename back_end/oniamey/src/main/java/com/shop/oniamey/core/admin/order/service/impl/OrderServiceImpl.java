@@ -1,10 +1,19 @@
 package com.shop.oniamey.core.admin.order.service.impl;
 
+import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.OrderService;
+import com.shop.oniamey.entity.Customer;
+import com.shop.oniamey.entity.Orders;
+import com.shop.oniamey.entity.base.EnumStatus;
 import com.shop.oniamey.infrastructure.exception.RestApiException;
+import com.shop.oniamey.repository.customer.CustomerRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
+import com.shop.oniamey.repository.user.UserRepository;
+import com.shop.oniamey.repository.voucher.VoucherRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +24,21 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List<OrderResponse> getAllOrder(){
+    @Autowired
+    private UserRepository UserRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
+
+    public List<OrderResponse> getAllOrder(){
         return orderRepository.findAllOrder();
     }
 
     @Override
-    public List<OrderResponse> getAllOrder(Pageable pageable) {
+    public Page<OrderResponse> getAllOrder(Pageable pageable) {
         return orderRepository.findAllOrder(pageable);
     }
 
@@ -32,4 +49,46 @@ public class OrderServiceImpl implements OrderService {
          }
          throw new RestApiException("ORDER NOT EXISTS");
     }
+
+    public String createOrder(OrderRequest orderRequest){
+        Orders orders= new Orders();
+        orders.setDeleted(false);
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
+           return "user not found";
+        }
+        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+            return "customer not found";
+        }
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+          return "voucher not found";
+        }
+        orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
+        orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
+        orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());
+        orders.setPhoneNumber(orderRequest.getPhoneNumber());
+        orders.setAddress(orderRequest.getAddress());
+        orders.setUserName(orderRequest.getUserName());
+        orders.setTotalMoney(orderRequest.getTotalMoney());
+        orders.setConfirmationDate(orderRequest.getConfirmationDate());
+        orders.setShipDate(orderRequest.getShipDate());
+        orders.setReceiveDate(orderRequest.getReceiveDate());
+        orders.setCompletionDate(orderRequest.getCompletionDate());
+        orders.setType(orderRequest.getType());
+        orders.setNote(orderRequest.getNote());
+        orders.setMoneyShip(orderRequest.getMoneyShip());
+        orders.setStatus(EnumStatus.PENDING);
+        orderRepository.save(orders);
+        return "Create order success";
+    }
+
+    @Transactional
+    @Override
+    public String deleteOrder(Long id) {
+        if (orderRepository.findById(id).isEmpty()){
+            return "order id not found";
+        }
+        orderRepository.deleteOrder(id);
+         return "delete order success";
+    }
+
 }
