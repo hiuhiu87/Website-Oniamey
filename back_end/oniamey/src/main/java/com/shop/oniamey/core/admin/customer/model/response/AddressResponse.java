@@ -2,15 +2,15 @@ package com.shop.oniamey.core.admin.customer.model.response;
 
 public interface AddressResponse {
 
+    String getId();
+
     String getLine();
 
     String getWard();
 
-    String getCity();
+    String getDistrict();
 
     String getProvince();
-
-    String getCountry();
 
     Boolean getIsDefault();
 

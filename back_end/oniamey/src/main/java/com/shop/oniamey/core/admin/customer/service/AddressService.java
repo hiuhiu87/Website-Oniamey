@@ -19,4 +19,6 @@ public interface AddressService {
 
     List<AddressResponse>  getAllAddress();
 
+    String setDefaultAddress(Long id);
+
 }

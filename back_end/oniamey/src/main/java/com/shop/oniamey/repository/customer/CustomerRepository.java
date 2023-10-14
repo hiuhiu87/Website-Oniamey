@@ -61,6 +61,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.phone_number as phoneNumber
             ,c.gender as gender
             ,c.deleted as isActive
+            ,c.avatar as avatar
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
             ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
             ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
