@@ -1,5 +1,3 @@
-.detail-form {
-  box-shadow: 0 0 10px gray;
-  width: 90%;
-  margin: 0 auto;
+.detail-form.container {
+  padding: 0 20px !important;
 }/*# sourceMappingURL=DetailCustomer.css.map */
