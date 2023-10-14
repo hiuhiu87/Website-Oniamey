@@ -20,16 +20,19 @@ const DetaiCustomer = () => {
   const { id } = useParams();
 
   const props = {
-    action: "/upload.do",
+    action: "http://localhost:8088/api/storage/uploadFile",
     multiple: true,
     onStart(file) {
       console.log("onStart", file, file.name);
+
     },
     onSuccess(ret) {
       console.log("onSuccess", ret);
+      setAvatar(ret);
     },
     onError(err) {
       console.log("onError", err);
+
     },
     beforeUpload(file, fileList) {
       console.log(file, fileList);
@@ -55,14 +58,8 @@ const DetaiCustomer = () => {
           <h5>Information</h5>
           <Form>
             <Form.Group className="mb-3" controlId="formBasicAvatar">
-              {/* <Image
-                src={avatar ? avatar : defaultImage}
-                roundedCircle
-                alt="avatar"
-                style={{ maxWidth: "100px" }}
-              /> */}
               <Upload {...props}>
-                <button>Click me to upload avatar</button>
+                <Image src={avatar ? avatar : defaultImage} roundedCircle alt="avatar" style={{ maxWidth: "100px" }} />
               </Upload>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicFullname">
