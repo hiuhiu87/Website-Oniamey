@@ -22,8 +22,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.gender as gender
             ,c.deleted as status
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from customer c
@@ -44,8 +44,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.gender as gender
             ,c.deleted as status
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt\s
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from customer c
@@ -62,8 +62,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.gender as gender
             ,c.deleted as isActive
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from customer c
