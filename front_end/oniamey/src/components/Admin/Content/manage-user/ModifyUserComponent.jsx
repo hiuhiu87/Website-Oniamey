@@ -4,25 +4,35 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import Image from "react-bootstrap/Image";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { message, Upload } from "antd";
 import { useState } from "react";
-import avatarStatic from "../manage-user/style/image/man.png";
 import { useEffect } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import API_UPOAD_AVATER from "../../../../services/ApiUploadAvater";
 import provinceService from "../../../../services/ProvinceService";
 import userService from "../../../../services/UserService";
+import "./style/UserStyle.css";
+import {
+  faQrcode,
+  faPlus,
+  faBackward,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ModifyUserComponent = () => {
   const [user, setUser] = useState({
+    username: "",
+    identityCard: "",
     fullName: "",
     email: "",
     avatar: "",
     birthDate: "",
     phoneNumber: "",
-    gender: 3,
+    gender: null,
     address: "",
     role: 0,
     isDeleted: false,
@@ -39,7 +49,46 @@ const ModifyUserComponent = () => {
   const [wards, setWards] = useState([]);
   const [provinceId, setProvinceId] = useState();
   const [districtId, setDistrictId] = useState();
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+
+  const beforeUpload = (file) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must be smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const handleChange = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj, (url) => {
+        setLoading(false);
+        setUser({ ...user, avatar: url });
+      });
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Chọn Ảnh Đại Diện</div>
+    </div>
+  );
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -200,108 +249,177 @@ const ModifyUserComponent = () => {
   }, [districtId, address.district]);
 
   return (
-    <Container>
-      <h1>{id ? "Update Staff Informtion" : "Add Staff"}</h1>
-      <Container className="mw-75">
-        <Form>
-          <Image src={avatarStatic} roundedCircle style={{ width: "100px" }} />
-          <Row className="mb-3 mt-4">
-            <Form.Group as={Col} controlId="formGridFullName">
+    <Container className="content-user-container">
+      <div className="d-flex justify-content-between">
+        <Link to="/admins/manage-employees">
+          <Button variant="secondary" className="m-3">
+            <FontAwesomeIcon icon={faBackward} className="me-2" />
+          </Button>
+        </Link>
+        <Button variant="success" onClick={handleSaveChanges} className="m-3">
+          <FontAwesomeIcon icon={faQrcode} className="me-2" />
+          Quét CCCD
+        </Button>
+      </div>
+      <Container className="d-flex justify-content-center">
+        <Col md={4}>
+          <h4>Thông Tin Nhân Viên</h4>
+          <Container>
+            <div className="image-container d-flex justify-content-center align-items-center">
+              <Upload
+                name="avatar"
+                listType="picture-circle"
+                className="avatar-uploader d-flex justify-content-center align-items-center"
+                showUploadList={false}
+                action={API_UPOAD_AVATER}
+                beforeUpload={beforeUpload}
+                onChange={handleChange}
+              >
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt="avatar"
+                    style={{ width: "100%" }}
+                  />
+                ) : (
+                  uploadButton
+                )}
+              </Upload>
+            </div>
+            <FloatingLabel
+              controlId="floatingInput"
+              label="Username"
+              className="mb-4"
+            >
+              <Form.Control
+                type="text"
+                placeholder="Username"
+                name="username"
+                value={user.username}
+                onChange={handleInputChange}
+                required
+              />
+            </FloatingLabel>
+            <FloatingLabel
+              controlId="floatingInput"
+              label="Tên Nhân Viên"
+              className="mb-5"
+            >
+              <Form.Control
+                type="text"
+                placeholder="Tên Nhân Viên"
+                name="fullName"
+                value={user.fullName}
+                onChange={handleInputChange}
+                required
+              />
+            </FloatingLabel>
+          </Container>
+        </Col>
+        <Col className="mh-100">
+          <h4>Thông Tin Chi Tiết</h4>
+          <Row>
+            <Col className="mh-100">
               <FloatingLabel
                 controlId="floatingInput"
-                label="Full Name"
-                className="mb-3"
+                label="Mã Định Danh (CMND / CCCD)"
+                className="mb-5"
               >
                 <Form.Control
                   type="text"
-                  placeholder="Enter Full Name"
-                  name="fullName"
+                  placeholder="Identity Card"
+                  name="identityCard"
+                  value={user.identityCard}
                   onChange={(e) => handleInputChange(e)}
-                  value={user.fullName}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridPhoneNumber">
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Phone Number"
-                className="mb-3"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Phone Number"
-                  name="phoneNumber"
-                  onChange={(e) => handleInputChange(e)}
-                  value={user.phoneNumber}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridEmail">
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Email Address"
-                className="mb-3"
-              >
-                <Form.Control
-                  type="email"
                   required
-                  placeholder="Enter Email"
-                  name="email"
-                  onChange={(e) => handleInputChange(e)}
-                  value={user.email}
                 />
               </FloatingLabel>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridBirthDate">
               <FloatingLabel
                 controlId="floatingInput"
-                label="Date of Birth"
-                className="mb-3"
+                label="Ngày Sinh"
+                className="mb-5"
               >
                 <Form.Control
                   type="date"
+                  placeholder="Birth Date"
                   name="birthDate"
-                  onChange={(e) => handleInputChange(e)}
                   value={user.birthDate}
+                  onChange={(e) => handleInputChange(e)}
+                  required
                 />
               </FloatingLabel>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridGender">
               <FloatingLabel
-                controlId="floatingSelect"
-                label="Choose Gender"
-                className="mb-3"
+                controlId="floatingInput"
+                label="Số Điện Thoại"
+                className="mb-5"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Phone Number"
+                  name="phoneNumber"
+                  value={user.phoneNumber}
+                  onChange={(e) => handleInputChange(e)}
+                  required
+                />
+              </FloatingLabel>
+            </Col>
+            <Col>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Giới Tính"
+                className="mb-5"
               >
                 <Form.Select
-                  aria-label="Floating label select example"
-                  name="gender"
-                  onChange={(e) => handleInputChange(e)}
                   value={user.gender}
+                  onChange={(e) => handleInputChange(e)}
                 >
-                  <option>--Choose One--</option>
-                  <option value={1}>Male</option>
-                  <option value={2}>Female</option>
-                  <option value={3}>Another</option>
+                  <option value={1}>Nam</option>
+                  <option value={2}>Nữ</option>
+                  <option value={3}>Khác</option>
                 </Form.Select>
               </FloatingLabel>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridCity">
               <FloatingLabel
-                controlId="floatingSelect"
-                label="Choose Province / City"
-                className="mb-3"
+                controlId="floatingInput"
+                label="Email"
+                className="mb-5"
+              >
+                <Form.Control
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  value={user.email}
+                  onChange={(e) => handleInputChange(e)}
+                  required
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Địa Chỉ Cụ Thể"
+                className="mb-5"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="line"
+                  name="line"
+                  value={address.line}
+                  onChange={(e) => handleChangeAddress(e)}
+                  required
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Tỉnh/Thành Phố"
+                className="mb-5"
               >
                 <Form.Select
-                  aria-label="Floating label select example"
-                  name="province"
-                  onChange={(e) => handleChangeAddress(e)}
                   value={address.province}
+                  onChange={(e) => handleChangeAddress(e)}
+                  name="province"
                 >
-                  <option>--Choose One--</option>
                   {provinces.map((province) => (
                     <option key={province.code} value={province.name}>
                       {province.name}
@@ -309,21 +427,18 @@ const ModifyUserComponent = () => {
                   ))}
                 </Form.Select>
               </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridState">
+            </Col>
+            <Col>
               <FloatingLabel
-                controlId="floatingSelectGrid"
-                label="Choose District"
-                className="mb-3"
+                controlId="floatingInput"
+                label="Quận/Huyện"
+                className="mb-5"
               >
                 <Form.Select
-                  aria-label="Floating label select example"
-                  name="district"
-                  onChange={(e) => handleChangeAddress(e)}
                   value={address.district}
+                  onChange={(e) => handleChangeAddress(e)}
+                  name="district"
                 >
-                  <option>--Choose One--</option>
                   {districts.map((district) => (
                     <option key={district.code} value={district.name}>
                       {district.name}
@@ -331,16 +446,18 @@ const ModifyUserComponent = () => {
                   ))}
                 </Form.Select>
               </FloatingLabel>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridZip">
-              <FloatingLabel controlId="floatingSelect" label="Choose Ward">
+            </Col>
+            <Col>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Phường/Xã"
+                className="mb-5"
+              >
                 <Form.Select
-                  aria-label="Floating label select example"
-                  name="ward"
-                  onChange={(e) => handleChangeAddress(e)}
                   value={address.ward}
+                  onChange={(e) => handleChangeAddress(e)}
+                  name="ward"
                 >
-                  <option>--Choose One--</option>
                   {wards.map((ward) => (
                     <option key={ward.code} value={ward.name}>
                       {ward.name}
@@ -348,69 +465,35 @@ const ModifyUserComponent = () => {
                   ))}
                 </Form.Select>
               </FloatingLabel>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridZip">
-              <FloatingLabel
-                controlId="floatingInputGrid"
-                label="Address Detail"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="Address Detail"
-                  name="line"
-                  onChange={(e) => handleChangeAddress(e)}
-                  value={address.line}
-                />
-              </FloatingLabel>
-            </Form.Group>
+            </Col>
           </Row>
-
-          <Form.Group className="mb-3" controlId="formGridAddress1">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              placeholder="1234 Main St"
-              name="address"
-              onChange={(e) => handleInputChange(e)}
-              value={user.address}
-            />
-          </Form.Group>
-          <Form.Group
-            as={Col}
-            controlId="formGridRole"
-            className="d-flex flex-row"
-          >
-            <Form.Check
-              type="checkbox"
-              label="Admin"
-              name="role"
-              onChange={(e) => handleInputChange(e)}
-              value={1}
-              checked={user.role === 1 ? true : false}
-            />
-            <Form.Check
-              className="ms-3"
-              type="checkbox"
-              label="Staff"
-              name="role"
-              onChange={(e) => handleInputChange(e)}
-              value={0}
-              checked={user.role === 0 ? true : false}
-            />
-          </Form.Group>
-          <div className="mt-3">
-            <Link to="/admins/manage-employees">
-              <Button variant="secondary" className="me-3">
-                Back
-              </Button>
-            </Link>
-            <Button variant="dark" onClick={handleSaveChanges}>
-              Submit
-            </Button>
-          </div>
-        </Form>
+        </Col>
       </Container>
+      <div className="d-flex justify-content-end">
+        <Button
+          variant="warning"
+          onClick={handleSaveChanges}
+          style={{ color: "white" }}
+        >
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          Thêm Nhân Viên
+        </Button>
+      </div>
     </Container>
   );
 };
 
 export default ModifyUserComponent;
+
+{
+  /* <div className="mt-3">
+          <Link to="/admins/manage-employees">
+            <Button variant="secondary" className="me-3">
+              Back
+            </Button>
+          </Link>
+          <Button variant="dark" onClick={handleSaveChanges}>
+            Submit
+          </Button>
+        </div> */
+}

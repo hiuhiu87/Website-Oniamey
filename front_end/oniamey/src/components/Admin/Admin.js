@@ -5,8 +5,6 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import BreadcrumbsPage from "./BreadCrumbs/BreadcrumbsPage";
-import { Container } from "react-bootstrap";
 
 const Admin = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -16,9 +14,8 @@ const Admin = () => {
                 <SideBar collapsed={collapsed} />
             </div>
             <div className="admin-content">
-                <div className="admin-header d-flex justify-content-around">
+                <div className="admin-header d-flex">
                     <BiSidebar size={25} onClick={() => setCollapsed(!collapsed)}/>
-                    <BreadcrumbsPage />
                 </div>
                 <div className="admin-main">
                     <Outlet />
