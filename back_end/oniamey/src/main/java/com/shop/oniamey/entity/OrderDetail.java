@@ -26,7 +26,7 @@ public class OrderDetail extends BaseModel {
     private Double price;
 
     @Column(name = "total_money",nullable = false)
-    private Double total_money;
+    private Double totalMoney;
 
     @ManyToOne
     @JoinColumn(name = "id_order")
