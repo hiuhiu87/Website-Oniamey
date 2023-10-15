@@ -42,6 +42,23 @@ const getAllProducts = () => {
     return instance.get(`api/v1/product/getAll`);
 }
 
+const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId) => {
+    const data = new FormData();
+    data.append('productId', productId);
+    data.append('categoryId', categoryId);
+    sizeIds.forEach(sizeId => {
+        data.append('colorId', sizeId);
+    });
+    colorIds.forEach(colorId => {
+        data.append('colorId', colorId);
+    });
+    data.append('materialId', materialId);
+    data.append('brandId', brandId);
+    data.append('collarId', collarId);
+    data.append('sleeveLengthId', sleeveLengthId);
+    return instance.post(`api/v1/product/product-details`, data);
+}
+
 const getAllProductDetails = () => {
     return instance.get(`api/v1/product/product-details`)
 }
@@ -50,4 +67,4 @@ const getAllProperties = (property) => {
     return instance.get(`api/v1/` + property);
 }
 
-export { getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty, postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductDetails };
+export { getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty, postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductDetails, postProductDetail };

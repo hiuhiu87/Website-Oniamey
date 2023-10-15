@@ -4,6 +4,7 @@ import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
 import { getAllProducts } from '../../../../../services/apiService';
 import { getAllProductDetails } from '../../../../../services/apiService';
 import { getAllProperties } from '../../../../../services/apiService';
+import { postProductDetail } from '../../../../../services/apiService';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import './ManageProduct.scss';
@@ -33,6 +34,10 @@ const ManageProduct = (props) => {
     const [listCollar, setListCollar] = useState([]);
     const [sleeveLengthId, setSleeveLengthlId] = useState('');
     const [listSleeveLength, setListSleeveLength] = useState([]);
+    const [sizeId, setSizeId] = useState('');
+    const [listSize, setListSize] = useState([]);
+    const [colorId, setColorId] = useState('');
+    const [listColor, setListColor] = useState([]);
 
     const [showModalCreateProduct, setShowModalCreateProduct] = useState(false);
     const [showModalUpdateProduct, setShowModalUpdateProduct] = useState(false);
@@ -56,6 +61,12 @@ const ManageProduct = (props) => {
 
     const [selectAll, setSelectAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState({});
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedColors, setSelectedColors] = useState([]);
+    const [selectedSizes, setSelectedSizes] = useState([]);
+
+    const [productDetails, setProductDetails] = useState([]);
 
 
     const handleSelectAll = () => {
@@ -81,7 +92,13 @@ const ManageProduct = (props) => {
         fetchListSleeveLength();
         fetchListMaterial();
         fetchListProductDetail();
+        fetchListSize();
+        fetchListColor();
     }, []);
+
+    useEffect(() => {
+        updateProductDetails();
+    }, [selectedColors, selectedSizes]);
 
     const fetchListProduct = async () => {
         let response = await getAllProducts();
@@ -127,6 +144,18 @@ const ManageProduct = (props) => {
         setSleeveLengthlId(response.data[0].id)
     }
 
+    const fetchListSize = async () => {
+        let response = await getAllProperties('size');
+        setListSize(response.data);
+        setSizeId(response.data[0].id)
+    }
+
+    const fetchListColor = async () => {
+        let response = await getAllProperties('color');
+        setListColor(response.data);
+        setColorId(response.data[0].id)
+    }
+
     const handleClickBtnUpdate = (product) => {
         setDataUpdate(product);
         setShowModalUpdateProduct(true);
@@ -145,19 +174,6 @@ const ManageProduct = (props) => {
         setDataDelete({});
     }
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedSizes, setSelectedSizes] = useState([]);
-
-    const colors = [
-        'Red', 'Green', 'Blue', 'Yellow', 'Orange', '123', '456', '789'
-        // Thêm các màu khác ở đây
-    ];
-
-    const sizes = [
-        'Small', 'Medium', 'Large', 'X-Large', 'XX-Large', '567', 'abc', 'def'
-        // Thêm các kích thước khác ở đây
-    ];
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -190,29 +206,66 @@ const ManageProduct = (props) => {
     };
 
     const renderColorButtons = () => {
-        return colors.map((color) => (
+        return listColor.map((color) => (
             <Button
-                key={color}
+                key={color.id}
                 className={selectedColors.includes(color) ? 'selected-button' : ''}
                 style={{ marginLeft: '8px', marginBottom: '8px' }}
-                onClick={() => handleColorChange(color)}
+                onClick={() => handleColorChange(color.id)}
             >
-                {color}
+                {color.name}
             </Button>
         ));
     };
 
     const renderSizeButtons = () => {
-        return sizes.map((size) => (
+        return listSize.map((size) => (
             <Button
-                key={size}
+                key={size.id}
                 className={selectedSizes.includes(size) ? 'selected-button' : ''}
                 style={{ marginLeft: '8px', marginBottom: '8px' }}
-                onClick={() => handleSizeChange(size)}
+                onClick={() => handleSizeChange(size.id)}
             >
-                {size}
+                {size.name}
             </Button>
         ));
+    };
+
+    const updateProductDetails = async () => {
+        const productDetails = [];
+        const sizeIds = [];
+        const colorIds = [];
+        selectedColors.forEach((colorId) => {
+            selectedSizes.forEach((sizeId) => {
+                const selectedProduct = listProduct.find((product) => product.id === productId);
+                const selectedColor = listColor.find((color) => color.id === colorId);
+                const selectedSize = listSize.find((size) => size.id === sizeId);
+                const productDetail = {
+                    productId: productId,
+                    name: `${selectedProduct.name} - [${selectedColor.name}][${selectedSize.name}]`,
+                    brandId: brandId,
+                    categoryId: categoryId,
+                    meterialId: materialId,
+                    collarId: collarId,
+                    sleeveLengthId: sleeveLengthId,
+                    colorId: colorId,
+                    sizeId: sizeId,
+                    price: 10000,
+                    quantity: 10
+                };
+                sizeIds.push(selectedSize.id);
+                colorIds.push(selectedColor.id);
+                productDetails.push(productDetail);
+                console.log('-----------')
+                console.log('Size: ', selectedSize.id);
+                console.log('Color: ', selectedColor.id);
+
+            });
+
+
+        });
+        setProductDetails(productDetails);
+
     };
 
     return (
@@ -395,7 +448,6 @@ const ManageProduct = (props) => {
                                                     <td className="text-center">{index + 1}</td>
                                                     <td className="text-center">
                                                         <img src={`${imageProductDetail}${item.imageUrl}`} />
-                                                        {/* {item.imageUrl} */}
                                                     </td>
                                                     <td className="text-center">{item.name}</td>
                                                     <td className="text-center">{item.quantity}</td>
@@ -442,7 +494,8 @@ const ManageProduct = (props) => {
                                     <div className='col-5 mb-4'>
                                         <div class="col-md">
                                             <div class="form-floating">
-                                                <select className="form-select" value={productId} >
+                                                <select className="form-select" defaultValue={productId} >
+                                                    <option value="">Chọn</option>
                                                     {listProduct.map(product => (
                                                         <option key={product.id} value={product.id}>
                                                             {product.name}
@@ -459,7 +512,8 @@ const ManageProduct = (props) => {
                                         <div className="col-md-2">
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className="form-floating">
-                                                    <select className="form-select" value={brandId} style={{ minWidth: '200px' }}>
+                                                    <select className="form-select" defaultValue={brandId} style={{ minWidth: '200px' }}>
+                                                        <option value="">Chọn</option>
                                                         {listBrand.map(brand => (
                                                             <option key={brand.id} value={brand.id}>
                                                                 {brand.name}
@@ -474,7 +528,8 @@ const ManageProduct = (props) => {
                                         <div class="col-md-2">
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className="form-floating">
-                                                    <select className="form-select" value={categoryId} style={{ minWidth: '200px' }}>
+                                                    <select className="form-select" defaultValue={categoryId} style={{ minWidth: '200px' }}>
+                                                        <option value="">Chọn</option>
                                                         {listCategory.map(category => (
                                                             <option key={category.id} value={category.id}>
                                                                 {category.name}
@@ -489,7 +544,8 @@ const ManageProduct = (props) => {
                                         <div class="col-md-2">
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className="form-floating">
-                                                    <select className="form-select" value={materialId} style={{ minWidth: '200px' }}>
+                                                    <select className="form-select" defaultValue={materialId} style={{ minWidth: '200px' }}>
+                                                        <option value="">Chọn</option>
                                                         {listMaterial.map(material => (
                                                             <option key={material.id} value={material.id}>
                                                                 {material.name}
@@ -504,7 +560,8 @@ const ManageProduct = (props) => {
                                         <div class="col-md-2">
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className="form-floating">
-                                                    <select className="form-select" value={collarId} style={{ minWidth: '200px' }}>
+                                                    <select className="form-select" defaultValue={collarId} style={{ minWidth: '200px' }}>
+                                                        <option value="">Chọn</option>
                                                         {listCollar.map(collar => (
                                                             <option key={collar.id} value={collar.id}>
                                                                 {collar.name}
@@ -519,7 +576,8 @@ const ManageProduct = (props) => {
                                         <div class="col-md-2">
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className="form-floating">
-                                                    <select className="form-select" value={sleeveLengthId} style={{ minWidth: '200px' }}>
+                                                    <select className="form-select" defaultValue={sleeveLengthId} style={{ minWidth: '200px' }}>
+                                                        <option value="">Chọn</option>
                                                         {listSleeveLength.map(sleeveLength => (
                                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                                 {sleeveLength.name}
@@ -550,24 +608,24 @@ const ManageProduct = (props) => {
                                     </div>
                                     <Row>
                                         <Col className='d-flex justify-content-center align-items-center flex-wrap'>
-                                            {selectedColors.map((color, index) => (
+                                            {selectedColors.map((colorId, index) => (
                                                 <Button
                                                     key={`color-${index}`}
                                                     className="selected-button"
                                                     style={{ marginLeft: '8px', marginBottom: '8px' }}
-                                                    onClick={() => handleColorChange(color)}
+                                                    onClick={() => handleColorChange(colorId)}
                                                 >
-                                                    {color} (Xóa)
+                                                    {listColor.find(color => color.id === colorId).name} (Xóa)
                                                 </Button>
                                             ))}
-                                            {selectedSizes.map((size, index) => (
+                                            {selectedSizes.map((sizeId, index) => (
                                                 <Button
                                                     key={`size-${index}`}
                                                     className="selected-button"
                                                     style={{ marginLeft: '8px' }}
-                                                    onClick={() => handleSizeChange(size)}
+                                                    onClick={() => handleSizeChange(sizeId)}
                                                 >
-                                                    {size} (Xóa)
+                                                    {listSize.find(size => size.id === sizeId).name} (Xóa)
                                                 </Button>
                                             ))}</Col>
                                     </Row>
@@ -588,28 +646,32 @@ const ManageProduct = (props) => {
                                             <th scope="col" className='px-1 text-center'>
                                                 <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
                                             </th>
-                                            <th scope="col" className='px-5 text-center'>No.</th>
-                                            <th scope="col" className='px-5 text-center'>Image</th>
-                                            <th scope="col" className='px-5 text-center'>Name</th>
-                                            <th scope="col" className='px-5 text-center'>Quantity</th>
-                                            <th scope="col" className='px-5 text-center'>Price</th>
+                                            <th scope="col" className='px-5 text-center'>#</th>
+                                            <th scope="col" className='px-5 text-center'>Sản phẩm</th>
+                                            <th scope="col" className='px-5 text-center'>Số lượng</th>
+                                            <th scope="col" className='px-5 text-center'>Giá bán</th>
                                             <th scope="col" className='px-5 text-center'>Size</th>
                                             <th scope="col" className='px-5 text-center'>Color</th>
-                                            <th scope="col" className='px-5 text-center'>Status</th>
+                                            <th scope="col" className='px-5 text-center'>Image</th>
                                             <th scope="col" className='px-5 text-center'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {listProduct.length > 0 && listProduct.map((item, index) => {
+                                        {productDetails.map((item, index) => {
                                             return (
                                                 <tr key={`table-material-${index}`} className="room">
                                                     <td className="text-center">
                                                         <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
                                                     </td>
                                                     <td className="text-center">{index + 1}</td>
-                                                    <td className="text-center">{item.code}</td>
+                                                    {/* <td className="text-center">
+                                                        <img src={`${imageProductDetail}${item.imageUrl}`} />
+                                                    </td> */}
                                                     <td className="text-center">{item.name}</td>
-                                                    <td className="text-center">{item.updatedAt}</td>
+                                                    <td className="text-center">{item.quantity}</td>
+                                                    <td className="text-center">{item.price}</td>
+                                                    <td className="text-center">{item.sizeId}</td>
+                                                    <td className="text-center">{item.colorId}</td>
                                                     <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
                                                     <td className="text-center">
                                                         <div className="d-flex justify-content-center align-items-center">
