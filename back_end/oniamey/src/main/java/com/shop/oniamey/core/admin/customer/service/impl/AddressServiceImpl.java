@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-
     @Autowired
     private AddressRepository addressRepository;
 
@@ -24,9 +23,23 @@ public class AddressServiceImpl implements AddressService {
     private CustomerRepository customerRepository;
 
     @Override
+    public String setDefaultAddress(Long id) {
+        Optional<Address> checkAddress = addressRepository.findById(id);
+        if (checkAddress.isPresent()) {
+            Address address = checkAddress.get();
+            addressRepository.setDefaultAddress(address.getCustomer().getId());
+            address.setIsDefault(true);
+            addressRepository.save(address);
+            return "Set default address success";
+        } else {
+            return "Address not found";
+        }
+    }
+
+    @Override
     public String addAddress(ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndCityAndProvinceAndCountryAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getCity(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCountry(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";
@@ -37,16 +50,19 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address address = new Address();
+        getRequestData(modifyAddressRequest, checkCustomer, address);
+        return "Add address success";
+    }
+
+    private void getRequestData(ModifyAddressRequest modifyAddressRequest, Optional<Customer> checkCustomer, Address address) {
         address.setLine(modifyAddressRequest.getLine());
         address.setWard(modifyAddressRequest.getWard());
-        address.setCity(modifyAddressRequest.getCity());
+        address.setDistrict(modifyAddressRequest.getDistrict());
         address.setProvince(modifyAddressRequest.getProvince());
-        address.setCountry(modifyAddressRequest.getCountry());
         address.setCustomer(checkCustomer.get());
         address.setIsDefault(modifyAddressRequest.getIsDefault());
         address.setDeleted(modifyAddressRequest.getIsDeleted());
         addressRepository.save(address);
-        return "Add address success";
     }
 
     @Override
@@ -62,7 +78,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String updateAddress(ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndCityAndProvinceAndCountryAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getCity(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCountry(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";
@@ -73,15 +89,7 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address address = checkAddress.get();
-        address.setLine(modifyAddressRequest.getLine());
-        address.setWard(modifyAddressRequest.getWard());
-        address.setCity(modifyAddressRequest.getCity());
-        address.setProvince(modifyAddressRequest.getProvince());
-        address.setCountry(modifyAddressRequest.getCountry());
-        address.setCustomer(checkCustomer.get());
-        address.setIsDefault(modifyAddressRequest.getIsDefault());
-        address.setDeleted(modifyAddressRequest.getIsDeleted());
-        addressRepository.save(address);
+        getRequestData(modifyAddressRequest, checkCustomer, address);
         return "Update address success";
     }
 
@@ -103,4 +111,6 @@ public class AddressServiceImpl implements AddressService {
     public List<AddressResponse> getAllAddress() {
         return null;
     }
+
+
 }

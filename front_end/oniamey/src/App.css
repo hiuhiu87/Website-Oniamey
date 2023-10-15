@@ -7,7 +7,7 @@ body {
 }
 @media (min-width: 1400px) {
   body .container, body .container-lg, body .container-md, body .container-sm, body .container-xl, body .container-xxl {
-    max-width: 1800px !important;
+    max-width: 1800px;
   }
 }
 

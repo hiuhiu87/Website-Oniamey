@@ -16,81 +16,71 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(
-            value = """
+    @Query(value = """
             select u.id
             ,u.full_name as fullName\s
             ,u.email as email
             ,u.phone_number as phoneNumber
-            ,r.name as role
+            ,u.role as role
             ,u.gender as gender
             ,u.address as address
             ,u.avatar as avatar
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(u.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(u.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt\s
+            ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from user as u
-            join `role` r on u.role_id = r.id
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
-            """,
-            nativeQuery = true
-    )
+            """, nativeQuery = true)
     List<UserResponse> getAllUsers(Pageable pageable);
 
-    @Query(
-            value = """
+    @Query(value = """
             select u.id
-            ,u.full_name as fullName\s
+            ,u.full_name as fullName
             ,u.email as email
             ,u.phone_number as phoneNumber
-            ,r.name as role
+            ,u.role as role
             ,u.gender as gender
             ,u.address as address
             ,u.avatar as avatar
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(u.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(u.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
+            ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from user as u
-            join `role` r on u.role_id = r.id
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
-            """,
-            nativeQuery = true
-    )
+            """, nativeQuery = true)
     List<UserResponse> getAllUsers();
 
     Optional<User> findByEmail(String email);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
 
-    @Query(
-            value = """
+    @Query(value = """
                 select u.id
                 ,u.full_name as fullName
                 ,u.email as email
                 ,u.phone_number as phoneNumber
-                ,u.role_id  as role
+                ,u.role  as role
                 ,u.gender as gender
                 ,u.address as address
                 ,u.avatar as avatar
+                ,u.deleted as isDeleted
                 ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
-                ,date_format(u.created_date  , '%m-%d-%Y %H:%i') as createdAt
-                ,date_format(u.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+                ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
+                ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
                 ,uc.full_name AS createdBy
                 ,uu.full_name AS updatedBy
                 from user as u
-                join `role` r on u.role_id = r.id
                 left JOIN user AS uc ON u.created_by = uc.id
                 left JOIN user AS uu ON u.updated_by = uu.id
                 where u.id = :id
-            """,
-            nativeQuery = true
-    )
+                
+            """, nativeQuery = true)
     UserDetailResponse getUserDetailById(Long id);
 
 }

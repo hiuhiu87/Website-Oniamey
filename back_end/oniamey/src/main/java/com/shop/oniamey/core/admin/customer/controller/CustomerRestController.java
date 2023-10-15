@@ -5,6 +5,7 @@ import com.shop.oniamey.core.admin.customer.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class CustomerRestController {
 
     @GetMapping("/get-all-customers/{page}")
     public ResponseEntity<?> getAllCustomers(@PathVariable int page) {
-        Pageable pageable = Pageable.ofSize(5).withPage(page - 1);
+        Pageable pageable = Pageable.ofSize(10).withPage(page - 1);
         return new ResponseEntity<>(customerService.getAllCustomers(pageable), HttpStatus.OK);
     }
 

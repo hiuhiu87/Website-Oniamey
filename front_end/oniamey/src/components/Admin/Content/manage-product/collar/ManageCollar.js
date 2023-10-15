@@ -3,6 +3,7 @@ import './ManageCollar.scss';
 import { GiHeavyCollar } from 'react-icons/gi';
 import { FaFilter, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
+import BreadcrumbsPage from '../../../BreadCrumbs/BreadcrumbsPage';
 
 const ManageCollar = (props) => {
     return (
@@ -12,6 +13,7 @@ const ManageCollar = (props) => {
                     <GiHeavyCollar size={32} /> Quản Lý Cổ Áo
                 </div>
             </div>
+            <BreadcrumbsPage />
             <div className='manage-collar-search'>
                 <div className='search-collar-title'>
                     <div className="title">
