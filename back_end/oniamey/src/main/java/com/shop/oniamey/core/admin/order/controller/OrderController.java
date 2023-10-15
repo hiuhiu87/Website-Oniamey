@@ -35,7 +35,7 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
 
-    @GetMapping( )
+    @GetMapping()
     public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "PENDING") String status){
         Pageable pageable = PageRequest.of(page,5);

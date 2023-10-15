@@ -46,4 +46,6 @@ public interface OrderResponse extends BaseResponse {
     String getCreatedBy();
 
     String getUpdatedBy();
+
+    String getCode();
 }

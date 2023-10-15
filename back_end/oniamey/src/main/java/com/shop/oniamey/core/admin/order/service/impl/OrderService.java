@@ -10,6 +10,7 @@ import com.shop.oniamey.repository.customer.CustomerRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
 import com.shop.oniamey.repository.user.UserRepository;
 import com.shop.oniamey.repository.voucher.VoucherRepository;
+import com.shop.oniamey.util.QRCodeProduct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,7 @@ public class OrderService implements IOrderService {
 
     public String createOrder(OrderRequest orderRequest){
         Orders orders= new Orders();
+        String randomCode= QRCodeProduct.generateRandomCode();
         orders.setDeleted(false);
         if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
            return "user not found";
@@ -62,6 +64,7 @@ public class OrderService implements IOrderService {
         if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
           return "voucher not found";
         }
+        orders.setCode(randomCode);
         orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
         orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
         orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());

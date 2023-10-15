@@ -34,7 +34,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             , o.type
             ,o.note
             ,o.money_ship as moneyShip
-            ,o.status               
+            ,o.status    
+            ,o.code             
              from orders o
              left join user uu on uu.id = o.updated_by
              left join user uc on uc.id = o.created_by
@@ -62,7 +63,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             , o.type
             ,o.note
             ,o.money_ship as moneyShip
-            ,o.status               
+            ,o.status  
+            ,o.code               
              from orders o
              left join user uu on uu.id = o.updated_by
              left join user uc on uc.id = o.created_by
@@ -96,7 +98,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                      , o.type
                      ,o.note
                      ,o.money_ship as moneyShip
-                     ,o.status               
+                     ,o.status  
+                     ,o.code               
                       from orders o
                       left join user uu on uu.id = o.updated_by
                       left join user uc on uc.id = o.created_by
@@ -123,7 +126,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                        , o.type
                        ,o.note
                        ,o.money_ship as moneyShip
-                       ,o.status               
+                       ,o.status
+                       ,o.code               
                         from orders o
                         left join user uu on uu.id = o.updated_by
                         left join user uc on uc.id = o.created_by
