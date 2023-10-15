@@ -5,6 +5,7 @@ import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,17 +24,23 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getAllOrder(), HttpStatus.OK);
     }
 
-    @GetMapping ()
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int page){
-        Pageable pageable = PageRequest.of(page,5);
-        return new ResponseEntity<>(orderService.getAllOrder(pageable),HttpStatus.OK);
-    }
+//    @GetMapping ()
+//    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int page){
+//        Pageable pageable = PageRequest.of(page,5);
+//        return new ResponseEntity<>(orderService.getAllOrder(pageable),HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public OrderResponse detail(@PathVariable Long id){
         return orderService.getOrderById(id);
     }
 
+    @GetMapping( )
+    public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "PENDING") String status){
+        Pageable pageable = PageRequest.of(page,5);
+        return orderService.getOrdersByStatus(pageable,status);
+    }
     @PostMapping()
     public String createOrder(@RequestBody @Valid OrderRequest orderRequest){
         return orderService.createOrder(orderRequest);
@@ -48,4 +55,6 @@ public class OrderController {
     public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest){
         return new ResponseEntity<>(orderService.updateOrder(id,orderRequest),HttpStatus.OK);
     }
+
+
 }

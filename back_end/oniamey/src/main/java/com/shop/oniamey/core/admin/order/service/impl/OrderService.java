@@ -49,6 +49,7 @@ public class OrderService implements IOrderService {
          throw new RestApiException("ORDER NOT EXISTS");
     }
 
+
     public String createOrder(OrderRequest orderRequest){
         Orders orders= new Orders();
         orders.setDeleted(false);
@@ -123,5 +124,12 @@ public class OrderService implements IOrderService {
         orderRepository.save(orders);
         return "Update order success";
     }
+
+    @Override
+    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
+        return orderRepository.getOrdersByStatus(pageable,status);
+    }
+
+
 
 }

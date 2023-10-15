@@ -14,4 +14,6 @@ public interface IOrderService {
     String createOrder(OrderRequest orderRequest);
     String deleteOrder(Long id);
     String updateOrder(Long id, OrderRequest orderRequest);
+
+    Page<OrderResponse> getOrdersByStatus(Pageable pageable,String status);
 }
