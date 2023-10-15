@@ -11,7 +11,7 @@ import Admin from './components/Admin/Admin';
 import HomePage from './components/Home/HomePage';
 import DashBoard from './components/Admin/Content/dashboard/DashBoard';
 import SalesAtTheCounter from './components/Admin/Content/sales-at-the-counter/SalesAtTheCounter';
-import ManageProduct from './components/Admin/Content/manage-product/product/Product'
+import ManageProduct from './components/Admin/Content/manage-product/product/ManageProduct'
 import ManageCategory from './components/Admin/Content/manage-product/category/ManageCategory';
 import ManageBrand from './components/Admin/Content/manage-product/brand/ManageBrand';
 import ManageMaterial from './components/Admin/Content/manage-product/material/ManageMaterial';

@@ -18,7 +18,7 @@ import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 import { Modal, Button } from 'antd';
 import 'antd-button-color/dist/css/style.css';
 import { Col, Row } from 'react-bootstrap';
-import imageServer from './../../../../../assets/uploads'
+// import imageServer from './../../../../../assets/uploads'
 
 const ManageProduct = (props) => {
 
@@ -393,7 +393,7 @@ const ManageProduct = (props) => {
                                                     </td>
                                                     <td className="text-center">{index + 1}</td>
                                                     <td className="text-center">
-                                                        <img src={`${imageServer}\\${item.imageUrl}`} />
+                                                        <img src={`${item.imageUrl}`} />
                                                     </td>
                                                     <td className="text-center">{item.name}</td>
                                                     <td className="text-center">{item.quantity}</td>
