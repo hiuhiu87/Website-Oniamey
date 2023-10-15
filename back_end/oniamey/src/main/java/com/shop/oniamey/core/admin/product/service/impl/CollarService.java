@@ -38,8 +38,7 @@ public class CollarService implements IPropertyService<Collar, Long> {
     public Collar create(PropertyRequest propertyRequest) {
         Collar collar = new Collar();
         collar.setName(propertyRequest.getName());
-        collar.setCreatedBy(propertyRequest.getCreatedBy());
-        collar.setUpdatedBy(propertyRequest.getUpdatedBy());
+        collar.setDeleted(propertyRequest.getDeleted());
         return collarRepository.save(collar);
     }
 
@@ -47,7 +46,6 @@ public class CollarService implements IPropertyService<Collar, Long> {
     public Collar update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         Collar existingCollar = getById(id);
         existingCollar.setName(propertyRequest.getName());
-        existingCollar.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingCollar.setDeleted(propertyRequest.getDeleted());
         collarRepository.save(existingCollar);
         return existingCollar;

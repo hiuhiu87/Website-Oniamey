@@ -17,10 +17,6 @@ public class PropertyRequest {
 
     private String name;
 
-    private Long createdBy;
-
-    private Long updatedBy;
-
     private Boolean deleted;
 
 }

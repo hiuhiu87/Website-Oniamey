@@ -9,12 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IProductService {
 
     Product getById(Long productId) throws DataNotFoundException;
 
     Page<ProductResponse> getAll(PageRequest pageRequest);
+
+    List<ProductResponse> getAllProduct();
 
     Product create(ProductRequest createProductRequest) throws IOException, WriterException;
 

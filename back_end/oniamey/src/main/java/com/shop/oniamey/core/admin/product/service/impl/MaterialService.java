@@ -38,8 +38,7 @@ public class MaterialService implements IPropertyService<Material, Long> {
     public Material create(PropertyRequest propertyRequest) {
         Material material = new Material();
         material.setName(propertyRequest.getName());
-        material.setCreatedBy(propertyRequest.getCreatedBy());
-        material.setUpdatedBy(propertyRequest.getUpdatedBy());
+        material.setDeleted(propertyRequest.getDeleted());
         return materialRepository.save(material);
     }
 
@@ -47,7 +46,6 @@ public class MaterialService implements IPropertyService<Material, Long> {
     public Material update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         Material existingMaterial = getById(id);
         existingMaterial.setName(propertyRequest.getName());
-        existingMaterial.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingMaterial.setDeleted(propertyRequest.getDeleted());
         materialRepository.save(existingMaterial);
         return existingMaterial;

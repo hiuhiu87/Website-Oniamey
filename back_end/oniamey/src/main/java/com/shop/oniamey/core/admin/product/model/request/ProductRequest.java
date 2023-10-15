@@ -21,10 +21,6 @@ public class ProductRequest {
 
     private String description;
 
-    private Long createdBy;
-
-    private Long updatedBy;
-
     private Boolean deleted;
 
 //    List<ProductDetailRequest> productDetail;

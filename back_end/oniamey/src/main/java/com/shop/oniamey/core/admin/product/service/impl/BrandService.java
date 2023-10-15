@@ -39,8 +39,7 @@ public class BrandService implements IPropertyService<Brand, Long> {
     public Brand create(PropertyRequest propertyRequest) {
         Brand brand = new Brand();
         brand.setName(propertyRequest.getName());
-        brand.setCreatedBy(propertyRequest.getCreatedBy());
-        brand.setUpdatedBy(propertyRequest.getUpdatedBy());
+        brand.setDeleted(propertyRequest.getDeleted());
         return brandRepository.save(brand);
     }
 
@@ -48,7 +47,6 @@ public class BrandService implements IPropertyService<Brand, Long> {
     public Brand update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         Brand existingBrand = getById(id);
         existingBrand.setName(propertyRequest.getName());
-        existingBrand.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingBrand.setDeleted(propertyRequest.getDeleted());
         brandRepository.save(existingBrand);
         return existingBrand;

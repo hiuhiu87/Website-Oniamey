@@ -39,10 +39,6 @@ public class AddProductDetailRequest {
 
     private Float weight;
 
-    private Long createdBy;
-
-    private Long updatedBy;
-
     private Boolean deleted;
 
 }
