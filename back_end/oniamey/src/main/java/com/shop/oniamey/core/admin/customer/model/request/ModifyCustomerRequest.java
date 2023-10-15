@@ -25,7 +25,7 @@ public class ModifyCustomerRequest {
     @NotEmpty(message = "Full name is required")
     private String fullName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Past(message = "Birth date must be in the past")
     @Nullable
     private Date birthDate;

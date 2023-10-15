@@ -1,0 +1,73 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@media (min-width: 1400px) {
+  body .container, body .container-lg, body .container-md, body .container-sm, body .container-xl, body .container-xxl {
+    max-width: 1800px;
+  }
+}
+
+.app-container .header-container .btn-login {
+  border-radius: 5px;
+  margin-right: 15px;
+  padding: 0 15px;
+  border: 1px solid #535353;
+  height: 40px;
+}
+.app-container .header-container button.btn-signup {
+  color: white;
+  background: #303030;
+  padding: 0 15px;
+  border-radius: 5px;
+  height: 40px;
+}
+.app-container .header-container button.btn-signup:hover {
+  background: black;
+}
+.app-container .header-container .navbar {
+  padding-top: 20px;
+  z-index: 10;
+  background-color: 0, 0, 0, 0 !important;
+}
+.app-container .header-container .navbar .nav-link.active {
+  color: #00bfff;
+}
+.app-container .homepage-container .homepage-content {
+  padding: 100px;
+  width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.app-container .homepage-container .homepage-content .title-1 {
+  font-size: 60px;
+  font-weight: 600;
+}
+.app-container .homepage-container .homepage-content .title-2 {
+  font-size: 35px;
+}
+.app-container .homepage-container .homepage-content .title-3 button {
+  height: 50px;
+  padding: 0 15px;
+  border-radius: 5px;
+  color: white;
+  background: #303030;
+  padding: 0 15px;
+  border-radius: 5px;
+  height: 40px;
+  border: none;
+}
+.app-container .homepage-container .homepage-content .title-3 button:hover {
+  background: black;
+}
+
+video {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}/*# sourceMappingURL=App.css.map */

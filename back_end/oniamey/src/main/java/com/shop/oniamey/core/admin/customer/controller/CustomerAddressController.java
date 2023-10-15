@@ -4,9 +4,11 @@ import com.shop.oniamey.core.admin.customer.model.request.ModifyAddressRequest;
 import com.shop.oniamey.core.admin.customer.service.AddressService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/customer-addresses")
+@CrossOrigin("*")
 public class CustomerAddressController {
 
     private AddressService addressService;
@@ -39,6 +42,9 @@ public class CustomerAddressController {
         return addressService.updateAddress(modifyAddressRequest);
     }
 
-
+    @PutMapping("/set-default-address/{id}")
+    public String setDefaultAddress(@PathVariable Long id) {
+        return addressService.setDefaultAddress(id);
+    }
 
 }

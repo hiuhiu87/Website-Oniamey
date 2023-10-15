@@ -124,8 +124,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Long getTotalPage() {
         long totalPage = customerRepository.count();
-        Long endPage = totalPage / 5;
-        if (totalPage % 5 != 0) {
+        Long endPage = totalPage / 10;
+        if (totalPage % 10 != 0) {
             endPage = endPage + 1;
         }
         System.out.println(endPage);
