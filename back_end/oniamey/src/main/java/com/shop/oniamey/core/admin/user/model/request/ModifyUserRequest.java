@@ -26,7 +26,6 @@ public class ModifyUserRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Birth date must be in the past")
-    @NotNull(message = "Birth date is required")
     private Date birthDate;
 
     @NotEmpty(message = "Email is required")

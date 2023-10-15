@@ -10,13 +10,15 @@ public interface UserDetailResponse {
 
     String getPhoneNumber();
 
-    Long getRole();
+    String getRole();
 
-    String getGender();
+    Integer getGender();
 
     String getAddress();
 
     String getAvatar();
+
+    Boolean getIsDeleted();
 
     String getBirthDate();
 

@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
             select u.id
-            ,u.full_name as fullName\s
+            ,u.full_name as fullName
             ,u.email as email
             ,u.phone_number as phoneNumber
             ,u.role as role
@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ,u.address as address
             ,u.avatar as avatar
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt\s
+            ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
             ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
@@ -67,6 +67,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 ,u.gender as gender
                 ,u.address as address
                 ,u.avatar as avatar
+                ,u.deleted as isDeleted
                 ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
                 ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
                 ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
@@ -76,6 +77,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 left JOIN user AS uc ON u.created_by = uc.id
                 left JOIN user AS uu ON u.updated_by = uu.id
                 where u.id = :id
+                
             """, nativeQuery = true)
     UserDetailResponse getUserDetailById(Long id);
 

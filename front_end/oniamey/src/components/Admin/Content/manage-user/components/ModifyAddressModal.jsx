@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, FloatingLabel, Modal, Button, Col, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import provinceService from "../../../../../services/ProvinceService";
 import CustomerService from "../../../../../services/CustomerService";
 
@@ -56,7 +57,7 @@ const ModifyAddressModal = ({ isOpen, onClose, id }) => {
       setDistricts([]);
       setWards([]);
     };
-  }, [provinceId]);
+  }, [provinceId, address.province]);
 
   useEffect(() => {
     if (address.district) {
@@ -74,7 +75,7 @@ const ModifyAddressModal = ({ isOpen, onClose, id }) => {
     return () => {
       setWards([]);
     };
-  }, [districtId]);
+  }, [districtId, address.district]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,9 +117,11 @@ const ModifyAddressModal = ({ isOpen, onClose, id }) => {
       .then((response) => {
         console.log(response.data);
         onClose();
+        toast.success("Address added successfully!");
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Something went wrong!");
       });
   };
 
