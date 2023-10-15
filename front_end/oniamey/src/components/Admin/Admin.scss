@@ -15,11 +15,32 @@
             padding-left: 20px;
             background-color: #ddd;
             margin-bottom: 15px;
-            // border: 1px solid red;
+
         }
 
         .admin-main {
-            // border: 1px solid red;
+            height: 60px;
         }
     }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+//   box-shadow: inset 0 0 5px grey; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

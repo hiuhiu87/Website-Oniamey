@@ -39,7 +39,7 @@ const deleteProduct = (id) => {
 }
 
 const getAllProducts = () => {
-    return instance.get(`api/v1/product`);
+    return instance.get(`api/v1/product/getAll`);
 }
 
 const getAllProductDetails = () => {
@@ -47,7 +47,7 @@ const getAllProductDetails = () => {
 }
 
 const getAllProperties = (property) => {
-    return instance.get(`api/v1/`, property);
+    return instance.get(`api/v1/` + property);
 }
 
 export { getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty, postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductDetails };

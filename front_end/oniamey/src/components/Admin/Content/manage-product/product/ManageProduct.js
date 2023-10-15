@@ -535,7 +535,7 @@ const ManageProduct = (props) => {
                                             Color & Size
                                         </Button>
 
-                                        <Modal title="Color & Size" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                                        <Modal title="Color & Size" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                                             <div className='mb-3 mt-3'>
                                                 <h4>Color:</h4>
                                                 {renderColorButtons()}
