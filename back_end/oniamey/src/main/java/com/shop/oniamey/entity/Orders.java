@@ -66,4 +66,7 @@ public class Orders extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "id_voucher")
     private Voucher voucher;
+
+    @Column(name ="code")
+    private String code;
 }
