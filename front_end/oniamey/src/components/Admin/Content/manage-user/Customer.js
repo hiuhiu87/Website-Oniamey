@@ -7,12 +7,17 @@ import {
   faPencilSquare,
   faLock,
   faUnlock,
+  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-import ModifyCustomerModal from "./ModifyCustomerModal";
+import ModifyCustomerModal from "./components/ModifyCustomerModal";
+import BreadcrumbsPage from "../../BreadCrumbs/BreadcrumbsPage";
 import service from "../../../../services/CustomerService";
 import "../manage-user/style/Table.css";
+import "../manage-user/style/CustomerStyle.css";
+import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Customer = (props) => {
   const [customer, setCustomer] = useState([]);
@@ -122,7 +127,7 @@ const Customer = (props) => {
               onClick={() => {
                 setCurrentPage(i + 1);
               }}
-              style={{ cursor: "pointer" }}
+              // style={{ cursor: "pointer", color: "#000", backgroundColor: "#cc9966" }}
             >
               {i + 1}
             </Pagination.Item>
@@ -229,7 +234,7 @@ const Customer = (props) => {
       cell: (row) => (
         <>
           <Button
-            className="btn btn-primary"
+            className="btn btn-dark"
             style={{ marginLeft: "10px" }}
             onClick={() => {
               openModal(row.id);
@@ -239,7 +244,7 @@ const Customer = (props) => {
           </Button>
           {"     "}
           <Button
-            className="btn btn-danger"
+            className="btn btn-dark"
             onClick={() => {
               showConfirmDelete(row.id);
             }}
@@ -249,6 +254,13 @@ const Customer = (props) => {
               icon={row.status === "false" ? faLock : faUnlock}
             />
           </Button>
+          <Link
+            to={`/admins/manage-customers/detail-customer/${row.id}`}
+            className="btn btn-dark"
+            style={{ marginLeft: "10px" }}
+          >
+            <FontAwesomeIcon icon={faCircleInfo} />
+          </Link>
         </>
       ),
     },
@@ -306,10 +318,11 @@ const Customer = (props) => {
   }, [records]);
 
   return (
-    <Container>
-      <h4>Quản Lý Khách Hàng</h4>
-      <Container className="d-flex justify-content-between align-items-center mb-3 mt-3 p-0">
-        <Col xs={4} className="d-flex">
+    <Container className="wrapper">
+      <h3 className="ml-5">Manager Customer</h3>
+      {/* <BreadcrumbsPage /> */}
+      <Container className="d-flex justify-content-between align-items-center mt-3">
+        <Col xs={3} className="d-flex">
           <Form.Control
             type="search"
             placeholder="Search by name or email"
@@ -319,7 +332,7 @@ const Customer = (props) => {
             onChange={(e) => handleFilter(e)}
           />
         </Col>
-        <Col xs={7} className="d-flex justify-content-end align-items-center">
+        <Col sm={8} className="d-flex justify-content-end align-items-center">
           <Form>
             <Form.Group className="me-2 d-flex justify-content-center align-items-center">
               <Form.Label className="m-2">Status</Form.Label>
@@ -331,13 +344,14 @@ const Customer = (props) => {
             </Form.Group>
           </Form>
         </Col>
-        <Col md={1}>
+        <Col>
           <Button
-            variant="primary"
-            style={{ fontSize: "15px" }}
-            onClick={openModal}
+            className="btn btn-dark w-100"
+            onClick={() => {
+              openModal();
+            }}
           >
-            Add New
+            <FontAwesomeIcon icon={faClipboardUser} /> Add
           </Button>
         </Col>
       </Container>
@@ -351,7 +365,9 @@ const Customer = (props) => {
       </Container>
       <Row className="d-flex justify-content-center align-items-center">
         <Col xs={12} className="d-flex justify-content-center">
-          <Pagination>{renderButtonPage()}</Pagination>
+          <Pagination style={{ cursor: "pointer", color: "#cc9966" }}>
+            {renderButtonPage()}
+          </Pagination>
         </Col>
       </Row>
       <ModifyCustomerModal

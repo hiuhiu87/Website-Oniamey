@@ -1,8 +1,10 @@
 import React from 'react';
 import './DashBoard.scss';
+import BreadcrumbsPage from '../../BreadCrumbs/BreadcrumbsPage';
 
 const Dashboard = (props) => {
     return (
+        
         <div class="container">
             <table class="table">
                 <thead>

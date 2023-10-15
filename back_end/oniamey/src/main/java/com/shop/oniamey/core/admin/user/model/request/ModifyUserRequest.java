@@ -33,7 +33,6 @@ public class ModifyUserRequest {
     @Email(message = "Email is invalid")
     private String email;
 
-    @NotEmpty(message = "Password is required")
     private String password;
 
     @NotEmpty(message = "Phone number is required")
@@ -53,6 +52,8 @@ public class ModifyUserRequest {
     private Boolean isDeleted;
 
     @NotNull(message = "Role is required")
-    private Long roleId;
+    @Min(value = 0)
+    @Max(value = 1)
+    private Integer role;
 
 }

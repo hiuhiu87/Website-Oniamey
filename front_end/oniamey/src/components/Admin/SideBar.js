@@ -27,7 +27,7 @@ const SideBar = (props) => {
     return (
         <>
             <ProSidebar
-                image={sidebarBg}
+                // image={sidebarBg}
                 collapsed={collapsed}
                 toggled={toggled}
                 breakPoint="md"
@@ -47,7 +47,7 @@ const SideBar = (props) => {
                         }}
                     >
                         <RiTShirt2Fill size={'2em'} color={"#ff7f29"} />
-                        <span> Oniamey Shop</span>
+                        <span>{!collapsed && " Oniamey Shop"}</span>
                     </div>
                 </SidebarHeader>
 

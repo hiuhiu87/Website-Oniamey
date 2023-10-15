@@ -1,30 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import store from './redux/store';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import User from './components/User/User';
-import Admin from './components/Admin/Admin';
-import HomePage from './components/Home/HomePage';
-import DashBoard from './components/Admin/Content/dashboard/DashBoard';
-import SalesAtTheCounter from './components/Admin/Content/sales-at-the-counter/SalesAtTheCounter';
-import ManageProduct from './components/Admin/Content/manage-product/product/Product'
-import ManageCategory from './components/Admin/Content/manage-product/category/ManageCategory';
-import ManageBrand from './components/Admin/Content/manage-product/brand/ManageBrand';
-import ManageMaterial from './components/Admin/Content/manage-product/material/ManageMaterial';
-import ManageSize from './components/Admin/Content/manage-product/size/ManageSize';
-import ManageColor from './components/Admin/Content/manage-product/color/ManageColor';
-import ManageCollar from './components/Admin/Content/manage-product/collar/ManageCollar';
-import ManageSleeveLength from './components/Admin/Content/manage-product/sleeve-length/ManageSleeveLength';
-import ManageOrder from './components/Admin/Content/manage-oder/Order';
-import ManageVoucher from './components/Admin/Content/manage-voucher/Voucher';
-import ManageEmployee from './components/Admin/Content/manage-user/Employee';
-import ManageCustomer from './components/Admin/Content/manage-user/Customer';
-import ManageStatistical from './components/Admin/Content/manage-statistical/Statistical';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import User from "./components/User/User";
+import Admin from "./components/Admin/Admin";
+import HomePage from "./components/Home/HomePage";
+import DashBoard from "./components/Admin/Content/dashboard/DashBoard";
+import SalesAtTheCounter from "./components/Admin/Content/sales-at-the-counter/SalesAtTheCounter";
+import ManageProduct from "./components/Admin/Content/manage-product/product/Product";
+import ManageCategory from "./components/Admin/Content/manage-product/category/ManageCategory";
+import ManageBrand from "./components/Admin/Content/manage-product/brand/ManageBrand";
+import ManageMaterial from "./components/Admin/Content/manage-product/material/ManageMaterial";
+import ManageSize from "./components/Admin/Content/manage-product/size/ManageSize";
+import ManageColor from "./components/Admin/Content/manage-product/color/ManageColor";
+import ManageCollar from "./components/Admin/Content/manage-product/collar/ManageCollar";
+import ManageSleeveLength from "./components/Admin/Content/manage-product/sleeve-length/ManageSleeveLength";
+import ManageOrder from "./components/Admin/Content/manage-oder/Order";
+import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
+import ManageEmployee from "./components/Admin/Content/manage-user/Employee";
+import ManageCustomer from "./components/Admin/Content/manage-user/Customer";
+import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
 import ModifyUserComponent from "./components/Admin/Content/manage-user/ModifyUserComponent";
+import DetaiCustomer from "./components/Admin/Content/manage-user/DetailCustomer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -62,8 +63,18 @@ root.render(
             path="manage-statisticals"
             element={<ManageStatistical />}
           ></Route>
-          <Route path="add-employee" element={<ModifyUserComponent />}></Route>
-          <Route path="update-employee" element={<ModifyUserComponent />}></Route>
+          <Route
+            path="manage-customers/add-employee"
+            element={<ModifyUserComponent />}
+          ></Route>
+          <Route
+            path="manage-customers/update-employee"
+            element={<ModifyUserComponent />}
+          ></Route>
+          <Route
+            path="manage-customers/detail-customer/:id"
+            element={<DetaiCustomer />}
+          ></Route>
         </Route>
       </Routes>
     </BrowserRouter>

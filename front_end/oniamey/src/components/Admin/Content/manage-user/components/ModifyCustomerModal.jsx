@@ -3,10 +3,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import service from "../../../../services/CustomerService";
+import service from "../../../../../services/CustomerService";
 import Swal from "sweetalert2";
 
-import formatDate from "../../../../utils/FormatDate";
+import formatDate from "../../../../../utils/FormatDate";
 
 const ModifyCustomerModal = ({ isOpen, onClose, id }) => {
   const [fullName, setFullName] = useState("");
@@ -203,7 +203,7 @@ const ModifyCustomerModal = ({ isOpen, onClose, id }) => {
             Close
           </Button>
           <Button
-            variant="primary"
+            variant="dark"
             onClick={(e) => {
               e.preventDefault();
               Swal.fire({
