@@ -1,10 +1,54 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import './ManageCollar.scss';
 import { GiHeavyCollar } from 'react-icons/gi';
-import { FaFilter, FaThList } from 'react-icons/fa';
-import { MdLibraryAdd } from 'react-icons/md';
+import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
+import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import ModalCreateCollar from './ModalCreateCollar';
+import ModalUpdateCollar from './ModalUpdateCollar';
+import ModalDeleteCollar from './ModalDeleteCollar';
+import { getAllProperties } from '../../../../../services/apiService';
 
 const ManageCollar = (props) => {
+
+    const [showModalCreateCollar, setShowModalCreateCollar] = useState(false);
+    const [showModalUpdateCollar, setShowModalUpdateCollar] = useState(false);
+    const [showModalDeleteCollar, setShowModalDeleteCollar] = useState(false);
+
+    const [dataUpdate, setDataUpdate] = useState({});
+    const [dataDelete, setDataDelete] = useState({});
+
+    const [listCollar, setListCollar] = useState([]);
+    const [CollarId, setCollarId] = useState('');
+
+    useEffect(() => {
+        fetchListCollar();
+    }, []);
+
+    const fetchListCollar = async () => {
+        let res = await getAllProperties('collar');
+        setListCollar(res.data);
+        setCollarId(res.data[0].id)
+        console.log(res);
+    }
+
+    const handleClickBtnUpdate = (collar) => {
+        setShowModalUpdateCollar(true);
+        setDataUpdate(collar);
+    }
+
+    const handleClickBtnDelete = (collar) => {
+        setShowModalDeleteCollar(true);
+        setDataDelete(collar);
+    }
+
+    const resetDataDelete = () => {
+        setDataDelete({});
+    }
+
+    const resetDataUpdate = () => {
+        setDataUpdate({});
+    }
+
     return (
         <div class="manage-collar-container">
             <div className='manage-collar-title'>
@@ -45,58 +89,73 @@ const ManageCollar = (props) => {
                     <div className="title">
                         <FaThList size={26} /> Danh Sách Cổ Áo
                     </div>
-                    <button type="button" class="btn btn-dark">
+                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateCollar(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th scope="col" className='px-5 text-center'>STT</th>
+                            <th scope="col" className='px-5 text-center'>Tên</th>
+                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
+                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
+                            <th scope="col" className='px-5 text-center'>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
+                        {listCollar.length > 0 && listCollar.map((collar, index) => {
+                            return (
+                                <tr key={`table-brand-${index}`}>
+                                    <td className="text-center">{index + 1}</td>
+                                    <td className="text-center">{collar.name}</td>
+                                    <td className="text-center">{collar.updatedAt}</td>
+                                    <td className="text-center">{collar.deleted === false ? 'Active' : 'DeActive'}</td>
+                                    <td className="text-center">
+                                        <div className="d-flex justify-content-center align-items-center">
+                                            <button className="btn-update btn btn-dark mx-3 short-button"
+                                                onClick={() => handleClickBtnUpdate(collar)}
+                                            >
+                                                <FaPenSquare color='#ffffff' />
+                                            </button>
+                                            <button className="btn-delete btn btn-dark short-button"
+                                                onClick={() => handleClickBtnDelete(collar)}
+                                            >
+                                                <MdDeleteSweep />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        {listCollar && listCollar.length === 0 &&
+                            <tr>
+                                <td colSpan={5}>
+                                    Không có Data!
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+            <ModalCreateCollar
+                show={showModalCreateCollar}
+                setShow={setShowModalCreateCollar}
+                fetchListCollar={fetchListCollar}
+            />
+            <ModalUpdateCollar
+                show={showModalUpdateCollar}
+                setShow={setShowModalUpdateCollar}
+                fetchListCollar={fetchListCollar}
+                dataUpdate={dataUpdate}
+                resetDataUpdate={resetDataUpdate}
+            />
+            <ModalDeleteCollar
+                show={showModalDeleteCollar}
+                setShow={setShowModalDeleteCollar}
+                fetchListCollar={fetchListCollar}
+                dataDelete={dataDelete}
+                resetDataDelete={resetDataDelete}
+            />
         </div >
     );
 }

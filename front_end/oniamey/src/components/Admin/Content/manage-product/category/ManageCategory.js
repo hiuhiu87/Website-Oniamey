@@ -1,10 +1,54 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import './ManageCategory.scss';
 import { MdCategory } from 'react-icons/md';
-import { FaFilter, FaThList } from 'react-icons/fa';
-import { MdLibraryAdd } from 'react-icons/md';
+import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
+import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import ModalCreateCategory from './ModalCreateCategory';
+import ModalUpdateCategory from './ModalUpdateCategory';
+import ModalDeleteCategory from './ModalDeleteCategory';
+import { getAllProperties } from '../../../../../services/apiService';
 
 const ManageCategory = (props) => {
+
+    const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
+    const [showModalUpdateCategory, setShowModalUpdateCategory] = useState(false);
+    const [showModalDeleteCategory, setShowModalDeleteCategory] = useState(false);
+
+    const [dataUpdate, setDataUpdate] = useState({});
+    const [dataDelete, setDataDelete] = useState({});
+
+    const [listCategory, setListCategory] = useState([]);
+    const [CategoryId, setCategoryId] = useState('');
+
+    useEffect(() => {
+        fetchListCategory();
+    }, []);
+
+    const fetchListCategory = async () => {
+        let res = await getAllProperties('category');
+        setListCategory(res.data);
+        setCategoryId(res.data[0].id)
+        console.log(res);
+    }
+
+    const handleClickBtnUpdate = (category) => {
+        setShowModalUpdateCategory(true);
+        setDataUpdate(category);
+    }
+
+    const handleClickBtnDelete = (category) => {
+        setShowModalDeleteCategory(true);
+        setDataDelete(category);
+    }
+
+    const resetDataDelete = () => {
+        setDataDelete({});
+    }
+
+    const resetDataUpdate = () => {
+        setDataUpdate({});
+    }
+
     return (
         <div class="manage-category-container">
             <div className='manage-category-title'>
@@ -45,58 +89,73 @@ const ManageCategory = (props) => {
                     <div className="title">
                         <FaThList size={26} /> Danh Sách Danh Mục
                     </div>
-                    <button type="button" class="btn btn-dark">
+                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateCategory(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th scope="col" className='px-5 text-center'>STT</th>
+                            <th scope="col" className='px-5 text-center'>Tên</th>
+                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
+                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
+                            <th scope="col" className='px-5 text-center'>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
+                        {listCategory.length > 0 && listCategory.map((category, index) => {
+                            return (
+                                <tr key={`table-brand-${index}`}>
+                                    <td className="text-center">{index + 1}</td>
+                                    <td className="text-center">{category.name}</td>
+                                    <td className="text-center">{category.updatedAt}</td>
+                                    <td className="text-center">{category.deleted === false ? 'Active' : 'DeActive'}</td>
+                                    <td className="text-center">
+                                        <div className="d-flex justify-content-center align-items-center">
+                                            <button className="btn-update btn btn-dark mx-3 short-button"
+                                                onClick={() => handleClickBtnUpdate(category)}
+                                            >
+                                                <FaPenSquare color='#ffffff' />
+                                            </button>
+                                            <button className="btn-delete btn btn-dark short-button"
+                                                onClick={() => handleClickBtnDelete(category)}
+                                            >
+                                                <MdDeleteSweep />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        {listCategory && listCategory.length === 0 &&
+                            <tr>
+                                <td colSpan={5}>
+                                    Không có Data!
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+            <ModalCreateCategory
+                show={showModalCreateCategory}
+                setShow={setShowModalCreateCategory}
+                fetchListCategory={fetchListCategory}
+            />
+            <ModalUpdateCategory
+                show={showModalUpdateCategory}
+                setShow={setShowModalUpdateCategory}
+                fetchListCategory={fetchListCategory}
+                dataUpdate={dataUpdate}
+                resetDataUpdate={resetDataUpdate}
+            />
+            <ModalDeleteCategory
+                show={showModalDeleteCategory}
+                setShow={setShowModalDeleteCategory}
+                fetchListCategory={fetchListCategory}
+                dataDelete={dataDelete}
+                resetDataDelete={resetDataDelete}
+            />
         </div >
     );
 }

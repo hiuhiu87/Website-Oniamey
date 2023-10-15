@@ -31,11 +31,11 @@ const ModalDeleteBrand = (props) => {
                     </b>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        No
-                    </Button>
                     <Button variant="dark" onClick={() => { handleSubmitDeleteBrand() }}>
                         Yes
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        No
                     </Button>
                 </Modal.Footer>
             </Modal>

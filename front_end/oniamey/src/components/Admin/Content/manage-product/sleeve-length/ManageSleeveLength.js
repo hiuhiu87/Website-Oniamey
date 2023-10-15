@@ -1,11 +1,54 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import './ManageSleeveLength.scss';
 import { CgDetailsLess } from 'react-icons/cg';
-import { FaFilter, FaThList } from 'react-icons/fa';
-import { MdLibraryAdd } from 'react-icons/md';
-import { Container } from 'react-bootstrap';
+import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
+import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import ModalCreateSleeveLength from './ModalCreateSleeveLength';
+import ModalUpdateSleeveLength from './ModalUpdateSleeveLength';
+import ModalDeleteSleeveLength from './ModalDeleteSleeveLength';
+import { getAllProperties } from '../../../../../services/apiService';
 
 const ManageSleeveLength = (props) => {
+
+    const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
+    const [showModalUpdateSleeveLength, setShowModalUpdateSleeveLength] = useState(false);
+    const [showModalDeleteSleeveLength, setShowModalDeleteSleeveLength] = useState(false);
+
+    const [dataUpdate, setDataUpdate] = useState({});
+    const [dataDelete, setDataDelete] = useState({});
+
+    const [listSleeveLength, setListSleeveLength] = useState([]);
+    const [SleeveLengthId, setSleeveLengthId] = useState('');
+
+    useEffect(() => {
+        fetchListSleeveLength();
+    }, []);
+
+    const fetchListSleeveLength = async () => {
+        let res = await getAllProperties('sleeve-length');
+        setListSleeveLength(res.data);
+        setSleeveLengthId(res.data[0].id)
+        console.log(res);
+    }
+
+    const handleClickBtnUpdate = (sleeveLength) => {
+        setShowModalUpdateSleeveLength(true);
+        setDataUpdate(sleeveLength);
+    }
+
+    const handleClickBtnDelete = (sleeveLength) => {
+        setShowModalDeleteSleeveLength(true);
+        setDataDelete(sleeveLength);
+    }
+
+    const resetDataDelete = () => {
+        setDataDelete({});
+    }
+
+    const resetDataUpdate = () => {
+        setDataUpdate({});
+    }
+
     return (
         <div class="manage-sleeve-length-container">
             <div className='manage-sleeve-length-title'>
@@ -50,58 +93,73 @@ const ManageSleeveLength = (props) => {
                     <div className="title">
                         <FaThList size={26} /> Danh Sách Chiều Dài Tay
                     </div>
-                    <button type="button" class="btn btn-dark">
+                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateSleeveLength(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th scope="col" className='px-5 text-center'>STT</th>
+                            <th scope="col" className='px-5 text-center'>Tên</th>
+                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
+                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
+                            <th scope="col" className='px-5 text-center'>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
+                        {listSleeveLength.length > 0 && listSleeveLength.map((sleeveLength, index) => {
+                            return (
+                                <tr key={`table-brand-${index}`}>
+                                    <td className="text-center">{index + 1}</td>
+                                    <td className="text-center">{sleeveLength.name}</td>
+                                    <td className="text-center">{sleeveLength.updatedAt}</td>
+                                    <td className="text-center">{sleeveLength.deleted === false ? 'Active' : 'DeActive'}</td>
+                                    <td className="text-center">
+                                        <div className="d-flex justify-content-center align-items-center">
+                                            <button className="btn-update btn btn-dark mx-3 short-button"
+                                                onClick={() => handleClickBtnUpdate(sleeveLength)}
+                                            >
+                                                <FaPenSquare color='#ffffff' />
+                                            </button>
+                                            <button className="btn-delete btn btn-dark short-button"
+                                                onClick={() => handleClickBtnDelete(sleeveLength)}
+                                            >
+                                                <MdDeleteSweep />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        {listSleeveLength && listSleeveLength.length === 0 &&
+                            <tr>
+                                <td colSpan={5}>
+                                    Không có Data!
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+            <ModalCreateSleeveLength
+                show={showModalCreateSleeveLength}
+                setShow={setShowModalCreateSleeveLength}
+                fetchListSleeveLength={fetchListSleeveLength}
+            />
+            <ModalUpdateSleeveLength
+                show={showModalUpdateSleeveLength}
+                setShow={setShowModalUpdateSleeveLength}
+                fetchListSleeveLength={fetchListSleeveLength}
+                dataUpdate={dataUpdate}
+                resetDataUpdate={resetDataUpdate}
+            />
+            <ModalDeleteSleeveLength
+                show={showModalDeleteSleeveLength}
+                setShow={setShowModalDeleteSleeveLength}
+                fetchListSleeveLength={fetchListSleeveLength}
+                dataDelete={dataDelete}
+                resetDataDelete={resetDataDelete}
+            />
         </div >
     );
 }

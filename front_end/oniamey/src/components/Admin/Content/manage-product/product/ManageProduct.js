@@ -18,9 +18,10 @@ import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 import { Modal, Button } from 'antd';
 import 'antd-button-color/dist/css/style.css';
 import { Col, Row } from 'react-bootstrap';
-// import imageServer from './../../../../../assets/uploads'
 
 const ManageProduct = (props) => {
+
+    const imageProductDetail = "D:\\Product\\Website-Oniamey\\front_end\\oniamey\\src\\assets\\uploads\\";
 
     const [brandId, setBrandId] = useState('');
     const [listBrand, setListBrand] = useState([]);
@@ -393,7 +394,8 @@ const ManageProduct = (props) => {
                                                     </td>
                                                     <td className="text-center">{index + 1}</td>
                                                     <td className="text-center">
-                                                        <img src={`${item.imageUrl}`} />
+                                                        <img src={`${imageProductDetail}${item.imageUrl}`} />
+                                                        {/* {item.imageUrl} */}
                                                     </td>
                                                     <td className="text-center">{item.name}</td>
                                                     <td className="text-center">{item.quantity}</td>

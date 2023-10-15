@@ -4,18 +4,18 @@ const postCreateProperty = (property, name, deleted) => {
     const data = new FormData();
     data.append('name', name);
     data.append('deleted', deleted);
-    return instance.post(`api/v1/`, property, data);
+    return instance.post(`api/v1/` + property, data);
 }
 
 const putUpdateProperty = (property, id, name, deleted) => {
     const data = new FormData();
     data.append('name', name);
     data.append('deleted', deleted);
-    return instance.post(`api/v1/`, property, id, data);
+    return instance.put(`api/v1/${property}/${id}`, data);
 }
 
 const deleteProperty = (property, id) => {
-    return instance.delete(`api/v1/`, property, id);
+    return instance.delete(`api/v1/${property}/${id}`);
 }
 
 const postCreateProduct = (name, description, deleted) => {
@@ -31,11 +31,11 @@ const putUpdateProduct = (id, name, description, deleted) => {
     data.append('name', name);
     data.append('description', description);
     data.append('deleted', deleted);
-    return instance.post(`api/v1/product`, id, data);
+    return instance.put(`api/v1/product/${id}`, data);
 }
 
 const deleteProduct = (id) => {
-    return instance.delete(`api/v1/product`, id);
+    return instance.delete(`api/v1/product/${id}`);
 }
 
 const getAllProducts = () => {
