@@ -55,7 +55,7 @@ root.render(
             path="manage-sleeve-lengths"
             element={<ManageSleeveLength />}
           ></Route>
-          <Route path="manage-orders/*" element={<Order />}></Route>
+          <Route path="manage-orders/*" element={<Order/>}></Route>
           <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
           <Route path="manage-employees" element={<ManageEmployee />}></Route>
           <Route path="manage-customers" element={<ManageCustomer />}></Route>

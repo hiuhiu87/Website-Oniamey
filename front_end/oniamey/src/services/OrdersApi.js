@@ -25,3 +25,15 @@ export const getCountStatus= async ()=>{
         return {};
     }
 }
+
+export const getByStatus= async(status)=>{
+try {
+    const res= await instance.get(`${urlOrder}/get-by-status`,{params:{
+        status
+    }});
+    return res.data;
+} catch (error) {
+    console.log(error);
+    return [];
+}
+}

@@ -1,14 +1,14 @@
 import * as OrdersApi from '../../../../../services/OrdersApi'
 import './OrderContent.scss'
-import { FaThList } from 'react-icons/fa';
+import { FaThList,FaEye } from 'react-icons/fa';
 import { useState, useEffect } from "react";
 const OrderContent = (Props) => {
     const [data, setData] = useState({});
+    const [listData,setListData]= useState();
     const [pageActive, setPageActive] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [size, setSize] = useState(5);
     const [checked, setChecked] = useState([]);
-    const [checkAll, setCheckAll] = useState(false);
     const fomatDate = (time) => {
         const date = new Date(time);
         return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getDate()}`;
@@ -16,6 +16,7 @@ const OrderContent = (Props) => {
     const getByStatus = async (page, sizeProp, status) => {
         const result = await OrdersApi.getOrdersByStatus(page, sizeProp, status);
         setData(result);
+        getAll();
     }
     const handleSize = (value) => {
         setSize(value);
@@ -33,16 +34,9 @@ const OrderContent = (Props) => {
     const handleChangePage = (index) => {
         setPageActive(index)
         setCurrentPage(index + 1);
-        getByStatus(index, size, Props.status);
+         getByStatus(index, size, Props.status);
     }
-    console.log(checked.length+'===='+data.totalElements)
-    console.log(checkAll)
     const handleCheckBox = (id) => {
-        if(checked.length===data.totalElements){
-            setCheckAll(true);
-        }else{
-            setCheckAll(false);
-        }
         setChecked(preChecked => {
             const isCheck = checked.includes(id);
             if (isCheck) {
@@ -52,20 +46,24 @@ const OrderContent = (Props) => {
             }
         });
     }
-    console.log(checked);
-    const handleSelectAll = () => {
-        if (checkAll) {
-            setChecked([])
-            setCheckAll(false);
-        } else {
-            data.content.map((item) => {
-                setChecked(preCheck => {
-                    return [...preCheck, item.id]
-                });
-            });
-            setCheckAll(true)
-        }
+    const getAll=async()=>{
+        const res= await OrdersApi.getByStatus(Props.status);
+        setListData(res);
     }
+    const handleSelectAll = () => {
+        if (data.totalElements=== checked.length) {
+            setChecked([])
+        } else {
+            const listId= ()=>{
+                const list=[];
+                    listData.map((item)=>{              
+                        list.push(item.id);
+                  });
+                return list;
+            } 
+            setChecked(listId());
+        }
+    } 
     return <div>
         <div className='manage-order-content-table'>
             <div className='form-search-order'>
@@ -75,14 +73,14 @@ const OrderContent = (Props) => {
                     </div>
                 </div>
                 <form className='nav-form-search'>
-                    <div className='formGroup'>
-                        <select className='input'  >
-                            <option disabled selected >Mã HD</option>
+                    {/* <div className='formGroup'>
+                        <select className='input' value={'mahd'} >
+                            <option disabled value={'mahd'} >Mã HD</option>
                             {data.content && data.content.map((item, index) => {
                                 return <option key={index} value={item.id}>{item.code}</option>
                             })}
                         </select>
-                    </div> 
+                    </div>  */}
                     <div className='formGroup'>
                         <label className='label' ></label>
                         <select className='input'
@@ -101,7 +99,7 @@ const OrderContent = (Props) => {
                 <thead>
                     <tr>
                         <th><input type='checkbox'
-                            checked={checkAll}
+                            checked={data.totalElements===checked.length}
                             onChange={handleSelectAll} /></th>
                         <th>Mã HD</th>
                         <th>Khách Hàng</th>
@@ -122,7 +120,7 @@ const OrderContent = (Props) => {
                             <td>{item.phoneNumber}</td>
                             <td>{item.totalMoney}</td>
                             <td>{fomatDate(item.createdAt)}</td>
-                            <td>icon</td>
+                            <td>{<FaEye style={{color:'#cc9966',fontSize:'24px'}}/>}</td>
                         </tr>)
                     })}
                 </tbody>
@@ -131,9 +129,10 @@ const OrderContent = (Props) => {
                 {data.totalPages ? <div >{'Trang: ' + currentPage + '/' + data.totalPages}</div> : null}
                 {data.totalPages ? (<div className='page-item'>
                     {Array.from({ length: data.totalPages }, (_, index) => (
-                        <div className={`${pageActive === index ? 'page-active' : ''} item `} key={index + 1} onClick={() => { handleChangePage(index) }}>
+                        <button className={`${pageActive === index ? 'page-active' : ''} item `} key={index + 1}
+                         onClick={() => { handleChangePage(index) }}>
                             {index + 1}
-                        </div>
+                        </button>
                     ))}
                 </div>) : null}
             </div>
