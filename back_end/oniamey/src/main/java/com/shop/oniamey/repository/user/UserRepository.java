@@ -60,6 +60,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
                 select u.id
+                ,u.username as username
+                ,u.identity_card as identityCard
                 ,u.full_name as fullName
                 ,u.email as email
                 ,u.phone_number as phoneNumber
@@ -81,4 +83,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """, nativeQuery = true)
     UserDetailResponse getUserDetailById(Long id);
 
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByIdentityCard(String identityCard);
 }
