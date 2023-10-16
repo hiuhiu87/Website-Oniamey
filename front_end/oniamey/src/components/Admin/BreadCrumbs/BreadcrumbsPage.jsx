@@ -20,7 +20,10 @@ const BreadcrumbsPage = () => {
       }
       if (index + 1 === location.pathname.split("/").length - 1) {
         return (
-          <li className="breadcrumb-item font-weight-bold mr-0 pr-0">
+          //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+          //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+          //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+           <li key={index} className="breadcrumb-item font-weight-bold mr-0 pr-0"> 
             <Link className={`black-text active-1`} to={currentPath}>
               <span>{crumb}</span>
             </Link>{" "}
@@ -28,7 +31,10 @@ const BreadcrumbsPage = () => {
         );
       }
       return (
-        <li className="breadcrumb-item font-weight-bold">
+        //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+        //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+        //tao thêm key để nó không báo warning nữa chứ ko sửa gì đâu
+        <li key={index} className="breadcrumb-item font-weight-bold">
           <Link className={`black-text text-uppercase`} to={currentPath}>
             <span>{crumb}</span>
           </Link>

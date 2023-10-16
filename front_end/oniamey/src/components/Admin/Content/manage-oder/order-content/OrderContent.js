@@ -1,60 +1,93 @@
 import * as OrdersApi from '../../../../../services/OrdersApi'
-import ReactPaginate from 'react-paginate';
+import './OrderContent.scss'
 import { FaThList } from 'react-icons/fa';
 import { useState, useEffect } from "react";
-import { Checkbox } from 'antd';
-const OrderContent = (props) => {
+const OrderContent = (Props) => {
     const [data, setData] = useState({});
-    const [order, setOrder] = useState([]);
+    const [pageActive, setPageActive] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [size, setSize] = useState(5);
-    const getByStatus = async (sizeProp) => {
-        const result = await OrdersApi.getOrdersByStatus(currentPage,sizeProp, props.status);
-        setData(result);
-        setOrder(result.content);
-    }
-    useEffect(() => {
-        getByStatus(size);
-    }, [])
+    const [checked, setChecked] = useState([]);
+    const [checkAll, setCheckAll] = useState(false);
     const fomatDate = (time) => {
         const date = new Date(time);
         return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getDate()}`;
     }
-    // const handleSize=(vl)=>{
-    //     setSize(vl);
-    //     getByStatus();
-    // }
-    console.log(size)
-    const handlePageClick = ({ selected }) => {
-        setCurrentPage(selected);
-        getByStatus(size);
+    const getByStatus = async (page, sizeProp, status) => {
+        const result = await OrdersApi.getOrdersByStatus(page, sizeProp, status);
+        setData(result);
+    }
+    const handleSize = (value) => {
+        setSize(value);
+        getByStatus(0, value, Props.status);
+        setCurrentPage(1);
+    }
+    useEffect(() => {
+        setPageActive(0);
+        setCurrentPage(1);
+        getByStatus(0, size, Props.status);
+    }, [Props.status]);
+    useEffect(() => {
+        getByStatus(0, size, Props.status);
+    }, []);
+    const handleChangePage = (index) => {
+        setPageActive(index)
+        setCurrentPage(index + 1);
+        getByStatus(index, size, Props.status);
+    }
+    console.log(checked.length+'===='+data.totalElements)
+    console.log(checkAll)
+    const handleCheckBox = (id) => {
+        if(checked.length===data.totalElements){
+            setCheckAll(true);
+        }else{
+            setCheckAll(false);
+        }
+        setChecked(preChecked => {
+            const isCheck = checked.includes(id);
+            if (isCheck) {
+                return checked.filter((item) => item !== id);
+            } else {
+                return [...preChecked, id];
+            }
+        });
+    }
+    console.log(checked);
+    const handleSelectAll = () => {
+        if (checkAll) {
+            setChecked([])
+            setCheckAll(false);
+        } else {
+            data.content.map((item) => {
+                setChecked(preCheck => {
+                    return [...preCheck, item.id]
+                });
+            });
+            setCheckAll(true)
+        }
     }
     return <div>
-        <div className='manage-brand-table'>
+        <div className='manage-order-content-table'>
             <div className='form-search-order'>
-                <div className='list-brand-title'>
+                <div className='or-title'>
                     <div className="title">
                         <FaThList size={26} /> Danh Sách Hóa Đơn
                     </div>
                 </div>
                 <form className='nav-form-search'>
                     <div className='formGroup'>
-                        <label className='label' >Mã HD</label>
-                        <select className='input' >
-                            {order.map((item, index) => {
-                                return <option key={index} value={item.id}>HD2023{item.id}</option>
+                        <select className='input'  >
+                            <option disabled selected >Mã HD</option>
+                            {data.content && data.content.map((item, index) => {
+                                return <option key={index} value={item.id}>{item.code}</option>
                             })}
                         </select>
-                    </div>
-                    <div className='formGroup'>
-                        <label className='label' >price</label>
-                        <input className='input' type="text"
-                        />
-                    </div>
+                    </div> 
                     <div className='formGroup'>
                         <label className='label' ></label>
-                        <select className='input' 
-                        // onChange={e=>{handleSize(e.target.value)}}
+                        <select className='input'
+                            value={size}
+                            onChange={e => { handleSize(e.target.value) }}
                         >
                             <option value={5}>5</option>
                             <option value={10}>10</option>
@@ -67,7 +100,9 @@ const OrderContent = (props) => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th><input type='checkbox' /></th>
+                        <th><input type='checkbox'
+                            checked={checkAll}
+                            onChange={handleSelectAll} /></th>
                         <th>Mã HD</th>
                         <th>Khách Hàng</th>
                         <th>Số Điện Thoại</th>
@@ -77,9 +112,11 @@ const OrderContent = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {order.map((item, index) => {
+                    {data.content && data.content.map((item, index) => {
                         return (<tr key={index}>
-                            <td><input type='checkbox' /></td>
+                            <td><input type='checkbox'
+                                checked={checked.includes(item.id)}
+                                onChange={() => { handleCheckBox(item.id) }} /></td>
                             <td>{item.code}</td>
                             <td>{item.userName}</td>
                             <td>{item.phoneNumber}</td>
@@ -90,25 +127,18 @@ const OrderContent = (props) => {
                     })}
                 </tbody>
             </table>
-            <div>
-                <ReactPaginate
-                    nextLabel={null}
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={2}
-                    pageCount={data.totalPages}
-                    previousLabel={null}
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    breakLabel="..."
-                    breakClassName="page-item"
-                    breakLinkClassName="page-link"
-                    containerClassName="pagination"
-                    activeClassName="active"
-                    renderOnZeroPageCount={null}
-                />
+            <div className='page-footer'>
+                {data.totalPages ? <div >{'Trang: ' + currentPage + '/' + data.totalPages}</div> : null}
+                {data.totalPages ? (<div className='page-item'>
+                    {Array.from({ length: data.totalPages }, (_, index) => (
+                        <div className={`${pageActive === index ? 'page-active' : ''} item `} key={index + 1} onClick={() => { handleChangePage(index) }}>
+                            {index + 1}
+                        </div>
+                    ))}
+                </div>) : null}
             </div>
         </div>
     </div>
 }
+
 export default OrderContent;

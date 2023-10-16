@@ -15,3 +15,13 @@ export const getOrdersByStatus= async (page,size,status)=>{
             return {};
         }
 }
+
+export const getCountStatus= async ()=>{
+    try {
+        const res = await instance.get(`${urlOrder}/get-count-status`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return {};
+    }
+}
