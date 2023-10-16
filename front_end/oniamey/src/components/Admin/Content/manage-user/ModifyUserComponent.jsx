@@ -342,7 +342,7 @@ const ModifyUserComponent = () => {
       <div className="d-flex justify-content-between align-items-center">
         <Link to="/admins/manage-employees">
           <Button variant="secondary" className="m-3">
-            <FontAwesomeIcon icon={faBackward} className="me-2" />
+            <FontAwesomeIcon icon={faBackward} />
           </Button>
         </Link>
         <Button variant="success" onClick={showModal} className="m-3">
@@ -433,6 +433,7 @@ const ModifyUserComponent = () => {
                   onChange={(e) => handleInputChange(e)}
                   required
                 />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
