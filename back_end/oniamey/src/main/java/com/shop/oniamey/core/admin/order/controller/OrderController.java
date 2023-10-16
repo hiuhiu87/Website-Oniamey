@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.order.controller;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
+import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import jakarta.validation.Valid;
@@ -37,8 +38,9 @@ public class OrderController {
 
     @GetMapping()
     public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "5") int size,
                                                  @RequestParam(defaultValue = "PENDING") String status){
-        Pageable pageable = PageRequest.of(page,5);
+        Pageable pageable = PageRequest.of(page,size);
         return orderService.getOrdersByStatus(pageable,status);
     }
     @PostMapping()
@@ -56,5 +58,9 @@ public class OrderController {
         return new ResponseEntity<>(orderService.updateOrder(id,orderRequest),HttpStatus.OK);
     }
 
+    @GetMapping("/get-count-status")
+    public CountStatusResponse getCountStatus(){
+        return orderService.getCountStatus();
+    }
 
 }

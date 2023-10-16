@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.order.service.impl;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
+import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import com.shop.oniamey.entity.Orders;
@@ -126,6 +127,11 @@ public class OrderService implements IOrderService {
         orders.setStatus(EnumStatus.PENDING);
         orderRepository.save(orders);
         return "Update order success";
+    }
+
+    @Override
+    public CountStatusResponse getCountStatus() {
+        return orderRepository.getCountStatus();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.shop.oniamey.repository.order;
 
+import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.entity.Orders;
 import org.springframework.data.domain.Page;
@@ -147,4 +148,14 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             """, nativeQuery = true)
     void deleteOrder(Long id);
 
+    @Query(value = """
+             SELECT 
+             (select count(id)from orders where status  like 'PENDING') as pending ,
+              (select count(id)from orders where status  like 'AWAITING_PICKUP') as awaitingPickup,
+               (select count(id)from orders where status  like 'SHIPPING')   as shipping ,
+               (select count(id)from orders where status  like 'SHIPPED')   as shipped ,
+               (select count(id)from orders where status  like 'CANCEL')   as cancel ,
+               (select count(id)from orders where status  like 'AWAITING_PAYMENT')   as awaitingPayment 
+            """, nativeQuery = true)
+    public CountStatusResponse getCountStatus();
 }
