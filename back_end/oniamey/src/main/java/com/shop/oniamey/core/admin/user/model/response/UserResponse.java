@@ -20,6 +20,8 @@ public interface UserResponse {
 
     String getBirthDate();
 
+    Boolean getStatus();
+
     String getCreatedAt();
 
     String getUpdatedAt();

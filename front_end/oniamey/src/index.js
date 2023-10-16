@@ -58,22 +58,22 @@ root.render(
           <Route path="manage-orders/*" element={<Order />}></Route>
           <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
           <Route path="manage-employees" element={<ManageEmployee />}></Route>
-          <Route path="manage-customers" element={<ManageCustomer />}></Route>
           <Route
-            path="manage-statisticals"
-            element={<ManageStatistical />}
-          ></Route>
-          <Route
-            path="manage-customers/add-employee"
+            path="manage-employees/add-employee"
             element={<ModifyUserComponent />}
           ></Route>
           <Route
-            path="manage-customers/update-employee"
+            path="manage-employees/update-employee/:id"
             element={<ModifyUserComponent />}
           ></Route>
+          <Route path="manage-customers" element={<ManageCustomer />} />
           <Route
             path="manage-customers/detail-customer/:id"
             element={<DetaiCustomer />}
+          />
+          <Route
+            path="manage-statisticals"
+            element={<ManageStatistical />}
           ></Route>
         </Route>
       </Routes>

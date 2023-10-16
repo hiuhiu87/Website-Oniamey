@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -25,6 +23,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseModel {
+
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "identity_card", nullable = false, unique = true)
+    private String identityCard;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
