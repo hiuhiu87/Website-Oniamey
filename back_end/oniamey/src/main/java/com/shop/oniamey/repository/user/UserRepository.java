@@ -16,13 +16,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
             select u.id
-            ,u.full_name as fullName\s
+            ,u.full_name as fullName
             ,u.email as email
             ,u.phone_number as phoneNumber
             ,u.role as role
             ,u.gender as gender
             ,u.address as address
             ,u.avatar as avatar
+            ,u.deleted as status
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
             ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt\s
             ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
