@@ -17,4 +17,5 @@ public interface IOrderService {
     String updateOrder(Long id, OrderRequest orderRequest);
     CountStatusResponse getCountStatus();
     Page<OrderResponse> getOrdersByStatus(Pageable pageable,String status);
+    List<OrderResponse> getByStatus(String status);
 }

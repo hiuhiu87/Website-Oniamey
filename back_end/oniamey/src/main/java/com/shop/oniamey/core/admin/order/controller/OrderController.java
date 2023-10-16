@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin/orders")
 @CrossOrigin("*")
@@ -43,6 +45,12 @@ public class OrderController {
         Pageable pageable = PageRequest.of(page,size);
         return orderService.getOrdersByStatus(pageable,status);
     }
+
+    @GetMapping ("/get-by-status")
+    public List<OrderResponse> getByStatus(@RequestParam(defaultValue = "PENDING") String status){
+        return orderService.getByStatus(status);
+    }
+
     @PostMapping()
     public String createOrder(@RequestBody @Valid OrderRequest orderRequest){
         return orderService.createOrder(orderRequest);

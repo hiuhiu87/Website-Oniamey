@@ -134,11 +134,16 @@ public class OrderService implements IOrderService {
         return orderRepository.getCountStatus();
     }
 
+
     @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
         return orderRepository.getOrdersByStatus(pageable,status);
     }
 
+    @Override
+    public List<OrderResponse> getByStatus(String status) {
+        return orderRepository.getByStatus(status);
+    }
 
 
 }
