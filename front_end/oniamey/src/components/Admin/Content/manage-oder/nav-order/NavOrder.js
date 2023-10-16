@@ -17,7 +17,7 @@ const NavOrder = (Props) => {
         const resolved = useResolvedPath(to)
         const match = useMatch({ path: resolved.pathname, end: true })
         return (
-            <li className={`${match ? 'active' : ''} nav-item` }>
+            <li className={`${match ? 'nav-active' : ''} nav-item` }>
                 <Link className={`${match ? 'active-item' : ''} nav-link`}  to={to} {...props}>
                     {children}
                 </Link>
