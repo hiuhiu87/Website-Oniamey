@@ -51,6 +51,9 @@ public class ProductDetail extends BaseModel {
     @JoinColumn(name = "id_sleeve_length")
     private SleeveLength sleeveLength;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
 

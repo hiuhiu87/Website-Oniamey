@@ -141,7 +141,7 @@ const SalesAtTheCounter = (props) => {
     });
 
     return (
-        <Container>
+        <Container className="sales-at-the-counter-manage">
             <Row className="justify-content-md-center " >
                 <Col>
                     <h4>Bán Hàng Tại Quầy</h4>

@@ -43,7 +43,6 @@
 
 .rdt_TableBody {
   border-radius: 10px;
-  box-shadow: 0 0 10px gray;
   min-height: 400px;
 }
 
@@ -60,7 +59,6 @@
 }
 
 .table-container {
-  box-shadow: 0 0 10px gray;
   border-radius: 10px;
   padding: 0 20px 20px 20px;
   min-height: 460px;

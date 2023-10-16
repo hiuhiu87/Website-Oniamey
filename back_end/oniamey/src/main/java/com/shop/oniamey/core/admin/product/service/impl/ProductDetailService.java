@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.product.service.impl;
 
+import com.google.zxing.WriterException;
 import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
@@ -26,6 +27,7 @@ import com.shop.oniamey.repository.product.ProductRepository;
 import com.shop.oniamey.repository.product.SizeRepository;
 import com.shop.oniamey.repository.product.SleeveLengthRepository;
 import lombok.RequiredArgsConstructor;
+import com.shop.oniamey.util.QRCodeProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +84,7 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
-    public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException {
+    public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException, WriterException {
         Product existingProduct = getPropertyById(addProductDetailRequest.getProductId(), productRepository, "Product");
         Category existingCategory = getPropertyById(addProductDetailRequest.getCategoryId(), categoryRepository, "Category");
         Material existingMaterial = getPropertyById(addProductDetailRequest.getMaterialId(), materialRepository, "Material");
@@ -108,17 +110,18 @@ public class ProductDetailService implements IProductDetailService {
                     productDetail.setBrand(existingBrand);
                     productDetail.setCollar(existingCollar);
                     productDetail.setSleeveLength(existingSleeveLength);
+                    String randomCode = QRCodeProduct.generateRandomCode();
+                    productDetail.setCode(randomCode);
                     productDetail.setName(existingProduct.getName() + " - " + " ["
                             + productDetail.getColor().getName() + "]" + " [" + productDetail.getSize().getName() + "]");
                     productDetail.setGender(addProductDetailRequest.getGender());
                     productDetail.setPrice(addProductDetailRequest.getPrice());
                     productDetail.setQuantity(addProductDetailRequest.getQuantity());
                     productDetail.setWeight(addProductDetailRequest.getWeight());
-                    productDetail.setCreatedBy(addProductDetailRequest.getCreatedBy());
-                    productDetail.setUpdatedBy(addProductDetailRequest.getUpdatedBy());
                     ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
                     productDetails.add(savedProductDetail);
                     productDetailRepository.save(productDetail);
+                    QRCodeProduct.generateQRCode(productDetail);
                 }
             }
         }
@@ -127,7 +130,8 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public ProductDetail update(Long id, UpdateProductDetailRequest updateProductDetailRequest) throws DataNotFoundException {
-        ProductDetail existingProductDetail = productDetailRepository.findById(id).orElseThrow(() -> new DateTimeException("ProductDetail not found"));
+        ProductDetail existingProductDetail = productDetailRepository.findById(id)
+                .orElseThrow(() -> new DateTimeException("ProductDetail not found"));
         Category existingCategory = getPropertyById(updateProductDetailRequest.getCategoryId(), categoryRepository, "Category");
         Material existingMaterial = getPropertyById(updateProductDetailRequest.getMaterialId(), materialRepository, "Material");
         Brand existingBrand = getPropertyById(updateProductDetailRequest.getBrandId(), brandRepository, "Brand");
@@ -135,6 +139,8 @@ public class ProductDetailService implements IProductDetailService {
         SleeveLength existingSleeveLength = getPropertyById(updateProductDetailRequest.getSleeveLengthId(), sleeveLengthRepository, "SleeveLength");
         Color existingColor = getPropertyById(updateProductDetailRequest.getColorId(), colorRepository, "Color");
         Size existingSize = getPropertyById(updateProductDetailRequest.getSizeId(), sizeRepository, "Size");
+
+        String randomCode = QRCodeProduct.generateRandomCode();
 
         existingProductDetail.setCategory(existingCategory);
         existingProductDetail.setSize(existingSize);
@@ -144,6 +150,7 @@ public class ProductDetailService implements IProductDetailService {
         existingProductDetail.setCollar(existingCollar);
         existingProductDetail.setSleeveLength(existingSleeveLength);
         existingProductDetail.setName(updateProductDetailRequest.getName());
+        existingProductDetail.setCode(randomCode);
         existingProductDetail.setGender(updateProductDetailRequest.getGender());
         existingProductDetail.setPrice(updateProductDetailRequest.getPrice());
         existingProductDetail.setQuantity(updateProductDetailRequest.getQuantity());

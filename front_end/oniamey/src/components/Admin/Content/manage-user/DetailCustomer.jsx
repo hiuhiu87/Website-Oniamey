@@ -8,6 +8,7 @@ import Upload from "rc-upload";
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
 
 import service from "../../../../services/CustomerService";
 import "../manage-user/style/DetailCustomer.css";
@@ -40,6 +41,18 @@ const DetaiCustomer = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     getAddresses();
+    
+  };
+
+  const showAlert = (title, message) => {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: "info",
+      // confirmButtonText: "Back to Home Page",
+      // showCancelButton: true,
+      cancelButtonText: "Okay",
+    })
   };
 
   const props = {
@@ -82,9 +95,11 @@ const DetaiCustomer = () => {
       .updateCustomer(customer, id)
       .then((res) => {
         console.log(res.data);
+        showAlert("Update Customer Success", "You clicked the button!");
       })
       .catch((err) => {
         console.log(err);
+        showAlert("Update Customer Failed", err.response.data.birthDate);
       });
   };
 
@@ -193,7 +208,7 @@ const DetaiCustomer = () => {
 
   return (
     <Fragment>
-      <h4 className="detail-customer-title">Detail Customer</h4>
+      <h3 className="detail-customer-title ms-4 mb-4">Detail Customer</h3>
       <Container className="detail-form h-75">
         <Tabs
           defaultActiveKey="home"

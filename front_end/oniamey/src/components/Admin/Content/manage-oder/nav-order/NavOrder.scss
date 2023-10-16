@@ -1,3 +1,59 @@
-.nav-order{
-    border: 1px solid red;
+.manage-order-nav {
+
+    .order-title {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+
+    .nav {
+        border-radius: 5px;
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 0px;
+    }
+
+    .nav-item {
+        .nav-link {
+            color: rgb(24, 13, 13) !important;
+        }
+
+        .active-item {
+            color: #f4f4f4 !important;
+        }
+    }
+
+    .nav-active {
+        background-color: #cc9966;
+        border-radius: 8px;
+
+    }
+
+    .nav-link {
+        width: 200px;
+        text-align: center;
+    }
+
+    .nav-btn {
+        position: relative;
+    }
+
+    .mess {
+        color: #f6f2f2;
+        font-weight: bold;
+        font-size: 12px;
+        position: absolute;
+        top: 5px;
+        left: 160px;
+        padding: 0px;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        background-color: rgb(255, 127, 41);
+        border-radius: 50%;
+    }
 }

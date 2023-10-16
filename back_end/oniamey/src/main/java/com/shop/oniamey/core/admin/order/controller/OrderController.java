@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.order.controller;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
+import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/orders")
@@ -35,12 +38,19 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
 
-    @GetMapping( )
+    @GetMapping()
     public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "5") int size,
                                                  @RequestParam(defaultValue = "PENDING") String status){
-        Pageable pageable = PageRequest.of(page,5);
+        Pageable pageable = PageRequest.of(page,size);
         return orderService.getOrdersByStatus(pageable,status);
     }
+
+    @GetMapping ("/get-by-status")
+    public List<OrderResponse> getByStatus(@RequestParam(defaultValue = "PENDING") String status){
+        return orderService.getByStatus(status);
+    }
+
     @PostMapping()
     public String createOrder(@RequestBody @Valid OrderRequest orderRequest){
         return orderService.createOrder(orderRequest);
@@ -56,5 +66,9 @@ public class OrderController {
         return new ResponseEntity<>(orderService.updateOrder(id,orderRequest),HttpStatus.OK);
     }
 
+    @GetMapping("/get-count-status")
+    public CountStatusResponse getCountStatus(){
+        return orderService.getCountStatus();
+    }
 
 }

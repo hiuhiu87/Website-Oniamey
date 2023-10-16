@@ -1,0 +1,10 @@
+.ant-upload.ant-upload-select {
+    width: 200px !important;
+    height: 200px !important;
+    border-color: #cc9966 !important;
+  }
+  
+  .content-user-container {
+    width: 95%;
+    box-shadow: 0 0 10px 0 gray;
+  }/*# sourceMappingURL=UserStyle.css.map */

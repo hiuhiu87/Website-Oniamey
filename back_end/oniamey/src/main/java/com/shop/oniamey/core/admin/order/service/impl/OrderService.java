@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.order.service.impl;
 
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
+import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import com.shop.oniamey.entity.Orders;
@@ -10,6 +11,7 @@ import com.shop.oniamey.repository.customer.CustomerRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
 import com.shop.oniamey.repository.user.UserRepository;
 import com.shop.oniamey.repository.voucher.VoucherRepository;
+import com.shop.oniamey.util.QRCodeProduct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,25 +45,27 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderResponse getOrderById(Long id) {
-         if(orderRepository.getOrdersById(id).isPresent()){
-             return orderRepository.getOrdersById(id).get();
-         }
-         throw new RestApiException("ORDER NOT EXISTS");
+        if(orderRepository.getOrdersById(id).isPresent()){
+            return orderRepository.getOrdersById(id).get();
+        }
+        throw new RestApiException("ORDER NOT EXISTS");
     }
 
 
     public String createOrder(OrderRequest orderRequest){
         Orders orders= new Orders();
+        String randomCode= QRCodeProduct.generateRandomCode();
         orders.setDeleted(false);
         if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
-           return "user not found";
+            return "user not found";
         }
         if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
             return "customer not found";
         }
         if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
-          return "voucher not found";
+            return "voucher not found";
         }
+        orders.setCode(randomCode);
         orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
         orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
         orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());
@@ -88,7 +92,7 @@ public class OrderService implements IOrderService {
             return "order id not found";
         }
         orderRepository.deleteOrder(id);
-         return "delete order success";
+        return "delete order success";
     }
 
     @Override
@@ -126,10 +130,20 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public CountStatusResponse getCountStatus() {
+        return orderRepository.getCountStatus();
+    }
+
+
+    @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
         return orderRepository.getOrdersByStatus(pageable,status);
     }
 
+    @Override
+    public List<OrderResponse> getByStatus(String status) {
+        return orderRepository.getByStatus(status);
+    }
 
 
 }

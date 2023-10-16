@@ -38,8 +38,7 @@ public class ColorService implements IPropertyService<Color, Long> {
     public Color create(PropertyRequest propertyRequest) {
         Color color = new Color();
         color.setName(propertyRequest.getName());
-        color.setCreatedBy(propertyRequest.getCreatedBy());
-        color.setUpdatedBy(propertyRequest.getUpdatedBy());
+        color.setDeleted(propertyRequest.getDeleted());
         return colorRepository.save(color);
     }
 
@@ -47,7 +46,6 @@ public class ColorService implements IPropertyService<Color, Long> {
     public Color update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         Color existingColor = getById(id);
         existingColor.setName(propertyRequest.getName());
-        existingColor.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingColor.setDeleted(propertyRequest.getDeleted());
         colorRepository.save(existingColor);
         return existingColor;

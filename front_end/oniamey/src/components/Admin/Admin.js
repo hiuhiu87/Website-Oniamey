@@ -28,7 +28,7 @@ const Admin = () => {
       <div className={`admin-content ${adminContentClass}`}>
         <div className="admin-header d-flex justify-content-around">
           <BiSidebar className="cick" size={25} onClick={toggleSidebar}/>
-          <BreadcrumbsPage />
+          {/* <BreadcrumbsPage /> */}
         </div>
         <div className="admin-main">
           <Outlet />
