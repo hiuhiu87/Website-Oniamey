@@ -17,7 +17,7 @@ import ModalCreateCategory from '../category/ModalCreateCategory';
 import ModalCreateCollar from '../collar/ModalCreateCollar';
 import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 import { Modal, Button } from 'antd';
-import 'antd-button-color/dist/css/style.css';
+// import 'antd-button-color/dist/css/style.css';
 import { Col, Row } from 'react-bootstrap';
 
 const ManageProduct = (props) => {

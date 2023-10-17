@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
 import QrReader from "react-qr-scanner";
+import validator from "validator";
 
 import formatDate from "../../../../utils/FormatDate";
 import apiUploadAvater from "../../../../services/ApiUploadAvater";
@@ -72,6 +73,79 @@ const ModifyUserComponent = () => {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [open, setOpen] = useState(false);
   const [delay, setDelay] = useState(100);
+  const [messageValidate, setMessageValidate] = useState({});
+
+  const validateField = () => {
+    const messageValidate = {};
+
+    if (validator.isEmpty(user.username)) {
+      messageValidate.username = "Username không được để trống";
+    } else if (user.username.length < 6) {
+      messageValidate.username = "Username phải có ít nhất 6 ký tự";
+    } else if (user.username.length > 32) {
+      messageValidate.username = "Username phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(user.fullName)) {
+      messageValidate.fullName = "Họ Và Tên không được để trống";
+    } else if (user.fullName.length < 6) {
+      messageValidate.fullName = "Họ và Tên phải có ít nhất 6 ký tự";
+    } else if (user.fullName.length > 32) {
+      messageValidate.fullName = "Họ và Tên phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(user.identityCard)) {
+      messageValidate.identityCard = "Mã Định Danh không được để trống";
+    } else if (user.identityCard.length < 9) {
+      messageValidate.identityCard = "Mã Định Danh phải có ít nhất 9 ký tự";
+    } else if (user.identityCard.length > 12) {
+      messageValidate.identityCard = "Mã Định Danh phải có ít hơn 12 ký tự";
+    }
+
+    if (validator.isEmpty(user.phoneNumber)) {
+      messageValidate.phoneNumber = "Số Điện Thoại không được để trống";
+    } else if (user.phoneNumber.length < 10) {
+      messageValidate.phoneNumber = "Số Điện Thoại phải có ít nhất 10 ký tự";
+    } else if (user.phoneNumber.length > 11) {
+      messageValidate.phoneNumber = "Số Điện Thoại phải có ít hơn 11 ký tự";
+    }
+
+    if (validator.isEmpty(user.email)) {
+      messageValidate.email = "Email không được để trống";
+    } else if (!validator.isEmail(user.email)) {
+      messageValidate.email = "Email không hợp lệ";
+    }
+
+    if (validator.isEmpty(user.birthDate)) {
+      messageValidate.birthDate = "Ngày Sinh không được để trống";
+    } else if (!validator.isDate(user.birthDate)) {
+      messageValidate.birthDate = "Ngày Sinh không hợp lệ";
+    }
+
+    if (validator.isEmpty(address.line)) {
+      messageValidate.line = "Địa Chỉ không được để trống";
+    } else if (address.line.length < 6) {
+      messageValidate.line = "Địa Chỉ phải có ít nhất 6 ký tự";
+    } else if (address.line.length > 32) {
+      messageValidate.line = "Địa Chỉ phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(address.province)) {
+      messageValidate.province = "Tỉnh/Thành Phố không được để trống";
+    }
+
+    if (validator.isEmpty(address.district)) {
+      messageValidate.district = "Quận/Huyện không được để trống";
+    }
+
+    if (validator.isEmpty(address.ward)) {
+      messageValidate.ward = "Phường/Xã không được để trống";
+    }
+
+    setMessageValidate(messageValidate);
+    if (Object.keys(messageValidate).length > 0) return false;
+    return true;
+  };
 
   const handleScan = (data) => {
     const stopStreamedVideo = (videoElem) => {
@@ -153,6 +227,7 @@ const ModifyUserComponent = () => {
   };
 
   const handleSaveChanges = () => {
+    if (!validateField()) return;
     if (id) {
       userService
         .updateUser(user, id)
@@ -337,8 +412,6 @@ const ModifyUserComponent = () => {
     </div>
   );
 
-  console.log(user);
-
   return (
     <Container className="content-user-container mt-4">
       <div className="d-flex justify-content-between align-items-center">
@@ -399,8 +472,12 @@ const ModifyUserComponent = () => {
                 name="username"
                 value={user.username}
                 onChange={handleInputChange}
-                required
+                isValid={!messageValidate.username && user.username !== ""}
+                isInvalid={messageValidate.username}
               />
+              <Form.Control.Feedback type="invalid">
+                {messageValidate.username}
+              </Form.Control.Feedback>
             </FloatingLabel>
             <FloatingLabel
               controlId="floatingInput"
@@ -413,8 +490,12 @@ const ModifyUserComponent = () => {
                 name="fullName"
                 value={user.fullName}
                 onChange={handleInputChange}
-                required
+                isValid={!messageValidate.fullName && user.fullName !== ""}
+                isInvalid={messageValidate.fullName}
               />
+              <Form.Control.Feedback type="invalid">
+                {messageValidate.fullName}
+              </Form.Control.Feedback>
             </FloatingLabel>
           </Container>
         </Col>
@@ -433,9 +514,14 @@ const ModifyUserComponent = () => {
                   name="identityCard"
                   value={user.identityCard}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={
+                    !messageValidate.identityCard && user.identityCard !== ""
+                  }
+                  isInvalid={messageValidate.identityCard}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.identityCard}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -448,7 +534,12 @@ const ModifyUserComponent = () => {
                   name="birthDate"
                   value={user.birthDate}
                   onChange={(e) => handleInputChange(e)}
+                  isValid={!messageValidate.birthDate && user.birthDate !== ""}
+                  isInvalid={messageValidate.birthDate}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.birthDate}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -461,8 +552,14 @@ const ModifyUserComponent = () => {
                   name="phoneNumber"
                   value={user.phoneNumber}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={
+                    !messageValidate.phoneNumber && user.phoneNumber !== ""
+                  }
+                  isInvalid={messageValidate.phoneNumber}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.phoneNumber}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -492,8 +589,12 @@ const ModifyUserComponent = () => {
                   name="email"
                   value={user.email}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={!messageValidate.email && user.email !== ""}
+                  isInvalid={messageValidate.email}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.email}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -506,13 +607,17 @@ const ModifyUserComponent = () => {
                   name="line"
                   value={address.line}
                   onChange={(e) => handleChangeAddress(e)}
-                  required
+                  isValid={!messageValidate.line && address.line !== ""}
+                  isInvalid={messageValidate.line}
                   disabled={
                     address.province === "" ||
                     address.district === "" ||
                     address.ward === ""
                   }
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.line}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
           </Row>
@@ -527,6 +632,8 @@ const ModifyUserComponent = () => {
                   value={address.province}
                   onChange={(e) => handleChangeAddress(e)}
                   name="province"
+                  isValid={!messageValidate.province && address.province !== ""}
+                  isInvalid={messageValidate.province}
                 >
                   <option>--Choose--</option>
                   {provinces.map((province) => (
@@ -535,6 +642,9 @@ const ModifyUserComponent = () => {
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.province}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -547,6 +657,8 @@ const ModifyUserComponent = () => {
                   value={address.district}
                   onChange={(e) => handleChangeAddress(e)}
                   name="district"
+                  isValid={!messageValidate.district && address.district !== ""}
+                  isInvalid={messageValidate.district}
                 >
                   <option>--Choose--</option>
                   {districts.map((district) => (
@@ -555,6 +667,9 @@ const ModifyUserComponent = () => {
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.district}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -567,6 +682,8 @@ const ModifyUserComponent = () => {
                   value={address.ward}
                   onChange={(e) => handleChangeAddress(e)}
                   name="ward"
+                  isValid={!messageValidate.ward && address.ward !== ""}
+                  isInvalid={messageValidate.ward}
                 >
                   <option>--Choose--</option>
                   {wards.map((ward) => (
@@ -575,6 +692,9 @@ const ModifyUserComponent = () => {
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.ward}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
           </Row>
