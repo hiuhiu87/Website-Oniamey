@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BsPersonPlus } from "react-icons/bs";
 import {
   faPencilSquare,
   faLock,
@@ -48,36 +49,8 @@ const Employee = (props) => {
       center: true,
     },
     {
-      name: "Full Name",
+      name: "Họ Và Tên",
       selector: (row) => row.fullName,
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Gender",
-      selector: (row) => {
-        if (row.gender === 1) {
-          return "Nam";
-        } else if (row.gender === 2) {
-          return "Nữ";
-        } else {
-          return "Khác";
-        }
-      },
-      sortable: true,
-      maxWidth: "100px",
-      minWidth: "100px",
-      center: true,
-    },
-    {
-      name: "Birth Date",
-      selector: (row) => {
-        if (row.birthDate) {
-          return row.birthDate;
-        } else {
-          return "N/A";
-        }
-      },
       sortable: true,
       center: true,
     },
@@ -85,15 +58,14 @@ const Employee = (props) => {
       name: "Email",
       selector: (row) => row.email,
       sortable: true,
-      center: true,
     },
     {
-      name: "Status",
+      name: "Trạng Thái",
       selector: (row) => {
         if (!row.status) {
-          return "Inactive";
+          return "Đã Nghỉ Làm";
         } else {
-          return "Active";
+          return "Đang Làm";
         }
       },
       sortable: true,
@@ -103,19 +75,20 @@ const Employee = (props) => {
       center: true,
     },
     {
-      name: "Phone Number",
+      name: "Số Điện Thoại",
       selector: (row) => row.phoneNumber,
       sortable: true,
       center: true,
     },
     {
-      name: "Created Date",
+      name: "Ngày Tham Gia",
       selector: (row) => row.createdAt,
       sortable: true,
       center: true,
+      width: "150px",
     },
     {
-      name: "Function",
+      name: "Thao Tác",
       center: true,
       cell: (row) => (
         <>
@@ -218,7 +191,8 @@ const Employee = (props) => {
     const filter = allUser.filter(
       (user) =>
         user.fullName.toLowerCase().includes(value.toLowerCase()) ||
-        user.email.toLowerCase().includes(value.toLowerCase())
+        user.email.toLowerCase().includes(value.toLowerCase()) ||
+        user.phoneNumber.toLowerCase().includes(value.toLowerCase())
     );
     setRecords(filter);
     if (value === "") {
@@ -286,7 +260,7 @@ const Employee = (props) => {
           <Col xs={3} className="">
             <Form.Control
               type="search"
-              placeholder="Search by name or email"
+              placeholder="Tìm kiếm theo tên, email, số điện thoại"
               className="me-2"
               aria-label="Search"
               autoComplete="on"
@@ -309,12 +283,13 @@ const Employee = (props) => {
               style={{ fontSize: "15px" }}
               className="btn btn-dark text-light"
             >
-              Add New
+              <BsPersonPlus style={{ marginRight: "5px" }} />
+              Thêm
             </Link>
           </Col>
         </Row>
       </Container>
-      <Container className="d-flex justify-content-between mb-3 mt-3 pt-0 ps-4 pe-4 table-container">
+      <Container className="d-flex justify-content-between mb-3 pt-0 ps-4 pe-4 table-container">
         <DataTable
           columns={columns}
           data={records}

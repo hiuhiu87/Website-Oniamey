@@ -152,17 +152,18 @@ const ModifyUserComponent = () => {
     return true;
   };
 
+  const stopStreamedVideo = (videoElem) => {
+    const stream = videoElem.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    videoElem.srcObject = null;
+  };
+
   const handleScan = (data) => {
-    const stopStreamedVideo = (videoElem) => {
-      const stream = videoElem.srcObject;
-      const tracks = stream.getTracks();
-
-      tracks.forEach((track) => {
-        track.stop();
-      });
-
-      videoElem.srcObject = null;
-    };
     if (data) {
       stopStreamedVideo(document.querySelector("video"));
       setOpen(false);
@@ -199,6 +200,7 @@ const ModifyUserComponent = () => {
 
   const handleCancel = () => {
     console.log("Clicked cancel button");
+    stopStreamedVideo(document.querySelector("video"));
     setOpen(false);
   };
 
@@ -210,8 +212,9 @@ const ModifyUserComponent = () => {
   const handleDeleteImage = (e) => {
     e.stopPropagation();
     const deleteFromServer = async () => {
-      const parts = user.avatar.split("/"); // Tách URL bằng dấu /
+      const parts = user.avatar.split("/");
       const fileName = parts[parts.length - 1];
+      console.log(fileName);
       await apiUploadAvater
         .deleteAvatar(fileName)
         .then((response) => {
@@ -231,7 +234,7 @@ const ModifyUserComponent = () => {
 
   const handleSaveChanges = () => {
     if (!validateField()) return;
-    
+
     if (id) {
       userService
         .updateUser(user, id)
@@ -286,6 +289,8 @@ const ModifyUserComponent = () => {
         ward: "",
         line: "",
       });
+      setProvinceId();
+      setDistrictId();
     };
   };
 
@@ -353,6 +358,10 @@ const ModifyUserComponent = () => {
             role: response.data.role === "ROLE_ADMIN" ? 1 : 0,
             isDeleted: response.data.isDeleted,
           });
+
+          if (response.data.avatar) {
+            setShowDeleteButton(true);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -362,7 +371,6 @@ const ModifyUserComponent = () => {
 
   useEffect(() => {
     if (address.province && provinceId !== undefined && provinceId !== null) {
-
       provinceService
         .getDistricts(provinceId)
         .then((response) => {
@@ -584,7 +592,9 @@ const ModifyUserComponent = () => {
                   <option value={2}>Nữ</option>
                   <option value={3}>Khác</option>
                 </Form.Select>
-                <Form.Control.Feedback type="invalid">{messageValidate.gender}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.gender}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"

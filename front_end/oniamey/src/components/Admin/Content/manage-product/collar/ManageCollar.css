@@ -1,0 +1,72 @@
+.manage-collar-title {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.manage-collar-search {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+.manage-collar-table {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 560px;
+  border-radius: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 20px;
+}
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.table th {
+  background-color: #cc9966;
+  font-weight: bold;
+}
+.table tbody tr:hover {
+  background-color: rgba(207, 182, 156, 0.199);
+}
+.table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.search-collar-title {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.list-collar-title {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: bold;
+}
+
+button {
+  width: 180px;
+}/*# sourceMappingURL=ManageCollar.css.map */
