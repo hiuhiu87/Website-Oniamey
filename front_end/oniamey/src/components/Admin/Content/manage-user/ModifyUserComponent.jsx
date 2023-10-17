@@ -164,6 +164,16 @@ const ModifyUserComponent = () => {
   };
 
   const handleScan = (data) => {
+    const regex =
+      /^(\d{8,12})\|([\p{L}\s]+)\|(\d{2}\/\d{2}\/\d{4})\|([A-Za-z]+)\|(.+)\|(\d{2}\/\d{2}\/\d{4})$/u;
+
+    if (data !== "" && data !== null && data !== undefined) {
+      if (!regex.test(data.text)) {
+        toast.error("QR Code không hợp lệ!");
+        return;
+      }
+    }
+
     if (data) {
       stopStreamedVideo(document.querySelector("video"));
       setOpen(false);
@@ -177,7 +187,6 @@ const ModifyUserComponent = () => {
       );
       let birthDate = parts[2];
       birthDate = birthDate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
-      console.log(birthDate);
       let gender = parts[3];
       let address = parts[4];
       setUser({
@@ -188,6 +197,26 @@ const ModifyUserComponent = () => {
         gender: gender === "Nam" ? 1 : 2,
         address: address,
       });
+
+      // setAddress({
+      //   ...address,
+      //   line: line,
+      //   ward: ward,
+      //   district: district,
+      //   province: province,
+      // });
+
+      // provinces.forEach((province) => {
+      //   if (province.name === province) {
+      //     setProvinceId(province.code);
+      //   }
+      // });
+
+      // districts.forEach((district) => {
+      //   if (district.name === district) {
+      //     setDistrictId(district.code);
+      //   }
+      // });
     }
   };
 
@@ -728,7 +757,12 @@ const ModifyUserComponent = () => {
           Thêm Nhân Viên
         </Button>
       </div>
-      <Modal title="Quét Mã QR" open={open} onCancel={handleCancel}>
+      <Modal
+        title="Quét Mã QR"
+        open={open}
+        onCancel={handleCancel}
+        onOk={handleCancel}
+      >
         <div className="qrcode-container">
           {open ? (
             <QrReader delay={delay} onError={handleError} onScan={handleScan} />
@@ -740,16 +774,3 @@ const ModifyUserComponent = () => {
 };
 
 export default ModifyUserComponent;
-
-{
-  /* <div className="mt-3">
-          <Link to="/admins/manage-employees">
-            <Button variant="secondary" className="me-3">
-              Back
-            </Button>
-          </Link>
-          <Button variant="dark" onClick={handleSaveChanges}>
-            Submit
-          </Button>
-        </div> */
-}

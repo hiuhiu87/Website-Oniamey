@@ -44,6 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ,u.gender as gender
             ,u.address as address
             ,u.avatar as avatar
+            ,u.deleted as status
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
             ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
             ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt

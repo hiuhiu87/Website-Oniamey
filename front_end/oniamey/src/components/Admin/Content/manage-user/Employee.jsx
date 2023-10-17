@@ -1,5 +1,11 @@
 import React, { Fragment } from "react";
-import { Container, Form, Col, Button, Pagination, Row } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Col,
+  Button,
+  Row,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
@@ -14,35 +20,32 @@ import Swal from "sweetalert2";
 
 import userService from "../../../../services/UserService";
 import "../manage-user/style/Table.css";
+import "./style/Employee.css";
 
 const Employee = (props) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
   const [records, setRecords] = useState([]);
   const [allUser, setAllUser] = useState([]);
   const [progressPending, setProgressPending] = useState(true);
-  const [onSearch, setOnSearch] = useState(false);
 
-  const renderNameColumns = () => {
-    if (onSearch === true) {
-      return "ID";
-    } else {
-      return "No.";
-    }
+  const getAllUser = () => {
+    setProgressPending(true);
+    userService
+      .getAllUsers()
+      .then((res) => {
+        setAllUser(res.data);
+        setRecords(res.data);
+        console.log(res.data);
+        setProgressPending(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const columns = [
     {
-      name: renderNameColumns(),
-      selector: (row) => {
-        if (currentPage === 1) {
-          return records.indexOf(row) + 1;
-        } else if (currentPage > 1) {
-          return (currentPage - 1) * 5 + records.indexOf(row) + 1;
-        } else {
-          return row.id;
-        }
-      },
+      name: "#",
+      selector: (row) => records.indexOf(row) + 1,
       compact: true,
       maxWidth: "40px",
       minWidth: "40px",
@@ -123,7 +126,7 @@ const Employee = (props) => {
                           confirmButtonColor: "#3085d6",
                           confirmButtonText: "OK",
                         }).then((result) => {
-                          getListStaff(currentPage);
+                          getAllUser();
                         });
                       })
                       .catch((err) => {
@@ -152,7 +155,7 @@ const Employee = (props) => {
                           confirmButtonColor: "#3085d6",
                           confirmButtonText: "OK",
                         }).then((result) => {
-                          getListStaff(currentPage);
+                          getAllUser();
                         });
                       })
                       .catch((err) => {
@@ -171,22 +174,7 @@ const Employee = (props) => {
     },
   ];
 
-  const getListStaff = (page) => {
-    setProgressPending(true);
-    userService
-      .getUsersPaging(page)
-      .then((res) => {
-        setRecords(res.data);
-        setProgressPending(false);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const handleFilter = (e) => {
-    setOnSearch(true);
     const value = e.target.value;
     const filter = allUser.filter(
       (user) =>
@@ -196,108 +184,104 @@ const Employee = (props) => {
     );
     setRecords(filter);
     if (value === "") {
-      setOnSearch(false);
-      getListStaff(currentPage);
+      setRecords(allUser);
     }
   };
 
-  const getTotalPages = () => {
-    userService
-      .getTotalPages()
-      .then((res) => {
-        setTotalPages(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const renderButtonPage = () => {
-    let button = [];
-    for (let i = 1; i <= totalPages; i++) {
-      button.push(
-        <Pagination.Item
-          key={i}
-          active={i === currentPage}
-          onClick={() => {
-            setCurrentPage(i);
-            getListStaff(i);
-          }}
-        >
-          {i}
-        </Pagination.Item>
-      );
+  const handleStatus = (e) => {
+    const value = e.target.value;
+    const filter = allUser.filter((user) => {
+      if (value === "true") {
+        return user.status === true;
+      } else if (value === "false") {
+        return user.status === false;
+      }
+    });
+    setRecords(filter);
+    if (value === "all") {
+      setRecords(allUser);
     }
-    return button;
   };
 
   useEffect(() => {
-    const getAllUser = () => {
-      userService
-        .getAllUsers()
-        .then((res) => {
-          setAllUser(res.data);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
     getAllUser();
-    getTotalPages();
   }, []);
-
-  useEffect(() => {
-    getListStaff(currentPage);
-  }, [currentPage]);
 
   return (
     <Fragment>
-      <Container>
-        <h4>Manager Staff</h4>
-        <Row>
-          <Col xs={3} className="">
-            <Form.Control
-              type="search"
-              placeholder="Tìm kiếm theo tên, email, số điện thoại"
-              className="me-2"
-              aria-label="Search"
-              autoComplete="on"
-              onChange={(e) => handleFilter(e)}
-            />
-          </Col>
-          <Col className="d-flex justify-content-end align-items-center">
-            <Form>
-              <Form.Group className="me-2 d-flex justify-content-center align-items-center">
-                <Form.Label className="m-2">Status</Form.Label>
-                <Form.Select role="button">
-                  <option value="">Find by status</option>
-                  <option value={1}>Active</option>
-                  <option value={0}>Deactivate</option>
-                </Form.Select>
+      <Container className="manager-employee-container">
+        <Container className="pb-0">
+          <h4>Quản Lý Nhân Viên</h4>
+          <Row>
+            <Col className="d-flex flex-row align-items-center">
+              <Form.Group
+                className="mb-3 flex-grow-1"
+                controlId="searchFilter"
+                style={{ marginLeft: "20px" }}
+              >
+                <Form.Control
+                  type="search"
+                  placeholder="Tìm kiếm theo tên, email, số điện thoại"
+                  className="me-2"
+                  aria-label="Search"
+                  autoComplete="on"
+                  onChange={(e) => handleFilter(e)}
+                />
               </Form.Group>
-            </Form>
-            <Link
-              to="add-employee"
-              style={{ fontSize: "15px" }}
-              className="btn btn-dark text-light"
-            >
-              <BsPersonPlus style={{ marginRight: "5px" }} />
-              Thêm
-            </Link>
-          </Col>
-        </Row>
-      </Container>
-      <Container className="d-flex justify-content-between mb-3 pt-0 ps-4 pe-4 table-container">
-        <DataTable
-          columns={columns}
-          data={records}
-          progressPending={allUser.length === 0 ? null : progressPending}
-        />
-      </Container>
-      <Container className="d-flex justify-content-center">
-        <Pagination>{renderButtonPage()}</Pagination>
+              <Form.Group
+                className="mb-3 ms-3"
+                controlId="searchStatus"
+              >
+                <Form.Label>Trạng Thái</Form.Label>
+                <div className="d-flex">
+                  <Form.Check
+                    inline
+                    label="Tất Cả"
+                    name="status"
+                    type="radio"
+                    defaultChecked
+                    value="all"
+                    onClick={(e) => handleStatus(e)}
+                  />
+                  <Form.Check
+                    inline
+                    label="Đang Làm"
+                    name="status"
+                    type="radio"
+                    value="true"
+                    onClick={(e) => handleStatus(e)}
+                  />
+                  <Form.Check
+                    inline
+                    label="Đã Nghỉ Làm"
+                    name="status"
+                    type="radio"
+                    value="false"
+                    onClick={(e) => handleStatus(e)}
+                  />
+                </div>
+              </Form.Group>
+            </Col>
+            <Col className="d-flex justify-content-end align-items-center">
+              <Link
+                to="add-employee"
+                style={{ fontSize: "15px" }}
+                className="btn btn-dark text-light"
+              >
+                <BsPersonPlus style={{ marginRight: "5px" }} />
+                Thêm
+              </Link>
+            </Col>
+          </Row>
+        </Container>
+        <Container className=" mb-3 pt-0 ps-4 pe-4 table-container">
+          <DataTable
+            columns={columns}
+            data={records}
+            progressPending={allUser.length === 0 ? null : progressPending}
+            pagination
+          />
+        </Container>
       </Container>
     </Fragment>
   );
