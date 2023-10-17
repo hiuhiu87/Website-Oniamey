@@ -11,7 +11,7 @@ import Admin from "./components/Admin/Admin";
 import HomePage from "./components/Home/HomePage";
 import DashBoard from "./components/Admin/Content/dashboard/DashBoard";
 import SalesAtTheCounter from "./components/Admin/Content/sales-at-the-counter/SalesAtTheCounter";
-import ManageProduct from "./components/Admin/Content/manage-product/product/Product";
+import ManageProduct from "./components/Admin/Content/manage-product/product/ManageProduct";
 import ManageCategory from "./components/Admin/Content/manage-product/category/ManageCategory";
 import ManageBrand from "./components/Admin/Content/manage-product/brand/ManageBrand";
 import ManageMaterial from "./components/Admin/Content/manage-product/material/ManageMaterial";
@@ -19,7 +19,7 @@ import ManageSize from "./components/Admin/Content/manage-product/size/ManageSiz
 import ManageColor from "./components/Admin/Content/manage-product/color/ManageColor";
 import ManageCollar from "./components/Admin/Content/manage-product/collar/ManageCollar";
 import ManageSleeveLength from "./components/Admin/Content/manage-product/sleeve-length/ManageSleeveLength";
-import ManageOrder from "./components/Admin/Content/manage-oder/Order";
+import Order from "./components/Admin/Content/manage-oder/Order";
 import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
 import ManageEmployee from "./components/Admin/Content/manage-user/Employee";
 import ManageCustomer from "./components/Admin/Content/manage-user/Customer";
@@ -55,7 +55,7 @@ root.render(
             path="manage-sleeve-lengths"
             element={<ManageSleeveLength />}
           ></Route>
-          <Route path="manage-orders" element={<ManageOrder />}></Route>
+          <Route path="manage-orders/*" element={<Order />}></Route>
           <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
           <Route path="manage-employees" element={<ManageEmployee />}></Route>
           <Route

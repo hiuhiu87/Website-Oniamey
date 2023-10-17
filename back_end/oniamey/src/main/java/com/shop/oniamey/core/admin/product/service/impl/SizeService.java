@@ -38,8 +38,7 @@ public class SizeService implements IPropertyService<Size, Long> {
     public Size create(PropertyRequest propertyRequest) {
         Size size = new Size();
         size.setName(propertyRequest.getName());
-        size.setCreatedBy(propertyRequest.getCreatedBy());
-        size.setUpdatedBy(propertyRequest.getUpdatedBy());
+        size.setDeleted(propertyRequest.getDeleted());
         return sizeRepository.save(size);
     }
 
@@ -47,7 +46,6 @@ public class SizeService implements IPropertyService<Size, Long> {
     public Size update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         Size existingSize = getById(id);
         existingSize.setName(propertyRequest.getName());
-        existingSize.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingSize.setDeleted(propertyRequest.getDeleted());
         sizeRepository.save(existingSize);
         return existingSize;

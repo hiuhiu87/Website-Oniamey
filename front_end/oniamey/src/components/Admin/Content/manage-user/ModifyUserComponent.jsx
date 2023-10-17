@@ -69,6 +69,7 @@ const ModifyUserComponent = () => {
   const [districtId, setDistrictId] = useState();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [open, setOpen] = useState(false);
   const [delay, setDelay] = useState(100);
@@ -361,6 +362,7 @@ const ModifyUserComponent = () => {
 
   useEffect(() => {
     if (address.province && provinceId !== undefined && provinceId !== null) {
+
       provinceService
         .getDistricts(provinceId)
         .then((response) => {
@@ -728,3 +730,16 @@ const ModifyUserComponent = () => {
 };
 
 export default ModifyUserComponent;
+
+{
+  /* <div className="mt-3">
+          <Link to="/admins/manage-employees">
+            <Button variant="secondary" className="me-3">
+              Back
+            </Button>
+          </Link>
+          <Button variant="dark" onClick={handleSaveChanges}>
+            Submit
+          </Button>
+        </div> */
+}

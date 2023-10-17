@@ -1,10 +1,54 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import './ManageMaterial.scss';
 import { GiExplosiveMaterials } from 'react-icons/gi';
-import { FaFilter, FaThList } from 'react-icons/fa';
-import { MdLibraryAdd } from 'react-icons/md';
+import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
+import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import ModalCreateMaterial from './ModalCreateMaterial';
+import ModalUpdateMaterial from './ModalUpdateMaterial';
+import ModalDeleteMaterial from './ModalDeleteMaterial';
+import { getAllProperties } from '../../../../../services/apiService';
 
 const ManageMaterial = (props) => {
+
+    const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
+    const [showModalUpdateMaterial, setShowModalUpdateMaterial] = useState(false);
+    const [showModalDeleteMaterial, setShowModalDeleteMaterial] = useState(false);
+
+    const [dataUpdate, setDataUpdate] = useState({});
+    const [dataDelete, setDataDelete] = useState({});
+
+    const [listMaterial, setListMaterial] = useState([]);
+    const [materialId, setMaterialId] = useState('');
+
+    useEffect(() => {
+        fetchListMaterial();
+    }, []);
+
+    const fetchListMaterial = async () => {
+        let res = await getAllProperties('material');
+        setListMaterial(res.data);
+        setMaterialId(res.data[0].id)
+        console.log(res);
+    }
+
+    const handleClickBtnUpdate = (material) => {
+        setShowModalUpdateMaterial(true);
+        setDataUpdate(material);
+    }
+
+    const handleClickBtnDelete = (material) => {
+        setShowModalDeleteMaterial(true);
+        setDataDelete(material);
+    }
+
+    const resetDataDelete = () => {
+        setDataDelete({});
+    }
+
+    const resetDataUpdate = () => {
+        setDataUpdate({});
+    }
+
     return (
         <div class="manage-material-container">
             <div className='manage-material-title'>
@@ -45,58 +89,73 @@ const ManageMaterial = (props) => {
                     <div className="title">
                         <FaThList size={26} /> Danh Sách Chất Liệu
                     </div>
-                    <button type="button" class="btn btn-dark">
+                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateMaterial(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th scope="col" className='px-5 text-center'>STT</th>
+                            <th scope="col" className='px-5 text-center'>Tên</th>
+                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
+                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
+                            <th scope="col" className='px-5 text-center'>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
+                        {listMaterial.length > 0 && listMaterial.map((material, index) => {
+                            return (
+                                <tr key={`table-brand-${index}`}>
+                                    <td className="text-center">{index + 1}</td>
+                                    <td className="text-center">{material.name}</td>
+                                    <td className="text-center">{material.updatedAt}</td>
+                                    <td className="text-center">{material.deleted === false ? 'Active' : 'DeActive'}</td>
+                                    <td className="text-center">
+                                        <div className="d-flex justify-content-center align-items-center">
+                                            <button className="btn-update btn btn-dark mx-3 short-button"
+                                                onClick={() => handleClickBtnUpdate(material)}
+                                            >
+                                                <FaPenSquare color='#ffffff' />
+                                            </button>
+                                            <button className="btn-delete btn btn-dark short-button"
+                                                onClick={() => handleClickBtnDelete(material)}
+                                            >
+                                                <MdDeleteSweep />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        {listMaterial && listMaterial.length === 0 &&
+                            <tr>
+                                <td colSpan={5}>
+                                    Không có Data!
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+            <ModalCreateMaterial
+                show={showModalCreateMaterial}
+                setShow={setShowModalCreateMaterial}
+                fetchListMaterial={fetchListMaterial}
+            />
+            <ModalUpdateMaterial
+                show={showModalUpdateMaterial}
+                setShow={setShowModalUpdateMaterial}
+                fetchListMaterial={fetchListMaterial}
+                dataUpdate={dataUpdate}
+                resetDataUpdate={resetDataUpdate}
+            />
+            <ModalDeleteMaterial
+                show={showModalDeleteMaterial}
+                setShow={setShowModalDeleteMaterial}
+                fetchListMaterial={fetchListMaterial}
+                dataDelete={dataDelete}
+                resetDataDelete={resetDataDelete}
+            />
         </div >
     );
 }

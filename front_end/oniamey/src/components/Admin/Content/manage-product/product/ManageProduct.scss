@@ -1,0 +1,45 @@
+.tab-product {
+    width: 98.5%;
+}
+
+.table th {
+    background-color: #CC9966;
+}
+
+.manage-product-search {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    height: 102%;
+    border-radius: 5px;
+}
+
+.text-floating {
+    font-weight: bold;
+    // color: red;
+}
+
+.btn-add-property {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.ant-modal-footer {
+    .ant-btn {
+        color: white;
+        background-color: black;
+    }
+}
+
+.room {
+    .text-center {
+        img {
+            width: 100%;
+        }
+    }
+}
