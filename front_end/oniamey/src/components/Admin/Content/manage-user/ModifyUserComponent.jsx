@@ -12,8 +12,12 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal } from "antd";
+import QrReader from "react-qr-scanner";
+import validator from "validator";
 
-import API_UPOAD_AVATER from "../../../../services/ApiUploadAvater";
+import formatDate from "../../../../utils/FormatDate";
+import apiUploadAvater from "../../../../services/ApiUploadAvater";
 import provinceService from "../../../../services/ProvinceService";
 import userService from "../../../../services/UserService";
 import "./style/UserStyle.css";
@@ -21,7 +25,21 @@ import {
   faQrcode,
   faPlus,
   faBackward,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import FormatString from "../../../../utils/FormatString";
+
+const beforeUpload = (file) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must be smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+};
 
 const ModifyUserComponent = () => {
   const [user, setUser] = useState({
@@ -32,7 +50,7 @@ const ModifyUserComponent = () => {
     avatar: "",
     birthDate: "",
     phoneNumber: "",
-    gender: null,
+    gender: 1,
     address: "",
     role: 0,
     isDeleted: false,
@@ -52,43 +70,132 @@ const ModifyUserComponent = () => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [delay, setDelay] = useState(100);
+  const [messageValidate, setMessageValidate] = useState({});
+
+  const validateField = () => {
+    const messageValidate = {};
+
+    if (validator.isEmpty(user.username)) {
+      messageValidate.username = "Username không được để trống";
+    } else if (user.username.length < 6) {
+      messageValidate.username = "Username phải có ít nhất 6 ký tự";
+    } else if (user.username.length > 32) {
+      messageValidate.username = "Username phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(user.fullName)) {
+      messageValidate.fullName = "Họ Và Tên không được để trống";
+    } else if (user.fullName.length < 6) {
+      messageValidate.fullName = "Họ và Tên phải có ít nhất 6 ký tự";
+    } else if (user.fullName.length > 32) {
+      messageValidate.fullName = "Họ và Tên phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(user.identityCard)) {
+      messageValidate.identityCard = "Mã Định Danh không được để trống";
+    } else if (user.identityCard.length < 9) {
+      messageValidate.identityCard = "Mã Định Danh phải có ít nhất 9 ký tự";
+    } else if (user.identityCard.length > 12) {
+      messageValidate.identityCard = "Mã Định Danh phải có ít hơn 12 ký tự";
+    }
+
+    if (validator.isEmpty(user.phoneNumber)) {
+      messageValidate.phoneNumber = "Số Điện Thoại không được để trống";
+    } else if (user.phoneNumber.length < 10) {
+      messageValidate.phoneNumber = "Số Điện Thoại phải có ít nhất 10 ký tự";
+    } else if (user.phoneNumber.length > 11) {
+      messageValidate.phoneNumber = "Số Điện Thoại phải có ít hơn 11 ký tự";
+    }
+
+    if (validator.isEmpty(user.email)) {
+      messageValidate.email = "Email không được để trống";
+    } else if (!validator.isEmail(user.email)) {
+      messageValidate.email = "Email không hợp lệ";
+    }
+
+    if (validator.isEmpty(user.birthDate)) {
+      messageValidate.birthDate = "Ngày Sinh không được để trống";
+    } else if (!validator.isDate(user.birthDate)) {
+      messageValidate.birthDate = "Ngày Sinh không hợp lệ";
+    }
+
+    if (validator.isEmpty(address.line)) {
+      messageValidate.line = "Địa Chỉ không được để trống";
+    } else if (address.line.length < 6) {
+      messageValidate.line = "Địa Chỉ phải có ít nhất 6 ký tự";
+    } else if (address.line.length > 32) {
+      messageValidate.line = "Địa Chỉ phải có ít hơn 32 ký tự";
+    }
+
+    if (validator.isEmpty(address.province)) {
+      messageValidate.province = "Tỉnh/Thành Phố không được để trống";
+    }
+
+    if (validator.isEmpty(address.district)) {
+      messageValidate.district = "Quận/Huyện không được để trống";
+    }
+
+    if (validator.isEmpty(address.ward)) {
+      messageValidate.ward = "Phường/Xã không được để trống";
+    }
+
+    setMessageValidate(messageValidate);
+    if (Object.keys(messageValidate).length > 0) return false;
+    return true;
   };
 
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must be smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
-  };
+  const handleScan = (data) => {
+    const stopStreamedVideo = (videoElem) => {
+      const stream = videoElem.srcObject;
+      const tracks = stream.getTracks();
 
-  const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setUser({ ...user, avatar: url });
+      tracks.forEach((track) => {
+        track.stop();
+      });
+
+      videoElem.srcObject = null;
+    };
+    if (data) {
+      stopStreamedVideo(document.querySelector("video"));
+      setOpen(false);
+      console.log(data);
+      let parts = data.text.split("|");
+
+      let identityCard = parts[0];
+      let fullName = parts[1];
+      fullName = FormatString.upperCaseFirstLetter(
+        FormatString.lowerCaseAllWordsExceptFirstLetters(fullName)
+      );
+      let birthDate = parts[2];
+      birthDate = birthDate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
+      console.log(birthDate);
+      let gender = parts[3];
+      let address = parts[4];
+      setUser({
+        ...user,
+        identityCard: identityCard,
+        fullName: fullName,
+        birthDate: birthDate,
+        gender: gender === "Nam" ? 0 : 1,
+        address: address,
       });
     }
   };
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Chọn Ảnh Đại Diện</div>
-    </div>
-  );
+  const handleError = (err) => {
+    console.error(err);
+  };
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -96,7 +203,31 @@ const ModifyUserComponent = () => {
     console.log(user);
   };
 
+  const handleDeleteImage = (e) => {
+    e.stopPropagation();
+    const deleteFromServer = async () => {
+      const parts = user.avatar.split("/"); // Tách URL bằng dấu /
+      const fileName = parts[parts.length - 1];
+      await apiUploadAvater
+        .deleteAvatar(fileName)
+        .then((response) => {
+          console.log(response.data);
+          toast.success("Delete successfully!");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Delete failed!");
+        });
+    };
+    deleteFromServer();
+    setUser({ ...user, avatar: "" });
+    setShowDeleteButton(false);
+    setLoading(false);
+    console.log(user);
+  };
+
   const handleSaveChanges = () => {
+    if (!validateField()) return;
     if (id) {
       userService
         .updateUser(user, id)
@@ -178,6 +309,18 @@ const ModifyUserComponent = () => {
           console.log(response.data);
           if (response.data.address) {
             const address = response.data.address.split(", ");
+            provinces.forEach((province) => {
+              if (province.name === address[3]) {
+                setProvinceId(province.code);
+              }
+            });
+
+            districts.forEach((district) => {
+              if (district.name === address[2]) {
+                setDistrictId(district.code);
+              }
+            });
+
             setAddress({
               province: address[3],
               district: address[2],
@@ -194,10 +337,12 @@ const ModifyUserComponent = () => {
           }
 
           setUser({
+            username: response.data.username,
+            identityCard: response.data.identityCard,
             fullName: response.data.fullName,
             email: response.data.email,
             avatar: response.data.avatar,
-            birthDate: response.data.birthDate,
+            birthDate: formatDate(response.data.birthDate),
             phoneNumber: response.data.phoneNumber,
             gender: response.data.gender,
             address: response.data.address,
@@ -212,7 +357,8 @@ const ModifyUserComponent = () => {
   }, [id]);
 
   useEffect(() => {
-    if (address.province && provinceId !== undefined) {
+    if (address.province && provinceId !== undefined && provinceId !== null) {
+
       provinceService
         .getDistricts(provinceId)
         .then((response) => {
@@ -248,39 +394,68 @@ const ModifyUserComponent = () => {
     };
   }, [districtId, address.district]);
 
+  const handleChange = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      setUser({ ...user, avatar: info.file.response });
+      setShowDeleteButton(true);
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
   return (
-    <Container className="content-user-container">
-      <div className="d-flex justify-content-between">
+    <Container className="content-user-container mt-4">
+      <div className="d-flex justify-content-between align-items-center">
         <Link to="/admins/manage-employees">
           <Button variant="secondary" className="m-3">
-            <FontAwesomeIcon icon={faBackward} className="me-2" />
+            <FontAwesomeIcon icon={faBackward} />
           </Button>
         </Link>
-        <Button variant="success" onClick={handleSaveChanges} className="m-3">
+        <Button variant="success" onClick={showModal} className="m-3">
           <FontAwesomeIcon icon={faQrcode} className="me-2" />
           Quét CCCD
         </Button>
       </div>
       <Container className="d-flex justify-content-center">
         <Col md={4}>
-          <h4>Thông Tin Nhân Viên</h4>
+          <h4 className="mb-4">Thông Tin Nhân Viên</h4>
           <Container>
-            <div className="image-container d-flex justify-content-center align-items-center">
+            <div className="image-container d-flex justify-content-center align-items-center mb-2">
               <Upload
-                name="avatar"
+                name="file"
                 listType="picture-circle"
                 className="avatar-uploader d-flex justify-content-center align-items-center"
                 showUploadList={false}
-                action={API_UPOAD_AVATER}
+                action={apiUploadAvater.uploadAvatar}
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
               >
                 {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt="avatar"
-                    style={{ width: "100%" }}
-                  />
+                  <div className="">
+                    <img
+                      src={user.avatar}
+                      alt="avatar"
+                      style={{ width: "100%" }}
+                    />
+                    {showDeleteButton && (
+                      <Button
+                        variant="outline-light-*"
+                        onClick={(e) => handleDeleteImage(e)}
+                        className="delete-button"
+                      >
+                        <FontAwesomeIcon icon={faTrash} color="red" />
+                      </Button>
+                    )}
+                  </div>
                 ) : (
                   uploadButton
                 )}
@@ -297,8 +472,12 @@ const ModifyUserComponent = () => {
                 name="username"
                 value={user.username}
                 onChange={handleInputChange}
-                required
+                isValid={!messageValidate.username && user.username !== ""}
+                isInvalid={messageValidate.username}
               />
+              <Form.Control.Feedback type="invalid">
+                {messageValidate.username}
+              </Form.Control.Feedback>
             </FloatingLabel>
             <FloatingLabel
               controlId="floatingInput"
@@ -311,13 +490,17 @@ const ModifyUserComponent = () => {
                 name="fullName"
                 value={user.fullName}
                 onChange={handleInputChange}
-                required
+                isValid={!messageValidate.fullName && user.fullName !== ""}
+                isInvalid={messageValidate.fullName}
               />
+              <Form.Control.Feedback type="invalid">
+                {messageValidate.fullName}
+              </Form.Control.Feedback>
             </FloatingLabel>
           </Container>
         </Col>
         <Col className="mh-100">
-          <h4>Thông Tin Chi Tiết</h4>
+          <h4 className="mb-4">Thông Tin Chi Tiết</h4>
           <Row>
             <Col className="mh-100">
               <FloatingLabel
@@ -331,8 +514,14 @@ const ModifyUserComponent = () => {
                   name="identityCard"
                   value={user.identityCard}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={
+                    !messageValidate.identityCard && user.identityCard !== ""
+                  }
+                  isInvalid={messageValidate.identityCard}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.identityCard}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -345,8 +534,12 @@ const ModifyUserComponent = () => {
                   name="birthDate"
                   value={user.birthDate}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={!messageValidate.birthDate && user.birthDate !== ""}
+                  isInvalid={messageValidate.birthDate}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.birthDate}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -359,8 +552,14 @@ const ModifyUserComponent = () => {
                   name="phoneNumber"
                   value={user.phoneNumber}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={
+                    !messageValidate.phoneNumber && user.phoneNumber !== ""
+                  }
+                  isInvalid={messageValidate.phoneNumber}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.phoneNumber}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -372,6 +571,7 @@ const ModifyUserComponent = () => {
                 <Form.Select
                   value={user.gender}
                   onChange={(e) => handleInputChange(e)}
+                  name="gender"
                 >
                   <option value={1}>Nam</option>
                   <option value={2}>Nữ</option>
@@ -389,8 +589,12 @@ const ModifyUserComponent = () => {
                   name="email"
                   value={user.email}
                   onChange={(e) => handleInputChange(e)}
-                  required
+                  isValid={!messageValidate.email && user.email !== ""}
+                  isInvalid={messageValidate.email}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.email}
+                </Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -403,8 +607,17 @@ const ModifyUserComponent = () => {
                   name="line"
                   value={address.line}
                   onChange={(e) => handleChangeAddress(e)}
-                  required
+                  isValid={!messageValidate.line && address.line !== ""}
+                  isInvalid={messageValidate.line}
+                  disabled={
+                    address.province === "" ||
+                    address.district === "" ||
+                    address.ward === ""
+                  }
                 />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.line}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
           </Row>
@@ -419,13 +632,19 @@ const ModifyUserComponent = () => {
                   value={address.province}
                   onChange={(e) => handleChangeAddress(e)}
                   name="province"
+                  isValid={!messageValidate.province && address.province !== ""}
+                  isInvalid={messageValidate.province}
                 >
+                  <option>--Choose--</option>
                   {provinces.map((province) => (
                     <option key={province.code} value={province.name}>
                       {province.name}
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.province}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -438,13 +657,19 @@ const ModifyUserComponent = () => {
                   value={address.district}
                   onChange={(e) => handleChangeAddress(e)}
                   name="district"
+                  isValid={!messageValidate.district && address.district !== ""}
+                  isInvalid={messageValidate.district}
                 >
+                  <option>--Choose--</option>
                   {districts.map((district) => (
                     <option key={district.code} value={district.name}>
                       {district.name}
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.district}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col>
@@ -457,13 +682,19 @@ const ModifyUserComponent = () => {
                   value={address.ward}
                   onChange={(e) => handleChangeAddress(e)}
                   name="ward"
+                  isValid={!messageValidate.ward && address.ward !== ""}
+                  isInvalid={messageValidate.ward}
                 >
+                  <option>--Choose--</option>
                   {wards.map((ward) => (
                     <option key={ward.code} value={ward.name}>
                       {ward.name}
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.ward}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
           </Row>
@@ -479,6 +710,13 @@ const ModifyUserComponent = () => {
           Thêm Nhân Viên
         </Button>
       </div>
+      <Modal title="Quét Mã QR" open={open} onCancel={handleCancel}>
+        <div className="qrcode-container">
+          {open ? (
+            <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+          ) : null}
+        </div>
+      </Modal>
     </Container>
   );
 };

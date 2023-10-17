@@ -90,7 +90,7 @@ const Employee = (props) => {
     {
       name: "Status",
       selector: (row) => {
-        if (row.status === "false") {
+        if (!row.status) {
           return "Inactive";
         } else {
           return "Active";
@@ -128,12 +128,70 @@ const Employee = (props) => {
           </Link>
           <Button
             variant="dark"
-            onClick={() => {}}
+            onClick={() => {
+              if (!row.status) {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You will activate this employee!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes!",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    userService
+                      .changeStatusUser(row.id)
+                      .then((res) => {
+                        Swal.fire({
+                          title: "Success!",
+                          text: "You have activated this employee!",
+                          icon: "success",
+                          confirmButtonColor: "#3085d6",
+                          confirmButtonText: "OK",
+                        }).then((result) => {
+                          getListStaff(currentPage);
+                        });
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You will deactivate this employee!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes!",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    userService
+                      .changeStatusUser(row.id)
+                      .then((res) => {
+                        Swal.fire({
+                          title: "Success!",
+                          text: "You have deactivated this employee!",
+                          icon: "success",
+                          confirmButtonColor: "#3085d6",
+                          confirmButtonText: "OK",
+                        }).then((result) => {
+                          getListStaff(currentPage);
+                        });
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }
+                });
+              }
+            }}
             style={{ marginLeft: "10px" }}
           >
-            <FontAwesomeIcon
-              icon={row.status === "false" ? faLock : faUnlock}
-            />
+            <FontAwesomeIcon icon={!row.status ? faLock : faUnlock} />
           </Button>
         </>
       ),

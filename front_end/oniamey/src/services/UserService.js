@@ -20,7 +20,7 @@ class UserService {
   }
 
   changeStatusUser(id) {
-    return axios.put(BASE_API_URL + "/update-user-status/" + id);
+    return axios.put(BASE_API_URL + "/update-staff-status/" + id);
   }
 
   getTotalPages() {

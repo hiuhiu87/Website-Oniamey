@@ -26,4 +26,12 @@ public interface CustomerService {
 
     Long getTotalPage();
 
+    Long getTotalPageDeleted();
+
+    Long getTotalPageActive();
+
+    List<CustomerResponse> getTotalPageInactive(Pageable pageable);
+
+    List<CustomerResponse> getTotalPageActive(Pageable pageable);
+
 }

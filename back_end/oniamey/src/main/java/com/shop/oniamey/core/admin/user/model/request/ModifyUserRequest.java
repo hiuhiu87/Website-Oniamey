@@ -21,12 +21,17 @@ import java.util.Date;
 @NoArgsConstructor
 public class ModifyUserRequest {
 
+    @NotEmpty(message = "Username is required")
+    private String username;
+
+    @NotEmpty(message = "Identity card is required")
+    private String identityCard;
+
     @NotEmpty(message = "Full name is required")
     private String fullName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Birth date must be in the past")
-    @NotNull(message = "Birth date is required")
     private Date birthDate;
 
     @NotEmpty(message = "Email is required")

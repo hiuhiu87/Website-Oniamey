@@ -132,4 +132,24 @@ public class CustomerServiceImpl implements CustomerService {
         return endPage;
     }
 
+    @Override
+    public Long getTotalPageDeleted() {
+        return null;
+    }
+
+    @Override
+    public Long getTotalPageActive() {
+        return null;
+    }
+
+    @Override
+    public List<CustomerResponse> getTotalPageInactive(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<CustomerResponse> getTotalPageActive(Pageable pageable) {
+        return null;
+    }
+
 }
