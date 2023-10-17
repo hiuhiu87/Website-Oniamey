@@ -50,7 +50,7 @@ const ModifyUserComponent = () => {
     avatar: "",
     birthDate: "",
     phoneNumber: "",
-    gender: 1,
+    gender: 0,
     address: "",
     role: 0,
     isDeleted: false,
@@ -141,7 +141,12 @@ const ModifyUserComponent = () => {
       messageValidate.ward = "Phường/Xã không được để trống";
     }
 
+    if (user.gender === 0) {
+      messageValidate.gender = "Giới Tính không được để trống";
+    }
+
     setMessageValidate(messageValidate);
+    console.log(user);
     if (Object.keys(messageValidate).length > 0) return false;
     return true;
   };
@@ -178,7 +183,7 @@ const ModifyUserComponent = () => {
         identityCard: identityCard,
         fullName: fullName,
         birthDate: birthDate,
-        gender: gender === "Nam" ? 0 : 1,
+        gender: gender === "Nam" ? 1 : 2,
         address: address,
       });
     }
@@ -199,7 +204,6 @@ const ModifyUserComponent = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUser({ ...user, [name]: value });
-    console.log(user);
   };
 
   const handleDeleteImage = (e) => {
@@ -222,11 +226,11 @@ const ModifyUserComponent = () => {
     setUser({ ...user, avatar: "" });
     setShowDeleteButton(false);
     setLoading(false);
-    console.log(user);
   };
 
   const handleSaveChanges = () => {
     if (!validateField()) return;
+    
     if (id) {
       userService
         .updateUser(user, id)
@@ -480,7 +484,7 @@ const ModifyUserComponent = () => {
             <FloatingLabel
               controlId="floatingInput"
               label="Tên Nhân Viên"
-              className="mb-5"
+              className="mb-4"
             >
               <Form.Control
                 type="text"
@@ -497,14 +501,14 @@ const ModifyUserComponent = () => {
             </FloatingLabel>
           </Container>
         </Col>
-        <Col className="mh-100">
-          <h4 className="mb-4">Thông Tin Chi Tiết</h4>
+        <Col className="mh-100 d-flex justify-content-between flex-column">
+          <h4 className="mb-5">Thông Tin Chi Tiết</h4>
           <Row>
             <Col className="mh-100">
               <FloatingLabel
                 controlId="floatingInput"
                 label="Mã Định Danh (CMND / CCCD)"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Control
                   type="text"
@@ -524,7 +528,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Ngày Sinh"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Control
                   type="date"
@@ -542,7 +546,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Số Điện Thoại"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Control
                   type="text"
@@ -564,22 +568,26 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Giới Tính"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Select
                   value={user.gender}
                   onChange={(e) => handleInputChange(e)}
                   name="gender"
+                  isValid={user.gender > 0 && user.gender < 4}
+                  isInvalid={messageValidate.gender}
                 >
+                  <option value={0}>--Choose--</option>
                   <option value={1}>Nam</option>
                   <option value={2}>Nữ</option>
                   <option value={3}>Khác</option>
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">{messageValidate.gender}</Form.Control.Feedback>
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
                 label="Email"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Control
                   type="email"
@@ -597,7 +605,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Địa Chỉ Cụ Thể"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Control
                   type="text"
@@ -624,7 +632,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Tỉnh/Thành Phố"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Select
                   value={address.province}
@@ -649,7 +657,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Quận/Huyện"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Select
                   value={address.district}
@@ -674,7 +682,7 @@ const ModifyUserComponent = () => {
               <FloatingLabel
                 controlId="floatingInput"
                 label="Phường/Xã"
-                className="mb-5"
+                className="mb-4"
               >
                 <Form.Select
                   value={address.ward}
