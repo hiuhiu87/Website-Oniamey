@@ -26,7 +26,7 @@ const Admin = () => {
         <SideBar collapsed={collapsed} />
       </div>
       <div className={`admin-content ${adminContentClass}`}>
-        <div className="admin-header d-flex justify-content-around">
+        <div className="admin-header d-flex">
           <BiSidebar className="cick" size={25} onClick={toggleSidebar}/>
           {/* <BreadcrumbsPage /> */}
         </div>

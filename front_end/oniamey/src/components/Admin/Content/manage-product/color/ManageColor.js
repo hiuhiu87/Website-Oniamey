@@ -7,6 +7,7 @@ import ModalCreateColor from './ModalCreateColor';
 import ModalUpdateColor from './ModalUpdateColor';
 import ModalDeleteColor from './ModalDeleteColor';
 import { getAllProperties } from '../../../../../services/apiService';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
 const ManageColor = (props) => {
 
@@ -31,12 +32,12 @@ const ManageColor = (props) => {
         console.log(res);
     }
 
-    const handleClickBtnUpdate = (color) => {
+    const handleShowModalUpdateColor = (color) => {
         setShowModalUpdateColor(true);
         setDataUpdate(color);
     }
 
-    const handleClickBtnDelete = (color) => {
+    const handleShowModalDeleteColor = (color) => {
         setShowModalDeleteColor(true);
         setDataDelete(color);
     }
@@ -50,113 +51,129 @@ const ManageColor = (props) => {
     }
 
     return (
-        <div class="manage-color-container">
-            <div className='manage-color-title'>
-                <div className="title">
-                    <IoIosColorPalette size={32} /> Quản Lý Màu Sắc
-                </div>
-            </div>
-            <div className='manage-color-search'>
-                <div className='search-color-title'>
+        <Container>
+            <div class="manage-color-container">
+                <div className='manage-color-title'>
                     <div className="title">
-                        <FaFilter size={26} /> Bộ Lọc
+                        <IoIosColorPalette size={32} /> Quản Lý Màu Sắc
                     </div>
+                </div>
+                <div className='manage-color-search'>
+                    <div className='search-color-title'>
+                        <div className="title">
+                            <FaFilter size={26} /> Bộ Lọc
+                        </div>
 
+                    </div>
+                    <Form>
+                        <Row className="mb-3 justify-content-md-center">
+                            <Form.Label column sm="1">
+                                Màu sắc
+                            </Form.Label>
+                            <Col sm="6" xs lg ="4">
+                                <Form.Control type="text" />
+                            </Col>
+                            <Col xs lg="1">
+                                <Button variant="secondary">Tìm Kiếm</Button>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3 justify-content-md-center">
+                            <Form.Label column sm="1">
+                                Trạng Thái
+                            </Form.Label>
+                            <Col sm="6" xs lg ="4">
+                                <Form.Select>
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <option value="option3">Option 3</option>
+                                </Form.Select>
+                            </Col>
+                            <Col xs lg="1">
+                                <Button variant="secondary">Tìm Kiếm</Button>
+                            </Col>
+                        </Row>
+                    </Form>
                 </div>
-                <form>
-                    <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Màu Sắc</label>
-                        <div class="col-sm-6 d-flex">
-                            <input type="text" class="form-control me-2" id="inputEmail3" />
-                            <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
+                <div className='manage-color-table'>
+                    <div className='list-color-title'>
+                        <div className="title">
+                            <FaThList size={26} /> Danh Sách Màu Sắc
                         </div>
+                        <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateColor(true)}>
+                            <MdLibraryAdd /> Thêm</button>
                     </div>
-                    <div class="row mb-3">
-                        <label for="inputPassword3" class="col-sm-1 col-form-label">Trạng Thái</label>
-                        <div class="col-sm-6 d-flex">
-                            <select class="form-select me-2" id="inputPassword3">
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                            </select>
-                            <button type="button" class="btn btn-secondary">Làm Mới</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div className='manage-color-table'>
-                <div className='list-color-title'>
-                    <div className="title">
-                        <FaThList size={26} /> Danh Sách Màu Sắc
-                    </div>
-                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateColor(true)}>
-                        <MdLibraryAdd /> Thêm</button>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" className='px-5 text-center'>STT</th>
-                            <th scope="col" className='px-5 text-center'>Tên</th>
-                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
-                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
-                            <th scope="col" className='px-5 text-center'>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listColor.length > 0 && listColor.map((color, index) => {
-                            return (
-                                <tr key={`table-brand-${index}`}>
-                                    <td className="text-center">{index + 1}</td>
-                                    <td className="text-center">{color.name}</td>
-                                    <td className="text-center">{color.updatedAt}</td>
-                                    <td className="text-center">{color.deleted === false ? 'Active' : 'DeActive'}</td>
-                                    <td className="text-center">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                onClick={() => handleClickBtnUpdate(color)}
-                                            >
-                                                <FaPenSquare color='#ffffff' />
-                                            </button>
-                                            <button className="btn-delete btn btn-dark short-button"
-                                                onClick={() => handleClickBtnDelete(color)}
-                                            >
-                                                <MdDeleteSweep />
-                                            </button>
-                                        </div>
+                    <Table striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                <th scope="col" className='px-5 text-center'>STT</th>
+                                <th scope="col" className='px-5 text-center'>Tên</th>
+                                <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
+                                <th scope="col" className='px-5 text-center'>Trạng Thái</th>
+                                <th scope="col" className='px-5 text-center'>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listColor.length > 0 && listColor.map((color, index) => {
+                                return (
+                                    <tr key={`table-brand-${index}`}>
+                                        <td className="text-center">{index + 1}</td>
+                                        <td className="text-center">{color.name}</td>
+                                        <td className="text-center">{color.updatedAt}</td>
+                                        <td className="text-center">{color.deleted === false ? 'Active' : 'DeActive'}</td>
+                                        <td className="text-center">
+                                            <Row className='justify-content-md-center'>
+                                                <Col md="auto">
+                                                    <Button
+                                                        variant="dark"
+                                                        onClick={() => handleShowModalUpdateColor(color)}
+                                                    >
+                                                        <FaPenSquare />
+                                                    </Button>
+                                                </Col>
+                                                <Col xs lg="2">
+                                                    <Button
+                                                        variant="dark"
+                                                        onClick={() => handleShowModalDeleteColor(color)}
+                                                    >
+                                                        <MdDeleteSweep />
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                            {listColor && listColor.length === 0 &&
+                                <tr>
+                                    <td colSpan={5}>
+                                        Không có Data!
                                     </td>
                                 </tr>
-                            )
-                        })}
-                        {listColor && listColor.length === 0 &&
-                            <tr>
-                                <td colSpan={5}>
-                                    Không có Data!
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <ModalCreateColor
-                show={showModalCreateColor}
-                setShow={setShowModalCreateColor}
-                fetchListColor={fetchListColor}
-            />
-            <ModalUpdateColor
-                show={showModalUpdateColor}
-                setShow={setShowModalUpdateColor}
-                fetchListColor={fetchListColor}
-                dataUpdate={dataUpdate}
-                resetDataUpdate={resetDataUpdate}
-            />
-            <ModalDeleteColor
-                show={showModalDeleteColor}
-                setShow={setShowModalDeleteColor}
-                fetchListColor={fetchListColor}
-                dataDelete={dataDelete}
-                resetDataDelete={resetDataDelete}
-            />
-        </div >
+                            }
+                        </tbody>
+                    </Table>
+                </div>
+                <ModalCreateColor
+                    show={showModalCreateColor}
+                    setShow={setShowModalCreateColor}
+                    fetchListColor={fetchListColor}
+                />
+                <ModalUpdateColor
+                    show={showModalUpdateColor}
+                    setShow={setShowModalUpdateColor}
+                    fetchListColor={fetchListColor}
+                    dataUpdate={dataUpdate}
+                    resetDataUpdate={resetDataUpdate}
+                />
+                <ModalDeleteColor
+                    show={showModalDeleteColor}
+                    setShow={setShowModalDeleteColor}
+                    fetchListColor={fetchListColor}
+                    dataDelete={dataDelete}
+                    resetDataDelete={resetDataDelete}
+                />
+            </div >
+        </Container>
     );
 }
 
