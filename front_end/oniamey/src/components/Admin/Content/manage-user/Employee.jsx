@@ -46,53 +46,52 @@ const Employee = (props) => {
     {
       name: "#",
       selector: (row) => records.indexOf(row) + 1,
-      compact: true,
+      compact: "true",
       maxWidth: "40px",
       minWidth: "40px",
-      center: true,
+      center: "true",
     },
     {
       name: "Họ Và Tên",
       selector: (row) => row.fullName,
-      sortable: true,
-      center: true,
+      sortable: "true",
+      center: "true",
     },
     {
       name: "Email",
       selector: (row) => row.email,
-      sortable: true,
+      sortable: "true",
     },
     {
       name: "Trạng Thái",
       selector: (row) => {
         if (!row.status) {
-          return "Đã Nghỉ Làm";
+          return <span className="text-danger">Đã Nghỉ</span>;
         } else {
-          return "Đang Làm";
+          return <span className="text-success">Đang Làm</span>;
         }
       },
-      sortable: true,
-      compact: true,
+      sortable: "true",
+      compact: "true",
       maxWidth: "80px",
       minWidth: "80px",
-      center: true,
+      center: "true",
     },
     {
       name: "Số Điện Thoại",
       selector: (row) => row.phoneNumber,
-      sortable: true,
-      center: true,
+      sortable: "true",
+      center: "true",
     },
     {
       name: "Ngày Tham Gia",
       selector: (row) => row.createdAt,
-      sortable: true,
-      center: true,
+      center: "true",
       width: "150px",
     },
     {
       name: "Thao Tác",
-      center: true,
+      center: "true",
       cell: (row) => (
         <>
           <Link
