@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 
 import userService from "../../../../services/UserService";
 import "../manage-user/style/Table.css";
-import { get } from "lodash";
 
 const Employee = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -192,9 +191,7 @@ const Employee = (props) => {
             }}
             style={{ marginLeft: "10px" }}
           >
-            <FontAwesomeIcon
-              icon={!row.status ? faLock : faUnlock}
-            />
+            <FontAwesomeIcon icon={!row.status ? faLock : faUnlock} />
           </Button>
         </>
       ),
