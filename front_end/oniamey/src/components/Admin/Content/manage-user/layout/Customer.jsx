@@ -11,11 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-import ModifyCustomerModal from "./components/ModifyCustomerModal";
-import BreadcrumbsPage from "../../BreadCrumbs/BreadcrumbsPage";
-import service from "../../../../services/CustomerService";
-import "../manage-user/style/Table.css";
-import "../manage-user/style/CustomerStyle.css";
+import ModifyCustomerModal from "../components/ModifyCustomerModal";
+import BreadcrumbsPage from "../../../BreadCrumbs/BreadcrumbsPage";
+import service from "../../../../../services/CustomerService";
+import "../style/Table.css";
+import "../style/CustomerStyle.css";
 import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 

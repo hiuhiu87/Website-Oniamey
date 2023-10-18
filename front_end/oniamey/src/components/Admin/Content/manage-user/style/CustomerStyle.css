@@ -15,4 +15,9 @@
 }
 .page-link:hover {
   color: black;
+}
+
+.detail-customer {
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
 }/*# sourceMappingURL=CustomerStyle.css.map */

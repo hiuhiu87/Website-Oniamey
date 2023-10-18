@@ -16,18 +16,18 @@ import { Modal } from "antd";
 import QrReader from "react-qr-scanner";
 import validator from "validator";
 
-import formatDate from "../../../../utils/FormatDate";
-import apiUploadAvater from "../../../../services/ApiUploadAvater";
-import provinceService from "../../../../services/ProvinceService";
-import userService from "../../../../services/UserService";
-import "./style/UserStyle.css";
+import formatDate from "../../../../../utils/FormatDate";
+import apiUploadAvater from "../../../../../services/ApiUploadAvater";
+import provinceService from "../../../../../services/ProvinceService";
+import userService from "../../../../../services/UserService";
+import "../style/UserStyle.css";
 import {
   faQrcode,
   faPlus,
   faBackward,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import FormatString from "../../../../utils/FormatString";
+import FormatString from "../../../../../utils/FormatString";
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -122,24 +122,26 @@ const ModifyUserComponent = () => {
       messageValidate.birthDate = "Ngày Sinh không hợp lệ";
     }
 
-    if (validator.isEmpty(address.line)) {
-      messageValidate.line = "Địa Chỉ không được để trống";
-    } else if (address.line.length < 6) {
-      messageValidate.line = "Địa Chỉ phải có ít nhất 6 ký tự";
-    } else if (address.line.length > 32) {
-      messageValidate.line = "Địa Chỉ phải có ít hơn 32 ký tự";
-    }
+    if (user.address === "") {
+      if (validator.isEmpty(address.line)) {
+        messageValidate.line = "Địa Chỉ không được để trống";
+      } else if (address.line.length < 6) {
+        messageValidate.line = "Địa Chỉ phải có ít nhất 6 ký tự";
+      } else if (address.line.length > 32) {
+        messageValidate.line = "Địa Chỉ phải có ít hơn 32 ký tự";
+      }
 
-    if (validator.isEmpty(address.province)) {
-      messageValidate.province = "Tỉnh/Thành Phố không được để trống";
-    }
+      if (validator.isEmpty(address.province)) {
+        messageValidate.province = "Tỉnh/Thành Phố không được để trống";
+      }
 
-    if (validator.isEmpty(address.district)) {
-      messageValidate.district = "Quận/Huyện không được để trống";
-    }
+      if (validator.isEmpty(address.district)) {
+        messageValidate.district = "Quận/Huyện không được để trống";
+      }
 
-    if (validator.isEmpty(address.ward)) {
-      messageValidate.ward = "Phường/Xã không được để trống";
+      if (validator.isEmpty(address.ward)) {
+        messageValidate.ward = "Phường/Xã không được để trống";
+      }
     }
 
     if (user.gender === 0) {
@@ -198,25 +200,10 @@ const ModifyUserComponent = () => {
         address: address,
       });
 
-      // setAddress({
-      //   ...address,
-      //   line: line,
-      //   ward: ward,
-      //   district: district,
-      //   province: province,
-      // });
-
-      // provinces.forEach((province) => {
-      //   if (province.name === province) {
-      //     setProvinceId(province.code);
-      //   }
-      // });
-
-      // districts.forEach((district) => {
-      //   if (district.name === district) {
-      //     setDistrictId(district.code);
-      //   }
-      // });
+      setAddress({
+        ...address,
+        line: address,
+      });
     }
   };
 
@@ -469,7 +456,7 @@ const ModifyUserComponent = () => {
       <Container className="d-flex justify-content-center">
         <Col md={4}>
           <h4 className="mb-4">Thông Tin Nhân Viên</h4>
-          <Container>
+          <Container className="d-flex flex-column justify-content-between pb-0">
             <div className="image-container d-flex justify-content-center align-items-center mb-2">
               <Upload
                 name="file"
@@ -502,249 +489,253 @@ const ModifyUserComponent = () => {
                 )}
               </Upload>
             </div>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Username"
-              className="mb-4"
-            >
-              <Form.Control
-                type="text"
-                placeholder="Username"
-                name="username"
-                value={user.username}
-                onChange={handleInputChange}
-                isValid={!messageValidate.username && user.username !== ""}
-                isInvalid={messageValidate.username}
-              />
-              <Form.Control.Feedback type="invalid">
-                {messageValidate.username}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Tên Nhân Viên"
-              className="mb-4"
-            >
-              <Form.Control
-                type="text"
-                placeholder="Tên Nhân Viên"
-                name="fullName"
-                value={user.fullName}
-                onChange={handleInputChange}
-                isValid={!messageValidate.fullName && user.fullName !== ""}
-                isInvalid={messageValidate.fullName}
-              />
-              <Form.Control.Feedback type="invalid">
-                {messageValidate.fullName}
-              </Form.Control.Feedback>
-            </FloatingLabel>
+            <div>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Username"
+                className="mb-4"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
+                  name="username"
+                  value={user.username}
+                  onChange={handleInputChange}
+                  isValid={!messageValidate.username && user.username !== ""}
+                  isInvalid={messageValidate.username}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.username}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Tên Nhân Viên"
+                className="mb-4"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Tên Nhân Viên"
+                  name="fullName"
+                  value={user.fullName}
+                  onChange={handleInputChange}
+                  isValid={!messageValidate.fullName && user.fullName !== ""}
+                  isInvalid={messageValidate.fullName}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.fullName}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </div>
           </Container>
         </Col>
         <Col className="mh-100 d-flex justify-content-between flex-column">
           <h4 className="mb-5">Thông Tin Chi Tiết</h4>
-          <Row>
-            <Col className="mh-100">
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Mã Định Danh (CMND / CCCD)"
-                className="mb-4"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="Identity Card"
-                  name="identityCard"
-                  value={user.identityCard}
-                  onChange={(e) => handleInputChange(e)}
-                  isValid={
-                    !messageValidate.identityCard && user.identityCard !== ""
-                  }
-                  isInvalid={messageValidate.identityCard}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.identityCard}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Ngày Sinh"
-                className="mb-4"
-              >
-                <Form.Control
-                  type="date"
-                  placeholder="Birth Date"
-                  name="birthDate"
-                  value={user.birthDate}
-                  onChange={(e) => handleInputChange(e)}
-                  isValid={!messageValidate.birthDate && user.birthDate !== ""}
-                  isInvalid={messageValidate.birthDate}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.birthDate}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Số Điện Thoại"
-                className="mb-4"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="Phone Number"
-                  name="phoneNumber"
-                  value={user.phoneNumber}
-                  onChange={(e) => handleInputChange(e)}
-                  isValid={
-                    !messageValidate.phoneNumber && user.phoneNumber !== ""
-                  }
-                  isInvalid={messageValidate.phoneNumber}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.phoneNumber}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-            </Col>
-            <Col>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Giới Tính"
-                className="mb-4"
-              >
-                <Form.Select
-                  value={user.gender}
-                  onChange={(e) => handleInputChange(e)}
-                  name="gender"
-                  isValid={user.gender > 0 && user.gender < 4}
-                  isInvalid={messageValidate.gender}
+          <div className="">
+            <Row>
+              <Col className="mh-100">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Mã Định Danh (CMND / CCCD)"
+                  className="mb-4"
                 >
-                  <option value={0}>--Choose--</option>
-                  <option value={1}>Nam</option>
-                  <option value={2}>Nữ</option>
-                  <option value={3}>Khác</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.gender}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Email"
-                className="mb-4"
-              >
-                <Form.Control
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  value={user.email}
-                  onChange={(e) => handleInputChange(e)}
-                  isValid={!messageValidate.email && user.email !== ""}
-                  isInvalid={messageValidate.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.email}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Địa Chỉ Cụ Thể"
-                className="mb-4"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="line"
-                  name="line"
-                  value={address.line}
-                  onChange={(e) => handleChangeAddress(e)}
-                  isValid={!messageValidate.line && address.line !== ""}
-                  isInvalid={messageValidate.line}
-                  disabled={
-                    address.province === "" ||
-                    address.district === "" ||
-                    address.ward === ""
-                  }
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.line}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Tỉnh/Thành Phố"
-                className="mb-4"
-              >
-                <Form.Select
-                  value={address.province}
-                  onChange={(e) => handleChangeAddress(e)}
-                  name="province"
-                  isValid={!messageValidate.province && address.province !== ""}
-                  isInvalid={messageValidate.province}
+                  <Form.Control
+                    type="text"
+                    placeholder="Identity Card"
+                    name="identityCard"
+                    value={user.identityCard}
+                    onChange={(e) => handleInputChange(e)}
+                    isValid={
+                      !messageValidate.identityCard && user.identityCard !== ""
+                    }
+                    isInvalid={messageValidate.identityCard}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.identityCard}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Ngày Sinh"
+                  className="mb-4"
                 >
-                  <option>--Choose--</option>
-                  {provinces.map((province) => (
-                    <option key={province.code} value={province.name}>
-                      {province.name}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.province}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-            </Col>
-            <Col>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Quận/Huyện"
-                className="mb-4"
-              >
-                <Form.Select
-                  value={address.district}
-                  onChange={(e) => handleChangeAddress(e)}
-                  name="district"
-                  isValid={!messageValidate.district && address.district !== ""}
-                  isInvalid={messageValidate.district}
+                  <Form.Control
+                    type="date"
+                    placeholder="Birth Date"
+                    name="birthDate"
+                    value={user.birthDate}
+                    onChange={(e) => handleInputChange(e)}
+                    isValid={!messageValidate.birthDate && user.birthDate !== ""}
+                    isInvalid={messageValidate.birthDate}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.birthDate}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Số Điện Thoại"
+                  className="mb-4"
                 >
-                  <option>--Choose--</option>
-                  {districts.map((district) => (
-                    <option key={district.code} value={district.name}>
-                      {district.name}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.district}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-            </Col>
-            <Col>
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Phường/Xã"
-                className="mb-4"
-              >
-                <Form.Select
-                  value={address.ward}
-                  onChange={(e) => handleChangeAddress(e)}
-                  name="ward"
-                  isValid={!messageValidate.ward && address.ward !== ""}
-                  isInvalid={messageValidate.ward}
+                  <Form.Control
+                    type="text"
+                    placeholder="Phone Number"
+                    name="phoneNumber"
+                    value={user.phoneNumber}
+                    onChange={(e) => handleInputChange(e)}
+                    isValid={
+                      !messageValidate.phoneNumber && user.phoneNumber !== ""
+                    }
+                    isInvalid={messageValidate.phoneNumber}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.phoneNumber}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Giới Tính"
+                  className="mb-4"
                 >
-                  <option>--Choose--</option>
-                  {wards.map((ward) => (
-                    <option key={ward.code} value={ward.name}>
-                      {ward.name}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.ward}
-                </Form.Control.Feedback>
-              </FloatingLabel>
-            </Col>
-          </Row>
+                  <Form.Select
+                    value={user.gender}
+                    onChange={(e) => handleInputChange(e)}
+                    name="gender"
+                    isValid={user.gender > 0 && user.gender < 4}
+                    isInvalid={messageValidate.gender}
+                  >
+                    <option value={0}>--Choose--</option>
+                    <option value={1}>Nam</option>
+                    <option value={2}>Nữ</option>
+                    <option value={3}>Khác</option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.gender}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email"
+                  className="mb-4"
+                >
+                  <Form.Control
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    value={user.email}
+                    onChange={(e) => handleInputChange(e)}
+                    isValid={!messageValidate.email && user.email !== ""}
+                    isInvalid={messageValidate.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.email}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Địa Chỉ Cụ Thể"
+                  className="mb-4"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="line"
+                    name="line"
+                    value={address.line}
+                    onChange={(e) => handleChangeAddress(e)}
+                    isValid={!messageValidate.line && address.line !== ""}
+                    isInvalid={messageValidate.line}
+                    disabled={
+                      address.province === "" ||
+                      address.district === "" ||
+                      address.ward === ""
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.line}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Tỉnh/Thành Phố"
+                  className="mb-4"
+                >
+                  <Form.Select
+                    value={address.province}
+                    onChange={(e) => handleChangeAddress(e)}
+                    name="province"
+                    isValid={!messageValidate.province && address.province !== ""}
+                    isInvalid={messageValidate.province}
+                  >
+                    <option>--Choose--</option>
+                    {provinces.map((province) => (
+                      <option key={province.code} value={province.name}>
+                        {province.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.province}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Quận/Huyện"
+                  className="mb-4"
+                >
+                  <Form.Select
+                    value={address.district}
+                    onChange={(e) => handleChangeAddress(e)}
+                    name="district"
+                    isValid={!messageValidate.district && address.district !== ""}
+                    isInvalid={messageValidate.district}
+                  >
+                    <option>--Choose--</option>
+                    {districts.map((district) => (
+                      <option key={district.code} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.district}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Phường/Xã"
+                  className="mb-4"
+                >
+                  <Form.Select
+                    value={address.ward}
+                    onChange={(e) => handleChangeAddress(e)}
+                    name="ward"
+                    isValid={!messageValidate.ward && address.ward !== ""}
+                    isInvalid={messageValidate.ward}
+                  >
+                    <option>--Choose--</option>
+                    {wards.map((ward) => (
+                      <option key={ward.code} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {messageValidate.ward}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Container>
       <div className="d-flex justify-content-end">

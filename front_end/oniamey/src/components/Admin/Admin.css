@@ -24,9 +24,6 @@
   background-color: #ddd;
   margin-bottom: 15px;
 }
-.admin-container .admin-content .admin-main {
-  height: 60px;
-}
 
 /* width */
 ::-webkit-scrollbar {

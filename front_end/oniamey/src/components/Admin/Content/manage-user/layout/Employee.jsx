@@ -18,9 +18,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-import userService from "../../../../services/UserService";
-import "../manage-user/style/Table.css";
-import "./style/Employee.css";
+import userService from "../../../../../services/UserService";
+import "../style/Table.css";
+import "../style/Employee.css";
 
 const Employee = (props) => {
   const [records, setRecords] = useState([]);
@@ -210,7 +210,7 @@ const Employee = (props) => {
     <Fragment>
       <Container className="manager-employee-container">
         <Container className="pb-0">
-          <h4>Quản Lý Nhân Viên</h4>
+          <h4>Danh Sách Nhân Viên</h4>
           <Row>
             <Col className="d-flex flex-row align-items-center">
               <Form.Group
