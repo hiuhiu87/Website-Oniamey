@@ -8,42 +8,21 @@ import {
   faLock,
   faUnlock,
   faCircleInfo,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-import ModifyCustomerModal from "../components/ModifyCustomerModal";
-import BreadcrumbsPage from "../../../BreadCrumbs/BreadcrumbsPage";
 import service from "../../../../../services/CustomerService";
 import "../style/Table.css";
 import "../style/CustomerStyle.css";
-import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const Customer = (props) => {
-  const [customer, setCustomer] = useState([]);
   const [onSearch, setOnSearch] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [idCustomer, setIdCustomer] = useState();
-  const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [records, setRecords] = useState([]);
   const [allCustomer, setAllCustomer] = useState([]);
   const [progressPending, setProgressPending] = useState(true);
-
-  const openModal = async (idCustomer) => {
-    if (idCustomer) {
-      setIdCustomer(idCustomer);
-      setIsModalOpen(true);
-    } else {
-      setIdCustomer(0);
-      setIsModalOpen(true);
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    getCustomers(currentPage);
-  };
 
   const customStyles = {
     rows: {
@@ -76,7 +55,7 @@ const Customer = (props) => {
           confirmButtonText: "OK",
         }).then((result) => {
           if (result.isConfirmed) {
-            getCustomers(currentPage);
+            getAllCustomer();
           }
         });
       } else {
@@ -104,38 +83,6 @@ const Customer = (props) => {
     });
   };
 
-  const getTotalPages = () => {
-    service
-      .getTotalPages()
-      .then((response) => {
-        setTotalPage(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const renderButtonPage = () => {
-    return (
-      <Fragment>
-        {Array(totalPage)
-          .fill(null)
-          .map((_, i) => (
-            <Pagination.Item
-              key={i}
-              active={i + 1 === currentPage}
-              onClick={() => {
-                setCurrentPage(i + 1);
-              }}
-              // style={{ cursor: "pointer", color: "#000", backgroundColor: "#cc9966" }}
-            >
-              {i + 1}
-            </Pagination.Item>
-          ))}
-      </Fragment>
-    );
-  };
-
   const renderNameColumns = () => {
     if (onSearch === true) {
       return "ID";
@@ -149,9 +96,9 @@ const Customer = (props) => {
       name: renderNameColumns(),
       selector: (row) => {
         if (currentPage === 1) {
-          return customer.indexOf(row) + 1;
+          return records.indexOf(row) + 1;
         } else if (currentPage > 1) {
-          return (currentPage - 1) * 5 + customer.indexOf(row) + 1;
+          return (currentPage - 1) * 5 + records.indexOf(row) + 1;
         } else {
           return row.id;
         }
@@ -162,36 +109,8 @@ const Customer = (props) => {
       center: true,
     },
     {
-      name: "Full Name",
+      name: "Họ Và Tên",
       selector: (row) => row.fullName,
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Gender",
-      selector: (row) => {
-        if (row.gender === 1) {
-          return "Nam";
-        } else if (row.gender === 2) {
-          return "Nữ";
-        } else {
-          return "Khác";
-        }
-      },
-      sortable: true,
-      maxWidth: "100px",
-      minWidth: "100px",
-      center: true,
-    },
-    {
-      name: "Birth Date",
-      selector: (row) => {
-        if (row.birthDate) {
-          return row.birthDate;
-        } else {
-          return "N/A";
-        }
-      },
       sortable: true,
       center: true,
     },
@@ -202,7 +121,13 @@ const Customer = (props) => {
       center: true,
     },
     {
-      name: "Status",
+      name: "Số Điện Thoại",
+      selector: (row) => row.phoneNumber,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Trạng Thái",
       selector: (row) => {
         if (row.status === "false") {
           return "Inactive";
@@ -216,33 +141,18 @@ const Customer = (props) => {
       minWidth: "80px",
       center: true,
     },
+
     {
-      name: "Phone Number",
-      selector: (row) => row.phoneNumber,
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Created Date",
+      name: "Ngày Tham Gia",
       selector: (row) => row.createdAt,
       sortable: true,
       center: true,
     },
     {
-      name: "Function",
+      name: "Thao Tác",
       center: true,
       cell: (row) => (
         <>
-          <Button
-            className="btn btn-dark"
-            style={{ marginLeft: "10px" }}
-            onClick={() => {
-              openModal(row.id);
-            }}
-          >
-            <FontAwesomeIcon icon={faPencilSquare} />
-          </Button>
-          {"     "}
           <Button
             className="btn btn-dark"
             onClick={() => {
@@ -266,26 +176,13 @@ const Customer = (props) => {
     },
   ];
 
-  const getCustomers = (page) => {
-    setProgressPending(true);
-    service
-      .getAllCustomers(page)
-      .then((res) => {
-        setCustomer(res.data);
-        setRecords(res.data);
-        console.log(res.data);
-        setProgressPending(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const getAllCustomer = () => {
     service
       .getAllCustomerSearch()
       .then((res) => {
         setAllCustomer(res.data);
+        setRecords(res.data);
+        setProgressPending(false);
       })
       .catch((err) => {
         console.log(err);
@@ -298,62 +195,97 @@ const Customer = (props) => {
     const newData = allCustomer.filter((row) => {
       const customerNameMatch = row.fullName.toLowerCase().includes(searchText);
       const emailMatch = row.email.toLowerCase().includes(searchText);
-      return customerNameMatch || emailMatch;
+      const phoneNumberMatch = row.phoneNumber.includes(searchText);
+      return customerNameMatch || emailMatch || phoneNumberMatch;
     });
     setRecords(newData);
     if (searchText === "") {
-      setRecords(customer);
+      setRecords(allCustomer);
       setOnSearch(false);
       setCurrentPage(1);
     }
   };
 
-  useEffect(() => {
-    getCustomers(currentPage);
-    getTotalPages();
-  }, [currentPage]);
+  const handleStatus = (e) => {
+    const value = e.target.value;
+    const filter = allCustomer.filter((customer) => {
+      if (value === "true") {
+        return customer.status === true;
+      } else if (value === "false") {
+        return customer.status === false;
+      }
+    });
+    setRecords(filter);
+    if (value === "all") {
+      setRecords(allCustomer);
+    }
+  };
 
   useEffect(() => {
     getAllCustomer();
-  }, [records]);
+  }, []);
 
   return (
-    <Container className="wrapper">
-      <h3 className="ml-5">Manager Customer</h3>
-      {/* <BreadcrumbsPage /> */}
-      <Container className="d-flex justify-content-between align-items-center mt-3">
-        <Col xs={3} className="d-flex">
-          <Form.Control
-            type="search"
-            placeholder="Search by name or email"
-            className="me-2"
-            aria-label="Search"
-            autoComplete="on"
-            onChange={(e) => handleFilter(e)}
-          />
-        </Col>
-        <Col sm={8} className="d-flex justify-content-end align-items-center">
-          <Form>
-            <Form.Group className="me-2 d-flex justify-content-center align-items-center">
-              <Form.Label className="m-2">Status</Form.Label>
-              <Form.Select role="button">
-                <option value="">Find by status</option>
-                <option value={1}>Active</option>
-                <option value={0}>Deactivate</option>
-              </Form.Select>
+    <Container className="manager-customer-container">
+      <Container className="pb-0">
+        <h3>Danh Sách Khách Hàng</h3>
+        <Row>
+          <Col className="d-flex flex-row align-items-center">
+            <Form.Group
+              className="mb-3 flex-grow-1"
+              controlId="searchFilter"
+              style={{ marginLeft: "20px" }}
+            >
+              <Form.Label>Tìm Kiếm</Form.Label>
+              <Form.Control
+                type="search"
+                placeholder="Tìm kiếm theo tên, email, số điện thoại"
+                className="me-2"
+                aria-label="Search"
+                autoComplete="on"
+                onChange={(e) => handleFilter(e)}
+              />
             </Form.Group>
-          </Form>
-        </Col>
-        <Col>
-          <Button
-            className="btn btn-dark w-100"
-            onClick={() => {
-              openModal();
-            }}
-          >
-            <FontAwesomeIcon icon={faClipboardUser} /> Add
-          </Button>
-        </Col>
+            <Form.Group className="mb-3 ms-3" controlId="searchStatus">
+              <Form.Label>Trạng Thái</Form.Label>
+              <div className="d-flex">
+                <Form.Check
+                  inline
+                  label="Tất Cả"
+                  name="status"
+                  type="radio"
+                  defaultChecked
+                  value="all"
+                  onClick={(e) => handleStatus(e)}
+                />
+                <Form.Check
+                  inline
+                  label="Kích Hoạt"
+                  name="status"
+                  type="radio"
+                  value="true"
+                  onClick={(e) => handleStatus(e)}
+                />
+                <Form.Check
+                  inline
+                  label="Khóa"
+                  name="status"
+                  type="radio"
+                  value="false"
+                  onClick={(e) => handleStatus(e)}
+                />
+              </div>
+            </Form.Group>
+          </Col>
+          <Col className="d-flex justify-content-end align-items-center">
+            <Link to="/admins/manage-customers/add-customer">
+              <Button className="btn btn-dark">
+                <FontAwesomeIcon icon={faPlus} className="me-2"/>
+                Thêm Khách Hàng
+              </Button>
+            </Link>
+          </Col>
+        </Row>
       </Container>
       <Container className="table-container">
         <DataTable
@@ -361,20 +293,9 @@ const Customer = (props) => {
           data={records}
           customStyles={customStyles}
           progressPending={progressPending}
+          pagination
         />
       </Container>
-      <Row className="d-flex justify-content-center align-items-center">
-        <Col xs={12} className="d-flex justify-content-center">
-          <Pagination style={{ cursor: "pointer", color: "#cc9966" }}>
-            {renderButtonPage()}
-          </Pagination>
-        </Col>
-      </Row>
-      <ModifyCustomerModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        id={idCustomer}
-      />
     </Container>
   );
 };

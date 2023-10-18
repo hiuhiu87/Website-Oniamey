@@ -18,6 +18,8 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     @Query(value = """
             select a.id,
+            a.receiver_name as receiver,
+            a.receiver_phone_number as phoneNumber,
              a.line as line,
             a.ward as ward ,
             a.province as province ,

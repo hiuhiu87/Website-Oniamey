@@ -72,6 +72,14 @@ root.render(
             element={<DetaiCustomer />}
           />
           <Route
+            path="manage-customers/update-customer/:id"
+            element={<DetaiCustomer />}
+          />
+          <Route
+            path="manage-customers/add-customer"
+            element={<DetaiCustomer />}
+          />
+          <Route
             path="manage-statisticals"
             element={<ManageStatistical />}
           ></Route>

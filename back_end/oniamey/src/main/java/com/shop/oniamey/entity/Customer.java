@@ -21,6 +21,12 @@ import java.util.Date;
 @AllArgsConstructor
 public class Customer extends BaseModel {
 
+    @Column(name = "username", unique = true)
+    private String username;
+
+    @Column(name = "identity_card", unique = true)
+    private String identityCard;
+
     @Column(name = "full_name", nullable = false)
     private String fullName;
 

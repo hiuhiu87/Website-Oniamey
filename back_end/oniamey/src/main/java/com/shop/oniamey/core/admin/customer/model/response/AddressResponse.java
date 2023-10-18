@@ -4,6 +4,10 @@ public interface AddressResponse {
 
     String getId();
 
+    String getReceiver();
+
+    String getPhoneNumber();
+
     String getLine();
 
     String getWard();

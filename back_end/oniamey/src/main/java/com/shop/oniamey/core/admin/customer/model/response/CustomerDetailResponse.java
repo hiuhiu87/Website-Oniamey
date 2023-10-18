@@ -4,6 +4,10 @@ public interface CustomerDetailResponse {
 
     Long getId();
 
+    String getUsername();
+
+    String getIdentityCard();
+
     String getFullName();
 
     String getEmail();
@@ -14,7 +18,7 @@ public interface CustomerDetailResponse {
 
     String getAvatar();
 
-    Boolean getIsActive();
+    Boolean getIsDeleted();
 
     String getBirthDate();
 

@@ -37,9 +37,9 @@ public class CustomerAddressController {
         return addressService.addAddress(modifyAddressRequest);
     }
 
-    @PostMapping("/update-address")
-    public String updateAddress(@Valid @RequestBody ModifyAddressRequest modifyAddressRequest) {
-        return addressService.updateAddress(modifyAddressRequest);
+    @PostMapping("/update-address/{id}")
+    public String updateAddress(@Valid @RequestBody ModifyAddressRequest modifyAddressRequest, @PathVariable Long id) {
+        return addressService.updateAddress(id, modifyAddressRequest);
     }
 
     @PutMapping("/set-default-address/{id}")

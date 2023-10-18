@@ -210,6 +210,7 @@ const ModifyUserComponent = () => {
   const handleError = (err) => {
     console.error(err);
   };
+  
   const showModal = () => {
     setOpen(true);
   };

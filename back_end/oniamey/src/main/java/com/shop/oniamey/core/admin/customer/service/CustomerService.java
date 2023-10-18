@@ -16,7 +16,7 @@ public interface CustomerService {
 
     CustomerDetailResponse getCustomerById(Long id);
 
-    String createCustomer(ModifyCustomerRequest modifyUserRequest);
+    Object createCustomer(ModifyCustomerRequest modifyUserRequest);
 
     String updateCustomer(Long id, ModifyCustomerRequest modifyUserRequest);
 

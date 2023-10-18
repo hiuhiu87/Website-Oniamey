@@ -1,10 +1,10 @@
 package com.shop.oniamey.core.admin.customer.service.impl;
 
-import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.customer.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerDetailResponse;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerResponse;
 import com.shop.oniamey.core.admin.customer.service.CustomerService;
+import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.entity.Customer;
 import com.shop.oniamey.repository.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public String createCustomer(ModifyCustomerRequest modifyUserRequest) {
+    public Object createCustomer(ModifyCustomerRequest modifyUserRequest) {
 
         Optional<Customer> checkUser = customerRepository.findByEmail(modifyUserRequest.getEmail());
 
@@ -49,18 +49,12 @@ public class CustomerServiceImpl implements CustomerService {
                 return "Phone number already exists";
             }
         }
-
-
         Customer customer = new Customer();
-        customer.setFullName(modifyUserRequest.getFullName());
-        customer.setEmail(modifyUserRequest.getEmail());
-        customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
-        customer.setGender(modifyUserRequest.getGender());
-        customer.setAvatar(modifyUserRequest.getAvatar());
-        customer.setBirthDate(modifyUserRequest.getBirthDate());
-        customer.setDeleted(modifyUserRequest.getIsDeleted());
-        customerRepository.save(customer);
-        return "Create customer successfully";
+        getDataRequest(modifyUserRequest, customer);
+
+        Long id = customerRepository.findByEmail(customer.getEmail()).get().getId();
+        System.out.println(id);
+        return id;
     }
 
     @Override
@@ -73,6 +67,13 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = checkUser.get();
         customer.setId(id);
+        getDataRequest(modifyUserRequest, customer);
+        return "Update customer successfully";
+    }
+
+    private void getDataRequest(ModifyCustomerRequest modifyUserRequest, Customer customer) {
+        customer.setUsername(modifyUserRequest.getUsername());
+        customer.setIdentityCard(modifyUserRequest.getIdentityCard());
         customer.setFullName(modifyUserRequest.getFullName());
         customer.setEmail(modifyUserRequest.getEmail());
         customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -81,7 +82,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setBirthDate(modifyUserRequest.getBirthDate());
         customer.setDeleted(modifyUserRequest.getIsDeleted());
         customerRepository.save(customer);
-        return "Update customer successfully";
     }
 
 

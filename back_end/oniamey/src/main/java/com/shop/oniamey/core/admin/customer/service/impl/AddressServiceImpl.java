@@ -55,6 +55,8 @@ public class AddressServiceImpl implements AddressService {
     }
 
     private void getRequestData(ModifyAddressRequest modifyAddressRequest, Optional<Customer> checkCustomer, Address address) {
+        address.setReceiverName(modifyAddressRequest.getReceiver());
+        address.setReceiverPhoneNumber(modifyAddressRequest.getPhoneNumber());
         address.setLine(modifyAddressRequest.getLine());
         address.setWard(modifyAddressRequest.getWard());
         address.setDistrict(modifyAddressRequest.getDistrict());
@@ -76,7 +78,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public String updateAddress(ModifyAddressRequest modifyAddressRequest) {
+    public String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
         Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
 
