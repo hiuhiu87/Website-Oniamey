@@ -70,11 +70,14 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String deleteAddress(Long id) {
         Optional<Address> checkAddress = addressRepository.findById(id);
-        if (checkAddress.isPresent()) {
-            addressRepository.deleteById(id);
-            return "Delete address success";
+        if (checkAddress.isEmpty()) {
+            return "Address not found";
         }
-        return null;
+
+        Address address = checkAddress.get();
+        address.setDeleted(true);
+        addressRepository.save(address);
+        return "Delete address success";
     }
 
     @Override

@@ -38,7 +38,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query(value = """
             select c.id
-            ,c.full_name as fullName\s
+            ,c.full_name as fullName
             ,c.email as email
             ,c.phone_number as phoneNumber
             ,c.gender as gender

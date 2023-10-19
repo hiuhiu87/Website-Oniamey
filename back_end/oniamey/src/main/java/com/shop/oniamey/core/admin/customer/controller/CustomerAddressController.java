@@ -47,4 +47,10 @@ public class CustomerAddressController {
         return addressService.setDefaultAddress(id);
     }
 
+    @PutMapping("/delete-address/{id}")
+    public String deleteAddress(@PathVariable Long id) {
+        return addressService.deleteAddress(id);
+    }
+
+
 }

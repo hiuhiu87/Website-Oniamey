@@ -8,6 +8,7 @@
 .content-user-container {
   width: 95%;
   box-shadow: 0 0 10px 0 gray;
+  border-radius: 10px;
 }
 
 .delete-button {

@@ -67,6 +67,20 @@ const ListAddressDetail = ({
       });
   };
 
+  const handleAddressDelete = () => {
+    service
+      .deleteAddress(finalAddress.id)
+      .then((res) => {
+        console.log(res);
+        toast.success("Xóa địa chỉ thành công");
+        refreshList();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Xóa địa chỉ thất bại");
+      });
+  };
+
   const handleChangeAddress = (e) => {
     const { name, value } = e.target;
     if (name === "province") {
@@ -221,10 +235,8 @@ const ListAddressDetail = ({
                 <Switch
                   checkedChildren={<CheckOutlined />}
                   unCheckedChildren={<CloseOutlined />}
-                  defaultChecked={checkedSwitch}
-                  onChange={(checked) =>
-                    checked && handleDefaultAddress(finalAddress.id)
-                  }
+                  checked={checkedSwitch}
+                  onChange={() => handleDefaultAddress(finalAddress.id)}
                 />
               </div>
               <div>
@@ -232,7 +244,7 @@ const ListAddressDetail = ({
                   <Button variant="warning" onClick={handleUpdateAddress}>
                     <AiFillEdit color="white" />
                   </Button>
-                  <Button variant="danger">
+                  <Button variant="danger" onClick={handleAddressDelete}>
                     <AiFillDelete />
                   </Button>
                 </Space>
