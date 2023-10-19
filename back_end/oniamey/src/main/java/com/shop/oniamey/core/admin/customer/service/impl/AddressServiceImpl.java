@@ -80,7 +80,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findById(id);
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";

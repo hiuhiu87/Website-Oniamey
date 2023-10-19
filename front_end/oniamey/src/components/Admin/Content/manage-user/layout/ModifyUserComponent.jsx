@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
 import QrReader from "react-qr-scanner";
 import validator from "validator";
+import { AiFillEdit } from "react-icons/ai";
+import { BsPersonPlusFill } from "react-icons/bs";
 
 import formatDate from "../../../../../utils/FormatDate";
 import apiUploadAvater from "../../../../../services/ApiUploadAvater";
@@ -23,11 +25,11 @@ import userService from "../../../../../services/UserService";
 import "../style/UserStyle.css";
 import {
   faQrcode,
-  faPlus,
   faBackward,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import FormatString from "../../../../../utils/FormatString";
+import Swal from "sweetalert2";
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -72,7 +74,7 @@ const ModifyUserComponent = () => {
 
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [open, setOpen] = useState(false);
-  const [delay, setDelay] = useState(100);
+  let delay = 100;
   const [messageValidate, setMessageValidate] = useState({});
 
   const validateField = () => {
@@ -210,13 +212,12 @@ const ModifyUserComponent = () => {
   const handleError = (err) => {
     console.error(err);
   };
-  
+
   const showModal = () => {
     setOpen(true);
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     stopStreamedVideo(document.querySelector("video"));
     setOpen(false);
   };
@@ -252,29 +253,41 @@ const ModifyUserComponent = () => {
   const handleSaveChanges = () => {
     if (!validateField()) return;
 
-    if (id) {
-      userService
-        .updateUser(user, id)
-        .then((response) => {
-          console.log(response.data);
-          toast.success("Update successfully!");
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Update failed!");
-        });
-    } else {
-      userService
-        .createUser(user)
-        .then((response) => {
-          console.log(response.data);
-          toast.success("Add successfully!");
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Add failed!");
-        });
-    }
+    Swal.fire({
+      title: `Bạn có chắc chắn muốn ${
+        id ? "lưu thay đổi của" : "thêm"
+      } nhân viên này không?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (id) {
+          userService
+            .updateUser(user, id)
+            .then((response) => {
+              console.log(response.data);
+              toast.success("Update successfully!");
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Update failed!");
+            });
+        } else {
+          userService
+            .createUser(user)
+            .then((response) => {
+              console.log(response.data);
+              toast.success("Add successfully!");
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Add failed!");
+            });
+        }
+      }
+    });
   };
 
   const handleChangeAddress = (e) => {
@@ -298,17 +311,6 @@ const ModifyUserComponent = () => {
       ...user,
       address: `${address.line}, ${address.ward}, ${address.district}, ${address.province}`,
     });
-
-    return () => {
-      setAddress({
-        province: "",
-        district: "",
-        ward: "",
-        line: "",
-      });
-      setProvinceId();
-      setDistrictId();
-    };
   };
 
   useEffect(() => {
@@ -317,15 +319,31 @@ const ModifyUserComponent = () => {
       .then((response) => {
         console.log(response.data);
         setProvinces(response.data);
+        const selectedProvince = response.data.find(
+          (province) => province.name === address.province
+        );
+        setProvinceId(selectedProvince.code);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    return () => {
-      setProvinces([]);
-    };
   }, []);
+
+  useEffect(() => {
+    provinceService
+      .getProvinces()
+      .then((response) => {
+        console.log(response.data);
+        setProvinces(response.data);
+        const selectedProvince = response.data.find(
+          (province) => province.name === address.province
+        );
+        setProvinceId(selectedProvince.code);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [address]);
 
   useEffect(() => {
     if (id) {
@@ -335,30 +353,11 @@ const ModifyUserComponent = () => {
           console.log(response.data);
           if (response.data.address) {
             const address = response.data.address.split(", ");
-            provinces.forEach((province) => {
-              if (province.name === address[3]) {
-                setProvinceId(province.code);
-              }
-            });
-
-            districts.forEach((district) => {
-              if (district.name === address[2]) {
-                setDistrictId(district.code);
-              }
-            });
-
             setAddress({
               province: address[3],
               district: address[2],
               ward: address[1],
               line: address[0],
-            });
-          } else {
-            setAddress({
-              province: "",
-              district: "",
-              ward: "",
-              line: "",
             });
           }
 
@@ -387,41 +386,30 @@ const ModifyUserComponent = () => {
   }, [id]);
 
   useEffect(() => {
-    if (address.province && provinceId !== undefined && provinceId !== null) {
+    if (provinceId) {
       provinceService
         .getDistricts(provinceId)
-        .then((response) => {
-          console.log(response.data.districts);
-          setDistricts(response.data.districts);
+        .then((res) => {
+          setDistricts(res.data.districts);
+          const selectedDistrict = res.data.districts.find(
+            (district) => district.name === address.district
+          );
+          setDistrictId(selectedDistrict.code);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((err) => console.log(err));
     }
-
-    return () => {
-      setDistricts([]);
-      setWards([]);
-    };
-  }, [provinceId, address.province]);
+  }, [provinceId]);
 
   useEffect(() => {
-    if (address.district && districtId !== undefined) {
+    if (districtId) {
       provinceService
         .getWards(districtId)
-        .then((response) => {
-          console.log(response.data.wards);
-          setWards(response.data.wards);
+        .then((res) => {
+          setWards(res.data.wards);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((err) => console.log(err));
     }
-
-    return () => {
-      setWards([]);
-    };
-  }, [districtId, address.district]);
+  }, [districtId]);
 
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
@@ -566,7 +554,9 @@ const ModifyUserComponent = () => {
                     name="birthDate"
                     value={user.birthDate}
                     onChange={(e) => handleInputChange(e)}
-                    isValid={!messageValidate.birthDate && user.birthDate !== ""}
+                    isValid={
+                      !messageValidate.birthDate && user.birthDate !== ""
+                    }
                     isInvalid={messageValidate.birthDate}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -670,7 +660,9 @@ const ModifyUserComponent = () => {
                     value={address.province}
                     onChange={(e) => handleChangeAddress(e)}
                     name="province"
-                    isValid={!messageValidate.province && address.province !== ""}
+                    isValid={
+                      !messageValidate.province && address.province !== ""
+                    }
                     isInvalid={messageValidate.province}
                   >
                     <option>--Choose--</option>
@@ -695,7 +687,9 @@ const ModifyUserComponent = () => {
                     value={address.district}
                     onChange={(e) => handleChangeAddress(e)}
                     name="district"
-                    isValid={!messageValidate.district && address.district !== ""}
+                    isValid={
+                      !messageValidate.district && address.district !== ""
+                    }
                     isInvalid={messageValidate.district}
                   >
                     <option>--Choose--</option>
@@ -745,8 +739,17 @@ const ModifyUserComponent = () => {
           onClick={handleSaveChanges}
           style={{ color: "white" }}
         >
-          <FontAwesomeIcon icon={faPlus} className="me-2" />
-          Thêm Nhân Viên
+          {id ? (
+            <div>
+              <AiFillEdit className="me-2" />
+              Cập Nhật
+            </div>
+          ) : (
+            <div>
+              <BsPersonPlusFill className="me-2" />
+              Thêm Mới
+            </div>
+          )}
         </Button>
       </div>
       <Modal

@@ -32,6 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             from user as u
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
+            order by u.id desc
             """, nativeQuery = true)
     List<UserResponse> getAllUsers(Pageable pageable);
 
@@ -53,6 +54,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             from user as u
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
+            order by u.id desc
             """, nativeQuery = true)
     List<UserResponse> getAllUsers();
 

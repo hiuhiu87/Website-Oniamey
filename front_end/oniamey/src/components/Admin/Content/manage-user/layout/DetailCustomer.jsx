@@ -23,8 +23,6 @@ import validator from "validator";
 import { Collapse } from "antd";
 import { CloseCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 
-
-
 import ListAddressDetail from "../components/ListAddressDetail";
 import provinceService from "../../../../../services/ProvinceService";
 import FormatString from "../../../../../utils/FormatString";
@@ -323,50 +321,73 @@ const DetaiCustomer = () => {
       });
   };
 
+  const refreshAddressList = () => {
+    service
+      .getAddressesById(id)
+      .then((response) => {
+        console.log(response.data);
+        setAllAddress(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleSubmit = () => {
     console.log(customer);
     if (!validateCustomerField()) return;
-    if (id) {
-      setHadId(true);
-      service
-        .updateCustomer(customer, id)
-        .then((response) => {
-          console.log(response.data);
-          toast.success("Update successfully!");
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Update failed!");
-        });
-    } else {
-      service
-        .createCustomer(customer)
-        .then((response) => {
-          if (response.status === 201 && isNaN(response.data) === false) {
-            console.log(response.data);
-            setHadId(true);
-            setCustomerAddress({
-              ...customerAddress,
-              receiver: customer.fullName,
-              phoneNumber: customer.phoneNumber,
-              customerId: response.data,
+
+    Swal.fire({
+      title: "Thông Báo",
+      text: "Bạn Có Chắc Chắn Muốn Thực Hiện Thao Tác Này Không ?",
+      icon: "warning",
+      confirmButtonText: "OK",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (id) {
+          setHadId(true);
+          service
+            .updateCustomer(customer, id)
+            .then((response) => {
+              console.log(response.data);
+              toast.success("Update successfully!");
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Update failed!");
             });
-            toast.success("Create successfully!");
-          } else if (response.data === "Email already exists") {
-            toast.error("Email đã tồn tại!");
-          } else if (response.data === "Username already exists") {
-            toast.error("Username đã tồn tại!");
-          } else if (response.data === "Identity Card already exists") {
-            toast.error("Mã Định Danh đã tồn tại!");
-          } else if (response.data === "Phone Number already exists") {
-            toast.error("Số Điện Thoại đã tồn tại!");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Create failed!");
-        });
-    }
+        } else {
+          service
+            .createCustomer(customer)
+            .then((response) => {
+              if (response.status === 201 && isNaN(response.data) === false) {
+                console.log(response.data);
+                setHadId(true);
+                setCustomerAddress({
+                  ...customerAddress,
+                  receiver: customer.fullName,
+                  phoneNumber: customer.phoneNumber,
+                  customerId: response.data,
+                });
+                toast.success("Create successfully!");
+              } else if (response.data === "Email already exists") {
+                toast.error("Email đã tồn tại!");
+              } else if (response.data === "Username already exists") {
+                toast.error("Username đã tồn tại!");
+              } else if (response.data === "Identity Card already exists") {
+                toast.error("Mã Định Danh đã tồn tại!");
+              } else if (response.data === "Phone Number already exists") {
+                toast.error("Số Điện Thoại đã tồn tại!");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Create failed!");
+            });
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -651,13 +672,13 @@ const DetaiCustomer = () => {
                   onClick={handleSubmit}
                 >
                   {hadId ? (
-                    <div className="">
-                      <BsPencilSquare className="me-2" />
+                    <div className="text-light">
+                      <BsPencilSquare className="me-2" color="white" />
                       Cập Nhật
                     </div>
                   ) : (
-                    <div className="">
-                      <BsPersonPlusFill className="me-2" />
+                    <div className="text-light">
+                      <BsPersonPlusFill className="me-2" color="white" />
                       Thêm Mới
                     </div>
                   )}
@@ -672,7 +693,11 @@ const DetaiCustomer = () => {
             <Collapse
               defaultActiveKey={hadId ? "1" : ""}
               expandIcon={({ isActive }) =>
-                isActive ? <CloseCircleFilled /> : <PlusCircleFilled />
+                isActive ? (
+                  <CloseCircleFilled color="red" />
+                ) : (
+                  <PlusCircleFilled color="green" />
+                )
               }
               collapsible={hadId ? "" : "disabled"}
               size="large"
@@ -838,6 +863,9 @@ const DetaiCustomer = () => {
                 address={address}
                 index={index}
                 key={address.id}
+                customerId={id}
+                refreshList={() => refreshAddressList()}
+                checkedSwitch={address.isDefault}
               />
             ))}
           </div>

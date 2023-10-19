@@ -8,25 +8,44 @@ import { Fragment } from "react";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 
 import service from "../../../../../services/CustomerService";
 import provinceService from "../../../../../services/ProvinceService";
 import { Button } from "react-bootstrap";
 import { useEffect } from "react";
 
-const ListAddressDetail = ({ address, index }) => {
+const ListAddressDetail = ({
+  address,
+  index,
+  customerId,
+  refreshList,
+  checkedSwitch,
+}) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [provinceId, setProvinceId] = useState();
   const [districtId, setDistrictId] = useState();
-  const [finalAddress, setFinalAddress] = useState({});
+  const [finalAddress, setFinalAddress] = useState({
+    id: address.id,
+    receiver: address.receiver,
+    phoneNumber: address.phoneNumber,
+    line: address.line,
+    ward: address.ward,
+    district: address.district,
+    province: address.province,
+    isDefault: address.isDefault,
+    customerId: customerId,
+    isDeleted: false,
+  });
 
   const handleDefaultAddress = (addressId) => {
     service
       .changeDefaultAddress(addressId)
       .then((res) => {
         console.log(res);
+        refreshList();
         toast.success("Đặt làm mặc định thành công");
       })
       .catch((err) => {
@@ -35,20 +54,35 @@ const ListAddressDetail = ({ address, index }) => {
       });
   };
 
+  const handleUpdateAddress = () => {
+    service
+      .updateAddress(finalAddress, finalAddress.id)
+      .then((res) => {
+        console.log(res);
+        toast.success("Cập nhật địa chỉ thành công");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Cập nhật địa chỉ thất bại");
+      });
+  };
+
   const handleChangeAddress = (e) => {
     const { name, value } = e.target;
-    setFinalAddress({ ...address, [name]: value });
     if (name === "province") {
-      const selectedProvince = provinces.find(
-        (province) => province.name === value
-      );
-      setProvinceId(selectedProvince.code);
+      provinces.forEach((province) => {
+        if (province.name === value) {
+          setProvinceId(province.code);
+        }
+      });
     } else if (name === "district") {
-      const selectedDistrict = districts.find(
-        (district) => district.name === value
-      );
-      setDistrictId(selectedDistrict.code);
+      districts.forEach((district) => {
+        if (district.name === value) {
+          setDistrictId(district.code);
+        }
+      });
     }
+    setFinalAddress({ ...finalAddress, [name]: value });
   };
 
   useEffect(() => {
@@ -57,7 +91,7 @@ const ListAddressDetail = ({ address, index }) => {
       .then((res) => {
         setProvinces(res.data);
         const selectedProvince = res.data.find(
-          (province) => province.name === address.province
+          (province) => province.name === finalAddress.province
         );
         setProvinceId(selectedProvince.code);
       })
@@ -71,7 +105,7 @@ const ListAddressDetail = ({ address, index }) => {
         .then((res) => {
           setDistricts(res.data.districts);
           const selectedDistrict = res.data.districts.find(
-            (district) => district.name === address.district
+            (district) => district.name === finalAddress.district
           );
           setDistrictId(selectedDistrict.code);
         })
@@ -99,13 +133,23 @@ const ListAddressDetail = ({ address, index }) => {
               <Col>
                 <Form.Group controlId="receiverInput" className="mb-4">
                   <Form.Label>Họ và tên người nhận</Form.Label>
-                  <Form.Control type="text" value={address.receiver} />
+                  <Form.Control
+                    name="receiver"
+                    type="text"
+                    value={finalAddress.receiver}
+                    onChange={(e) => handleChangeAddress(e)}
+                  />
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group controlId="phoneNumberInput" className="mb-4">
                   <Form.Label>Số điện thoại</Form.Label>
-                  <Form.Control type="text" value={address.phoneNumber} />
+                  <Form.Control
+                    name="phoneNumber"
+                    type="text"
+                    value={finalAddress.phoneNumber}
+                    onChange={(e) => handleChangeAddress(e)}
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -113,7 +157,11 @@ const ListAddressDetail = ({ address, index }) => {
               <Col>
                 <Form.Group controlId="addressInput" className="mb-4">
                   <Form.Label>Địa chỉ</Form.Label>
-                  <Form.Control type="text" value={address.line} />
+                  <Form.Control
+                    type="text"
+                    value={finalAddress.line}
+                    onChange={(e) => handleChangeAddress(e)}
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -123,7 +171,7 @@ const ListAddressDetail = ({ address, index }) => {
                   <Form.Label>Tỉnh/Thành phố</Form.Label>
                   <Form.Select
                     name="province"
-                    value={address.province}
+                    value={finalAddress.province}
                     onChange={(e) => handleChangeAddress(e)}
                   >
                     {provinces.map((province) => (
@@ -139,7 +187,7 @@ const ListAddressDetail = ({ address, index }) => {
                   <Form.Label>Quận/Huyện</Form.Label>
                   <Form.Select
                     name="district"
-                    value={address.district}
+                    value={finalAddress.district}
                     onChange={(e) => handleChangeAddress(e)}
                   >
                     {districts.map((district) => (
@@ -155,7 +203,7 @@ const ListAddressDetail = ({ address, index }) => {
                   <Form.Label>Phường/Xã</Form.Label>
                   <Form.Select
                     name="ward"
-                    value={address.ward}
+                    value={finalAddress.ward}
                     onChange={(e) => handleChangeAddress(e)}
                   >
                     {wards.map((ward) => (
@@ -173,16 +221,20 @@ const ListAddressDetail = ({ address, index }) => {
                 <Switch
                   checkedChildren={<CheckOutlined />}
                   unCheckedChildren={<CloseOutlined />}
-                  defaultChecked={address.isDefault}
+                  defaultChecked={checkedSwitch}
                   onChange={(checked) =>
-                    checked && handleDefaultAddress(address.id)
+                    checked && handleDefaultAddress(finalAddress.id)
                   }
                 />
               </div>
               <div>
                 <Space>
-                  <Button variant="primary">Sửa</Button>
-                  <Button variant="danger">Xóa</Button>
+                  <Button variant="warning" onClick={handleUpdateAddress}>
+                    <AiFillEdit color="white" />
+                  </Button>
+                  <Button variant="danger">
+                    <AiFillDelete />
+                  </Button>
                 </Space>
               </div>
             </div>

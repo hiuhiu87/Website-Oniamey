@@ -51,6 +51,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             from customer c
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
+            order by c.id desc
                         """, nativeQuery = true)
     List<CustomerResponse> getAllCustomers();
 

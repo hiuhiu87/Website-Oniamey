@@ -51,12 +51,8 @@ class CustomerService {
     return axios.put(BASE_API_URL_ADDRESS + "/set-default-address/" + id);
   }
 
-  getListCustomerActive() {
-    return axios.get(BASE_API_URL_CUSTOMER + "/get-list-customer-active");
-  }
-
-  getListCustomerInactive() {
-    return axios.get(BASE_API_URL_CUSTOMER + "/get-list-customer-inactive");
+  updateAddress(address, id) {
+    return axios.put(BASE_API_URL_ADDRESS + "/update-address/" + id, address);
   }
 
 }

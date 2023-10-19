@@ -87,7 +87,7 @@ const Customer = (props) => {
     if (onSearch === true) {
       return "ID";
     } else {
-      return "No.";
+      return "STT";
     }
   };
 
@@ -118,7 +118,8 @@ const Customer = (props) => {
       name: "Email",
       selector: (row) => row.email,
       sortable: true,
-      center: true,
+      minWidth: "180px",
+      maxWidth: "180px",
     },
     {
       name: "Số Điện Thoại",
@@ -130,15 +131,15 @@ const Customer = (props) => {
       name: "Trạng Thái",
       selector: (row) => {
         if (row.status === "false") {
-          return "Inactive";
+          return <span style={{ color: "red" }}>Khóa</span>;
         } else {
-          return "Active";
+          return <span style={{ color: "green" }}>Kích Hoạt</span>;
         }
       },
       sortable: true,
       compact: true,
-      maxWidth: "80px",
-      minWidth: "80px",
+      maxWidth: "100px",
+      minWidth: "100px",
       center: true,
     },
 
@@ -151,6 +152,8 @@ const Customer = (props) => {
     {
       name: "Thao Tác",
       center: true,
+      minWidth: "200px",
+      maxWidth: "200px",
       cell: (row) => (
         <>
           <Button
@@ -208,13 +211,7 @@ const Customer = (props) => {
 
   const handleStatus = (e) => {
     const value = e.target.value;
-    const filter = allCustomer.filter((customer) => {
-      if (value === "true") {
-        return customer.status === true;
-      } else if (value === "false") {
-        return customer.status === false;
-      }
-    });
+    const filter = allCustomer.filter((customer) => customer.status === value);
     setRecords(filter);
     if (value === "all") {
       setRecords(allCustomer);
@@ -229,6 +226,7 @@ const Customer = (props) => {
     <Container className="manager-customer-container">
       <Container className="pb-0">
         <h3>Danh Sách Khách Hàng</h3>
+        <hr />
         <Row>
           <Col className="d-flex flex-row align-items-center">
             <Form.Group
@@ -280,7 +278,7 @@ const Customer = (props) => {
           <Col className="d-flex justify-content-end align-items-center">
             <Link to="/admins/manage-customers/add-customer">
               <Button className="btn btn-dark">
-                <FontAwesomeIcon icon={faPlus} className="me-2"/>
+                <FontAwesomeIcon icon={faPlus} className="me-2" />
                 Thêm Khách Hàng
               </Button>
             </Link>
@@ -294,6 +292,7 @@ const Customer = (props) => {
           customStyles={customStyles}
           progressPending={progressPending}
           pagination
+          responsive
         />
       </Container>
     </Container>

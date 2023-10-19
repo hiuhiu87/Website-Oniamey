@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BsPersonPlus } from "react-icons/bs";
+import { BsPersonPlusFill } from "react-icons/bs";
 import {
   faPencilSquare,
   faLock,
@@ -44,7 +44,7 @@ const Employee = (props) => {
 
   const columns = [
     {
-      name: "#",
+      name: "STT",
       selector: (row) => records.indexOf(row) + 1,
       compact: "true",
       maxWidth: "40px",
@@ -211,6 +211,7 @@ const Employee = (props) => {
       <Container className="manager-employee-container">
         <Container className="pb-0">
           <h4>Danh Sách Nhân Viên</h4>
+          <hr />
           <Row>
             <Col className="d-flex flex-row align-items-center">
               <Form.Group
@@ -218,6 +219,7 @@ const Employee = (props) => {
                 controlId="searchFilter"
                 style={{ marginLeft: "20px" }}
               >
+                <Form.Label>Tìm Kiếm</Form.Label>
                 <Form.Control
                   type="search"
                   placeholder="Tìm kiếm theo tên, email, số điện thoại"
@@ -267,13 +269,13 @@ const Employee = (props) => {
                 style={{ fontSize: "15px" }}
                 className="btn btn-dark text-light"
               >
-                <BsPersonPlus style={{ marginRight: "5px" }} />
+                <BsPersonPlusFill style={{ marginRight: "5px" }} />
                 Thêm
               </Link>
             </Col>
           </Row>
         </Container>
-        <Container className=" mb-3 pt-0 ps-4 pe-4 table-container">
+        <Container className=" mb-3 mt-2 pt-0 ps-4 pe-4 table-container">
           <DataTable
             columns={columns}
             data={records}
