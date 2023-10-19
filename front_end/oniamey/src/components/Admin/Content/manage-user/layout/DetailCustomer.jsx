@@ -22,9 +22,10 @@ import QrReader from "react-qr-scanner";
 import validator from "validator";
 import { Collapse } from "antd";
 import { CloseCircleFilled, PlusCircleFilled } from "@ant-design/icons";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Switch, Space } from "antd";
 
+
+
+import ListAddressDetail from "../components/ListAddressDetail";
 import provinceService from "../../../../../services/ProvinceService";
 import FormatString from "../../../../../utils/FormatString";
 import formatDate from "../../../../../utils/FormatDate";
@@ -78,22 +79,9 @@ const DetaiCustomer = () => {
   const [wards, setWards] = useState([]);
   const [provinceId, setProvinceId] = useState();
   const [districtId, setDistrictId] = useState();
-  const [wardId, setWardId] = useState();
   const [hadId, setHadId] = useState(false);
   const { id } = useParams();
   const [allAddress, setAllAddress] = useState([]);
-  const [addressUpdate, setAddressUpdate] = useState({
-    id: "",
-    receiver: "",
-    phoneNumber: "",
-    line: "",
-    province: "",
-    district: "",
-    ward: "",
-    customerId: id,
-    isDefault: false,
-    isDeleted: false,
-  });
 
   const validateCustomerField = () => {
     const messageValidate = {};
@@ -381,34 +369,6 @@ const DetaiCustomer = () => {
     }
   };
 
-  const handleChangeAddressUpdate = (event) => {
-    const { name, value } = event.target;
-    setAddressUpdate({ ...addressUpdate, [name]: value });
-    if (name === "province") {
-      const selectedProvince = provinces.find(
-        (province) => province.name === value
-      );
-      setProvinceId(selectedProvince ? selectedProvince.code : null);
-    }
-
-    if (name === "district") {
-      const selectedDistrict = districts.find(
-        (district) => district.name === value
-      );
-      setDistrictId(selectedDistrict ? selectedDistrict.code : null);
-    }
-
-    if (name === "ward") {
-      const selectedWard = wards.find((ward) => ward.name === value);
-      setWardId(selectedWard ? selectedWard.code : null);
-    }
-
-    console.log(addressUpdate);
-    console.log(provinceId);
-    console.log(districtId);
-    console.log(wardId);
-  };
-
   useEffect(() => {
     provinceService
       .getProvinces()
@@ -503,52 +463,6 @@ const DetaiCustomer = () => {
       setWards([]);
     };
   }, [districtId, customerAddress.district]);
-
-  useEffect(() => {
-    if (addressUpdate.province && provinceId !== undefined) {
-      provinceService
-        .getDistricts(provinceId)
-        .then((response) => {
-          console.log(response.data.districts);
-          setDistricts(response.data.districts);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return () => {
-      setDistricts([]);
-      setWards([]);
-    };
-  }, [provinceId, addressUpdate.province]);
-
-  useEffect(() => {
-    if (addressUpdate.district) {
-      provinceService
-        .getWards(districtId)
-        .then((response) => {
-          console.log(response.data.wards);
-          setWards(response.data.wards);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return () => {
-      setWards([]);
-    };
-  }, [districtId, addressUpdate.district]);
-
-  useEffect(() => {
-    if (addressUpdate.ward) {
-      const selectedWard = wards.find(
-        (ward) => ward.name === addressUpdate.ward
-      );
-      setWardId(selectedWard ? selectedWard.code : null);
-    }
-  }, [addressUpdate.ward]);
 
   return (
     <Container className="detail-customer mt-4">
@@ -919,169 +833,13 @@ const DetaiCustomer = () => {
               </Collapse.Panel>
             </Collapse>
             <hr />
-            <Collapse defaultActiveKey={hadId ? "1" : ""}>
-              {allAddress.map((address, index) => (
-                <Collapse.Panel
-                  header={`Địa Chỉ ${index + 1}`}
-                  key={address.id}
-                >
-                  <Container className="d-flex flex-column justify-content-between pb-0">
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="receiverInput" className="mb-4">
-                          <Form.Label>Người Nhận</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Nguyễn Văn A"
-                            name="receiver"
-                            value={address.receiver}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.receiver &&
-                              address.receiver !== ""
-                            }
-                            isInvalid={messageValidateAddress.receiver}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.receiver}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group
-                          controlId="phoneNumberInput"
-                          className="mb-4"
-                        >
-                          <Form.Label>Số Điện Thoại</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="0123456789"
-                            name="phoneNumber"
-                            value={address.phoneNumber}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.phoneNumber &&
-                              address.phoneNumber !== ""
-                            }
-                            isInvalid={messageValidateAddress.phoneNumber}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.phoneNumber}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Form.Group controlId="lineInput" className="mb-4">
-                      <Form.Label>Số Nhà, Đường</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Số nhà, đường"
-                        name="line"
-                        value={address.line}
-                        onChange={(e) => handleChangeAddress(e)}
-                        isValid={
-                          !messageValidateAddress.line && address.line !== ""
-                        }
-                        isInvalid={messageValidateAddress.line}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {messageValidateAddress.line}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="provinceInput" className="mb-4">
-                          <Form.Label>Tỉnh/Thành Phố</Form.Label>
-                          <Form.Select
-                            name="province"
-                            value={address.province}
-                            onChange={(e) => handleChangeAddressUpdate(e)}
-                            isValid={
-                              !messageValidateAddress.province &&
-                              address.province !== ""
-                            }
-                            isInvalid={messageValidateAddress.province}
-                          >
-                            <option>Chọn Tỉnh/Thành Phố</option>
-                            {provinces.map((province) => (
-                              <option key={province.code} value={province.name}>
-                                {province.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.province}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group controlId="districtInput" className="mb-4">
-                          <Form.Label>Quận/Huyện</Form.Label>
-                          <Form.Select
-                            name="district"
-                            value={address.district}
-                            onChange={(e) => handleChangeAddressUpdate(e)}
-                            isValid={
-                              !messageValidateAddress.district &&
-                              address.district !== ""
-                            }
-                            isInvalid={messageValidateAddress.district}
-                          >
-                            <option>Chọn Quận/Huyện</option>
-                            {districts.map((district) => (
-                              <option key={district.code} value={district.name}>
-                                {district.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.district}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group controlId="wardInput" className="mb-4">
-                          <Form.Label>Phường/Xã</Form.Label>
-                          <Form.Select
-                            name="ward"
-                            value={address.ward}
-                            onChange={(e) => handleChangeAddressUpdate(e)}
-                            isValid={
-                              !messageValidateAddress.ward &&
-                              address.ward !== ""
-                            }
-                            isInvalid={messageValidateAddress.ward}
-                          >
-                            <option value="">Chọn Phường/Xã</option>
-                            {wards.map((ward) => (
-                              <option key={ward.code} value={ward.name}>
-                                {ward.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.ward}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <div>
-                      <div>
-                        Đặt làm mặc định{"   "}
-                        <Switch
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />}
-                          defaultChecked={address.isDefault}
-                          onChange={(checked) => {
-                            service.changeDefaultAddress(address.id);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Container>
-                </Collapse.Panel>
-              ))}
-            </Collapse>
+            {allAddress.map((address, index) => (
+              <ListAddressDetail
+                address={address}
+                index={index}
+                key={address.id}
+              />
+            ))}
           </div>
         </Col>
       </Container>
