@@ -21,7 +21,7 @@
     }
 }
 
-.detail-customer{
+.detail-customer {
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
@@ -30,13 +30,25 @@
     box-shadow: 0 0 10px gray;
 }
 
-.manager-customer-container{
+.manager-customer-container {
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px gray;
+    // border-radius: 10px;
+    // box-shadow: 0 0 10px gray;
     width: 95% !important;
     overflow-x: auto;
     box-sizing: border-box;
+
+    .filter-customer-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px gray;
+        margin-bottom: 20px;
+    }
+
+    .list-customer-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px gray;
+    }
+
 }

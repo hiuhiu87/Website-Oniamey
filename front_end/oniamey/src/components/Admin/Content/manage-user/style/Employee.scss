@@ -1,7 +1,19 @@
-.manager-employee-container{
+.manager-employee-container {
     margin-top: 40px;
     width: 95%;
     height: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+    // border-radius: 10px;
+    // box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+
+    .filter-staff-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+        margin-bottom: 20px;
+    }
+
+    .list-staff-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+    }
+
 }

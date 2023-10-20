@@ -1,11 +1,5 @@
 import React, { Fragment } from "react";
-import {
-  Container,
-  Form,
-  Col,
-  Button,
-  Row,
-} from "react-bootstrap";
+import { Container, Form, Col, Button, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
@@ -206,14 +200,18 @@ const Employee = (props) => {
     getAllUser();
   }, []);
 
+  const paginationComponentOptions = {
+    rowsPerPageText: 'Số bản ghi mỗi trang: ',
+    rangeSeparatorText: 'trên',
+  };
+
   return (
     <Fragment>
       <Container className="manager-employee-container">
-        <Container className="pb-0">
-          <h4>Danh Sách Nhân Viên</h4>
-          <hr />
+        <Container className="pb-0 filter-staff-container">
+          <h4>Tìm Kiếm Nhân Viên</h4>
           <Row>
-            <Col className="d-flex flex-row align-items-center">
+            <Col>
               <Form.Group
                 className="mb-3 flex-grow-1"
                 controlId="searchFilter"
@@ -229,10 +227,9 @@ const Employee = (props) => {
                   onChange={(e) => handleFilter(e)}
                 />
               </Form.Group>
-              <Form.Group
-                className="mb-3 ms-3"
-                controlId="searchStatus"
-              >
+            </Col>
+            <Col>
+              <Form.Group className="mb-3 ms-3" controlId="searchStatus">
                 <Form.Label>Trạng Thái</Form.Label>
                 <div className="d-flex">
                   <Form.Check
@@ -263,25 +260,30 @@ const Employee = (props) => {
                 </div>
               </Form.Group>
             </Col>
-            <Col className="d-flex justify-content-end align-items-center">
-              <Link
-                to="add-employee"
-                style={{ fontSize: "15px" }}
-                className="btn btn-dark text-light"
-              >
-                <BsPersonPlusFill style={{ marginRight: "5px" }} />
-                Thêm
-              </Link>
-            </Col>
           </Row>
         </Container>
-        <Container className=" mb-3 mt-2 pt-0 ps-4 pe-4 table-container">
-          <DataTable
-            columns={columns}
-            data={records}
-            progressPending={allUser.length === 0 ? null : progressPending}
-            pagination
-          />
+        <Container className="pb-0 list-staff-container">
+          <h4>Danh Sách Nhân Viên</h4>
+          <hr />
+          <Container className="d-flex justify-content-end align-items-center">
+            <Link
+              to="add-employee"
+              style={{ fontSize: "15px" }}
+              className="btn btn-dark text-light"
+            >
+              <BsPersonPlusFill style={{ marginRight: "5px" }} />
+              Thêm
+            </Link>
+          </Container>
+          <Container className=" mb-3 mt-2 pt-0 ps-4 pe-4 table-container">
+            <DataTable
+              columns={columns}
+              data={records}
+              progressPending={allUser.length === 0 ? null : progressPending}
+              pagination
+              paginationComponentOptions={paginationComponentOptions}
+            />
+          </Container>
         </Container>
       </Container>
     </Fragment>

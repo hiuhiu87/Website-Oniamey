@@ -439,6 +439,7 @@ const DetaiCustomer = () => {
             email: response.data.email,
             avatar: response.data.avatar,
           });
+          if (response.data.avatar !== "") setShowDeleteButton(true);
           setCustomerAddress({
             ...customerAddress,
             customerId: response.data.id,

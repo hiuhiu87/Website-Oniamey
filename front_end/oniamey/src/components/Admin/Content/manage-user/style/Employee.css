@@ -2,6 +2,13 @@
   margin-top: 40px;
   width: 95%;
   height: 100%;
+}
+.manager-employee-container .filter-staff-container {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+  margin-bottom: 20px;
+}
+.manager-employee-container .list-staff-container {
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
 }/*# sourceMappingURL=Employee.css.map */

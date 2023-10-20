@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
-import { Container, Form, Col, Button, Pagination, Row } from "react-bootstrap";
+import { Container, Form, Col, Button, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPencilSquare,
   faLock,
   faUnlock,
   faCircleInfo,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
 
 import service from "../../../../../services/CustomerService";
@@ -43,6 +43,13 @@ const Customer = (props) => {
         paddingRight: "8px",
       },
     },
+  };
+
+  const paginationComponentOptions = {
+    rowsPerPageText: "Số bản ghi mỗi trang: ",
+    rangeSeparatorText: "trên",
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "Tất cả",
   };
 
   const changeStatusCustomer = (customerId) => {
@@ -224,11 +231,13 @@ const Customer = (props) => {
 
   return (
     <Container className="manager-customer-container">
-      <Container className="pb-0">
-        <h3>Danh Sách Khách Hàng</h3>
-        <hr />
+      <Container className="pb-0 filter-customer-container">
+        <h3>
+          <AiOutlineFileSearch className="me-2" />
+          Bộ Lọc
+        </h3>
         <Row>
-          <Col className="d-flex flex-row align-items-center">
+          <Col>
             <Form.Group
               className="mb-3 flex-grow-1"
               controlId="searchFilter"
@@ -237,13 +246,15 @@ const Customer = (props) => {
               <Form.Label>Tìm Kiếm</Form.Label>
               <Form.Control
                 type="search"
-                placeholder="Tìm kiếm theo tên, email, số điện thoại"
+                placeholder="Tìm kiếm theo Họ Tên / Email / Số Điện Thoại"
                 className="me-2"
                 aria-label="Search"
                 autoComplete="on"
                 onChange={(e) => handleFilter(e)}
               />
             </Form.Group>
+          </Col>
+          <Col>
             <Form.Group className="mb-3 ms-3" controlId="searchStatus">
               <Form.Label>Trạng Thái</Form.Label>
               <div className="d-flex">
@@ -275,25 +286,33 @@ const Customer = (props) => {
               </div>
             </Form.Group>
           </Col>
-          <Col className="d-flex justify-content-end align-items-center">
-            <Link to="/admins/manage-customers/add-customer">
-              <Button className="btn btn-dark">
-                <FontAwesomeIcon icon={faPlus} className="me-2" />
-                Thêm Khách Hàng
-              </Button>
-            </Link>
-          </Col>
         </Row>
       </Container>
-      <Container className="table-container">
-        <DataTable
-          columns={columns}
-          data={records}
-          customStyles={customStyles}
-          progressPending={progressPending}
-          pagination
-          responsive
-        />
+      <Container className="pb-0 list-customer-container">
+        <h3>
+          <AiOutlineUnorderedList className="me-2" />
+          Danh Sách Khách Hàng
+        </h3>
+        <hr />
+        <Container className="d-flex justify-content-end align-items-center">
+          <Link to="/admins/manage-customers/add-customer">
+            <Button className="btn btn-dark">
+              <FontAwesomeIcon icon={faPlus} className="me-2" />
+              Thêm Khách Hàng
+            </Button>
+          </Link>
+        </Container>
+        <Container className="table-container">
+          <DataTable
+            columns={columns}
+            data={records}
+            customStyles={customStyles}
+            progressPending={progressPending}
+            pagination
+            paginationComponentOptions={paginationComponentOptions}
+            responsive
+          />
+        </Container>
       </Container>
     </Container>
   );

@@ -37,4 +37,8 @@
   position: fixed;
   top: 0;
   z-index: 20;
+}
+
+.pro-sidebar {
+  min-width: 280px;
 }/*# sourceMappingURL=SideBar.css.map */
