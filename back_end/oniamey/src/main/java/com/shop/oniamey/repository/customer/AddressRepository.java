@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    Optional<Address> findByLineAndWardAndProvinceAndCustomerId(String line, String ward, String province, Long customerId);
+    Optional<Address> findByLineAndWardAndDistrictAndProvinceAndCustomerIdAndDeletedIsFalse(String line, String ward, String district, String province, Long customerId);
 
     @Query(value = """
             select a.id,

@@ -313,7 +313,23 @@ const DetaiCustomer = () => {
       .createAddress(customerAddress)
       .then((response) => {
         console.log(response.data);
-        toast.success("Create successfully!");
+        if (response.status === "Address already exists") {
+          toast.dismiss("Address already exists");
+        } else {
+          toast.success("Create successfully!");
+          refreshAddressList();
+          setCustomerAddress({
+            ...customerAddress,
+            receiver: "",
+            phoneNumber: "",
+            line: "",
+            province: "",
+            district: "",
+            ward: "",
+            isDefault: false,
+            isDeleted: false,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);

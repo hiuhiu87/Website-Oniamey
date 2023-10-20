@@ -14,6 +14,7 @@ import service from "../../../../../services/CustomerService";
 import provinceService from "../../../../../services/ProvinceService";
 import { Button } from "react-bootstrap";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const ListAddressDetail = ({
   address,
@@ -68,17 +69,32 @@ const ListAddressDetail = ({
   };
 
   const handleAddressDelete = () => {
-    service
-      .deleteAddress(finalAddress.id)
-      .then((res) => {
-        console.log(res);
-        toast.success("Xóa địa chỉ thành công");
-        refreshList();
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Xóa địa chỉ thất bại");
-      });
+    const deleteAddress = () => {
+      service
+        .deleteAddress(finalAddress.id)
+        .then((res) => {
+          console.log(res);
+          toast.success("Xóa địa chỉ thành công");
+          refreshList();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Xóa địa chỉ thất bại");
+        });
+    };
+
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa địa chỉ này?",
+      text: "Bạn sẽ không thể khôi phục lại địa chỉ này!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteAddress();
+      }
+    });
   };
 
   const handleChangeAddress = (e) => {
@@ -110,7 +126,7 @@ const ListAddressDetail = ({
         setProvinceId(selectedProvince.code);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [finalAddress.province]);
 
   useEffect(() => {
     if (provinceId) {
@@ -125,7 +141,7 @@ const ListAddressDetail = ({
         })
         .catch((err) => console.log(err));
     }
-  }, [provinceId]);
+  }, [provinceId, finalAddress.district]);
 
   useEffect(() => {
     if (districtId) {

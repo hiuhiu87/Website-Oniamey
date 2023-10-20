@@ -39,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String addAddress(ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndDistrictAndProvinceAndCustomerIdAndDeletedIsFalse(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getDistrict(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";
