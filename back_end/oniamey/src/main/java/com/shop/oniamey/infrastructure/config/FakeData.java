@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 //import com.shop.oniamey.entity.SleeveLength;
 //import com.shop.oniamey.entity.User;
 //import com.shop.oniamey.entity.Voucher;
-//import com.shop.oniamey.entity.base.EnumStatus;
+//import com.shop.oniamey.infrastructure.constant.EnumStatus;
 //import com.shop.oniamey.infrastructure.constant.RoleName;
 //import com.shop.oniamey.repository.customer.AddressRepository;
 //import com.shop.oniamey.repository.customer.CartDetailRepository;

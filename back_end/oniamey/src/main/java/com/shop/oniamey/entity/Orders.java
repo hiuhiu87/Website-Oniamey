@@ -1,7 +1,8 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
-import com.shop.oniamey.entity.base.EnumStatus;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
+import com.shop.oniamey.infrastructure.constant.OrderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,11 +48,12 @@ public class Orders extends BaseModel {
     @Column(name = "receive_date", nullable = false)
     private Date receiveDate;
 
-    @Column(name = "completion_date", nullable = false)
+    @Column(name = "completion_date")
     private Date completionDate;
 
     @Column(name = "type", nullable = false, length = 100)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
 
     @Column(name = "note", nullable = false, length = 1000)
     private String note;
@@ -61,7 +63,7 @@ public class Orders extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     @Column( name = "status" ,length = 50)
-    private EnumStatus status;
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "id_voucher")

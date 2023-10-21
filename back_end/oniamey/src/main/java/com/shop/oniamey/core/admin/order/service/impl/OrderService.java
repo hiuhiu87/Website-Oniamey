@@ -5,7 +5,7 @@ import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import com.shop.oniamey.entity.Orders;
-import com.shop.oniamey.entity.base.EnumStatus;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
 import com.shop.oniamey.infrastructure.exception.RestApiException;
 import com.shop.oniamey.repository.customer.CustomerRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
@@ -34,6 +34,7 @@ public class OrderService implements IOrderService {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    @Override
     public List<OrderResponse> getAllOrder(){
         return orderRepository.findAllOrder();
     }
@@ -52,6 +53,7 @@ public class OrderService implements IOrderService {
     }
 
 
+    @Override
     public String createOrder(OrderRequest orderRequest){
         Orders orders= new Orders();
         String randomCode= QRCodeProduct.generateRandomCode();
@@ -80,7 +82,7 @@ public class OrderService implements IOrderService {
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
-        orders.setStatus(EnumStatus.PENDING);
+        orders.setStatus(orderRequest.getStatus());
         orderRepository.save(orders);
         return "Create order success";
     }
@@ -124,7 +126,7 @@ public class OrderService implements IOrderService {
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
-        orders.setStatus(EnumStatus.PENDING);
+        orders.setStatus(OrderStatus.PENDING);
         orderRepository.save(orders);
         return "Update order success";
     }
@@ -137,6 +139,9 @@ public class OrderService implements IOrderService {
 
     @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
+        if (status.equalsIgnoreCase("ALL")){
+            return orderRepository.getOrdersByStatus(pageable,"%");
+        }
         return orderRepository.getOrdersByStatus(pageable,status);
     }
 
