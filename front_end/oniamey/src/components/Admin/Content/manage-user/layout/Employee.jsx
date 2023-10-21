@@ -10,6 +10,7 @@ import {
   faLock,
   faUnlock,
 } from "@fortawesome/free-solid-svg-icons";
+import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
 
 import userService from "../../../../../services/UserService";
@@ -201,15 +202,18 @@ const Employee = (props) => {
   }, []);
 
   const paginationComponentOptions = {
-    rowsPerPageText: 'Số bản ghi mỗi trang: ',
-    rangeSeparatorText: 'trên',
+    rowsPerPageText: "Số bản ghi mỗi trang: ",
+    rangeSeparatorText: "trên",
   };
 
   return (
     <Fragment>
       <Container className="manager-employee-container">
         <Container className="pb-0 filter-staff-container">
-          <h4>Tìm Kiếm Nhân Viên</h4>
+          <h5>
+            <AiOutlineFileSearch className="me-2" />
+            Bộ Lọc
+          </h5>
           <Row>
             <Col>
               <Form.Group
@@ -263,7 +267,10 @@ const Employee = (props) => {
           </Row>
         </Container>
         <Container className="pb-0 list-staff-container">
-          <h4>Danh Sách Nhân Viên</h4>
+          <h5>
+            <AiOutlineUnorderedList className="me-2" />
+            Danh Sách Nhân Viên
+          </h5>
           <hr />
           <Container className="d-flex justify-content-end align-items-center">
             <Link

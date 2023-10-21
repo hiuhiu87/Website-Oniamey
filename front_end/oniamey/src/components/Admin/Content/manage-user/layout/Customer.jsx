@@ -179,7 +179,7 @@ const Customer = (props) => {
             className="btn btn-dark"
             style={{ marginLeft: "10px" }}
           >
-            <FontAwesomeIcon icon={faCircleInfo} />
+            <FontAwesomeIcon icon={faCircleInfo} color="white"/>
           </Link>
         </>
       ),
