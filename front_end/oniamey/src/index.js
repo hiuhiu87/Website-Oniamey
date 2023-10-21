@@ -20,6 +20,7 @@ import ManageColor from "./components/Admin/Content/manage-product/color/ManageC
 import ManageCollar from "./components/Admin/Content/manage-product/collar/ManageCollar";
 import ManageSleeveLength from "./components/Admin/Content/manage-product/sleeve-length/ManageSleeveLength";
 import Order from "./components/Admin/Content/manage-oder/Order";
+import OrderDetail from "./components/Admin/Content/manage-oder/order-detail/OrderDetail";
 import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
 import ManageEmployee from "./components/Admin/Content/manage-user/Employee";
 import ManageCustomer from "./components/Admin/Content/manage-user/Customer";
@@ -55,7 +56,7 @@ root.render(
             path="manage-sleeve-lengths"
             element={<ManageSleeveLength />}
           ></Route>
-          <Route path="manage-orders/*" element={<Order/>}></Route>
+          <Route path="manage-orders/*" element={<Order />}></Route>
           <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
           <Route path="manage-employees" element={<ManageEmployee />}></Route>
           <Route path="manage-customers" element={<ManageCustomer />}></Route>

@@ -1,7 +1,21 @@
-
+ 
 .manage-order-content-table {
+    .btn-change-status-order{
+        position: absolute;
+        right: 20px;
+        display: flex;
+        .btn-change-status-order-item{
+            margin: 3px;
+        }
+    }
+    .nav-form-search{
+        position: absolute;
+        width: 100px;
+        left: 250px;
+    }
     .form-search-order{
         display: flex;
+        position: relative;
     }
     max-width: 1800px;
     margin: 0 auto;

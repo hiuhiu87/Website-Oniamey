@@ -18,7 +18,8 @@ const NavOrder = (Props) => {
         const match = useMatch({ path: resolved.pathname, end: true })
         return (
             <li className={`${match ? 'nav-order-active' : ''} nav-item-order`}>
-                <Link className={`${match ? 'active-order-item' : ''} nav-link nav-link-order`} to={to} {...props}>
+                <Link className={`${match ? 'active-order-item' : ''} nav-link nav-link-order`}
+                    to={to} {...props}>
                     {children}
                 </Link>
             </li>
@@ -35,29 +36,32 @@ const NavOrder = (Props) => {
         </div>
         <ul className="nav nav-pills nav-orderrr">
             <div className='nav-btn' >
-                {/* <div className='nav-btn' onClick={()=>{Props.handleChangeStatus('PENDING')}}> */}
-                <CustomNav to='pending' >Chờ xác nhận</CustomNav>
+                <CustomNav to='../all' >Tất cả</CustomNav>
+                <CustomMess number={countStatus.allStatus} />
+            </div>
+            <div className='nav-btn' >
+                <CustomNav to='../pending' >Chờ xác nhận</CustomNav>
                 <CustomMess number={countStatus.pending} />
             </div>
             <div className='nav-btn' >
-                <CustomNav to='awaiting-pickup'>Chờ lấy hàng</CustomNav>
-                <CustomMess number={countStatus.awaitingPickup} />
+                <CustomNav to='../confirmed'>Đã xác nhận</CustomNav>
+                <CustomMess number={countStatus.confirmed} />
             </div>
             <div className='nav-btn'>
-                <CustomNav to='shipping' >Đang giao</CustomNav>
+                <CustomNav to='../shipping' >Đang giao</CustomNav>
                 <CustomMess number={countStatus.shipping} />
             </div>
             <div className='nav-btn'>
-                <CustomNav to='shipped' >Đã giao</CustomNav>
+                <CustomNav to='../shipped' >Đã giao</CustomNav>
                 <CustomMess number={countStatus.shipped} />
             </div>
             <div className='nav-btn'>
-                <CustomNav to='cancel' >Hủy</CustomNav>
-                <CustomMess number={countStatus.cancel} />
+                <CustomNav to='../success' >Hoàn thành</CustomNav>
+                <CustomMess number={countStatus.success} />
             </div>
             <div className='nav-btn'>
-                <CustomNav to='awaiting-payment' >Chờ thanh toán</CustomNav>
-                <CustomMess number={countStatus.awaitingPayment} />
+                <CustomNav to='../cancel' >Hủy</CustomNav>
+                <CustomMess number={countStatus.cancel} />
             </div>
         </ul>
     </div>

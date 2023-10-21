@@ -114,7 +114,7 @@ const SideBar = (props) => {
                             suffix={<span className='badge red'>New</span>}
                         >
                             Quản Lý Hóa Đơn
-                            <Link to="/admins/manage-orders/pending"></Link>
+                            <Link to="/admins/manage-orders/all"></Link>
                         </MenuItem>
                     </Menu>
                     <Menu iconShape="circle">

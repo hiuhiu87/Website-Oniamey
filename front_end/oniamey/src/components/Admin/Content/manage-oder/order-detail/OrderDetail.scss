@@ -1,0 +1,22 @@
+.manage-order-detail{
+    
+    .time-line-order-detail{
+        position: relative;
+        max-width: 1600px;
+         margin: 0 auto;
+         padding: 20px;
+          background: #ffffff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+         margin-bottom: 20px;
+          height: 200px;
+          border-radius: 5px;
+          height: 300px;
+          .order-detail-button-timeline{
+            position: absolute;
+            top: 30px;
+          }
+    }
+    .detail-title{
+        margin-bottom: 30px;
+    }
+} 
