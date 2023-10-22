@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import service from "../../../../../services/CustomerService";
 import "../style/Table.css";
@@ -23,6 +24,7 @@ const Customer = (props) => {
   const [records, setRecords] = useState([]);
   const [allCustomer, setAllCustomer] = useState([]);
   const [progressPending, setProgressPending] = useState(true);
+  const navigate = useNavigate();
 
   const customStyles = {
     rows: {
@@ -51,6 +53,10 @@ const Customer = (props) => {
     selectAllRowsItem: true,
     selectAllRowsItemText: "Tất cả",
     // defaultValue: "5",
+  };
+
+  const handleRowClicked = (row) => {
+    navigate(`/admins/manage-customers/detail-customer/${row.id}`);
   };
 
   const changeStatusCustomer = (customerId) => {
@@ -312,8 +318,11 @@ const Customer = (props) => {
             paginationComponentOptions={paginationComponentOptions}
             responsive
             highlightOnHover
+            onRowClicked={(row) => handleRowClicked(row)}
             paginationRowsPerPageOptions={[5, 10, 15]}
+            paginationPerPage={5}
             paginationDefaultPage={1}
+            pointerOnHover
           />
         </Container>
       </Container>

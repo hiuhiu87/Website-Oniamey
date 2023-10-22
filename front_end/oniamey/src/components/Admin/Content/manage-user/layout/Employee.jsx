@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import userService from "../../../../../services/UserService";
 import "../style/Table.css";
@@ -21,6 +22,7 @@ const Employee = (props) => {
   const [records, setRecords] = useState([]);
   const [allUser, setAllUser] = useState([]);
   const [progressPending, setProgressPending] = useState(true);
+  const navigate = useNavigate();
 
   const getAllUser = () => {
     setProgressPending(true);
@@ -35,6 +37,10 @@ const Employee = (props) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleRowClicked = (row) => {
+    navigate(`/admins/manage-employees/update-employee/${row.id}`);
   };
 
   const columns = [
@@ -101,21 +107,22 @@ const Employee = (props) => {
             onClick={() => {
               if (!row.status) {
                 Swal.fire({
-                  title: "Are you sure?",
-                  text: "You will activate this employee!",
+                  title: "Thông báo",
+                  text: "Bạn có chắc muốn kích hoạt nhân viên này ?",
                   icon: "warning",
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "Yes!",
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Hủy",
                 }).then((result) => {
                   if (result.isConfirmed) {
                     userService
                       .changeStatusUser(row.id)
                       .then((res) => {
                         Swal.fire({
-                          title: "Success!",
-                          text: "You have activated this employee!",
+                          title: "Thành công!",
+                          text: "Bạn đã kích hoạt nhân viên này!",
                           icon: "success",
                           confirmButtonColor: "#3085d6",
                           confirmButtonText: "OK",
@@ -130,21 +137,22 @@ const Employee = (props) => {
                 });
               } else {
                 Swal.fire({
-                  title: "Are you sure?",
-                  text: "You will deactivate this employee!",
+                  title: "Thông báo",
+                  text: "Bạn có chắc muốn khóa nhân viên này ?",
                   icon: "warning",
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "Yes!",
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Hủy",
                 }).then((result) => {
                   if (result.isConfirmed) {
                     userService
                       .changeStatusUser(row.id)
                       .then((res) => {
                         Swal.fire({
-                          title: "Success!",
-                          text: "You have deactivated this employee!",
+                          title: "Thành công!",
+                          text: "Bạn đã khóa nhân viên này!",
                           icon: "success",
                           confirmButtonColor: "#3085d6",
                           confirmButtonText: "OK",
@@ -293,7 +301,10 @@ const Employee = (props) => {
               paginationComponentOptions={paginationComponentOptions}
               highlightOnHover
               paginationRowsPerPageOptions={[5, 10, 15]}
+              paginationPerPage={5}
               paginationDefaultPage={1}
+              responsive
+              onRowClicked={(row) => handleRowClicked(row)}
             />
           </Container>
         </Container>
