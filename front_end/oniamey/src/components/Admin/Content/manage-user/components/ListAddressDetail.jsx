@@ -9,6 +9,7 @@ import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import PropTypes from "prop-types";
 
 import service from "../../../../../services/CustomerService";
 import provinceService from "../../../../../services/ProvinceService";
@@ -271,6 +272,14 @@ const ListAddressDetail = ({
       </Collapse>
     </Fragment>
   );
+};
+
+ListAddressDetail.propTypes = {
+  address: PropTypes.object,
+  index: PropTypes.number,
+  customerId: PropTypes.number,
+  refreshList: PropTypes.func,
+  checkedSwitch: PropTypes.bool,
 };
 
 export default ListAddressDetail;

@@ -110,29 +110,29 @@ const Customer = (props) => {
           return row.id;
         }
       },
-      compact: true,
+      compact: "true",
       maxWidth: "40px",
       minWidth: "40px",
-      center: true,
+      center: "true",
     },
     {
       name: "Họ Và Tên",
       selector: (row) => row.fullName,
-      sortable: true,
-      center: true,
+      sortable: "true",
+      center: "true",
     },
     {
       name: "Email",
       selector: (row) => row.email,
-      sortable: true,
+      sortable: "true",
       minWidth: "180px",
       maxWidth: "180px",
     },
     {
       name: "Số Điện Thoại",
       selector: (row) => row.phoneNumber,
-      sortable: true,
-      center: true,
+      sortable: "true",
+      center: "true",
     },
     {
       name: "Trạng Thái",
@@ -143,22 +143,21 @@ const Customer = (props) => {
           return <span style={{ color: "green" }}>Kích Hoạt</span>;
         }
       },
-      sortable: true,
-      compact: true,
+      sortable: "true",
+      compact: "true",
       maxWidth: "100px",
       minWidth: "100px",
-      center: true,
+      center: "true",
     },
-
     {
       name: "Ngày Tham Gia",
       selector: (row) => row.createdAt,
-      sortable: true,
-      center: true,
+      sortable: "true",
+      center: "true",
     },
     {
       name: "Thao Tác",
-      center: true,
+      center: "true",
       minWidth: "200px",
       maxWidth: "200px",
       cell: (row) => (
@@ -179,7 +178,7 @@ const Customer = (props) => {
             className="btn btn-dark"
             style={{ marginLeft: "10px" }}
           >
-            <FontAwesomeIcon icon={faCircleInfo} color="white"/>
+            <FontAwesomeIcon icon={faCircleInfo} color="white" />
           </Link>
         </>
       ),
@@ -232,10 +231,10 @@ const Customer = (props) => {
   return (
     <Container className="manager-customer-container">
       <Container className="pb-0 filter-customer-container">
-        <h3>
+        <h5>
           <AiOutlineFileSearch className="me-2" />
           Bộ Lọc
-        </h3>
+        </h5>
         <Row>
           <Col>
             <Form.Group
@@ -289,10 +288,10 @@ const Customer = (props) => {
         </Row>
       </Container>
       <Container className="pb-0 list-customer-container">
-        <h3>
+        <h5>
           <AiOutlineUnorderedList className="me-2" />
           Danh Sách Khách Hàng
-        </h3>
+        </h5>
         <hr />
         <Container className="d-flex justify-content-end align-items-center">
           <Link to="/admins/manage-customers/add-customer">
