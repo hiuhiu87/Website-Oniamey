@@ -179,7 +179,7 @@ const Customer = (props) => {
             className="btn btn-dark"
             style={{ marginLeft: "10px" }}
           >
-            <FontAwesomeIcon icon={faCircleInfo} color="white"/>
+            <FontAwesomeIcon icon={faCircleInfo} color="white" />
           </Link>
         </>
       ),
@@ -232,10 +232,10 @@ const Customer = (props) => {
   return (
     <Container className="manager-customer-container">
       <Container className="pb-0 filter-customer-container">
-        <h3>
+        <h5>
           <AiOutlineFileSearch className="me-2" />
           Bộ Lọc
-        </h3>
+        </h5>
         <Row>
           <Col>
             <Form.Group
@@ -289,10 +289,10 @@ const Customer = (props) => {
         </Row>
       </Container>
       <Container className="pb-0 list-customer-container">
-        <h3>
+        <h5>
           <AiOutlineUnorderedList className="me-2" />
           Danh Sách Khách Hàng
-        </h3>
+        </h5>
         <hr />
         <Container className="d-flex justify-content-end align-items-center">
           <Link to="/admins/manage-customers/add-customer">
