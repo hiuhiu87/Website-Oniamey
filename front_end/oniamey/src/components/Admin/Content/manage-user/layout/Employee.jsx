@@ -204,6 +204,8 @@ const Employee = (props) => {
   const paginationComponentOptions = {
     rowsPerPageText: "Số bản ghi mỗi trang: ",
     rangeSeparatorText: "trên",
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "Tất cả",
   };
 
   return (
@@ -289,6 +291,9 @@ const Employee = (props) => {
               progressPending={allUser.length === 0 ? null : progressPending}
               pagination
               paginationComponentOptions={paginationComponentOptions}
+              highlightOnHover
+              paginationRowsPerPageOptions={[5, 10, 15]}
+              paginationDefaultPage={1}
             />
           </Container>
         </Container>

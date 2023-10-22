@@ -50,6 +50,7 @@ const Customer = (props) => {
     rangeSeparatorText: "trên",
     selectAllRowsItem: true,
     selectAllRowsItemText: "Tất cả",
+    // defaultValue: "5",
   };
 
   const changeStatusCustomer = (customerId) => {
@@ -310,6 +311,9 @@ const Customer = (props) => {
             pagination
             paginationComponentOptions={paginationComponentOptions}
             responsive
+            highlightOnHover
+            paginationRowsPerPageOptions={[5, 10, 15]}
+            paginationDefaultPage={1}
           />
         </Container>
       </Container>
