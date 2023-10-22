@@ -1,1 +1,10 @@
-{"version":3,"sources":["DetailCustomer.scss","DetailCustomer.css"],"names":[],"mappings":"AAAA;EAEI,0BAAA;ACAJ","file":"DetailCustomer.css"}
+{
+  "version": 3,
+  "sources": [
+    "DetailCustomer.scss",
+    "DetailCustomer.css"
+  ],
+  "names": [],
+  "mappings": "AAAA;EAEI,0BAAA;ACAJ",
+  "file": "DetailCustomer.css"
+}

@@ -1,1 +1,10 @@
-{"version":3,"sources":["CustomerStyle.scss","CustomerStyle.css"],"names":[],"mappings":"AAAA;EACI,gBAAA;ACCJ;;ADII;;EAEI,UAAA;EACA,YAAA;EACA,uBAAA;EACA,mBAAA;ACDR;;ADKA;EACI,YAAA;ACFJ;ADII;EACI,YAAA;ACFR","file":"CustomerStyle.css"}
+{
+  "version": 3,
+  "sources": [
+    "CustomerStyle.scss",
+    "CustomerStyle.css"
+  ],
+  "names": [],
+  "mappings": "AAAA;EACI,gBAAA;ACCJ;;ADII;;EAEI,UAAA;EACA,YAAA;EACA,uBAAA;EACA,mBAAA;ACDR;;ADKA;EACI,YAAA;ACFJ;ADII;EACI,YAAA;ACFR",
+  "file": "CustomerStyle.css"
+}

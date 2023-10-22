@@ -1,22 +1,22 @@
 .container {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .active {
 
-    >.page-link,
-    .page-link.active {
-        z-index: 3;
-        color: white;
-        background-color: black;
-        border-color: black;
-    }
+  > .page-link,
+  .page-link.active {
+    z-index: 3;
+    color: white;
+    background-color: black;
+    border-color: black;
+  }
 }
 
 .page-link {
-    color: black;
+  color: black;
 
-    &:hover {
-        color: black;
-    }
+  &:hover {
+    color: black;
+  }
 }

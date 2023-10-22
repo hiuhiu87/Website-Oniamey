@@ -2,14 +2,16 @@ import * as OrdersApi from '../../../../../services/OrdersApi'
 import './OrderContent.scss';
 import NavOrder from '../nav-order/NavOrder';
 import { Link } from 'react-router-dom';
+import { FaMoneyBill } from 'react-icons/fa'
 import { FaThList, FaEye } from 'react-icons/fa';
 import { useState, useEffect } from "react";
+
 const OrderContent = (Props) => {
     const [data, setData] = useState({});
     const [pageActive, setPageActive] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [size, setSize] = useState(5);
-  
+
     const getByStatus = async (page, sizeProp, status) => {
         const result = await OrdersApi.getOrdersByStatus(page, sizeProp, status);
         setData(result);
@@ -33,10 +35,19 @@ const OrderContent = (Props) => {
         getByStatus(index, size, Props.status);
     }
 
-    return <div>
-        <div className='nav-order'>
-                <NavOrder/>
+    return <div className='manage-order-all-content'>
+        <div className='manager-order-title'>
+            <div className="order-title">
+                <FaMoneyBill /> Quản Lý Hóa Đơn
             </div>
+        </div>
+        {/* <div className='order-content-form-search'>
+            sdga
+        </div> */}
+        <div className='nav-order-contentt'>
+            <NavOrder />
+        </div>
+
         <div className='manage-order-content-table'>
             <div className='form-search-order'>
                 <div className='or-title'>
@@ -48,7 +59,9 @@ const OrderContent = (Props) => {
                     <div className='order-formGroup'>
                         <select className='order-input form-select'
                             value={size}
-                            onChange={e => { handleSize(e.target.value) }}
+                            onChange={e => {
+                                handleSize(e.target.value)
+                            }}
                         >
                             <option value={5}>5</option>
                             <option value={10}>10</option>
@@ -84,18 +97,20 @@ const OrderContent = (Props) => {
                             <td>{item.totalMoney}</td>
                             <td>{item.type}</td>
                             <td>{item.status}</td>
-                            <td><Link to={`../${item.id}`}>{<FaEye style={{ color: 'black', fontSize: '24px' }}/>}</Link></td>
+                            <td><Link to={`../${item.id}`}>{<FaEye style={{ color: 'black', fontSize: '24px' }} />}</Link></td>
                         </tr>)
                     })}
                 </tbody>
             </table>
             <div className='page-footer'>
-                {data.totalPages ? <div >{'Trang: ' + currentPage + '/' + data.totalPages}</div> : null}
+                {data.totalPages ? <div>{'Trang: ' + currentPage + '/' + data.totalPages}</div> : null}
                 {data.totalPages ? (<div className='page-item'>
                     {Array.from({ length: data.totalPages }, (_, index) => (
-                        <button className={`${pageActive === index ? 'page-active' 
-                        : ''} item `} key={index + 1}
-                            onClick={() => { handleChangePage(index) }}>
+                        <button className={`${pageActive === index ? 'page-active'
+                            : ''} item `} key={index + 1}
+                            onClick={() => {
+                                handleChangePage(index)
+                            }}>
                             {index + 1}
                         </button>
                     ))}

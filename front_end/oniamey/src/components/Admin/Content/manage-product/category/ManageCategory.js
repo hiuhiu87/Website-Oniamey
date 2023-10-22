@@ -1,21 +1,21 @@
 import React from 'react';
 import './ManageCategory.scss';
-import { MdCategory } from 'react-icons/md';
-import { FaFilter, FaThList } from 'react-icons/fa';
-import { MdLibraryAdd } from 'react-icons/md';
+import {MdCategory} from 'react-icons/md';
+import {FaFilter, FaThList} from 'react-icons/fa';
+import {MdLibraryAdd} from 'react-icons/md';
 
 const ManageCategory = (props) => {
     return (
         <div class="manage-category-container">
             <div className='manage-category-title'>
                 <div className="title">
-                    <MdCategory size={32} /> Quản Lý Danh Mục
+                    <MdCategory size={32}/> Quản Lý Danh Mục
                 </div>
             </div>
             <div className='manage-category-search'>
                 <div className='search-category-title'>
                     <div className="title">
-                        <FaFilter size={26} /> Bộ Lọc
+                        <FaFilter size={26}/> Bộ Lọc
                     </div>
 
                 </div>
@@ -23,7 +23,7 @@ const ManageCategory = (props) => {
                     <div class="row mb-3">
                         <label for="inputEmail3" class="col-sm-1 col-form-label">Danh Mục</label>
                         <div class="col-sm-6 d-flex">
-                            <input type="text" class="form-control me-2" id="inputEmail3" />
+                            <input type="text" class="form-control me-2" id="inputEmail3"/>
                             <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
                         </div>
                     </div>
@@ -43,61 +43,62 @@ const ManageCategory = (props) => {
             <div className='manage-category-table'>
                 <div className='list-category-title'>
                     <div className="title">
-                        <FaThList size={26} /> Danh Sách Danh Mục
+                        <FaThList size={26}/> Danh Sách Danh Mục
                     </div>
                     <button type="button" class="btn btn-dark">
-                        <MdLibraryAdd /> Thêm</button>
+                        <MdLibraryAdd/> Thêm
+                    </button>
                 </div>
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Ngày cập nhật</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                            <td>Data 3</td>
-                        </tr>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                        <td>Data 3</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
-        </div >
+        </div>
     );
 }
 
