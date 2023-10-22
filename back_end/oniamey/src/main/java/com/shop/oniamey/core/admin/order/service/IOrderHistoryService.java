@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
-public interface IOrderHistoryService  {
+public interface IOrderHistoryService {
     List<OrderHistoryResponse> getOrderHistoryById(String id);
-   String createOrderHistory(OrderHistoryRequest orderHistoryRequest);
+
+    List<OrderHistoryResponse> createOrderHistory(OrderHistoryRequest orderHistoryRequest );
 }

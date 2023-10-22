@@ -35,8 +35,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RestApiException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse exHandler(RestApiException restApiException){
-        return new ErrorResponse(HttpStatus.BAD_REQUEST,restApiException.getMessage());
+    public ErrorResponse exHandler(RestApiException restApiException) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, restApiException.getMessage());
     }
 
 

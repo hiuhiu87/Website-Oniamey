@@ -7,48 +7,45 @@ import com.shop.oniamey.entity.OrderHistory;
 import com.shop.oniamey.entity.Orders;
 import com.shop.oniamey.repository.order.OrderHistoryRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Service
-public class OrderHistoryService implements  IOrderHistoryService {
+public class OrderHistoryService implements IOrderHistoryService {
     @Autowired
     private OrderHistoryRepository orderHistoryRepo;
 
     @Autowired
     private OrderRepository orderRepository;
+
     @Override
     public List<OrderHistoryResponse> getOrderHistoryById(String id) {
-        List<OrderHistoryResponse> listOrderHistory=orderHistoryRepo.getOrderHistoryById(id);
+        List<OrderHistoryResponse> listOrderHistory = orderHistoryRepo.getOrderHistoryById(id);
         listOrderHistory.sort(Comparator.comparing(OrderHistoryResponse::getCreatedAt));
         return listOrderHistory;
     }
 
+    @Transactional
     @Override
-    public String createOrderHistory(OrderHistoryRequest orderHistoryRequest) {
-        OrderHistory orderHistory= new OrderHistory();
-        Optional<Orders> order= orderRepository.findById(orderHistoryRequest.getIdOrder());
-        if (order.isEmpty()){
-            return  "order id is not found" ;
+    public List<OrderHistoryResponse> createOrderHistory(OrderHistoryRequest orderHistoryRequest ) {
+
+        Optional<Orders> order = orderRepository.findById(orderHistoryRequest.getIdOrder());
+        if (order.isEmpty()) {
+            return new ArrayList<>();
         }
-        orderHistory.setCreatedAt( new Date());
-        orderHistory.setDeleted(false);
-        orderHistory.setOrder(order.get());
-        orderHistory.setStatus(orderHistoryRequest.getStatus());
-        orderHistory.setActionDescription(orderHistoryRequest.getActionDescription());
-        if (orderHistoryRepo.checkExists(orderHistoryRequest.getIdOrder(),orderHistoryRequest.getStatus().toString()).isPresent()){
-            return "order history exists";
+        //chỉ cho phép tồn tại 1 bản ghi có cùng idOrder và status
+        if (orderHistoryRepo.checkExists(orderHistoryRequest.getIdOrder(), orderHistoryRequest.getStatus().toString()).isPresent()) {
+            return new ArrayList<>();
         }
-         orderHistoryRepo.save(orderHistory);
-         return   "create order history is success" ;
+        orderRepository.updateStatus(orderHistoryRequest.getStatus().toString(),orderHistoryRequest.getIdOrder());
+        orderHistoryRepo.createOrderHistory(orderHistoryRequest.getIdOrder(),
+                orderHistoryRequest.getActionDescription(),orderHistoryRequest.getStatus().toString());
+        return getOrderHistoryById(orderHistoryRequest.getIdOrder().toString());
     }
-
-
 }

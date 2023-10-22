@@ -35,7 +35,7 @@ public class OrderService implements IOrderService {
     private VoucherRepository voucherRepository;
 
     @Override
-    public List<OrderResponse> getAllOrder(){
+    public List<OrderResponse> getAllOrder() {
         return orderRepository.findAllOrder();
     }
 
@@ -46,26 +46,26 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderResponse getOrderById(Long id) {
-         if(orderRepository.getOrdersById(id).isPresent()){
-             return orderRepository.getOrdersById(id).get();
-         }
-         throw new RestApiException("ORDER NOT EXISTS");
+        if (orderRepository.getOrdersById(id).isPresent()) {
+            return orderRepository.getOrdersById(id).get();
+        }
+        throw new RestApiException("ORDER NOT EXISTS");
     }
 
 
     @Override
-    public String createOrder(OrderRequest orderRequest){
-        Orders orders= new Orders();
-        String randomCode= QRCodeProduct.generateRandomCode();
+    public String createOrder(OrderRequest orderRequest) {
+        Orders orders = new Orders();
+        String randomCode = QRCodeProduct.generateRandomCode();
         orders.setDeleted(false);
-        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
-           return "user not found";
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()) {
+            return "user not found";
         }
-        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+        if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
             return "customer not found";
         }
-        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
-          return "voucher not found";
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
+            return "voucher not found";
         }
         orders.setCode(randomCode);
         orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
@@ -90,26 +90,26 @@ public class OrderService implements IOrderService {
     @Transactional
     @Override
     public String deleteOrder(Long id) {
-        if (orderRepository.findById(id).isEmpty()){
+        if (orderRepository.findById(id).isEmpty()) {
             return "order id not found";
         }
         orderRepository.deleteOrder(id);
-         return "delete order success";
+        return "delete order success";
     }
 
     @Override
     public String updateOrder(Long id, OrderRequest orderRequest) {
-        if (orderRepository.findById(id).isEmpty()){
+        if (orderRepository.findById(id).isEmpty()) {
             return "order id not found";
         }
         Orders orders = orderRepository.findById(id).get();
-        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()) {
             return "user not found";
         }
-        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+        if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
             return "customer not found";
         }
-        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
             return "voucher not found";
         }
         orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
@@ -139,10 +139,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
-        if (status.equalsIgnoreCase("ALL")){
-            return orderRepository.getOrdersByStatus(pageable,"%");
+        if (status.equalsIgnoreCase("ALL")) {
+            return orderRepository.getOrdersByStatus(pageable, "%");
         }
-        return orderRepository.getOrdersByStatus(pageable,status);
+        return orderRepository.getOrdersByStatus(pageable, status);
     }
 
     @Override

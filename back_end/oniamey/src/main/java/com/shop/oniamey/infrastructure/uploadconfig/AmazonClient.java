@@ -46,11 +46,11 @@ public class AmazonClient {
 
     private String generateFileName(MultipartFile multiPart) {
         String fileCode = RandomStringUtils.randomAlphanumeric(8);
-        return fileCode  + "-" + multiPart.getOriginalFilename().replace(" ", "_");
+        return fileCode + "-" + multiPart.getOriginalFilename().replace(" ", "_");
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
-        s3client.putObject(new PutObjectRequest(bucketName, "productimage/"+  fileName, file)
+        s3client.putObject(new PutObjectRequest(bucketName, "productimage/" + fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 

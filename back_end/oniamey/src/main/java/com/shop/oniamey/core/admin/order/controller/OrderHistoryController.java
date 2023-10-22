@@ -19,12 +19,12 @@ public class OrderHistoryController {
     private IOrderHistoryService orderHistoryService;
 
     @GetMapping("/{id}")
-    public List<OrderHistoryResponse> getById(@PathVariable  String id){
+    public List<OrderHistoryResponse> getById(@PathVariable String id) {
         return orderHistoryService.getOrderHistoryById(id);
     }
 
     @PostMapping("/create-order-history")
-    public ResponseEntity<?> createOrderHistory(@RequestBody @Valid OrderHistoryRequest orderHistoryRequest){
-        return new ResponseEntity<>(orderHistoryService.createOrderHistory(orderHistoryRequest), HttpStatus.OK);
+    public ResponseEntity<?> createOrderHistory(@RequestBody @Valid OrderHistoryRequest orderHistoryRequest ) {
+        return new ResponseEntity<>(orderHistoryService.createOrderHistory(orderHistoryRequest ), HttpStatus.OK);
     }
 }

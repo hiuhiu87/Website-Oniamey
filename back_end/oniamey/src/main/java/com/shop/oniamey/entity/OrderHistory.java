@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -22,11 +23,10 @@ public class OrderHistory extends BaseModel {
     @JoinColumn(name = "id_order")
     private Orders order;
 
-    @Column(name = "action_description",nullable = false,length = 1000)
+    @Column(name = "action_description", nullable = false, length = 1000)
     private String actionDescription;
 
     @Enumerated(EnumType.STRING)
-    @Column( name = "status" ,length = 50)
+    @Column(name = "status", length = 50)
     private OrderStatus status;
-
 }

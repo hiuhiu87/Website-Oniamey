@@ -3,6 +3,7 @@ package com.shop.oniamey.repository.order;
 import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.entity.Orders;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,7 +49,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = """
             select o.id as userId ,
             o.id as  customerId ,
-            uu.full_name as tenNhanVien
+            unv.full_name as tenNhanVien
             ,o.phone_number as phoneNumber
             , o.address
             ,o.user_name as userName
@@ -68,6 +69,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             ,o.code               
              from orders o
              left join user uu on uu.id = o.updated_by
+             left join user unv on unv.id = o.id_user
              left join user uc on uc.id = o.created_by
              where o.deleted = 0
             """,
@@ -111,7 +113,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = """ 
                          select o.id as userId ,
                         o.id as  customerId,
-                         uu.full_name as tenNhanVien
+                         unv.full_name as tenNhanVien
                         ,o.phone_number as phoneNumber
                         , o.address
                         ,o.user_name as userName
@@ -140,6 +142,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                         ,o.code             
                          from orders o
                          left join user uu on uu.id = o.updated_by
+                         left join user unv on unv.id = o.id_user
                          left join user uc on uc.id = o.created_by
                          where o.deleted = 0 and o.status like :status
             """,
@@ -195,4 +198,12 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
               (select count(id)from orders where status  like 'CANCEL' and deleted= 0)   as cancel
               """, nativeQuery = true)
     CountStatusResponse getCountStatus();
+
+    @Modifying
+    @Query(value = """
+    update orders set status= :status where id =:id
+""",nativeQuery = true)
+    void updateStatus(String status,Long id);
+
+
 }

@@ -22,8 +22,8 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
-    @GetMapping ("/all")
-    public ResponseEntity<?> getAll(){
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(orderService.getAllOrder(), HttpStatus.OK);
     }
 
@@ -33,41 +33,41 @@ public class OrderController {
 //        return new ResponseEntity<>(orderService.getAllOrder(pageable),HttpStatus.OK);
 //    }
 
-    @GetMapping("/{id}")
-    public OrderResponse detail(@PathVariable Long id){
+    @GetMapping("/detail/{id}")
+    public OrderResponse detail(@PathVariable Long id) {
         return orderService.getOrderById(id);
     }
 
     @GetMapping()
     public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "5") int size,
-                                                 @RequestParam(defaultValue = "ALL") String status){
-        Pageable pageable = PageRequest.of(page,size);
-        return orderService.getOrdersByStatus(pageable,status);
+                                                 @RequestParam(defaultValue = "ALL") String status) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderService.getOrdersByStatus(pageable, status);
     }
 
-    @GetMapping ("/get-by-status")
-    public List<OrderResponse> getByStatus(@RequestParam(defaultValue = "PENDING") String status){
+    @GetMapping("/get-by-status")
+    public List<OrderResponse> getByStatus(@RequestParam(defaultValue = "PENDING") String status) {
         return orderService.getByStatus(status);
     }
 
     @PostMapping()
-    public String createOrder(@RequestBody @Valid OrderRequest orderRequest){
+    public String createOrder(@RequestBody @Valid OrderRequest orderRequest) {
         return orderService.createOrder(orderRequest);
     }
 
-    @DeleteMapping ("/{id}")
-    public String deleteOrder(@PathVariable("id") Long id){
+    @DeleteMapping("/{id}")
+    public String deleteOrder(@PathVariable("id") Long id) {
         return orderService.deleteOrder(id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest){
-        return new ResponseEntity<>(orderService.updateOrder(id,orderRequest),HttpStatus.OK);
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
+        return new ResponseEntity<>(orderService.updateOrder(id, orderRequest), HttpStatus.OK);
     }
 
     @GetMapping("/get-count-status")
-    public CountStatusResponse getCountStatus(){
+    public CountStatusResponse getCountStatus() {
         return orderService.getCountStatus();
     }
 

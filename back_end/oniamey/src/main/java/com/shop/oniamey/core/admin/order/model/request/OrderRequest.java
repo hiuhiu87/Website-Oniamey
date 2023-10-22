@@ -32,10 +32,10 @@ public class OrderRequest {
     @NotNull(message = "phone number is required")
     private String phoneNumber;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     private String address;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     private String userName;
 
     @NotNull(message = "total money is required")
@@ -55,10 +55,10 @@ public class OrderRequest {
     @Past
     private Date completionDate;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     private OrderType type;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     @Length(max = 1000)
     private String note;
 

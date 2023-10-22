@@ -35,7 +35,7 @@ public class ModifyCustomerRequest {
     private String email;
 
     @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp = "(^$|[0-9]{10})")
     private String phoneNumber;
 
     @Min(value = 1)

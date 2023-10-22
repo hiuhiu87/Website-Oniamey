@@ -62,13 +62,13 @@ public class Orders extends BaseModel {
     private Double moneyShip;
 
     @Enumerated(EnumType.STRING)
-    @Column( name = "status" ,length = 50)
+    @Column(name = "status", length = 50)
     private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "id_voucher")
     private Voucher voucher;
 
-    @Column(name ="code")
+    @Column(name = "code")
     private String code;
 }
