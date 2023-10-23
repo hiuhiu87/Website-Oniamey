@@ -15,7 +15,7 @@
     .order-detail-button-cancel{
       position: absolute;
       top: 245px;
-      left: 115px;
+      left: 144px;
     }
     .order-detail-button-history{
       position: absolute;
@@ -26,14 +26,61 @@
     .order-detail-button-timeline {
       position: absolute;
       top: 245px;
-      width: 50px;
+      width: 120px !important;
     }
   }
 
   .detail-title {
     margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: bold;
   }
-   
+   .order-detail-information{
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+     max-width: 1600px;
+    //  height: 300px;
+    padding-bottom: 20px;
+     margin: 0 auto;
+     .order-detail-information-title{
+      padding-top: 20px;
+      margin-left: 20px;
+      margin-bottom: 20px;
+     }
+     .information-order{
+
+      .order-detail-footer{
+        position: relative;
+        height:50px;
+         .money-footer{
+          div{
+            left: 50px;
+            text-align: right;
+          }
+         }
+      }
+        .information-order-header{
+          display: flex;
+        }
+          border-radius: 5px;
+          margin: 0 auto;
+          max-width: 1100px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        
+        .item-information-order{
+            position: relative;
+            div{
+              position: absolute;
+              left: 150px;
+            }
+            display: flex;
+            padding: 10px;
+          }
+          .order-infor-detail{
+            width: 500px;
+          }
+     }
+   }
 }  
 .table-order-history{
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -57,4 +104,11 @@
       background-color: rgba(207, 182, 156, 0.199);
     } 
   }
+}
+.product-item-order-detail{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+ 
 }

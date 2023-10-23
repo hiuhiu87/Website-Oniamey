@@ -40,10 +40,7 @@ const OrderContent = (Props) => {
             <div className="order-title">
                 <FaMoneyBill /> Quản Lý Hóa Đơn
             </div>
-        </div>
-        {/* <div className='order-content-form-search'>
-            sdga
-        </div> */}
+        </div> 
         <div className='nav-order-contentt'>
             <NavOrder />
         </div>
