@@ -75,10 +75,7 @@ public class OrderService implements IOrderService {
         orders.setAddress(orderRequest.getAddress());
         orders.setUserName(orderRequest.getUserName());
         orders.setTotalMoney(orderRequest.getTotalMoney());
-        orders.setConfirmationDate(orderRequest.getConfirmationDate());
         orders.setShipDate(orderRequest.getShipDate());
-        orders.setReceiveDate(orderRequest.getReceiveDate());
-        orders.setCompletionDate(orderRequest.getCompletionDate());
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
@@ -119,10 +116,7 @@ public class OrderService implements IOrderService {
         orders.setAddress(orderRequest.getAddress());
         orders.setUserName(orderRequest.getUserName());
         orders.setTotalMoney(orderRequest.getTotalMoney());
-        orders.setConfirmationDate(orderRequest.getConfirmationDate());
         orders.setShipDate(orderRequest.getShipDate());
-        orders.setReceiveDate(orderRequest.getReceiveDate());
-        orders.setCompletionDate(orderRequest.getCompletionDate());
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());

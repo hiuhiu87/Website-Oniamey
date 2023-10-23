@@ -39,17 +39,11 @@ public class Orders extends BaseModel {
     @Column(name = "total_money", nullable = false)
     private Double totalMoney;
 
-    @Column(name = "confirmation_date", nullable = false)
-    private Date confirmationDate;
+    @Column(name = "money_reduced", nullable = false)
+    private Double moneyReduced=0.0;
 
     @Column(name = "ship_date", nullable = false)
-    private Date shipDate;
-
-    @Column(name = "receive_date", nullable = false)
-    private Date receiveDate;
-
-    @Column(name = "completion_date")
-    private Date completionDate;
+    private Date shipDate; //ngày giao hàng dự kiến
 
     @Column(name = "type", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)

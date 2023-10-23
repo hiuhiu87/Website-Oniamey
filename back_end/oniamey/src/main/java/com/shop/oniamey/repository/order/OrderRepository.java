@@ -24,11 +24,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             ,o.phone_number as phoneNumber
             , o.address
             ,o.user_name as userName
-            , o.total_money as totalMoney
-            ,o.confirmation_date as confirmationDate
-            ,o.ship_date as shipDate
-            , o.receive_date as receiveDate
-            , o.completion_date as completionDate
+            ,o.money_reduced as moneyReduced
+            , o.total_money as totalMoney 
+            ,o.ship_date as shipDate 
             , o.id,o.created_at as createdAt
             , uc.full_name as createdBy
             , o.updated_at as updatedAt
@@ -52,12 +50,10 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             unv.full_name as tenNhanVien
             ,o.phone_number as phoneNumber
             , o.address
+            ,o.money_reduced as moneyReduced
             ,o.user_name as userName
-            , o.total_money as totalMoney
-            ,o.confirmation_date as confirmationDate
-            ,o.ship_date as shipDate
-            , o.receive_date as receiveDate
-            , o.completion_date as completionDate
+            , o.total_money as totalMoney 
+            ,o.ship_date as shipDate 
             , o.id,o.created_at as createdAt
             , uc.full_name as createdBy
             , o.updated_at as updatedAt
@@ -89,11 +85,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                    ,o.phone_number as phoneNumber
                                      , o.address
                                      ,o.user_name as userName
-                                     , o.total_money as totalMoney
-                                     ,o.confirmation_date as confirmationDate
-                                     ,o.ship_date as shipDate
-                                     , o.receive_date as receiveDate
-                                     , o.completion_date as completionDate
+                                     , o.total_money as totalMoney 
+                                     ,o.ship_date as shipDate 
+                                     ,o.money_reduced as moneyReduced
                                      , o.id,o.created_at as createdAt
                                      , uc.full_name as createdBy
                                      , o.updated_at as updatedAt
@@ -117,11 +111,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                         ,o.phone_number as phoneNumber
                         , o.address
                         ,o.user_name as userName
-                        , o.total_money as totalMoney
-                        ,o.confirmation_date as confirmationDate
-                        ,o.ship_date as shipDate
-                        , o.receive_date as receiveDate
-                        , o.completion_date as completionDate
+                        , o.total_money as totalMoney 
+                        ,o.money_reduced as moneyReduced
+                        ,o.ship_date as shipDate 
                         , o.id,o.created_at as createdAt
                         , uc.full_name as createdBy
                         , o.updated_at as updatedAt
@@ -161,14 +153,12 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                        ,o.phone_number as phoneNumber
                        , o.address
                        ,o.user_name as userName
-                       , o.total_money as totalMoney
-                       ,o.confirmation_date as confirmationDate
-                       ,o.ship_date as shipDate
-                       , o.receive_date as receiveDate
-                       , o.completion_date as completionDate
+                       , o.total_money as totalMoney 
+                       ,o.ship_date as shipDate 
                        , o.id,o.created_at as createdAt
                        , uc.full_name as createdBy
                        , o.updated_at as updatedAt
+                       ,o.money_reduced as moneyRemitduced
                        , uu.full_name as updatedBy
                        , o.type
                        ,o.note
@@ -202,7 +192,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Modifying
     @Query(value = """
     update orders set status= :status where id =:id
-""",nativeQuery = true)
+    """,nativeQuery = true)
     void updateStatus(String status,Long id);
 
 

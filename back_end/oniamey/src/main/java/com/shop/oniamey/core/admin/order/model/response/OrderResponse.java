@@ -20,13 +20,7 @@ public interface OrderResponse extends BaseResponse {
 
     Double getTotalMoney();
 
-    Date getConfirmationDate();
-
     Date getShipDate();
-
-    Date getReceiveDate();
-
-    Date getCompletionDate();
 
     String getType();
 
@@ -45,5 +39,7 @@ public interface OrderResponse extends BaseResponse {
     String getUpdatedBy();
 
     String getCode();
+
+    String getMoneyReduced();
 
 }
