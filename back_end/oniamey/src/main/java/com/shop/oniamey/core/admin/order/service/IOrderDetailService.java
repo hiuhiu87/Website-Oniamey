@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface IOrderDetailService {
     List<OrderDetailResponse> getOderDetailByOrderId(Long id);
 }

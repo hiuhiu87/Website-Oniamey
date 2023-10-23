@@ -4,6 +4,7 @@ import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
 import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
+import com.shop.oniamey.core.admin.order.service.impl.PaymentMethodService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,16 +23,13 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private PaymentMethodService paymentMethodService;
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(orderService.getAllOrder(), HttpStatus.OK);
     }
 
-//    @GetMapping ()
-//    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int page){
-//        Pageable pageable = PageRequest.of(page,5);
-//        return new ResponseEntity<>(orderService.getAllOrder(pageable),HttpStatus.OK);
-//    }
 
     @GetMapping("/detail/{id}")
     public OrderResponse detail(@PathVariable Long id) {
@@ -43,6 +41,7 @@ public class OrderController {
                                                  @RequestParam(defaultValue = "5") int size,
                                                  @RequestParam(defaultValue = "ALL") String status) {
         Pageable pageable = PageRequest.of(page, size);
+        paymentMethodService.generate2Method();
         return orderService.getOrdersByStatus(pageable, status);
     }
 

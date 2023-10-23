@@ -15,8 +15,11 @@ public class OrderDetailService implements IOrderDetailService {
     private OrderRepository orderRepository;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+    @Autowired
+    private PaymentMethodService paymentMethodService;
     @Override
     public List<OrderDetailResponse> getOderDetailByOrderId(Long id) {
+        paymentMethodService.generate2Method();
         if(orderRepository.findById(id).isPresent()){
             return orderDetailRepository.getOrderDetailByOrderId(id);
         }
