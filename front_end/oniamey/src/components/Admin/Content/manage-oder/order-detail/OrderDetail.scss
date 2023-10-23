@@ -38,26 +38,20 @@
    .order-detail-information{
      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
      max-width: 1600px;
-    //  height: 300px;
     padding-bottom: 20px;
-     margin: 0 auto;
+     margin: 0 auto; 
      .order-detail-information-title{
       padding-top: 20px;
       margin-left: 20px;
       margin-bottom: 20px;
      }
      .information-order{
-
-      .order-detail-footer{
-        position: relative;
-        height:50px;
-         .money-footer{
-          div{
-            left: 50px;
-            text-align: right;
-          }
-         }
-      }
+       .money-footer-title{
+        padding-left: 50px ;
+       }
+      .money-order-footer{ 
+        text-align: right;
+       }
         .information-order-header{
           display: flex;
         }
@@ -81,6 +75,13 @@
           }
      }
    }
+
+   .btn-confirm-order-detail{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+       }
 }  
 .table-order-history{
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -109,6 +110,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   gap: 16px;
- 
+}
+.price-col-order-detail{
+  text-align: right;
+}
+.price-col-order-detail2{
+  padding-right: 120px;
+  text-align: right;
 }
