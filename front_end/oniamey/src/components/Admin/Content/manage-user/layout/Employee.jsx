@@ -300,6 +300,7 @@ const Employee = (props) => {
               pagination
               paginationComponentOptions={paginationComponentOptions}
               highlightOnHover
+              pointerOnHover
               paginationRowsPerPageOptions={[5, 10, 15]}
               paginationPerPage={5}
               paginationDefaultPage={1}

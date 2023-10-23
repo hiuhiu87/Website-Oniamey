@@ -50,7 +50,7 @@ const DetaiCustomer = () => {
     identityCard: "",
     phoneNumber: "",
     birthDate: "",
-    gender: 0,
+    gender: 1,
     email: "",
     avatar: "",
     isDeleted: false,
@@ -71,7 +71,7 @@ const DetaiCustomer = () => {
   const [messageValidateAddress, setMessageValidateAddress] = useState({});
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [delay, setDelay] = useState(100);
+  const delay = 100;
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -175,7 +175,6 @@ const DetaiCustomer = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCustomer({ ...customer, [name]: value });
-    console.log(customer);
   };
 
   const handleError = (err) => {
@@ -234,7 +233,6 @@ const DetaiCustomer = () => {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     stopStreamedVideo(document.querySelector("video"));
     setOpen(false);
   };
@@ -300,16 +298,9 @@ const DetaiCustomer = () => {
       );
       setDistrictId(selectedDistrict ? selectedDistrict.code : null);
     }
-
-    console.log(customerAddress);
   };
 
-  const handleAddAddress = () => {
-    if (!validateAddressField()) return;
-    if (customerAddress.customerId === "") {
-      toast.error("Vui lòng tạo thông tin khách hàng trước!");
-      return;
-    }
+  const createAddress = () => {
     service
       .createAddress(customerAddress)
       .then((response) => {
@@ -336,6 +327,26 @@ const DetaiCustomer = () => {
         console.log(error);
         toast.error("Create failed!");
       });
+  };
+
+  const handleAddAddress = () => {
+    if (!validateAddressField()) return;
+    if (customerAddress.customerId === "") {
+      toast.error("Vui lòng tạo thông tin khách hàng trước!");
+      return;
+    }
+
+    Swal.fire({
+      title: "Thông Báo",
+      text: "Bạn Có Chắc Chắn Muốn Thêm Địa Chỉ Này Cho Khách Hàng Không ?",
+      icon: "warning",
+      confirmButtonText: "OK",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        createAddress();
+      }
+    });
   };
 
   const refreshAddressList = () => {
@@ -468,6 +479,7 @@ const DetaiCustomer = () => {
           console.log(error);
         });
     }
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
@@ -663,7 +675,7 @@ const DetaiCustomer = () => {
                     {messageValidate.birthDate}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-4" controlId="">
+                <Form.Group className="mb-4" controlId="genderCheckRadio">
                   <Form.Label>Giới Tính</Form.Label>
                   <div className="d-flex">
                     <Form.Check
@@ -671,7 +683,7 @@ const DetaiCustomer = () => {
                       label="Nam"
                       name="gender"
                       type="radio"
-                      defaultChecked
+                      checked={customer.gender === 1}
                       value="1"
                       onChange={handleInputChange}
                     />
@@ -681,6 +693,7 @@ const DetaiCustomer = () => {
                       name="gender"
                       type="radio"
                       value="2"
+                      checked={customer.gender === 2}
                       onChange={handleInputChange}
                     />
                     <Form.Check
@@ -688,6 +701,7 @@ const DetaiCustomer = () => {
                       label="Khác"
                       name="gender"
                       type="radio"
+                      checked={customer.gender === 3}
                       value="3"
                       onChange={handleInputChange}
                     />
@@ -890,14 +904,17 @@ const DetaiCustomer = () => {
               </Collapse>
               <hr />
               {allAddress.map((address, index) => (
-                <ListAddressDetail
-                  address={address}
-                  index={index}
-                  key={address.id}
-                  customerId={id}
-                  refreshList={() => refreshAddressList()}
-                  checkedSwitch={address.isDefault}
-                />
+                <div className="">
+                  <br />
+                  <ListAddressDetail
+                    address={address}
+                    index={index}
+                    key={address.id}
+                    customerId={id}
+                    refreshList={() => refreshAddressList()}
+                    checkedSwitch={address.isDefault}
+                  />
+                </div>
               ))}
             </div>
           </Col>

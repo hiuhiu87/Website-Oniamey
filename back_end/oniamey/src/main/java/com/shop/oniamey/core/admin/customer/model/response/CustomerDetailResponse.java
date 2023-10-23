@@ -14,7 +14,7 @@ public interface CustomerDetailResponse {
 
     String getPhoneNumber();
 
-    String getGender();
+    Integer getGender();
 
     String getAvatar();
 

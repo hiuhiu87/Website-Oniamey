@@ -17,6 +17,7 @@ import service from "../../../../../services/CustomerService";
 import "../style/Table.css";
 import "../style/CustomerStyle.css";
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 
 const Customer = (props) => {
   const [onSearch, setOnSearch] = useState(false);
@@ -105,7 +106,7 @@ const Customer = (props) => {
     }
   };
 
-  const columns = [
+  const columns = useMemo (() =>[
     {
       name: renderNameColumns(),
       selector: (row) => {
@@ -190,7 +191,7 @@ const Customer = (props) => {
         </>
       ),
     },
-  ];
+  ]) ;
 
   const getAllCustomer = () => {
     service

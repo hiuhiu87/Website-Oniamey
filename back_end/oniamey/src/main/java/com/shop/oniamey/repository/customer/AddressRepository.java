@@ -28,6 +28,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             from address a
             join customer c on c.id = a.customer_id
             where c.id = :idCustomer and a.deleted = false
+            order by a.is_default desc
             """, nativeQuery = true)
     List<AddressResponse> getAllAddressByCustomerId(Long idCustomer);
 

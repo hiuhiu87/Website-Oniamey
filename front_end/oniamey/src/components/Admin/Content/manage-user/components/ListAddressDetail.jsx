@@ -158,7 +158,12 @@ const ListAddressDetail = ({
   return (
     <Fragment>
       <Collapse defaultActiveKey={["0"]}>
-        <Collapse.Panel header={`Địa Chỉ ${index + 1}`} key={index}>
+        <Collapse.Panel
+          header={
+            address.isDefault ? "Địa Chỉ Mặc Định" : `Địa Chỉ ${index + 1}`
+          }
+          key={index}
+        >
           <Container className="d-flex flex-column justify-content-between pb-0">
             <Row>
               <Col>
@@ -254,6 +259,7 @@ const ListAddressDetail = ({
                   unCheckedChildren={<CloseOutlined />}
                   checked={checkedSwitch}
                   onChange={() => handleDefaultAddress(finalAddress.id)}
+                  disabled={address.isDefault}
                 />
               </div>
               <div>
