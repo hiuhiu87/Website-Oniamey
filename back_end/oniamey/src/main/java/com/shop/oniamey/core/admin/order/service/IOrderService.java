@@ -21,9 +21,9 @@ public interface IOrderService {
 
     String updateOrder(Long id, OrderRequest orderRequest);
 
-    CountStatusResponse getCountStatus();
+    CountStatusResponse getCountStatus(String type, String search);
 
-    Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status);
+    Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status, String orderType,String keySearch);
 
     List<OrderResponse> getByStatus(String status);
 }

@@ -105,46 +105,65 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     Optional<OrderResponse> getOrdersById(Long id);
 
     @Query(value = """ 
-                         select o.id as userId ,
-                        o.id as  customerId,
-                         unv.full_name as tenNhanVien
-                        ,o.phone_number as phoneNumber
-                        , o.address
-                        ,o.user_name as userName
-                        , o.total_money as totalMoney 
-                        ,o.money_reduced as moneyReduced
-                        ,o.ship_date as shipDate 
-                        , o.id,o.created_at as createdAt
-                        , uc.full_name as createdBy
-                        , o.updated_at as updatedAt
-                        , uu.full_name as updatedBy
-                        , o.type
-                        ,o.note
-                        ,o.money_ship as moneyShip
-                        ,CASE
-                          WHEN
-                         o.status = 'PENDING' THEN 'Chờ xác nhận'
-                    WHEN o.status = 'CONFIRMED' THEN 'Đã xác nhận'
-                   WHEN o.status = 'SHIPPING' THEN 'Đang giao'
-                   WHEN o.status = 'SHIPPED' THEN 'Đã giao'
-                   WHEN o.status = 'SUCCESS' THEN 'Hoàn thành'
-                  WHEN o.status = 'CANCEL' THEN 'Hủy'
-                  ELSE o.status
-                      END AS status
-                        ,o.code             
-                         from orders o
-                         left join user uu on uu.id = o.updated_by
-                         left join user unv on unv.id = o.id_user
-                         left join user uc on uc.id = o.created_by
-                         where o.deleted = 0 and o.status like :status
+                          select o.id as userId ,
+                           o.id as  customerId, 
+                           unv.full_name as tenNhanVien ,
+                           o.phone_number as phoneNumber , 
+                           o.address ,o.user_name as userName , 
+                           o.total_money as totalMoney ,
+                           o.money_reduced as moneyReduced ,
+                           o.ship_date as shipDate , 
+                           o.id,
+                           o.created_at as createdAt ,
+                           uc.full_name as createdBy ,
+                           o.updated_at as updatedAt ,
+                           uu.full_name as updatedBy , 
+                           o.type ,
+                           o.note ,
+                           o.money_ship as moneyShip ,
+                           CASE WHEN o.status = 'PENDING' THEN 'Chờ xác nhận' 
+                                WHEN o.status = 'CONFIRMED'  THEN 'Đã xác nhận' 
+                                WHEN o.status = 'SHIPPING' THEN 'Đang giao' 
+                                WHEN o.status = 'SHIPPED' THEN 'Đã giao' 
+                                WHEN o.status = 'SUCCESS' THEN 'Hoàn thành' 
+                                WHEN o.status = 'CANCEL' THEN 'Hủy' 
+                                ELSE o.status END AS status ,
+                           o.code 
+                       from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like :status and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    )
+                              
             """,
             countQuery = """
                                     select count(*)
-                                    from orders
-                                    where deleted=0 and status like :status
+                                   from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like :status and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    )
                     """,
             nativeQuery = true)
-    Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status);
+    Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status, String type, String search);
 
     @Query(value = """
             select o.id as userId ,
@@ -179,21 +198,112 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     void deleteOrder(Long id);
 
     @Query(value = """  
-            SELECT  (select count(id)from orders where deleted= 0) as allStatus ,
-             (select count(id)from orders where status  like 'PENDING' and deleted= 0) as pending ,
-             (select count(id)from orders where status  like 'CONFIRMED' and deleted= 0) as confirmed,
-            (select count(id)from orders where status  like 'SHIPPING' and deleted= 0)   as shipping ,
-              (select count(id)from orders where status  like 'SHIPPED'and deleted= 0)   as shipped ,
-             (select count(id)from orders where status  like 'SUCCESS' and deleted= 0)   as success ,
-              (select count(id)from orders where status  like 'CANCEL' and deleted= 0)   as cancel
+            SELECT  (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like '%' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    )) as allStatus ,
+             (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'PENDING' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    )) as pending ,
+             (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'CONFIRMED' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    )) as confirmed,
+            (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'SHIPPING' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)  )  )  as shipping ,
+              (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'SHIPPED' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    ))   as shipped ,
+             (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'SUCCESS' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    ))   as success ,
+              (select count(o.id)from orders o 
+                       left join user uu on uu.id = o.updated_by 
+                       left join user unv on unv.id = o.id_user 
+                       left join user uc on uc.id = o.created_by 
+                       where o.deleted = 0 and 
+                             o.status like 'CANCEL' and 
+                             o.type like :type AND 
+                             ( (o.code like :search ) or 
+                             (unv.full_name like :search) or 
+                             (o.phone_number like :search) or 
+                             (o.user_name like :search) or 
+                             (o.type like :search) or 
+                             (o.total_money like :search) or 
+                             (o.status like :search)    ))   as cancel
               """, nativeQuery = true)
-    CountStatusResponse getCountStatus();
+    CountStatusResponse getCountStatus(String type, String search);
 
     @Modifying
     @Query(value = """
-    update orders set status= :status where id =:id
-    """,nativeQuery = true)
-    void updateStatus(String status,Long id);
+            update orders set status= :status where id =:id
+            """, nativeQuery = true)
+    void updateStatus(String status, Long id);
 
 
 }

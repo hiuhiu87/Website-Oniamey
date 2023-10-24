@@ -126,17 +126,33 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public CountStatusResponse getCountStatus() {
-        return orderRepository.getCountStatus();
+    public CountStatusResponse getCountStatus(String orderType,String keySearch) {
+        String type="%"+orderType+"%";
+        String search="%"+keySearch+"%";
+        if (keySearch.equalsIgnoreCase( "none")){
+            search="%";
+        }
+        if (orderType.equalsIgnoreCase("none")){
+            type="%";
+        }
+        return orderRepository.getCountStatus(type,search);
     }
 
 
     @Override
-    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
-        if (status.equalsIgnoreCase("ALL")) {
-            return orderRepository.getOrdersByStatus(pageable, "%");
+    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status , String orderType,String keySearch) {
+        String type="%"+orderType+"%";
+        String search="%"+keySearch+"%";
+        if (keySearch.equalsIgnoreCase( "none")){
+            search="%";
         }
-        return orderRepository.getOrdersByStatus(pageable, status);
+        if (orderType.equalsIgnoreCase("none")){
+            type="%";
+        }
+        if (status.equalsIgnoreCase("ALL")) {
+            return orderRepository.getOrdersByStatus(pageable, "%",type,search);
+        }
+        return orderRepository.getOrdersByStatus(pageable, status,type,search);
     }
 
     @Override

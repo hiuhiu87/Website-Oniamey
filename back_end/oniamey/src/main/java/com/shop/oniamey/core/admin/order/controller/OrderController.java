@@ -39,10 +39,12 @@ public class OrderController {
     @GetMapping()
     public Page<OrderResponse> getOrdersByStatus(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "5") int size,
+                                                 @RequestParam(defaultValue = "none") String orderType,
+                                                 @RequestParam(defaultValue = "none ") String keySearch,
                                                  @RequestParam(defaultValue = "ALL") String status) {
         Pageable pageable = PageRequest.of(page, size);
         paymentMethodService.generate2Method();
-        return orderService.getOrdersByStatus(pageable, status);
+        return orderService.getOrdersByStatus(pageable, status,orderType,keySearch);
     }
 
     @GetMapping("/get-by-status")
@@ -66,8 +68,9 @@ public class OrderController {
     }
 
     @GetMapping("/get-count-status")
-    public CountStatusResponse getCountStatus() {
-        return orderService.getCountStatus();
+    public CountStatusResponse getCountStatus( @RequestParam(defaultValue = "none") String orderType,
+                                               @RequestParam(defaultValue = "none ") String keySearch) {
+        return orderService.getCountStatus(orderType,keySearch);
     }
 
 }
