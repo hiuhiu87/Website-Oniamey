@@ -262,13 +262,13 @@ const OrderContent = (props) => {
                                     <Col xs lg={3}>
                                         <img src='./path/to/decorative-ima' alt='ảnh lỗi vl' />
                                     </Col>
-                                    <Col xs lg={4}>
+                                    <Col xs lg={3}>
                                         <div><h6>{item.productDetailName}</h6></div>
-                                        <div>{`Kích cỡ: ${item.sizeName}`}</div>
-                                        <div>{`Màu: ${item.colorName}`}</div>
+                                        {item.sizeName?<div>{`Kích cỡ: ${item.sizeName}`}</div>:null}
+                                        {item.colorName?<div>{`Màu: ${item.colorName}`}</div>:null}
                                         <div>{`x ${item.quantity}`}</div>
                                     </Col>
-                                    <Col xs lg={2}>
+                                    <Col xs lg={3}>
                                         {`Đơn giá: ${item.price} VND`}
                                     </Col>
                                     <Col xs lg={3}>
@@ -334,7 +334,7 @@ const OrderContent = (props) => {
                                                                 },
                                                                 {
                                                                     label: 'Chuyển khoản',
-                                                                    value: '2',
+                                                                    value: 2,
                                                                 },
                                                             ],
                                                         }

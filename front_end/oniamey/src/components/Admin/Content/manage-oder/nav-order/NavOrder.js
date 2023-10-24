@@ -5,15 +5,7 @@ import './NavOrder.scss'
 import {Link} from "react-router-dom"
 import {useEffect, useState} from 'react'
 
-const NavOrder = (Props) => {
-    const [countStatus, setCountStatus] = useState({});
-    const getCountStatus = async () => {
-        const result = await OrdersApi.getCountStatus();
-        setCountStatus(result);
-    }
-    useEffect(() => {
-        getCountStatus();
-    }, []);
+const NavOrder = (Props) => { 
     const CustomNav = ({children, to, ...props}) => {
         const resolved = useResolvedPath(to)
         const match = useMatch({path: resolved.pathname, end: true})
@@ -34,31 +26,31 @@ const NavOrder = (Props) => {
         <ul className="nav nav-pills nav-orderrr">
             <div className='nav-btn'>
                 <CustomNav to='../all'>Tất cả</CustomNav>
-                <CustomMess number={countStatus.allStatus}/>
+                <CustomMess number={Props.countStatus.allStatus}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../pending'>Chờ xác nhận</CustomNav>
-                <CustomMess number={countStatus.pending}/>
+                <CustomMess number={Props.countStatus.pending}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../confirmed'>Đã xác nhận</CustomNav>
-                <CustomMess number={countStatus.confirmed}/>
+                <CustomMess number={Props.countStatus.confirmed}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../shipping'>Đang giao</CustomNav>
-                <CustomMess number={countStatus.shipping}/>
+                <CustomMess number={Props.countStatus.shipping}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../shipped'>Đã giao</CustomNav>
-                <CustomMess number={countStatus.shipped}/>
+                <CustomMess number={Props.countStatus.shipped}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../success'>Hoàn thành</CustomNav>
-                <CustomMess number={countStatus.success}/>
+                <CustomMess number={Props.countStatus.success}/>
             </div>
             <div className='nav-btn'>
                 <CustomNav to='../cancel'>Hủy</CustomNav>
-                <CustomMess number={countStatus.cancel}/>
+                <CustomMess number={Props.countStatus.cancel}/>
             </div>
         </ul>
     </div>

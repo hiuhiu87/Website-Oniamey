@@ -14,7 +14,7 @@ const Order = (props) => {
     }
     return (
         <div>
-            <div className='order-content'>
+            <div className='manage-order-contentt'>
                 <Routes>
                     <Route path="/:id" element={<OrderDetail status="ALL"/>}/>
                     <Route path="all" element={<CustomContent status="ALL"/>}/>

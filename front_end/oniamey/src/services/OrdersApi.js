@@ -1,14 +1,17 @@
 import instance from '../utils/axiosCustomize';
 
 const urlOrder = "api/admin/orders";
-export const getOrdersByStatus = async (page, size, status) => {
+export const getOrdersByStatus = async (page, size, status, orderType, keySearch) => {
+
     try {
         const res = await instance.get(
             urlOrder, {
             params: {
                 page,
                 size,
-                status
+                status,
+                orderType,
+                keySearch
             }
         });
         return res.data;
@@ -26,9 +29,14 @@ export const detail = async (id) => {
         return {};
     }
 }
-export const getCountStatus = async () => {
+export const getCountStatus = async (orderType, keySearch) => {
     try {
-        const res = await instance.get(`${urlOrder}/get-count-status`);
+        const res = await instance.get(`${urlOrder}/get-count-status`, {
+            params: {
+                orderType, 
+                keySearch
+            }
+        });
         return res.data;
     } catch (error) {
         console.log(error);
