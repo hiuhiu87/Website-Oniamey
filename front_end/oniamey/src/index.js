@@ -26,6 +26,7 @@ import ManageCustomer from "./components/Admin/Content/manage-user/layout/Custom
 import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
 import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
 import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
+import LoginPage from "./components/Admin/Content/login-page/LoginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,7 +38,7 @@ root.render(
           <Route index element={<HomePage />}></Route>
           <Route path="users" element={<User />}></Route>
         </Route>
-
+        <Route path="login" element={<LoginPage />} />
         <Route path="/admins" element={<Admin />}>
           <Route index element={<DashBoard />}></Route>
           <Route
