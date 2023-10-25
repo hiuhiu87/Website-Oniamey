@@ -9,7 +9,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {};
+  const handleLogin = () => {
+    const data = {
+      email: email,
+      password: password,
+    };
+    console.log(data);
+  };
 
   return (
     <Container fluid>
@@ -51,6 +57,8 @@ const LoginPage = () => {
                       className="form-control email"
                       name="username"
                       placeholder="Email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <div className="pwdMask">
                       <Form.Control
@@ -58,6 +66,8 @@ const LoginPage = () => {
                         className="form-control password"
                         name="password"
                         placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                       <span className="fa fa-eye-slash pwd-toggle"></span>
                     </div>
@@ -69,7 +79,9 @@ const LoginPage = () => {
                       </a>
                     </div>
                     <div className="d-flex justify-content-around">
-                      <Button variant="warning" className="text-light">
+                      <Button variant="warning" className="text-light"
+                        onClick={handleLogin}
+                      >
                         Đăng Nhập
                       </Button>
                       <Link to="/">

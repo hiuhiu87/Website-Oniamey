@@ -4,6 +4,7 @@ import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.customer.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerDetailResponse;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerResponse;
+import com.shop.oniamey.entity.Customer;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public interface CustomerService {
 
     Long getTotalPage();
 
-    Long getTotalPageDeleted();
+    Customer getCustomerByEmail(String email);
 
-    Long getTotalPageActive();
+    String registerCustomerFacebook(Customer customer);
 
-    List<CustomerResponse> getTotalPageInactive(Pageable pageable);
+    String registerCustomerGoogle(Customer customer);
 
-    List<CustomerResponse> getTotalPageActive(Pageable pageable);
+    boolean checkByEmail(String email);
 
 }

@@ -133,23 +133,33 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Long getTotalPageDeleted() {
+    public Customer getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email).get();
+    }
+
+    @Override
+    public String registerCustomerFacebook(Customer customer) {
+
+        Optional<Customer> optionalUser = customerRepository.findByEmail(customer.getEmail());
+
+        if (optionalUser.isPresent()) {
+            return "Email is already exist";
+        }
+
+        customerRepository.save(customer);
+
+        return "Register success";
+    }
+
+    @Override
+    public String registerCustomerGoogle(Customer customer) {
         return null;
     }
 
     @Override
-    public Long getTotalPageActive() {
-        return null;
+    public boolean checkByEmail(String email) {
+        return customerRepository.findByEmail(email).isPresent();
     }
 
-    @Override
-    public List<CustomerResponse> getTotalPageInactive(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public List<CustomerResponse> getTotalPageActive(Pageable pageable) {
-        return null;
-    }
 
 }

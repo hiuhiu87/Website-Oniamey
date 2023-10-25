@@ -1,8 +1,11 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
+import com.shop.oniamey.infrastructure.constant.AuthenticationProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -48,5 +51,11 @@ public class Customer extends BaseModel {
 
     @Column(name = "avatar")
     private String avatar;
+
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthenticationProvider authProvider;
+
+
 
 }

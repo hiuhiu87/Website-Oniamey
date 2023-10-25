@@ -156,4 +156,27 @@ public class UserServiceImpl implements UserService {
         return endPage;
     }
 
+    @Override
+    public boolean checkByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).get();
+    }
+
+    public String registerUserFacebook(User user) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+
+        if (optionalUser.isPresent()) {
+            return "Email is already exist";
+        }
+
+        userRepository.save(user);
+
+        return "Register success";
+    }
+
 }

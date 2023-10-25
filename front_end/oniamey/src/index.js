@@ -27,65 +27,79 @@ import ManageStatistical from "./components/Admin/Content/manage-statistical/Sta
 import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
 import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
 import LoginPage from "./components/Admin/Content/login-page/LoginPage";
+import { AuthProvider } from "./authentication/AuthCustom";
+import ProtectedRoute from "./authentication/ProtectedRoute";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     {/* <React.StrictMode> */}
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<HomePage />}></Route>
-          <Route path="users" element={<User />}></Route>
-        </Route>
-        <Route path="login" element={<LoginPage />} />
-        <Route path="/admins" element={<Admin />}>
-          <Route index element={<DashBoard />}></Route>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<HomePage />}></Route>
+            <Route path="users" element={<User />}></Route>
+          </Route>
+          <Route path="login" element={<LoginPage />} />
           <Route
-            path="sales-at-the-counter"
-            element={<SalesAtTheCounter />}
-          ></Route>
-          <Route path="manage-products" element={<ManageProduct />}></Route>
-          <Route path="manage-categories" element={<ManageCategory />}></Route>
-          <Route path="manage-brands" element={<ManageBrand />}></Route>
-          <Route path="manage-materials" element={<ManageMaterial />}></Route>
-          <Route path="manage-sizes" element={<ManageSize />}></Route>
-          <Route path="manage-colors" element={<ManageColor />}></Route>
-          <Route path="manage-collars" element={<ManageCollar />}></Route>
-          <Route
-            path="manage-sleeve-lengths"
-            element={<ManageSleeveLength />}
-          ></Route>
-          <Route path="manage-orders/*" element={<Order />}></Route>
-          <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
-          <Route path="manage-employees" element={<ManageEmployee />}></Route>
-          <Route
-            path="manage-employees/add-employee"
-            element={<ModifyUserComponent />}
-          ></Route>
-          <Route
-            path="manage-employees/update-employee/:id"
-            element={<ModifyUserComponent />}
-          ></Route>
-          <Route path="manage-customers" element={<ManageCustomer />} />
-          <Route
-            path="manage-customers/detail-customer/:id"
-            element={<DetaiCustomer />}
-          />
-          <Route
-            path="manage-customers/update-customer/:id"
-            element={<DetaiCustomer />}
-          />
-          <Route
-            path="manage-customers/add-customer"
-            element={<DetaiCustomer />}
-          />
-          <Route
-            path="manage-statisticals"
-            element={<ManageStatistical />}
-          ></Route>
-        </Route>
-      </Routes>
+            path="/admins"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<DashBoard />}></Route>
+            <Route
+              path="sales-at-the-counter"
+              element={<SalesAtTheCounter />}
+            ></Route>
+            <Route path="manage-products" element={<ManageProduct />}></Route>
+            <Route
+              path="manage-categories"
+              element={<ManageCategory />}
+            ></Route>
+            <Route path="manage-brands" element={<ManageBrand />}></Route>
+            <Route path="manage-materials" element={<ManageMaterial />}></Route>
+            <Route path="manage-sizes" element={<ManageSize />}></Route>
+            <Route path="manage-colors" element={<ManageColor />}></Route>
+            <Route path="manage-collars" element={<ManageCollar />}></Route>
+            <Route
+              path="manage-sleeve-lengths"
+              element={<ManageSleeveLength />}
+            ></Route>
+            <Route path="manage-orders/*" element={<Order />}></Route>
+            <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
+            <Route path="manage-employees" element={<ManageEmployee />}></Route>
+            <Route
+              path="manage-employees/add-employee"
+              element={<ModifyUserComponent />}
+            ></Route>
+            <Route
+              path="manage-employees/update-employee/:id"
+              element={<ModifyUserComponent />}
+            ></Route>
+            <Route path="manage-customers" element={<ManageCustomer />} />
+            <Route
+              path="manage-customers/detail-customer/:id"
+              element={<DetaiCustomer />}
+            />
+            <Route
+              path="manage-customers/update-customer/:id"
+              element={<DetaiCustomer />}
+            />
+            <Route
+              path="manage-customers/add-customer"
+              element={<DetaiCustomer />}
+            />
+            <Route
+              path="manage-statisticals"
+              element={<ManageStatistical />}
+            ></Route>
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
     {/* </React.StrictMode> */}
   </Provider>
