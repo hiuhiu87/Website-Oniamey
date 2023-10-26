@@ -50,52 +50,165 @@ root.render(
               </ProtectedRoute>
             }
           >
-            <Route index element={<DashBoard />}></Route>
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <DashBoard />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route
               path="sales-at-the-counter"
-              element={<SalesAtTheCounter />}
+              element={
+                <ProtectedRoute>
+                  <SalesAtTheCounter />
+                </ProtectedRoute>
+              }
             ></Route>
-            <Route path="manage-products" element={<ManageProduct />}></Route>
+            <Route
+              path="manage-products"
+              element={
+                <ProtectedRoute>
+                  <ManageProduct />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route
               path="manage-categories"
-              element={<ManageCategory />}
+              element={
+                <ProtectedRoute>
+                  <ManageCategory />
+                </ProtectedRoute>
+              }
             ></Route>
-            <Route path="manage-brands" element={<ManageBrand />}></Route>
-            <Route path="manage-materials" element={<ManageMaterial />}></Route>
-            <Route path="manage-sizes" element={<ManageSize />}></Route>
-            <Route path="manage-colors" element={<ManageColor />}></Route>
-            <Route path="manage-collars" element={<ManageCollar />}></Route>
+            <Route
+              path="manage-brands"
+              element={
+                <ProtectedRoute>
+                  <ManageBrand />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-materials"
+              element={
+                <ProtectedRoute>
+                  <ManageMaterial />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-sizes"
+              element={
+                <ProtectedRoute>
+                  <ManageSize />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-colors"
+              element={
+                <ProtectedRoute>
+                  <ManageColor />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-collars"
+              element={
+                <ProtectedRoute>
+                  <ManageCollar />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route
               path="manage-sleeve-lengths"
-              element={<ManageSleeveLength />}
+              element={
+                <ProtectedRoute>
+                  <ManageSleeveLength />
+                </ProtectedRoute>
+              }
             ></Route>
-            <Route path="manage-orders/*" element={<Order />}></Route>
-            <Route path="manage-vouchers" element={<ManageVoucher />}></Route>
-            <Route path="manage-employees" element={<ManageEmployee />}></Route>
+            <Route
+              path="manage-orders/*"
+              element={
+                <ProtectedRoute>
+                  <Order />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-vouchers"
+              element={
+                <ProtectedRoute>
+                  <ManageVoucher />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="manage-employees"
+              element={
+                <ProtectedRoute>
+                  <ManageEmployee />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route
               path="manage-employees/add-employee"
-              element={<ModifyUserComponent />}
+              element={
+                <ProtectedRoute>
+                  <ModifyUserComponent />
+                </ProtectedRoute>
+              }
             ></Route>
             <Route
               path="manage-employees/update-employee/:id"
-              element={<ModifyUserComponent />}
+              element={
+                <ProtectedRoute>
+                  <ModifyUserComponent />
+                </ProtectedRoute>
+              }
             ></Route>
-            <Route path="manage-customers" element={<ManageCustomer />} />
+            <Route
+              path="manage-customers"
+              element={
+                <ProtectedRoute>
+                  <ManageCustomer />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="manage-customers/detail-customer/:id"
-              element={<DetaiCustomer />}
+              element={
+                <ProtectedRoute>
+                  <DetaiCustomer />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="manage-customers/update-customer/:id"
-              element={<DetaiCustomer />}
+              element={
+                <ProtectedRoute>
+                  <DetaiCustomer />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="manage-customers/add-customer"
-              element={<DetaiCustomer />}
+              element={
+                <ProtectedRoute>
+                  <DetaiCustomer />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="manage-statisticals"
-              element={<ManageStatistical />}
+              element={
+                <ProtectedRoute>
+                  <ManageStatistical />
+                </ProtectedRoute>
+              }
             ></Route>
           </Route>
         </Routes>

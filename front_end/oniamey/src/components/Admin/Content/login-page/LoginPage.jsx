@@ -3,18 +3,40 @@ import { Container, Row, Col, Form, FormGroup, Button } from "react-bootstrap";
 import logo from "../../../../assets/logoBlack.png";
 import "./LoginStyle.css";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../../../../authentication/AuthCustom";
+import { useNavigate } from "react-router-dom";
+import userService from "../../../../services/UserService";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     const data = {
       email: email,
       password: password,
     };
-    console.log(data);
+    userService
+      .login(data)
+      .then((res) => {
+        console.log("data respone" + res.data);
+        login(res.data);
+        navigate("/admins");
+        toast.success("Đăng Nhập Thành Công", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      });
   };
 
   return (
@@ -79,7 +101,9 @@ const LoginPage = () => {
                       </a>
                     </div>
                     <div className="d-flex justify-content-around">
-                      <Button variant="warning" className="text-light"
+                      <Button
+                        variant="warning"
+                        className="text-light"
                         onClick={handleLogin}
                       >
                         Đăng Nhập
