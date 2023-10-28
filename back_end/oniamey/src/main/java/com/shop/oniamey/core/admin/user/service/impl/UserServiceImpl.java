@@ -1,6 +1,7 @@
 package com.shop.oniamey.core.admin.user.service.impl;
 
 import com.shop.oniamey.core.admin.user.model.request.ModifyUserRequest;
+import com.shop.oniamey.core.admin.user.model.response.CurrentUserResponse;
 import com.shop.oniamey.core.admin.user.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.user.model.response.UserResponse;
 import com.shop.oniamey.core.admin.user.service.UserService;
@@ -166,6 +167,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).get();
     }
 
+    @Override
+    public CurrentUserResponse getCurrentUser(String email) {
+        User user = userRepository.findByEmail(email).get();
+        CurrentUserResponse currentUserResponse = new CurrentUserResponse();
+        currentUserResponse.setId(user.getId());
+        currentUserResponse.setUsername(user.getFullName());
+        currentUserResponse.setImageUrl(user.getAvatar());
+        currentUserResponse.setEmail(user.getEmail());
+        currentUserResponse.setRole(user.getRole().name());
+        return currentUserResponse;
+    }
+
     public String registerUserFacebook(User user) {
 
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
@@ -177,6 +190,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return "Register success";
+    }
+
+    @Override
+    public String getRoleByEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            return userRepository.findByEmail(email).get().getRole().name();
+        }
+        return null;
     }
 
 }

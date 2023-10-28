@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     setUser(data);
     console.log("data respone" + data);
-    navigate("/product_frontend");
+    navigate("/admins");
   };
 
   // call this function to sign out logged in user

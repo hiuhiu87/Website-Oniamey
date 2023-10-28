@@ -455,6 +455,12 @@ const ModifyUserComponent = () => {
                 action={apiUploadAvater.uploadAvatar}
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
+                headers={{
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("user")).accessToken
+                  }`,
+                  "Access-Control-Allow-Origin": "*",
+                }}
               >
                 {user.avatar ? (
                   <div className="">

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +33,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             left JOIN user AS uu ON c.updated_by = uu.id
                         """, nativeQuery = true)
     List<CustomerResponse> getAllCustomers(Pageable pageable);
-
-    List<Customer> findAllByDeletedFalse(Pageable pageable);
-
-    List<Customer> findAllByDeletedTrue(Pageable pageable);
 
     @Query(value = """
             select c.id
@@ -77,8 +75,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             """, nativeQuery = true)
     CustomerDetailResponse getCustomerById(Long id);
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     Optional<Customer> findByEmail(String email);
 
     Optional<Customer> findByPhoneNumber(String phoneNumber);
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    Optional<Customer> findByUsername(String username);
 
 }

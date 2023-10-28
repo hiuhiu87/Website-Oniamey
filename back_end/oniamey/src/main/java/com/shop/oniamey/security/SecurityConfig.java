@@ -68,7 +68,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         source.registerCorsConfiguration("/**", config.applyPermitDefaultValues());
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "*"));
-        config.setAllowedOrigins(List.of("http://localhost:3001"));
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
         config.setAllowCredentials(true);
         config.setExposedHeaders(List.of("Authorization"));
@@ -93,6 +93,8 @@ public class SecurityConfig {
 //        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/register").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/users/create-user-staff", "/api/admin/users/get-all-staffs", "/api/admin/users/update-staff-status").hasAuthority("ROLE_ADMIN"));
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/users/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER"));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/customers/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER"));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/storage/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_CUSTOMER"));
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/oauth2/**").permitAll());
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())).successHandler(oAuth2LoginSuccessHandler));
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());

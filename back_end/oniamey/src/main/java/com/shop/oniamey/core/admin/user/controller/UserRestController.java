@@ -1,11 +1,12 @@
 package com.shop.oniamey.core.admin.user.controller;
 
-import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.user.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.user.service.UserService;
+import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -68,6 +69,11 @@ public class UserRestController {
     @GetMapping("/total-page")
     public ResponseEntity<?> getTotalPage() {
         return new ResponseEntity<>(userService.getTotalPage(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user-by-email/")
+    public ResponseEntity<?> getUserByEmail(@Param("email") String email) {
+        return new ResponseEntity<>(userService.getCurrentUser(email), HttpStatus.OK);
     }
 
 }

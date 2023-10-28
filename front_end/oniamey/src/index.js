@@ -29,6 +29,7 @@ import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailC
 import LoginPage from "./components/Admin/Content/login-page/LoginPage";
 import { AuthProvider } from "./authentication/AuthCustom";
 import ProtectedRoute from "./authentication/ProtectedRoute";
+import OAuth2RedirectHandler from "./authentication/OAuth2RedirectHandler";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,6 +38,14 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route
+            path="/facebook_callback/:token"
+            element={<OAuth2RedirectHandler />}
+          />
+          <Route
+            path="/google_callback/:token"
+            element={<OAuth2RedirectHandler />}
+          />
           <Route path="/" element={<App />}>
             <Route index element={<HomePage />}></Route>
             <Route path="users" element={<User />}></Route>
@@ -170,6 +179,10 @@ root.render(
                 </ProtectedRoute>
               }
             ></Route>
+            <Route
+              path="/admins/profile/:id"
+              element={<ModifyUserComponent />}
+            />
             <Route
               path="manage-customers"
               element={

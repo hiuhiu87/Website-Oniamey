@@ -1,19 +1,11 @@
 import { setCommonHeaders } from "../utils/axiosCustomize";
-import { checkToken } from "../utils/axiosCustomize";
 import instance from "../utils/axiosCustomize";
 
 const BASE_API_URL = "/api/admin/users";
 const BASE_API_URL_LOGIN = "/api/auth";
 
 class UserService {
-
-  constructor() {
-    this.accessToken = "";
-    checkToken();
-  }
-
   setAccessToken(accessToken) {
-    this.accessToken = accessToken;
     setCommonHeaders(accessToken);
   }
 
@@ -49,6 +41,13 @@ class UserService {
     return instance.post(BASE_API_URL_LOGIN + "/login", loginData);
   }
 
+  getUserByEmail(email) {
+    return instance.get(BASE_API_URL + "/get-user-by-email/", {
+      params: {
+        email: email,
+      },
+    });
+  }
 }
 
 const userService = new UserService();

@@ -61,8 +61,30 @@ public class UserDetailServiceImpl extends DefaultOAuth2UserService implements U
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         String clientName = userRequest.getClientRegistration().getClientName();
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        String email = oAuth2User.getAttribute("email");
         LOGGER.info("oAuth2User login");
-        return new AuthUser(oAuth2User, clientName);
+        Optional<User> user = userRepository.findByEmail(email);
+        Optional<Customer> customer = customerRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            LOGGER.info("user login");
+            if (clientName.equals("Facebook")) {
+                user.get().setAuthProvider(AuthenticationProvider.FACEBOOK);
+            } else {
+                user.get().setAuthProvider(AuthenticationProvider.GOOGLE);
+            }
+            return new AuthUser(user.get(), oAuth2User, clientName);
+        } else if (customer.isPresent()) {
+            LOGGER.info("customer login");
+            if (clientName.equals("Facebook")) {
+                customer.get().setAuthProvider(AuthenticationProvider.FACEBOOK);
+            } else {
+                customer.get().setAuthProvider(AuthenticationProvider.GOOGLE);
+            }
+            return new AuthUser(customer.get(), oAuth2User, clientName);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
     }
 
 }

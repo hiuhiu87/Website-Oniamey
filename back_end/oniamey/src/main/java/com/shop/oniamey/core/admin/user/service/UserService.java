@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.user.service;
 
+import com.shop.oniamey.core.admin.user.model.response.CurrentUserResponse;
 import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.user.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.user.model.response.UserDetailResponse;
@@ -33,4 +34,9 @@ public interface UserService {
     User getUserByEmail(String email);
 
     String registerUserFacebook(User user);
+
+    String getRoleByEmail(String email);
+
+    CurrentUserResponse getCurrentUser(String email);
+
 }

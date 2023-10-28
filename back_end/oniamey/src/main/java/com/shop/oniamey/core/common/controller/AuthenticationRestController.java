@@ -34,7 +34,6 @@ public class AuthenticationRestController {
 
     private final CustomerService customerService;
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
@@ -44,11 +43,10 @@ public class AuthenticationRestController {
             );
             AuthUser user = (AuthUser) authentication.getPrincipal();
             String accessToken = jwtTokenUtil.generateAccessToken(user);
-            String role = user.getRole();
+            String role = user.getAuthorities().stream().findFirst().get().getAuthority();
             LoginResponse loginResponse = new LoginResponse(user.getUsername(), accessToken, role);
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } catch (BadCredentialsException badCredentialsException) {
-            badCredentialsException.printStackTrace();
             return new ResponseEntity<>("Login failed with wrong email or password", HttpStatus.UNAUTHORIZED);
         }
     }
