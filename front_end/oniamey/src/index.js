@@ -24,9 +24,10 @@ import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
 import ManageEmployee from "./components/Admin/Content/manage-user/layout/Employee";
 import ManageCustomer from "./components/Admin/Content/manage-user/layout/Customer";
 import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
-import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
-import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
-import LoginPage from "./components/Admin/Content/login-page/LoginPage";
+import ModifyUserComponent from "./components/Admin/Content/manage-user/ModifyUserComponent";
+import DetaiCustomer from "./components/Admin/Content/manage-user/DetailCustomer";
+import ManagePromotion from "./components/Admin/Content/manage-promotion/ManagePromotion";
+import ModifyPromotion from "./components/Admin/Content/manage-promotion/ModifyPromotion";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -84,6 +85,15 @@ root.render(
             path="manage-statisticals"
             element={<ManageStatistical />}
           ></Route>
+          <Route path="manage-promotion" element={<ManagePromotion />} />
+          <Route
+            path="manage-promotion/add-promotion"
+            element={<ModifyPromotion />}
+          />
+          <Route
+            path="manage-promotion/update-promotion/:id"
+            element={<ModifyPromotion />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
