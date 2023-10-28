@@ -28,7 +28,6 @@ const Admin = () => {
       <div className={`admin-content ${adminContentClass}`}>
         <div className="admin-header d-flex">
           <BiSidebar className="cick" size={25} onClick={toggleSidebar}/>
-          {/* <BreadcrumbsPage /> */}
         </div>
         <div className="admin-main">
           <Outlet />

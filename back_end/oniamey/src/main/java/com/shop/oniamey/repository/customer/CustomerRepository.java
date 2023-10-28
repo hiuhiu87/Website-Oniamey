@@ -38,7 +38,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query(value = """
             select c.id
-            ,c.full_name as fullName\s
+            ,c.full_name as fullName
             ,c.email as email
             ,c.phone_number as phoneNumber
             ,c.gender as gender
@@ -51,16 +51,19 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             from customer c
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
+            order by c.id desc
                         """, nativeQuery = true)
     List<CustomerResponse> getAllCustomers();
 
     @Query(value = """
             select c.id
             ,c.full_name as fullName
+            ,c.identity_card as identityCard
+            ,c.username as username
             ,c.email as email
             ,c.phone_number as phoneNumber
             ,c.gender as gender
-            ,c.deleted as isActive
+            ,c.deleted as isDeleted
             ,c.avatar as avatar
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
             ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
@@ -77,55 +80,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByEmail(String email);
 
     Optional<Customer> findByPhoneNumber(String phoneNumber);
-
-    @Query(value = """
-            select count(*) from customer
-            where deleted = false
-            """, nativeQuery = true)
-    Long getTotalPageActive();
-
-    @Query(value = """
-            select count(*) from customer
-            where deleted = true
-            """, nativeQuery = true)
-    Long getTotalPageInActive();
-
-    @Query(value = """
-            select c.id
-            ,c.full_name as fullName
-            ,c.email as email
-            ,c.phone_number as phoneNumber
-            ,c.gender as gender
-            ,c.deleted as status
-            ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
-            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
-            ,uc.full_name AS createdBy
-            ,uu.full_name AS updatedBy
-            from customer c
-            left JOIN user AS uc ON c.created_by = uc.id
-            left JOIN user AS uu ON c.updated_by = uu.id
-            where c.deleted = false
-                        """, nativeQuery = true)
-    List<CustomerResponse> getAllCustomersActive();
-
-    @Query(value = """
-            select c.id
-            ,c.full_name as fullName\s
-            ,c.email as email
-            ,c.phone_number as phoneNumber
-            ,c.gender as gender
-            ,c.deleted as status
-            ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
-            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
-            ,uc.full_name AS createdBy
-            ,uu.full_name AS updatedBy
-            from customer c
-            left JOIN user AS uc ON c.created_by = uc.id
-            left JOIN user AS uu ON c.updated_by = uu.id
-            where c.deleted = true
-                        """, nativeQuery = true)
-    List<CustomerResponse> getAllCustomersInActive();
 
 }

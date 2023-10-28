@@ -32,6 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             from user as u
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
+            order by u.id desc
             """, nativeQuery = true)
     List<UserResponse> getAllUsers(Pageable pageable);
 
@@ -44,6 +45,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ,u.gender as gender
             ,u.address as address
             ,u.avatar as avatar
+            ,u.deleted as status
             ,date_format(u.birth_date, '%m-%d-%Y') as birthDate
             ,date_format(u.created_at  , '%m-%d-%Y %H:%i') as createdAt
             ,date_format(u.updated_at , '%m-%d-%Y %H:%i') as updatedAt
@@ -52,6 +54,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             from user as u
             left JOIN user AS uc ON u.created_by = uc.id
             left JOIN user AS uu ON u.updated_by = uu.id 
+            order by u.id desc
             """, nativeQuery = true)
     List<UserResponse> getAllUsers();
 

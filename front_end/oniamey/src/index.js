@@ -21,11 +21,12 @@ import ManageCollar from "./components/Admin/Content/manage-product/collar/Manag
 import ManageSleeveLength from "./components/Admin/Content/manage-product/sleeve-length/ManageSleeveLength";
 import Order from "./components/Admin/Content/manage-oder/Order";
 import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
-import ManageEmployee from "./components/Admin/Content/manage-user/Employee";
-import ManageCustomer from "./components/Admin/Content/manage-user/Customer";
+import ManageEmployee from "./components/Admin/Content/manage-user/layout/Employee";
+import ManageCustomer from "./components/Admin/Content/manage-user/layout/Customer";
 import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
-import ModifyUserComponent from "./components/Admin/Content/manage-user/ModifyUserComponent";
-import DetaiCustomer from "./components/Admin/Content/manage-user/DetailCustomer";
+import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
+import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
+import LoginPage from "./components/Admin/Content/login-page/LoginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,7 +38,7 @@ root.render(
           <Route index element={<HomePage />}></Route>
           <Route path="users" element={<User />}></Route>
         </Route>
-
+        <Route path="login" element={<LoginPage />} />
         <Route path="/admins" element={<Admin />}>
           <Route index element={<DashBoard />}></Route>
           <Route
@@ -69,6 +70,14 @@ root.render(
           <Route path="manage-customers" element={<ManageCustomer />} />
           <Route
             path="manage-customers/detail-customer/:id"
+            element={<DetaiCustomer />}
+          />
+          <Route
+            path="manage-customers/update-customer/:id"
+            element={<DetaiCustomer />}
+          />
+          <Route
+            path="manage-customers/add-customer"
             element={<DetaiCustomer />}
           />
           <Route

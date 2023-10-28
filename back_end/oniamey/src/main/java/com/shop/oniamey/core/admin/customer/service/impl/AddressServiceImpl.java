@@ -39,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String addAddress(ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndDistrictAndProvinceAndCustomerIdAndDeletedIsFalse(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getDistrict(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";
@@ -55,6 +55,8 @@ public class AddressServiceImpl implements AddressService {
     }
 
     private void getRequestData(ModifyAddressRequest modifyAddressRequest, Optional<Customer> checkCustomer, Address address) {
+        address.setReceiverName(modifyAddressRequest.getReceiver());
+        address.setReceiverPhoneNumber(modifyAddressRequest.getPhoneNumber());
         address.setLine(modifyAddressRequest.getLine());
         address.setWard(modifyAddressRequest.getWard());
         address.setDistrict(modifyAddressRequest.getDistrict());
@@ -68,17 +70,20 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public String deleteAddress(Long id) {
         Optional<Address> checkAddress = addressRepository.findById(id);
-        if (checkAddress.isPresent()) {
-            addressRepository.deleteById(id);
-            return "Delete address success";
+        if (checkAddress.isEmpty()) {
+            return "Address not found";
         }
-        return null;
+
+        Address address = checkAddress.get();
+        address.setDeleted(true);
+        addressRepository.save(address);
+        return "Delete address success";
     }
 
     @Override
-    public String updateAddress(ModifyAddressRequest modifyAddressRequest) {
+    public String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
-        Optional<Address> checkAddress = addressRepository.findByLineAndWardAndProvinceAndCustomerId(modifyAddressRequest.getLine(), modifyAddressRequest.getWard(), modifyAddressRequest.getProvince(), modifyAddressRequest.getCustomerId());
+        Optional<Address> checkAddress = addressRepository.findById(id);
 
         if (checkCustomer.isEmpty()) {
             return "Customer not found";
