@@ -51,6 +51,7 @@ root.render(
             <Route path="users" element={<User />}></Route>
           </Route>
           <Route path="login" element={<LoginPage />} />
+          <Route path="login?error=:code" element={<LoginPage />} />
           <Route
             path="/admins"
             element={

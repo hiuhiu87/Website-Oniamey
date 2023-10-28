@@ -18,6 +18,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
+  const errorParams = new URLSearchParams(window.location.search).get("error");
   const dataLocalStorage = JSON.parse(localStorage.getItem("user"));
   const BASE_URL_FACEBOOK_LOGIN =
     "http://localhost:8088/oauth2/authorization/facebook";
@@ -69,6 +70,13 @@ const LoginPage = () => {
     checkLogin();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (errorParams) {
+      toast.error("Tài Khoản Không Tồn Tại! Vui Lòng Liên Hệ Quản Trị Viên");
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+  }, [errorParams]);
 
   return (
     <Fragment>

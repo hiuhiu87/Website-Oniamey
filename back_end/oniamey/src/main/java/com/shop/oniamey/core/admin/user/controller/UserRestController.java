@@ -76,4 +76,9 @@ public class UserRestController {
         return new ResponseEntity<>(userService.getCurrentUser(email), HttpStatus.OK);
     }
 
+//    @PutMapping("/verify-user/{id}")
+//    public ResponseEntity<?> verifyUser(@PathVariable Long id) {
+//        return new ResponseEntity<>(userService.verifyUser(id), HttpStatus.OK);
+//    }
+
 }

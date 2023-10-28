@@ -1,6 +1,7 @@
 package com.shop.oniamey.security;
 
 import com.shop.oniamey.security.jwt.JwtTokenFilter;
+import com.shop.oniamey.security.oauth2.OAuth2LoginFailHandler;
 import com.shop.oniamey.security.oauth2.OAuth2LoginSuccessHandler;
 import com.shop.oniamey.security.securityservice.UserDetailServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,9 +37,16 @@ public class SecurityConfig {
 
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
+    private OAuth2LoginFailHandler oAuth2LoginFailHandler;
+
     @Autowired
-    public void setAuth2LoginSuccessHandler(OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
+    public void setoAuth2LoginSuccessHandler(OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
         this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+    }
+
+    @Autowired
+    public void setoAuth2LoginFailHandler(OAuth2LoginFailHandler oAuth2LoginFailHandler) {
+        this.oAuth2LoginFailHandler = oAuth2LoginFailHandler;
     }
 
     @Autowired
@@ -96,7 +104,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/admin/customers/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER"));
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/storage/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_CUSTOMER"));
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/oauth2/**").permitAll());
-        http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())).successHandler(oAuth2LoginSuccessHandler));
+        http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())).successHandler(oAuth2LoginSuccessHandler).failureHandler(oAuth2LoginFailHandler));
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(((request, response, authException) -> {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
