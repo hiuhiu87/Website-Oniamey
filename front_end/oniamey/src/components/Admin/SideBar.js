@@ -154,7 +154,17 @@ const SideBar = (props) => {
                             <Link to="/admins/manage-statisticals"></Link>
                         </MenuItem>
                     </Menu>
+                    <Menu iconShape="circle">
+                        <MenuItem
+                            icon={<FaTag color='#CC9966' />}
+                            
+                        >
+                            Quản Lý Khuyến Mãi
+                            <Link to="/admins/manage-promotion"></Link>
+                        </MenuItem>
+                    </Menu>
                 </SidebarContent>
+                
 
                 <SidebarFooter style={{ textAlign: 'center' }}>
                     <div

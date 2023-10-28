@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
 import QrReader from "react-qr-scanner";
 import validator from "validator";
+import { useNavigate } from "react-router-dom";
 
 import formatDate from "../../../../utils/FormatDate";
 import apiUploadAvater from "../../../../services/ApiUploadAvater";
@@ -69,6 +70,7 @@ const ModifyUserComponent = () => {
   const [districtId, setDistrictId] = useState();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [open, setOpen] = useState(false);
@@ -358,7 +360,6 @@ const ModifyUserComponent = () => {
 
   useEffect(() => {
     if (address.province && provinceId !== undefined && provinceId !== null) {
-
       provinceService
         .getDistricts(provinceId)
         .then((response) => {

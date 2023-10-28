@@ -14,6 +14,7 @@
     "lodash": "4.17.21",
     "react": "18.2.0",
     "react-bootstrap": "2.4.0",
+    "react-bootstrap-time-picker": "^2.0.1",
     "react-data-table-component": "^7.5.4",
     "react-dom": "18.2.0",
     "react-icons": "4.4.0",
