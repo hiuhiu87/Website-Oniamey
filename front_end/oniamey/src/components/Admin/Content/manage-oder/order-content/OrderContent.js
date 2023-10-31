@@ -6,7 +6,7 @@ import NavOrder from '../nav-order/NavOrder';
 import { FaFilter, FaThList, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { FaMoneyBill } from 'react-icons/fa';
-import { useState, useEffect,useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Col, Form, Row } from 'react-bootstrap';
 
 const OrderContent = (Props) => {
@@ -27,7 +27,7 @@ const OrderContent = (Props) => {
         getCountStatus(orderType, keySearch);
         setData(result);
     }
-    const handleSize = ( value) => {
+    const handleSize = (value) => {
         setSize(value);
         getByStatus(0, value, Props.status, orderType, keySearch);
         setCurrentPage(1);
@@ -42,10 +42,10 @@ const OrderContent = (Props) => {
     }, []);
     const handleChangePage = (index) => {
         setPageActive(index)
-        setCurrentPage(index );
-        getByStatus(index-1, size, Props.status, orderType, keySearch);
+        setCurrentPage(index);
+        getByStatus(index - 1, size, Props.status, orderType, keySearch);
     }
-    
+
     const handleChangeType = (value) => {
         getByStatus(0, size, Props.status, value, keySearch);
         setOrderType(value);
@@ -54,7 +54,7 @@ const OrderContent = (Props) => {
         if (value === '') {
             getByStatus(0, size, Props.status, orderType, 'none');
             setKeySearch('none');
-        }else{
+        } else {
             getByStatus(0, size, Props.status, orderType, value);
             setKeySearch(value);
         }
@@ -84,7 +84,7 @@ const OrderContent = (Props) => {
                     <Col sm="6" xs lg="4">
                         <Select
                             defaultValue="Tất cả"
-                            
+                            style={{ width: '150px' }}
                             onChange={handleChangeType}
                             options={[
                                 {
@@ -165,13 +165,13 @@ const OrderContent = (Props) => {
                     })}
                 </tbody>
             </table>
-            <div className='page-footer'>  
-                   {data.content && data.content.length>0? <Pagination
-                    onChange={(pageNumber)=>handleChangePage(pageNumber)}
+            <div className='page-footer'>
+                {data.content && data.content.length > 0 ? <Pagination
+                    onChange={(pageNumber) => handleChangePage(pageNumber)}
                     simple
                     current={currentPage}
-                     defaultCurrent ={1}
-                    total={data.totalPages?(data.totalPages*10):1}/> :null}
+                    defaultCurrent={1}
+                    total={data.totalPages ? (data.totalPages * 10) : 1} /> : null}
             </div>
         </div>
     </div>
