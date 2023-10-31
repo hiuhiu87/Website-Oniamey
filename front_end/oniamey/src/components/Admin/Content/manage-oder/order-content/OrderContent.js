@@ -1,11 +1,12 @@
 import * as OrdersApi from '../../../../../services/OrdersApi'
 import './OrderContent.scss';
+import { Pagination } from 'antd';
 import { Input, Select } from 'antd';
 import NavOrder from '../nav-order/NavOrder';
 import { FaFilter, FaThList, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { FaMoneyBill } from 'react-icons/fa';
-import { useState, useEffect } from "react";
+import { useState, useEffect,useMemo } from "react";
 import { Col, Form, Row } from 'react-bootstrap';
 
 const OrderContent = (Props) => {
@@ -18,7 +19,7 @@ const OrderContent = (Props) => {
     const [keySearch, setKeySearch] = useState('none');
     const [data, setData] = useState({});
     const [pageActive, setPageActive] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [size, setSize] = useState(5);
 
     const getByStatus = async (page, sizeProp, status, orderType, keySearch) => {
@@ -26,12 +27,11 @@ const OrderContent = (Props) => {
         getCountStatus(orderType, keySearch);
         setData(result);
     }
-    const handleSize = (value) => {
+    const handleSize = ( value) => {
         setSize(value);
         getByStatus(0, value, Props.status, orderType, keySearch);
         setCurrentPage(1);
     }
-
     useEffect(() => {
         setPageActive(0);
         setCurrentPage(1);
@@ -42,9 +42,10 @@ const OrderContent = (Props) => {
     }, []);
     const handleChangePage = (index) => {
         setPageActive(index)
-        setCurrentPage(index + 1);
-        getByStatus(index, size, Props.status, orderType, keySearch);
+        setCurrentPage(index );
+        getByStatus(index-1, size, Props.status, orderType, keySearch);
     }
+    
     const handleChangeType = (value) => {
         getByStatus(0, size, Props.status, value, keySearch);
         setOrderType(value);
@@ -164,19 +165,13 @@ const OrderContent = (Props) => {
                     })}
                 </tbody>
             </table>
-            <div className='page-footer'>
-                {data.totalPages ? <div>{'Trang: ' + currentPage + '/' + data.totalPages}</div> : null}
-                {data.totalPages ? (<div className='page-item'>
-                    {Array.from({ length: data.totalPages }, (_, index) => (
-                        <button className={`${pageActive === index ? 'page-active'
-                            : ''} item `} key={index + 1}
-                            onClick={() => {
-                                handleChangePage(index)
-                            }}>
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>) : null}
+            <div className='page-footer'>  
+                   {data.content && data.content.length>0? <Pagination
+                    onChange={(pageNumber)=>handleChangePage(pageNumber)}
+                    simple
+                    current={currentPage}
+                     defaultCurrent ={1}
+                    total={data.totalPages?(data.totalPages*10):1}/> :null}
             </div>
         </div>
     </div>
