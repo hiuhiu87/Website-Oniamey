@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9d104f6-0854-400b-aad6-d1936cb874db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/oniamey.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/palette.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/previews.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dev/useInitial.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Admin/Content/manage-user/layout/Customer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Admin/Content/manage-user/layout/Customer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Admin/Content/manage-user/layout/ModifyUserComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Admin/Content/manage-user/layout/ModifyUserComponent.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +37,9 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\Admin\\AppData\\Roaming\\npm\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "D:\\WebStorm 2022.2.5\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -52,7 +47,7 @@
     <option name="myId2Visible">
       <map>
         <entry key="com.haulmont.rcb.reactComponents" value="false" />
-        <entry key="com.haulmont.rcb.reactInspector" value="true" />
+        <entry key="com.haulmont.rcb.reactInspector" value="false" />
       </map>
     </option>
   </component>
@@ -65,6 +60,11 @@
       <option name="presentableId" value="Default" />
       <updated>1698602753842</updated>
       <workItem from="1698602758508" duration="683000" />
+      <workItem from="1698678067675" duration="1591000" />
+      <workItem from="1698748455386" duration="1334000" />
+      <workItem from="1698758639305" duration="232000" />
+      <workItem from="1698760500059" duration="4192000" />
+      <workItem from="1698765581065" duration="9907000" />
     </task>
     <servers />
   </component>

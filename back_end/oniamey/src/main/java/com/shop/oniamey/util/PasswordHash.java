@@ -13,6 +13,6 @@ public class PasswordHash {
     }
 
 //    public static void main(String[] args) {
-//        System.out.println(hashPassword("11111"));
+//        System.out.println(hashPassword("123456"));
 //    }
 }

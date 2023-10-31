@@ -53,7 +53,6 @@ const Customer = (props) => {
     rangeSeparatorText: "trên",
     selectAllRowsItem: true,
     selectAllRowsItemText: "Tất cả",
-    // defaultValue: "5",
   };
 
   const handleRowClicked = (row) => {
@@ -106,6 +105,7 @@ const Customer = (props) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const columns = useMemo (() =>[
     {
       name: renderNameColumns(),
