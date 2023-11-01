@@ -42,12 +42,16 @@ const getAllProducts = () => {
     return instance.get(`api/v1/product/getAll`);
 }
 
-const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId) => {
+const getAllProductsWithPage = (page, limit) => {
+    return instance.get(`api/v1/product?page=${page}&limit=${limit}`);
+}
+
+const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId, names, quantities, prices) => {
     const data = new FormData();
     data.append('productId', productId);
     data.append('categoryId', categoryId);
     sizeIds.forEach(sizeId => {
-        data.append('colorId', sizeId);
+        data.append('sizeId', sizeId);
     });
     colorIds.forEach(colorId => {
         data.append('colorId', colorId);
@@ -56,6 +60,36 @@ const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId,
     data.append('brandId', brandId);
     data.append('collarId', collarId);
     data.append('sleeveLengthId', sleeveLengthId);
+    data.append('names', names);
+    data.append('quantities', quantities);
+    data.append('prices', prices);
+    return instance.post(`api/v1/product/product-details`, data);
+}
+
+const postImageForProductDetails = (colorId, productDetailIds, imageUrl) => {
+    const data = new FormData();
+    data.append('colorId', colorId);
+    if (!Array.isArray(productDetailIds)) {
+        productDetailIds = [productDetailIds];
+    }
+    productDetailIds.forEach((productDetailId, index) => {
+        data.append('productDetailId', productDetailId);
+        if (imageUrl[index] && imageUrl[index].originFileObj) {
+            data.append('imageUrl', imageUrl[index].originFileObj);
+        }
+    });
+    return instance.post(`api/v1/images/upload`, data);
+}
+
+const deleteProductDetailsByProperty = (productId, sizeIds, colorIds) => {
+    const data = new FormData();
+    data.append('productId', productId);
+    sizeIds.forEach(sizeId => {
+        data.append('sizeId', sizeId);
+    });
+    colorIds.forEach(colorId => {
+        data.append('colorId', colorId);
+    });
     return instance.post(`api/v1/product/product-details`, data);
 }
 
@@ -63,8 +97,21 @@ const getAllProductDetails = () => {
     return instance.get(`api/v1/product/product-details`)
 }
 
+const getAllProductDetailsWithPage = (page, limit) => {
+    return instance.get(`api/v1/product/product-details-page?page=${page}&limit=${limit}`)
+}
+
+const getAllProductDetailsByProductId = (productId, page, limit) => {
+    return instance.get(`api/v1/product/product-details/${productId}?page=${page}&limit=${limit}`)
+}
+
 const getAllProperties = (property) => {
     return instance.get(`api/v1/` + property);
 }
 
-export { getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty, postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductDetails, postProductDetail };
+export {
+    getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty,
+    postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductsWithPage,
+    getAllProductDetailsWithPage, getAllProductDetails, postProductDetail, deleteProductDetailsByProperty, getAllProductDetailsByProductId,
+    postImageForProductDetails
+};

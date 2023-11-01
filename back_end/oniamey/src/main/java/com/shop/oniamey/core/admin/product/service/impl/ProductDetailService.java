@@ -28,6 +28,8 @@ import com.shop.oniamey.repository.product.SizeRepository;
 import com.shop.oniamey.repository.product.SleeveLengthRepository;
 import lombok.RequiredArgsConstructor;
 import com.shop.oniamey.util.QRCodeProduct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,6 @@ import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +63,11 @@ public class ProductDetailService implements IProductDetailService {
     private final ImageRepository imageRepository;
 
     @Override
+    public Page<ProductDetailResponse> getAllWithPage(PageRequest pageRequest) {
+        return productDetailRepository.getAll(pageRequest);
+    }
+
+    @Override
     public List<ProductDetailResponse> getAll() {
         return productDetailRepository.getAll();
     }
@@ -73,8 +79,13 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
-    public List<ProductDetailResponse> getAllByProductId(Long productId) {
-        return productDetailRepository.getAllByProductId(productId);
+    public Page<ProductDetailResponse> getAllByProductId(Long productId, PageRequest pageRequest) {
+        return productDetailRepository.getAllByProductId(productId, pageRequest);
+    }
+
+    @Override
+    public List<ProductDetailResponse> getAllByColorId(Long colorId) {
+        return productDetailRepository.getAllByColorId(colorId);
     }
 
     private <T> T getPropertyById(Long id, JpaRepository<T, Long> repository, String propertyName) throws DataNotFoundException {
@@ -82,6 +93,73 @@ public class ProductDetailService implements IProductDetailService {
                 .orElseThrow(() ->
                         new DataNotFoundException(propertyName + " not found" + " with id: " + id));
     }
+
+//    @Override
+//    public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException, WriterException {
+//        Product existingProduct = getPropertyById(addProductDetailRequest.getProductId(), productRepository, "Product");
+//        Category existingCategory = getPropertyById(addProductDetailRequest.getCategoryId(), categoryRepository, "Category");
+//        Material existingMaterial = getPropertyById(addProductDetailRequest.getMaterialId(), materialRepository, "Material");
+//        Brand existingBrand = getPropertyById(addProductDetailRequest.getBrandId(), brandRepository, "Brand");
+//        Collar existingCollar = getPropertyById(addProductDetailRequest.getCollarId(), collarRepository, "Collar");
+//        SleeveLength existingSleeveLength = getPropertyById(addProductDetailRequest.getSleeveLengthId(), sleeveLengthRepository, "SleeveLength");
+//        List<Long> quantities = addProductDetailRequest.getQuantities();
+//        List<Float> prices = addProductDetailRequest.getPrices();
+//
+//        List<ProductDetail> productDetails = new ArrayList<>();
+//        if (existingProduct != null) {
+//            List<Long> colorIds = addProductDetailRequest.getColorId();
+//            List<Long> sizeIds = addProductDetailRequest.getSizeId();
+//
+//
+//            for (int i = 0; i < colorIds.size(); i++) {
+//                for (int j = 0; j < sizeIds.size(); j++) {
+//                    Long colorId = colorIds.get(i);
+//                    Long sizeId = sizeIds.get(j);
+//                    Long quantity = quantities.get(i * sizeIds.size() + j);
+//                    quantities.add(quantity);
+//                    Float price = prices.get(i * sizeIds.size() + j);
+//                    prices.add(price);
+//                    ProductDetail existingProductDetail = productDetailRepository.getProductByProperty(
+//                            existingProduct.getId(),
+//                            colorId, sizeId, existingMaterial.getId(),
+//                            existingBrand.getId(), existingCollar.getId(),
+//                            existingSleeveLength.getId()
+//                    );
+//                    if (existingProductDetail != null) {
+//                        Long newQuantity = existingProductDetail.getQuantity() + 10L;
+//                        existingProductDetail.setQuantity(newQuantity);
+//                        productDetailRepository.save(existingProductDetail);
+//                        productDetails.add(existingProductDetail);
+//                    } else {
+//                        ProductDetail productDetail = new ProductDetail();
+////                    productDetailRepository.deleteByProductAndAttributes(existingProduct.getId(), colorId, sizeId, existingMaterial.getId(), existingBrand.getId(), existingCollar.getId(), existingSleeveLength.getId());
+//                        productDetail.setProduct(existingProduct);
+//                        productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() -> new DataNotFoundException("Color not found")));
+//                        productDetail.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new DataNotFoundException("Size not found")));
+//                        productDetail.setCategory(existingCategory);
+//                        productDetail.setMaterial(existingMaterial);
+//                        productDetail.setBrand(existingBrand);
+//                        productDetail.setCollar(existingCollar);
+//                        productDetail.setSleeveLength(existingSleeveLength);
+//                        String randomCode = QRCodeProduct.generateRandomCode();
+//                        productDetail.setCode(randomCode);
+//                        productDetail.setName(existingProduct.getProductName() + " - " + " ["
+//                                + productDetail.getColor().getName() + "]" + " [" + productDetail.getSize().getName() + "]");
+//                        productDetail.setGender(true);
+//                        productDetail.setPrice(price);
+//                        productDetail.setQuantity(quantity);
+//                        productDetail.setWeight(addProductDetailRequest.getWeight());
+//                        productDetail.setDeleted(false);
+//                        ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
+//                        productDetails.add(savedProductDetail);
+//                        productDetailRepository.save(productDetail);
+//                        QRCodeProduct.generateQRCode(productDetail);
+//                    }
+//                }
+//            }
+//        }
+//        return productDetails;
+//    }
 
     @Override
     public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException, WriterException {
@@ -94,34 +172,55 @@ public class ProductDetailService implements IProductDetailService {
 
         List<ProductDetail> productDetails = new ArrayList<>();
         if (existingProduct != null) {
-            Set<Long> colorIds = addProductDetailRequest.getColorId();
-            Set<Long> sizeIds = addProductDetailRequest.getSizeId();
+            List<Long> colorIds = addProductDetailRequest.getColorId();
+            List<Long> sizeIds = addProductDetailRequest.getSizeId();
+            List<String> names = addProductDetailRequest.getNames();
+            List<Long> quantities = addProductDetailRequest.getQuantities();
+            List<Float> prices = addProductDetailRequest.getPrices();
 
-            for (Long colorId : colorIds) {
-                for (Long sizeId : sizeIds) {
+            for (int i = 0; i < colorIds.size(); i++) {
+                for (int j = 0; j < sizeIds.size(); j++) {
+                    Long colorId = colorIds.get(i);
+                    Long sizeId = sizeIds.get(j);
+                    Long quantity = quantities.get(i * sizeIds.size() + j);
+                    Float price = prices.get(i * sizeIds.size() + j);
+                    String name = names.get(i * sizeIds.size() + j);
 
-                    ProductDetail productDetail = new ProductDetail();
+                    ProductDetail existingProductDetail = productDetailRepository.getProductByProperty(
+                            existingProduct.getId(),
+                            colorId, sizeId, existingMaterial.getId(),
+                            existingBrand.getId(), existingCollar.getId(),
+                            existingSleeveLength.getId()
+                    );
 
-                    productDetail.setProduct(existingProduct);
-                    productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() ->new DataNotFoundException("Color not found")));
-                    productDetail.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new DataNotFoundException("Size not found")));
-                    productDetail.setCategory(existingCategory);
-                    productDetail.setMaterial(existingMaterial);
-                    productDetail.setBrand(existingBrand);
-                    productDetail.setCollar(existingCollar);
-                    productDetail.setSleeveLength(existingSleeveLength);
-                    String randomCode = QRCodeProduct.generateRandomCode();
-                    productDetail.setCode(randomCode);
-                    productDetail.setName(existingProduct.getName() + " - " + " ["
-                            + productDetail.getColor().getName() + "]" + " [" + productDetail.getSize().getName() + "]");
-                    productDetail.setGender(addProductDetailRequest.getGender());
-                    productDetail.setPrice(addProductDetailRequest.getPrice());
-                    productDetail.setQuantity(addProductDetailRequest.getQuantity());
-                    productDetail.setWeight(addProductDetailRequest.getWeight());
-                    ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
-                    productDetails.add(savedProductDetail);
-                    productDetailRepository.save(productDetail);
-                    QRCodeProduct.generateQRCode(productDetail);
+                    if (existingProductDetail != null) {
+                        Long newQuantity = existingProductDetail.getQuantity() + quantity;
+                        existingProductDetail.setQuantity(newQuantity);
+                        existingProductDetail.setPrice(price);
+                        productDetailRepository.save(existingProductDetail);
+                        productDetails.add(existingProductDetail);
+                    } else {
+                        ProductDetail productDetail = new ProductDetail();
+                        productDetail.setProduct(existingProduct);
+                        productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() -> new DataNotFoundException("Color not found")));
+                        productDetail.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new DataNotFoundException("Size not found")));
+                        productDetail.setCategory(existingCategory);
+                        productDetail.setMaterial(existingMaterial);
+                        productDetail.setBrand(existingBrand);
+                        productDetail.setCollar(existingCollar);
+                        productDetail.setSleeveLength(existingSleeveLength);
+                        String randomCode = QRCodeProduct.generateRandomCode();
+                        productDetail.setCode(randomCode);
+                        productDetail.setName(name);
+                        productDetail.setGender(true);
+                        productDetail.setPrice(price);
+                        productDetail.setQuantity(quantity);
+                        productDetail.setWeight(addProductDetailRequest.getWeight());
+                        productDetail.setDeleted(false);
+                        ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
+                        productDetails.add(savedProductDetail);
+                        QRCodeProduct.generateQRCode(productDetail);
+                    }
                 }
             }
         }
@@ -174,5 +273,15 @@ public class ProductDetailService implements IProductDetailService {
         existingProductDetail.setDeleted(true);
         productDetailRepository.save(existingProductDetail);
     }
+
+//    @Override
+//    @Transactional
+//    public void deleteByColorIdAndSizeId(DeleteProductDetailRequest deleteProductDetailRequest) {
+//        Long productId = deleteProductDetailRequest.getProductId();
+//        List<Long> sizeId = deleteProductDetailRequest.getSizeId();
+//        List<Long> colorId = deleteProductDetailRequest.getColorId();
+//        productDetailRepository.deleteByProperty(productId, sizeId, colorId);
+//        productRepository.flush();
+//    }
 
 }

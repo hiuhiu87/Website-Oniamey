@@ -1,6 +1,5 @@
 import { React, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { Modal } from 'antd';
 import _ from 'lodash';
 import { postCreateProperty } from '../../../../../services/apiService';
 
@@ -25,21 +24,11 @@ const ModalCreateColor = (props) => {
     };
 
     return (
-        <Modal
-            show={show}
-            onHide={handleClose}
-            size="x"
-            backdrop="static"
-            className='modal-add-color'
-            centered
-        >
-            <Modal.Header>
-                <Modal.Title>Add New Color</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <>
+            <Modal title="Thêm Màu Sắc" open={show} onOk={() => handleSubmitCreateColor()} onCancel={handleClose}>
                 <form className="row g-3">
                     <div className="col-md-12">
-                        <label className="form-label">Name</label>
+                        <label className="form-label">Tên</label>
                         <input
                             type="text"
                             className="form-control"
@@ -48,23 +37,15 @@ const ModalCreateColor = (props) => {
                         />
                     </div>
                     <div className="col-md-12">
-                        <label className="form-label">Status</label>
+                        <label className="form-label">Trạng thái</label>
                         <select className="form-select" onChange={(e) => setDeleted(e.target.value)}>
-                            <option value={false}>Active</option>
-                            <option value={true}>DeActive</option>
+                            <option value={false}>Hoạt động</option>
+                            <option value={true}>Ngừng hoạt động</option>
                         </select>
                     </div>
                 </form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="dark" onClick={() => handleSubmitCreateColor()}>
-                    Save
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
+            </Modal>
+        </>
     );
 }
 

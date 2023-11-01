@@ -7,6 +7,7 @@ import ModalCreateMaterial from './ModalCreateMaterial';
 import ModalUpdateMaterial from './ModalUpdateMaterial';
 import ModalDeleteMaterial from './ModalDeleteMaterial';
 import { getAllProperties } from '../../../../../services/apiService';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
 const ManageMaterial = (props) => {
 
@@ -31,12 +32,12 @@ const ManageMaterial = (props) => {
         console.log(res);
     }
 
-    const handleClickBtnUpdate = (material) => {
+    const handleShowModalUpdateMaterial = (material) => {
         setShowModalUpdateMaterial(true);
         setDataUpdate(material);
     }
 
-    const handleClickBtnDelete = (material) => {
+    const handleShowModalDeleteMaterial = (material) => {
         setShowModalDeleteMaterial(true);
         setDataDelete(material);
     }
@@ -61,28 +62,35 @@ const ManageMaterial = (props) => {
                     <div className="title">
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
-
                 </div>
-                <form>
-                    <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Chất Liệu</label>
-                        <div class="col-sm-6 d-flex">
-                            <input type="text" class="form-control me-2" id="inputEmail3" />
-                            <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="inputPassword3" class="col-sm-1 col-form-label">Trạng Thái</label>
-                        <div class="col-sm-6 d-flex">
-                            <select class="form-select me-2" id="inputPassword3">
+                <Form>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Chất liệu
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Control type="text" />
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Trạng Thái
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Select>
                                 <option value="option1">Option 1</option>
                                 <option value="option2">Option 2</option>
                                 <option value="option3">Option 3</option>
-                            </select>
-                            <button type="button" class="btn btn-secondary">Làm Mới</button>
-                        </div>
-                    </div>
-                </form>
+                            </Form.Select>
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
             <div className='manage-material-table'>
                 <div className='list-material-title'>
@@ -92,7 +100,7 @@ const ManageMaterial = (props) => {
                     <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateMaterial(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
-                <table class="table">
+                <Table striped hover responsive>
                     <thead>
                         <tr>
                             <th scope="col" className='px-5 text-center'>STT</th>
@@ -111,18 +119,24 @@ const ManageMaterial = (props) => {
                                     <td className="text-center">{material.updatedAt}</td>
                                     <td className="text-center">{material.deleted === false ? 'Active' : 'DeActive'}</td>
                                     <td className="text-center">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                onClick={() => handleClickBtnUpdate(material)}
-                                            >
-                                                <FaPenSquare color='#ffffff' />
-                                            </button>
-                                            <button className="btn-delete btn btn-dark short-button"
-                                                onClick={() => handleClickBtnDelete(material)}
-                                            >
-                                                <MdDeleteSweep />
-                                            </button>
-                                        </div>
+                                        <Row className='justify-content-md-center'>
+                                            <Col md="auto">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalUpdateMaterial(material)}
+                                                >
+                                                    <FaPenSquare />
+                                                </Button>
+                                            </Col>
+                                            <Col xs lg="2">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalDeleteMaterial(material)}
+                                                >
+                                                    <MdDeleteSweep />
+                                                </Button>
+                                            </Col>
+                                        </Row>
                                     </td>
                                 </tr>
                             )
@@ -135,7 +149,7 @@ const ManageMaterial = (props) => {
                             </tr>
                         }
                     </tbody>
-                </table>
+                </Table>
             </div>
             <ModalCreateMaterial
                 show={showModalCreateMaterial}

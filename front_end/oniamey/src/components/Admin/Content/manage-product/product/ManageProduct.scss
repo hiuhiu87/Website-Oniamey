@@ -6,14 +6,46 @@
     background-color: #CC9966;
 }
 
+.manage-product-title {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+
+.search-product-title {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .manage-product-search {
-    max-width: 1800px;
+    width: 101.5%;
     margin: 0 auto;
     padding: 20px;
     background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     height: 102%;
+    border-radius: 5px;
+}
+
+.list-product-title {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.manage-product-table {
+    width: 101.5%;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 560px;
     border-radius: 5px;
 }
 
@@ -43,3 +75,94 @@
         }
     }
 }
+
+.ant-upload-wrapper .ant-upload-picture-card-wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+
+.manage-product-add-title {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.search-product-add-title {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.manage-product-add-search {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    height: 102%;
+    border-radius: 5px;
+}
+
+.list-product-add-title {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.manage-product-add-table {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 560px;
+    border-radius: 5px;
+}
+
+.pagination .previous a {
+    background-color: black;
+    color: #CC9966;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .pagination .previous a:hover {
+    color: #ffffff;
+    background-color: #CC9966;
+  }
+  
+  .pagination .next a {
+    background-color: black;
+    color: #CC9966;
+    border-radius: 5px;
+    margin-left: 50%;
+  }
+  
+  .pagination .next a:hover {
+    color: #ffffff;
+    background-color: #CC9966;
+  }
+
+  ul.pagination li.selected {
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+
+  ul.pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+  }
+
+  
+  
+
+  
+  

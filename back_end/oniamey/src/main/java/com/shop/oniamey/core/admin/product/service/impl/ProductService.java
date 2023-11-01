@@ -51,7 +51,7 @@ public class ProductService implements IProductService {
         String randomCode = QRCodeProduct.generateRandomCode();
         Product product = new Product();
         product.setCode(randomCode);
-        product.setName(productRequest.getName());
+        product.setProductName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
         product.setDeleted(productRequest.getDeleted());
         Product savedProduct = productRepository.save(product);
@@ -64,7 +64,7 @@ public class ProductService implements IProductService {
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Product not found"));
         String randomCode = QRCodeProduct.generateRandomCode();
-        existingProduct.setName(productRequest.getName());
+        existingProduct.setProductName(productRequest.getName());
         existingProduct.setCode(randomCode);
         existingProduct.setDescription(productRequest.getDescription());
 

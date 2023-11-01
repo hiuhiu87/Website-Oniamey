@@ -7,6 +7,7 @@ import ModalCreateCategory from './ModalCreateCategory';
 import ModalUpdateCategory from './ModalUpdateCategory';
 import ModalDeleteCategory from './ModalDeleteCategory';
 import { getAllProperties } from '../../../../../services/apiService';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
 const ManageCategory = (props) => {
 
@@ -31,12 +32,12 @@ const ManageCategory = (props) => {
         console.log(res);
     }
 
-    const handleClickBtnUpdate = (category) => {
+    const handleShowModalUpdateCategory = (category) => {
         setShowModalUpdateCategory(true);
         setDataUpdate(category);
     }
 
-    const handleClickBtnDelete = (category) => {
+    const handleShowModalDeleteCategory = (category) => {
         setShowModalDeleteCategory(true);
         setDataDelete(category);
     }
@@ -63,26 +64,34 @@ const ManageCategory = (props) => {
                     </div>
 
                 </div>
-                <form>
-                    <div class="row mb-3">
-                        <label for="inputEmail3" class="col-sm-1 col-form-label">Danh Mục</label>
-                        <div class="col-sm-6 d-flex">
-                            <input type="text" class="form-control me-2" id="inputEmail3" />
-                            <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="inputPassword3" class="col-sm-1 col-form-label">Trạng Thái</label>
-                        <div class="col-sm-6 d-flex">
-                            <select class="form-select me-2" id="inputPassword3">
+                <Form>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Danh mục
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Control type="text" />
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Trạng Thái
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Select>
                                 <option value="option1">Option 1</option>
                                 <option value="option2">Option 2</option>
                                 <option value="option3">Option 3</option>
-                            </select>
-                            <button type="button" class="btn btn-secondary">Làm Mới</button>
-                        </div>
-                    </div>
-                </form>
+                            </Form.Select>
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
             <div className='manage-category-table'>
                 <div className='list-category-title'>
@@ -92,7 +101,7 @@ const ManageCategory = (props) => {
                     <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateCategory(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
-                <table class="table">
+                <Table striped hover responsive>
                     <thead>
                         <tr>
                             <th scope="col" className='px-5 text-center'>STT</th>
@@ -111,18 +120,24 @@ const ManageCategory = (props) => {
                                     <td className="text-center">{category.updatedAt}</td>
                                     <td className="text-center">{category.deleted === false ? 'Active' : 'DeActive'}</td>
                                     <td className="text-center">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                onClick={() => handleClickBtnUpdate(category)}
-                                            >
-                                                <FaPenSquare color='#ffffff' />
-                                            </button>
-                                            <button className="btn-delete btn btn-dark short-button"
-                                                onClick={() => handleClickBtnDelete(category)}
-                                            >
-                                                <MdDeleteSweep />
-                                            </button>
-                                        </div>
+                                        <Row className='justify-content-md-center'>
+                                            <Col md="auto">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalUpdateCategory(category)}
+                                                >
+                                                    <FaPenSquare />
+                                                </Button>
+                                            </Col>
+                                            <Col xs lg="2">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalDeleteCategory(category)}
+                                                >
+                                                    <MdDeleteSweep />
+                                                </Button>
+                                            </Col>
+                                        </Row>
                                     </td>
                                 </tr>
                             )
@@ -135,7 +150,7 @@ const ManageCategory = (props) => {
                             </tr>
                         }
                     </tbody>
-                </table>
+                </Table>
             </div>
             <ModalCreateCategory
                 show={showModalCreateCategory}

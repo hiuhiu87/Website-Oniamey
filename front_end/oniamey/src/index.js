@@ -12,6 +12,8 @@ import HomePage from './components/Home/HomePage';
 import DashBoard from './components/Admin/Content/dashboard/DashBoard';
 import SalesAtTheCounter from './components/Admin/Content/sales-at-the-counter/SalesAtTheCounter';
 import ManageProduct from './components/Admin/Content/manage-product/product/ManageProduct'
+import AddProduct from './components/Admin/Content/manage-product/product/AddProduct'
+import UpdateProduct from './components/Admin/Content/manage-product/product/UpdateProduct'
 import ManageCategory from './components/Admin/Content/manage-product/category/ManageCategory';
 import ManageBrand from './components/Admin/Content/manage-product/brand/ManageBrand';
 import ManageMaterial from './components/Admin/Content/manage-product/material/ManageMaterial';
@@ -42,8 +44,11 @@ root.render(
           <Route
             path="sales-at-the-counter"
             element={<SalesAtTheCounter />}
-          ></Route>
+          >
+          </Route>
           <Route path="manage-products" element={<ManageProduct />}></Route>
+          <Route path="update-products/:productId" element={<UpdateProduct />}></Route>
+          <Route path="add-products" element={<AddProduct />}></Route>
           <Route path="manage-categories" element={<ManageCategory />}></Route>
           <Route path="manage-brands" element={<ManageBrand />}></Route>
           <Route path="manage-materials" element={<ManageMaterial />}></Route>

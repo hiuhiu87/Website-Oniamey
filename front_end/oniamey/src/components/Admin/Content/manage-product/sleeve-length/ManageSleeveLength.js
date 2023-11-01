@@ -7,6 +7,7 @@ import ModalCreateSleeveLength from './ModalCreateSleeveLength';
 import ModalUpdateSleeveLength from './ModalUpdateSleeveLength';
 import ModalDeleteSleeveLength from './ModalDeleteSleeveLength';
 import { getAllProperties } from '../../../../../services/apiService';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
 const ManageSleeveLength = (props) => {
 
@@ -31,12 +32,12 @@ const ManageSleeveLength = (props) => {
         console.log(res);
     }
 
-    const handleClickBtnUpdate = (sleeveLength) => {
+    const handleShowModalUpdateSleeveLength = (sleeveLength) => {
         setShowModalUpdateSleeveLength(true);
         setDataUpdate(sleeveLength);
     }
 
-    const handleClickBtnDelete = (sleeveLength) => {
+    const handleShowModalDeleteSleeveLength = (sleeveLength) => {
         setShowModalDeleteSleeveLength(true);
         setDataDelete(sleeveLength);
     }
@@ -62,31 +63,34 @@ const ManageSleeveLength = (props) => {
                         <FaFilter size={26} /> Bộ Lọc
                     </div>
                 </div>
-
-                <div className='main-container'>
-                    <div className='w-50'>
-                        <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Chiều Dài Tay</label>
-                            <div class="col d-flex align-content-between">
-                                <input type="text" class="form-control me-4" id="inputEmail3" />
-                                <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng Thái</label>
-                            <div class="col d-flex">
-                                <select class="form-select me-4" id="inputPassword3">
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                </select>
-                                <button type="button" class="btn btn-secondary">Làm Mới</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+                <Form>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Chiều dài
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Control type="text" />
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Form.Label column sm="1">
+                            Trạng Thái
+                        </Form.Label>
+                        <Col sm="6" xs lg="4">
+                            <Form.Select>
+                                <option value="option1">Option 1</option>
+                                <option value="option2">Option 2</option>
+                                <option value="option3">Option 3</option>
+                            </Form.Select>
+                        </Col>
+                        <Col xs lg="1">
+                            <Button variant="secondary">Tìm Kiếm</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
             <div className='manage-sleeve-length-table'>
                 <div className='list-sleeve-length-title'>
@@ -96,7 +100,7 @@ const ManageSleeveLength = (props) => {
                     <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateSleeveLength(true)}>
                         <MdLibraryAdd /> Thêm</button>
                 </div>
-                <table class="table">
+                <Table striped hover responsive>
                     <thead>
                         <tr>
                             <th scope="col" className='px-5 text-center'>STT</th>
@@ -115,18 +119,24 @@ const ManageSleeveLength = (props) => {
                                     <td className="text-center">{sleeveLength.updatedAt}</td>
                                     <td className="text-center">{sleeveLength.deleted === false ? 'Active' : 'DeActive'}</td>
                                     <td className="text-center">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                onClick={() => handleClickBtnUpdate(sleeveLength)}
-                                            >
-                                                <FaPenSquare color='#ffffff' />
-                                            </button>
-                                            <button className="btn-delete btn btn-dark short-button"
-                                                onClick={() => handleClickBtnDelete(sleeveLength)}
-                                            >
-                                                <MdDeleteSweep />
-                                            </button>
-                                        </div>
+                                        <Row className='justify-content-md-center'>
+                                            <Col md="auto">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalUpdateSleeveLength(sleeveLength)}
+                                                >
+                                                    <FaPenSquare />
+                                                </Button>
+                                            </Col>
+                                            <Col xs lg="2">
+                                                <Button
+                                                    variant="dark"
+                                                    onClick={() => handleShowModalDeleteSleeveLength(sleeveLength)}
+                                                >
+                                                    <MdDeleteSweep />
+                                                </Button>
+                                            </Col>
+                                        </Row>
                                     </td>
                                 </tr>
                             )
@@ -139,7 +149,7 @@ const ManageSleeveLength = (props) => {
                             </tr>
                         }
                     </tbody>
-                </table>
+                </Table>
             </div>
             <ModalCreateSleeveLength
                 show={showModalCreateSleeveLength}

@@ -14,30 +14,42 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = """
-                    SELECT id,
-                    code as code,
-                    name as name,
-                    description as description,
+                    SELECT p.id,
+                    p.code as code,
+                    p.name as productName,
+                    sum_quantity as quantity,
+                    p.description as description,
                     created_at as createdAt,
                     updated_at as updatedAt,
                     created_by as createdBy,
                     updated_by as updatedBy,
                     deleted as deleted
-                    FROM product
+                    FROM product p
+                    LEFT JOIN (
+                      SELECT id_product, sum(quantity) AS sum_quantity
+                      FROM product_detail
+                      GROUP BY id_product
+                    ) AS sub ON p.id = sub.id_product
             """, nativeQuery = true)
     Page<ProductResponse> getAll(Pageable pageable);
 
     @Query(value = """
-                    SELECT id,
-                    code as code,
-                    name as name,
-                    description as description,
+                    SELECT p.id,
+                    p.code as code,
+                    p.name as productName,
+                    sum_quantity as quantity,
+                    p.description as description,
                     created_at as createdAt,
                     updated_at as updatedAt,
                     created_by as createdBy,
                     updated_by as updatedBy,
                     deleted as deleted
-                    FROM product order by created_at desc
+                    FROM product p
+                    LEFT JOIN (
+                      SELECT id_product, sum(quantity) AS sum_quantity
+                      FROM product_detail
+                      GROUP BY id_product
+                    ) AS sub ON p.id = sub.id_product
             """, nativeQuery = true)
     List<ProductResponse> getAll();
 }

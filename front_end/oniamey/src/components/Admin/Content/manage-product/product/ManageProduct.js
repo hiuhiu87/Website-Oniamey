@@ -1,54 +1,31 @@
 import { React, useState, useEffect } from 'react';
-import { FaFilter, FaThList, FaProductHunt, FaPenSquare, FaMousePointer } from 'react-icons/fa';
+import axios from "axios";
+import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom';
+import { FaFilter, FaThList, FaProductHunt, FaPenSquare, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import { AiFillEye } from 'react-icons/ai';
 import { getAllProducts } from '../../../../../services/apiService';
 import { getAllProductDetails } from '../../../../../services/apiService';
-import { getAllProperties } from '../../../../../services/apiService';
-import { postProductDetail } from '../../../../../services/apiService';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import { getAllProductDetailsWithPage } from '../../../../../services/apiService';
+import { getAllProductsWithPage } from '../../../../../services/apiService';
 import './ManageProduct.scss';
 import ModalCreateProduct from './ModalCreateProduct';
-import ModalUpdateProduct from './ModalUpdateProduct';
+import ModalUpdateProduct from './UpdateProduct';
 import ModalDeleteProduct from './ModalDeleteProduct';
-import ModalCreateBrand from '../brand/ModalCreateBrand';
-import ModalCreateMaterial from '../material/ModalCreateMaterial';
-import ModalCreateCategory from '../category/ModalCreateCategory';
-import ModalCreateCollar from '../collar/ModalCreateCollar';
-import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
-import { Modal, Button } from 'antd';
+import { Tabs } from 'antd';
+import { Col, Container, Form, Row, Button } from 'react-bootstrap';
 import 'antd-button-color/dist/css/style.css';
-import { Col, Row } from 'react-bootstrap';
 
 const ManageProduct = (props) => {
 
     const imageProductDetail = "D:\\Product\\Website-Oniamey\\front_end\\oniamey\\src\\assets\\uploads\\";
 
-    const [brandId, setBrandId] = useState('');
-    const [listBrand, setListBrand] = useState([]);
-    const [categoryId, setCategoryId] = useState('');
-    const [listCategory, setListCategory] = useState([]);
-    const [materialId, setMaterialId] = useState('');
-    const [listMaterial, setListMaterial] = useState([]);
-    const [collarId, setCollarId] = useState('');
-    const [listCollar, setListCollar] = useState([]);
-    const [sleeveLengthId, setSleeveLengthlId] = useState('');
-    const [listSleeveLength, setListSleeveLength] = useState([]);
-    const [sizeId, setSizeId] = useState('');
-    const [listSize, setListSize] = useState([]);
-    const [colorId, setColorId] = useState('');
-    const [listColor, setListColor] = useState([]);
+    const { TabPane } = Tabs;
 
     const [showModalCreateProduct, setShowModalCreateProduct] = useState(false);
     const [showModalUpdateProduct, setShowModalUpdateProduct] = useState(false);
     const [showModalDeleteProduct, setShowModalDeleteProduct] = useState(false);
-
-    const [showModalCreateBrand, setShowModalCreateBrand] = useState(false);
-    const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
-    const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
-    const [showModalCreateCollar, setShowModalCreateCollar] = useState(false);
-    const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
-
 
     const [dataUpdate, setDataUpdate] = useState({});
     const [dataDelete, setDataDelete] = useState({});
@@ -61,13 +38,6 @@ const ManageProduct = (props) => {
 
     const [selectAll, setSelectAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState({});
-
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedSizes, setSelectedSizes] = useState([]);
-
-    const [productDetails, setProductDetails] = useState([]);
-
 
     const handleSelectAll = () => {
         const newSelectedItems = {};
@@ -86,78 +56,24 @@ const ManageProduct = (props) => {
 
     useEffect(() => {
         fetchListProduct();
-        fetchListBrand();
-        fetchListCategory();
-        fetchListCollar();
-        fetchListSleeveLength();
-        fetchListMaterial();
         fetchListProductDetail();
-        fetchListSize();
-        fetchListColor();
     }, []);
-
-    useEffect(() => {
-        updateProductDetails();
-    }, [selectedColors, selectedSizes]);
 
     const fetchListProduct = async () => {
         let response = await getAllProducts();
         setListProduct(response.data);
         setProductId(response.data[0].id);
-        console.log(typeof (response.data));
     }
 
     const fetchListProductDetail = async () => {
         let response = await getAllProductDetails();
         setListProductDetail(response.data);
         setProductDetailId(response.data[0].id);
-        console.log(typeof (response.data));
-    }
-
-    const fetchListBrand = async () => {
-        let response = await getAllProperties('brand');
-        setListBrand(response.data);
-        setBrandId(response.data[0].id);
-    }
-
-    const fetchListCategory = async () => {
-        let response = await getAllProperties('category');
-        setListCategory(response.data);
-        setCategoryId(response.data[0].id)
-    }
-
-    const fetchListMaterial = async () => {
-        let response = await getAllProperties('material');
-        setListMaterial(response.data);
-        setMaterialId(response.data[0].id)
-    }
-
-    const fetchListCollar = async () => {
-        let response = await getAllProperties('collar');
-        setListCollar(response.data);
-        setCollarId(response.data[0].id)
-    }
-
-    const fetchListSleeveLength = async () => {
-        let response = await getAllProperties('sleeve-length');
-        setListSleeveLength(response.data);
-        setSleeveLengthlId(response.data[0].id)
-    }
-
-    const fetchListSize = async () => {
-        let response = await getAllProperties('size');
-        setListSize(response.data);
-        setSizeId(response.data[0].id)
-    }
-
-    const fetchListColor = async () => {
-        let response = await getAllProperties('color');
-        setListColor(response.data);
-        setColorId(response.data[0].id)
     }
 
     const handleClickBtnUpdate = (product) => {
         setDataUpdate(product);
+        setProductId(product.id);
         setShowModalUpdateProduct(true);
     }
 
@@ -174,139 +90,86 @@ const ManageProduct = (props) => {
         setDataDelete({});
     }
 
+    const [products, setProducts] = useState([]);
+    const [productDetails, setProductDetails] = useState([]);
+    const [pageProduct, setPageProduct] = useState(0);
+    const [pageProductDetail, setPageProductDetail] = useState(0);
+    const limit = 5;
+    const [totalPageProducts, setTotalPageProducts] = useState(0);
+    const [totalPageProductDetails, setTotalPageProductDetails] = useState(0);
 
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
+    useEffect(() => {
+        fetchListProductWithPage(pageProduct, limit)
+        fetchListProductDetailWithPage(pageProductDetail, limit)
+    }, [pageProduct, pageProductDetail]);
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleColorChange = (color) => {
-        if (selectedColors.includes(color)) {
-            const updatedSelectedColors = selectedColors.filter((c) => c !== color);
-            setSelectedColors(updatedSelectedColors);
-        } else {
-            setSelectedColors([...selectedColors, color]);
+    const fetchListProductWithPage = async () => {
+        try {
+            let res = await getAllProductsWithPage(pageProduct, limit);
+            if (res.data.products) {
+                setProducts(res.data.products);
+                setTotalPageProducts(res.data.totalPages);
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
         }
+    }
+
+    const handlePageProductChange = data => {
+        const selectedPage = data.selected;
+        setPageProduct(selectedPage);
     };
 
-    const handleSizeChange = (size) => {
-        if (selectedSizes.includes(size)) {
-            const updatedSelectedSizes = selectedSizes.filter((s) => s !== size);
-            setSelectedSizes(updatedSelectedSizes);
-        } else {
-            setSelectedSizes([...selectedSizes, size]);
-        }
+    const handlePageProductDetailChange = data => {
+        const selectedPage = data.selected;
+        setPageProductDetail(selectedPage);
     };
 
-    const renderColorButtons = () => {
-        return listColor.map((color) => (
-            <Button
-                key={color.id}
-                className={selectedColors.includes(color) ? 'selected-button' : ''}
-                style={{ marginLeft: '8px', marginBottom: '8px' }}
-                onClick={() => handleColorChange(color.id)}
-            >
-                {color.name}
-            </Button>
-        ));
-    };
-
-    const renderSizeButtons = () => {
-        return listSize.map((size) => (
-            <Button
-                key={size.id}
-                className={selectedSizes.includes(size) ? 'selected-button' : ''}
-                style={{ marginLeft: '8px', marginBottom: '8px' }}
-                onClick={() => handleSizeChange(size.id)}
-            >
-                {size.name}
-            </Button>
-        ));
-    };
-
-    const updateProductDetails = async () => {
-        const productDetails = [];
-        const sizeIds = [];
-        const colorIds = [];
-        selectedColors.forEach((colorId) => {
-            selectedSizes.forEach((sizeId) => {
-                const selectedProduct = listProduct.find((product) => product.id === productId);
-                const selectedColor = listColor.find((color) => color.id === colorId);
-                const selectedSize = listSize.find((size) => size.id === sizeId);
-                const productDetail = {
-                    productId: productId,
-                    name: `${selectedProduct.name} - [${selectedColor.name}][${selectedSize.name}]`,
-                    brandId: brandId,
-                    categoryId: categoryId,
-                    meterialId: materialId,
-                    collarId: collarId,
-                    sleeveLengthId: sleeveLengthId,
-                    colorId: colorId,
-                    sizeId: sizeId,
-                    price: 10000,
-                    quantity: 10
-                };
-                sizeIds.push(selectedSize.id);
-                colorIds.push(selectedColor.id);
-                productDetails.push(productDetail);
-                console.log('-----------')
-                console.log('Size: ', selectedSize.id);
-                console.log('Color: ', selectedColor.id);
-
-            });
-
-
-        });
-        setProductDetails(productDetails);
-
-    };
+    const fetchListProductDetailWithPage = async () => {
+        let response = await getAllProductDetailsWithPage(pageProductDetail, limit);
+        setProductDetails(response.data.productDetails);
+        setTotalPageProductDetails(response.data.totalPages);
+    }
 
     return (
-        <div class="manage-material-container">
-            <div className='manage-material-title'>
+        <div class="manage-product-container">
+            <div className='manage-product-title'>
                 <div className="title">
                     <FaProductHunt size={32} /> Quản Lý Sản Phẩm
                 </div>
             </div>
-            <Tabs
+            {/* <Tabs
                 defaultActiveKey="product"
                 transition={false}
                 id="noanim-tab-example"
                 className="mb-3 px-3 ms-3 tab-product"
             >
-                <Tab eventKey="product" title="Product">
+                <Tab eventKey="product" title="Sản phẩm">
                     <div className='manage-material-search'>
                         <div className='search-material-title'>
                             <div className="title">
-                                <FaFilter size={26} /> Filter
+                                <FaFilter size={26} /> Bộ Lọc
                             </div>
 
                         </div>
                         <div className='main-search'>
                             <div className='w-50'>
                                 <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Product</label>
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Sản phẩm</label>
                                     <div class="col d-flex align-content-between">
                                         <input type="text" class="form-control me-4" id="inputEmail3" />
-                                        <button type="button" class="btn btn-secondary">Search</button>
+                                        <button type="button" class="btn btn-secondary">Tìm kiếm</button>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Status</label>
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng thái</label>
                                     <div class="col d-flex">
                                         <select class="form-select me-4" id="inputPassword3">
                                             <option value="option1">Option 1</option>
                                             <option value="option2">Option 2</option>
                                             <option value="option3">Option 3</option>
                                         </select>
-                                        <button type="button" class="btn btn-secondary">Refresh</button>
+                                        <button type="button" class="btn btn-secondary">Làm Mới</button>
                                     </div>
                                 </div>
                             </div>
@@ -315,10 +178,13 @@ const ManageProduct = (props) => {
                     <div className='manage-material-table'>
                         <div className='list-material-title'>
                             <div className="title">
-                                <FaThList size={26} /> Product List
+                                <FaThList size={26} /> Danh Sách Sản Phẩm
                             </div>
-                            <button type="button" class="btn btn-dark btn-add" onClick={() => setShowModalCreateProduct(true)}>
-                                <MdLibraryAdd /> Add</button>
+                            <Link to="/admins/add-products">
+                                <button type="button" class="btn btn-dark btn-add">
+                                    <MdLibraryAdd /> Thêm
+                                </button>
+                            </Link>
 
                         </div>
                         <table className="table">
@@ -327,12 +193,12 @@ const ManageProduct = (props) => {
                                     <th scope="col" className='px-1 text-center'>
                                         <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
                                     </th>
-                                    <th scope="col" className='px-5 text-center'>No.</th>
-                                    <th scope="col" className='px-5 text-center'>Code</th>
-                                    <th scope="col" className='px-5 text-center'>Name</th>
-                                    <th scope="col" className='px-5 text-center'>Update Day</th>
-                                    <th scope="col" className='px-5 text-center'>Status</th>
-                                    <th scope="col" className='px-5 text-center'>Action</th>
+                                    <th scope="col" className='px-5 text-center'>#</th>
+                                    <th scope="col" className='px-5 text-center'>Mã sản phẩm</th>
+                                    <th scope="col" className='px-5 text-center'>Tên sản phẩm</th>
+                                    <th scope="col" className='px-5 text-center'>Ngày cập nhật</th>
+                                    <th scope="col" className='px-5 text-center'>Trạng thái</th>
+                                    <th scope="col" className='px-5 text-center'>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -344,7 +210,7 @@ const ManageProduct = (props) => {
                                             </td>
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-center">{item.code}</td>
-                                            <td className="text-center">{item.name}</td>
+                                            <td className="text-center">{item.productName}</td>
                                             <td className="text-center">{item.updatedAt}</td>
                                             <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
                                             <td className="text-center">
@@ -367,7 +233,7 @@ const ManageProduct = (props) => {
                                 {listProduct && listProduct.length === 0 &&
                                     <tr>
                                         <td colSpan={7} className='text-center'>
-                                            Not found data!
+                                            Không có dữ liệu!
                                         </td>
                                     </tr>
                                 }
@@ -375,346 +241,478 @@ const ManageProduct = (props) => {
                         </table>
                     </div>
                 </Tab>
-                <Tab eventKey="product-detail" title="Product Detail">
-                    <Tabs
-                        defaultActiveKey="listProductDetail"
-                        id="uncontrolled-tab-example"
-                        className="mb-3 px-3 ms-3 tab-product"
-                    >
-                        <Tab eventKey="listProductDetail" title="List">
-                            <div className='manage-material-search'>
-                                <div className='search-material-title'>
-                                    <div className="title">
-                                        <FaFilter size={26} /> Filter
-                                    </div>
+                <Tab eventKey="product-detail" title="Sản phẩm chi tiết">
+                    <div className='manage-material-search'>
+                        <div className='search-material-title'>
+                            <div className="title">
+                                <FaFilter size={26} /> Bộ Lọc
+                            </div>
 
+                        </div>
+                        <div className='main-search'>
+                            <div className='w-50'>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Sản phẩm</label>
+                                    <div class="col d-flex align-content-between">
+                                        <input type="text" class="form-control me-4" id="inputEmail3" />
+                                        <button type="button" class="btn btn-secondary">Tìm kiếm</button>
+                                    </div>
                                 </div>
-                                <div className='main-search'>
-                                    <div className='w-50'>
-                                        <div class="row mb-3">
-                                            <label for="inputEmail3" class="col-sm-2 col-form-label">Product Detail</label>
-                                            <div class="col d-flex align-content-between">
-                                                <input type="text" class="form-control me-4" id="inputEmail3" />
-                                                <button type="button" class="btn btn-secondary">Search</button>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword3" class="col-sm-2 col-form-label">Status</label>
-                                            <div class="col d-flex">
-                                                <select class="form-select me-4" id="inputPassword3">
-                                                    <option value="option1">Option 1</option>
-                                                    <option value="option2">Option 2</option>
-                                                    <option value="option3">Option 3</option>
-                                                </select>
-                                                <button type="button" class="btn btn-secondary">Refresh</button>
-                                            </div>
-                                        </div>
+                                <div class="row mb-3">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng thái</label>
+                                    <div class="col d-flex">
+                                        <select class="form-select me-4" id="inputPassword3">
+                                            <option value="option1">Option 1</option>
+                                            <option value="option2">Option 2</option>
+                                            <option value="option3">Option 3</option>
+                                        </select>
+                                        <button type="button" class="btn btn-secondary">Làm mới</button>
                                     </div>
                                 </div>
                             </div>
-                            <div className='manage-material-table'>
-                                <div className='list-material-title'>
-                                    <div className="title">
-                                        <FaThList size={26} /> Product Detail List
-                                    </div>
-                                    <button type="button" class="btn btn-dark">
-                                        <MdLibraryAdd /> Add</button>
+                        </div>
+                    </div>
+                    <div className='manage-material-table'>
+                        <div className='list-material-title'>
+                            <div className="title">
+                                <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
+                            </div>
+                            <button type="button" class="btn btn-dark">
+                                <MdLibraryAdd /> Thêm</button>
 
-                                </div>
-                                <table className="table">
-                                    <thead style={{ backgroundColor: "black" }}>
-                                        <tr>
-                                            <th scope="col" className='px-1 text-center'>
-                                                <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                                            </th>
-                                            <th scope="col" className='px-5 text-center'>No.</th>
-                                            <th scope="col" className='px-5 text-center'>Image</th>
-                                            <th scope="col" className='px-5 text-center'>Name</th>
-                                            <th scope="col" className='px-5 text-center'>Quantity</th>
-                                            <th scope="col" className='px-5 text-center'>Price</th>
-                                            <th scope="col" className='px-5 text-center'>Size</th>
-                                            <th scope="col" className='px-5 text-center'>Color</th>
-                                            <th scope="col" className='px-5 text-center'>Status</th>
-                                            <th scope="col" className='px-5 text-center'>Action</th>
+                        </div>
+                        <table className="table">
+                            <thead style={{ backgroundColor: "black" }}>
+                                <tr>
+                                    <th scope="col" className='px-1 text-center'>
+                                        <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                                    </th>
+                                    <th scope="col" className='px-5 text-center'>#</th>
+                                    <th scope="col" className='px-5 text-center'>Ảnh</th>
+                                    <th scope="col" className='px-5 text-center'>Tên</th>
+                                    <th scope="col" className='px-5 text-center'>SL</th>
+                                    <th scope="col" className='px-5 text-center'>GB</th>
+                                    <th scope="col" className='px-5 text-center'>KC</th>
+                                    <th scope="col" className='px-5 text-center'>Màu</th>
+                                    <th scope="col" className='px-5 text-center'>TT</th>
+                                    <th scope="col" className='px-5 text-center'>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {listProductDetail.length > 0 && listProductDetail.map((item, index) => {
+                                    return (
+                                        <tr key={`table-material-${index}`} className="room">
+                                            <td className="text-center">
+                                                <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
+                                            </td>
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-center">
+                                                <img src={`${imageProductDetail}${item.imageUrl}`} />
+                                            </td>
+                                            <td className="text-center">{item.name}</td>
+                                            <td className="text-center">{item.quantity}</td>
+                                            <td className="text-center">{item.price}</td>
+                                            <td className="text-center">{item.size}</td>
+                                            <td className="text-center">{item.color}</td>
+                                            <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
+                                            <td className="text-center">
+                                                <div className="d-flex justify-content-center align-items-center">
+                                                    <button className="btn-update btn btn-dark mx-3 short-button"
+                                                        onClick={() => handleClickBtnUpdate(item)}
+                                                    >
+                                                        <FaPenSquare color='#ffffff' />
+                                                    </button>
+                                                    <button className="btn-delete btn btn-dark short-button"
+                                                        onClick={() => handleClickBtnDelete(item)}
+                                                    >
+                                                        <MdDeleteSweep />
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {listProductDetail.length > 0 && listProductDetail.map((item, index) => {
-                                            return (
-                                                <tr key={`table-material-${index}`} className="room">
-                                                    <td className="text-center">
-                                                        <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
-                                                    </td>
-                                                    <td className="text-center">{index + 1}</td>
-                                                    <td className="text-center">
-                                                        <img src={`${imageProductDetail}${item.imageUrl}`} />
-                                                    </td>
-                                                    <td className="text-center">{item.name}</td>
-                                                    <td className="text-center">{item.quantity}</td>
-                                                    <td className="text-center">{item.price}</td>
-                                                    <td className="text-center">{item.size}</td>
-                                                    <td className="text-center">{item.color}</td>
-                                                    <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
-                                                    <td className="text-center">
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                                onClick={() => handleClickBtnUpdate(item)}
-                                                            >
-                                                                <FaPenSquare color='#ffffff' />
-                                                            </button>
-                                                            <button className="btn-delete btn btn-dark short-button"
-                                                                onClick={() => handleClickBtnDelete(item)}
-                                                            >
-                                                                <MdDeleteSweep />
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                        {listProduct && listProduct.length === 0 &&
-                                            <tr>
-                                                <td colSpan={7} className='text-center'>
-                                                    Not found data!
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                    );
+                                })}
+                                {listProduct && listProduct.length === 0 &&
+                                    <tr>
+                                        <td colSpan={7} className='text-center'>
+                                            Không có dữ liệu!
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </Tab >
+            </Tabs > */}
+            <Tabs defaultActiveKey="1" className="mb-3 px-3 tab-product">
+                <TabPane
+                    tab={
+                        <span>
+                            <FaProductHunt size={15} className='mb-1 mx-1' /> Sản Phẩm
+                        </span>
+                    }
+                    key="1"
+                >
+                    <div className='manage-product-search'>
+                        <div className='search-product-title'>
+                            <div className="title">
+                                <FaFilter size={26} /> Bộ Lọc
                             </div>
-                        </Tab>
-                        <Tab eventKey="addProductDetail" title="Add">
-                            <div className='manage-product-search'>
-                                <div className='search-material-title'>
-                                    <div className="title">
-                                        <FaMousePointer size={26} /> Select Properties
-                                    </div>
-                                </div>
-                                <div className='main-search row'>
-                                    <div className='col-5 mb-4'>
-                                        <div class="col-md">
-                                            <div class="form-floating">
-                                                <select className="form-select" defaultValue={productId} >
+
+                        </div>
+                        <Form>
+                            <Row className="mb-3 justify-content-md-center ">
+                                <Form.Label column sm="1">
+                                    Sản phẩm
+                                </Form.Label>
+                                <Col sm="6" xs lg="4">
+                                    <Form.Control type="text" />
+                                </Col>
+                                <Col xs lg="1">
+                                    <Button variant="secondary">Tìm Kiếm</Button>
+                                </Col>
+                            </Row>
+                            <Row className="mb-3 justify-content-md-center">
+                                <Form.Label column sm="1">
+                                    Trạng Thái
+                                </Form.Label>
+                                <Col sm="6" xs lg="4">
+                                    <Form.Select>
+                                        <option value="option1">Option 1</option>
+                                        <option value="option2">Option 2</option>
+                                        <option value="option3">Option 3</option>
+                                    </Form.Select>
+                                </Col>
+                                <Col xs lg="1">
+                                    <Button variant="secondary">Tìm Kiếm</Button>
+                                </Col>
+                            </Row>
+                        </Form>
+
+                    </div>
+                    <div className='manage-product-table'>
+                        <div className='list-product-title'>
+                            <div className="title">
+                                <FaThList size={26} /> Danh Sách Sản Phẩm
+                            </div>
+                            <Link to="/admins/add-products">
+                                <button type="button" class="btn btn-dark btn-add">
+                                    <MdLibraryAdd /> Thêm
+                                </button>
+                            </Link>
+
+                        </div>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" className='px-5 text-center'>#</th>
+                                    <th scope="col" className='px-5 text-center'>Mã sản phẩm</th>
+                                    <th scope="col" className='px-5 text-center'>Tên sản phẩm</th>
+                                    <th scope="col" className='px-5 text-center'>Số lượng</th>
+                                    <th scope="col" className='px-5 text-center'>Trạng thái</th>
+                                    <th scope="col" className='px-5 text-center'>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.map((product, index) => (
+                                    <tr key={`table-product-${index}`} className="room">
+                                        <td className="text-center">{index + 1}</td>
+                                        <td className="text-center">{product.code}</td>
+                                        <td className="text-center">{product.productName}</td>
+                                        <td className="text-center">{product.quantity}</td>
+                                        <td className="text-center">{product.deleted === false ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
+                                        <td className="text-center">
+                                            <div className="d-flex justify-content-center align-items-center">
+                                                <button className="btn-delete btn btn-dark short-button"
+                                                    onClick={() => handleClickBtnDelete(product)}
+                                                >
+                                                    <AiFillEye />
+                                                </button>
+                                                <Link to={`/admins/update-products/${product.id}`} state={{ productName: product.productName }}>
+                                                    <button className="btn-update btn btn-dark mx-3 short-button"
+                                                        onClick={() => handleClickBtnUpdate(product)}
+                                                    >
+                                                        <FaPenSquare color='#ffffff' />
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className='justify-content-center'>
+                            <ReactPaginate
+                                previousLabel={<FaAngleLeft size={25} />}
+                                nextLabel={<FaAngleRight size={25} />}
+                                breakLabel={'...'}
+                                pageCount={totalPageProducts}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageProductChange}
+                                containerClassName={'pagination'}
+                                subContainerClassName={'pages pagination'}
+                            />
+                        </div>
+                    </div>
+                </TabPane>
+                <TabPane
+                    tab={
+                        <span>
+                            <FaProductHunt size={15} className='mb-1 mx-1' /> Sản Phẩm Chi Tiết
+                        </span>
+                    }
+                    key="2"
+                >
+                    <div className='manage-product-search'>
+                        <div className='search-product-title'>
+                            <div className="title">
+                                <FaFilter size={26} /> Bộ Lọc
+                            </div>
+
+                        </div>
+                        <Form>
+                            <Row className="mb-3 justify-content-md-center ">
+                                {/* <Form.Label column sm="1">
+                                    Sản phẩm
+                                </Form.Label> */}
+                                <Col sm="6" xs lg="8">
+                                    <Form.Control type="text" />
+                                </Col>
+                            </Row>
+                            <Row className="mt-2 mb-3 justify-content-md-center">
+                                <Col lg="3">
+                                    <div className="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
                                                     <option value="">Chọn</option>
-                                                    {listProduct.map(product => (
-                                                        <option key={product.id} value={product.id}>
-                                                            {product.name}
-                                                        </option>
-                                                    ))}
+                                                    {/* {listBrand.map(brand => (
+                                            <option key={brand.id} value={brand.id}>
+                                                {brand.name}
+                                            </option>
+                                        ))} */}
                                                 </select>
-                                                <label for="floatingSelectGrid" className='text-floating'>Product</label>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Thương hiệu</label>
                                             </div>
-
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
-
-                                    <div className='row d-flex justify-content-center align-items-center mb-3'>
-                                        <div className="col-md-2">
-                                            <div className='d-flex justify-content-between align-items-center'>
-                                                <div className="form-floating">
-                                                    <select className="form-select" defaultValue={brandId} style={{ minWidth: '200px' }}>
-                                                        <option value="">Chọn</option>
-                                                        {listBrand.map(brand => (
-                                                            <option key={brand.id} value={brand.id}>
-                                                                {brand.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Brand</label>
-                                                </div>
-                                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
+                                </Col>
+                                <Col lg="3">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listCategory.map(category => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Danh mục</label>
                                             </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div className='d-flex justify-content-between align-items-center'>
-                                                <div className="form-floating">
-                                                    <select className="form-select" defaultValue={categoryId} style={{ minWidth: '200px' }}>
-                                                        <option value="">Chọn</option>
-                                                        {listCategory.map(category => (
-                                                            <option key={category.id} value={category.id}>
-                                                                {category.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Category</label>
-                                                </div>
-                                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCategory(true)}><MdLibraryAdd /></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div className='d-flex justify-content-between align-items-center'>
-                                                <div className="form-floating">
-                                                    <select className="form-select" defaultValue={materialId} style={{ minWidth: '200px' }}>
-                                                        <option value="">Chọn</option>
-                                                        {listMaterial.map(material => (
-                                                            <option key={material.id} value={material.id}>
-                                                                {material.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Material</label>
-                                                </div>
-                                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div className='d-flex justify-content-between align-items-center'>
-                                                <div className="form-floating">
-                                                    <select className="form-select" defaultValue={collarId} style={{ minWidth: '200px' }}>
-                                                        <option value="">Chọn</option>
-                                                        {listCollar.map(collar => (
-                                                            <option key={collar.id} value={collar.id}>
-                                                                {collar.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Collar</label>
-                                                </div>
-                                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div className='d-flex justify-content-between align-items-center'>
-                                                <div className="form-floating">
-                                                    <select className="form-select" defaultValue={sleeveLengthId} style={{ minWidth: '200px' }}>
-                                                        <option value="">Chọn</option>
-                                                        {listSleeveLength.map(sleeveLength => (
-                                                            <option key={sleeveLength.id} value={sleeveLength.id}>
-                                                                {sleeveLength.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Sleeve Length</label>
-                                                </div>
-                                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
-                                            </div>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
-                                    <div className='d-flex justify-content-center align-items-center' >
-                                        <Button type="dark" onClick={showModal} className='mb-2 mt-2'>
-                                            Color & Size
-                                        </Button>
-
-                                        <Modal title="Color & Size" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                                            <div className='mb-3 mt-3'>
-                                                <h4>Color:</h4>
-                                                {renderColorButtons()}
+                                </Col>
+                                <Col lg="4">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listMaterial.map(material => (
+                                            <option key={material.id} value={material.id}>
+                                                {material.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Chất liệu</label>
                                             </div>
-                                            <div>
-                                                <h4>Size:</h4>
-                                                {renderSizeButtons()}
-                                            </div>
-                                        </Modal>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                        </div>
                                     </div>
-                                    <Row>
-                                        <Col className='d-flex justify-content-center align-items-center flex-wrap'>
-                                            {selectedColors.map((colorId, index) => (
-                                                <Button
-                                                    key={`color-${index}`}
-                                                    className="selected-button"
-                                                    style={{ marginLeft: '8px', marginBottom: '8px' }}
-                                                    onClick={() => handleColorChange(colorId)}
-                                                >
-                                                    {listColor.find(color => color.id === colorId).name} (Xóa)
-                                                </Button>
-                                            ))}
-                                            {selectedSizes.map((sizeId, index) => (
-                                                <Button
-                                                    key={`size-${index}`}
-                                                    className="selected-button"
-                                                    style={{ marginLeft: '8px' }}
-                                                    onClick={() => handleSizeChange(sizeId)}
-                                                >
-                                                    {listSize.find(size => size.id === sizeId).name} (Xóa)
-                                                </Button>
-                                            ))}</Col>
-                                    </Row>
-                                </div>
+                                </Col>
+                            </Row>
+                            <Row className="mt-3 mb-3">
+                                <Col xs lg="3">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listCollar.map(collar => (
+                                            <option key={collar.id} value={collar.id}>
+                                                {collar.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Cổ áo</label>
+                                            </div>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col xs lg="3">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listSleeveLength.map(sleeveLength => (
+                                            <option key={sleeveLength.id} value={sleeveLength.id}>
+                                                {sleeveLength.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Chiều dài tay</label>
+                                            </div>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col xs lg="3">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listSleeveLength.map(sleeveLength => (
+                                            <option key={sleeveLength.id} value={sleeveLength.id}>
+                                                {sleeveLength.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
+                                            </div>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col xs lg="2">
+                                    <div class="col-md-2">
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                            <div className="form-floating">
+                                                <select className="form-select" style={{ minWidth: '200px' }}>
+                                                    <option value="">Chọn</option>
+                                                    {/* {listSleeveLength.map(sleeveLength => (
+                                            <option key={sleeveLength.id} value={sleeveLength.id}>
+                                                {sleeveLength.name}
+                                            </option>
+                                        ))} */}
+                                                </select>
+                                                <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
+                                            </div>
+                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={6}>
+                                    <div className="col-md-12">
+                                        <label className="form-label">Số lượng</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </Col>
+                                <Col xs={6}>
+                                    <div className="col-md-12">
+                                        <label className="form-label">Giá bán</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Form>
+                    </div>
+                    <div className='manage-product-table'>
+                        <div className='list-product-title'>
+                            <div className="title">
+                                <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
                             </div>
-                            <div className='manage-material-table'>
-                                <div className='list-material-title'>
-                                    <div className="title">
-                                        <FaThList size={26} /> Product Detail List
-                                    </div>
-                                    <button type="button" class="btn btn-dark">
-                                        <MdLibraryAdd /> Add</button>
-
-                                </div>
-                                <table className="table">
-                                    <thead style={{ backgroundColor: "black" }}>
-                                        <tr>
-                                            <th scope="col" className='px-1 text-center'>
-                                                <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                                            </th>
-                                            <th scope="col" className='px-5 text-center'>#</th>
-                                            <th scope="col" className='px-5 text-center'>Sản phẩm</th>
-                                            <th scope="col" className='px-5 text-center'>Số lượng</th>
-                                            <th scope="col" className='px-5 text-center'>Giá bán</th>
-                                            <th scope="col" className='px-5 text-center'>Size</th>
-                                            <th scope="col" className='px-5 text-center'>Color</th>
-                                            <th scope="col" className='px-5 text-center'>Image</th>
-                                            <th scope="col" className='px-5 text-center'>Action</th>
+                        </div>
+                        <table className="table">
+                            <thead style={{ backgroundColor: "black" }}>
+                                <tr>
+                                    <th scope="col" className='px-3 text-center'>#</th>
+                                    <th scope="col" className='px-5 text-center'>Ảnh</th>
+                                    <th scope="col" className='px-5 text-center'>Tên</th>
+                                    <th scope="col" className='px-4 text-center'>Số lượng</th>
+                                    <th scope="col" className='px-4 text-center'>Giá bán</th>
+                                    <th scope="col" className='px-4 text-center'>Kích cỡ</th>
+                                    <th scope="col" className='px-4 text-center'>Màu</th>
+                                    <th scope="col" className='px-4 text-center'>Trạng thái</th>
+                                    <th scope="col" className='px-3 text-center'>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {productDetails.length > 0 && productDetails.map((item, index) => {
+                                    return (
+                                        <tr key={`table-product-${index}`} className="room">
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-center">
+                                                <img src={`${imageProductDetail}${item.imageUrl}`} />
+                                            </td>
+                                            <td className="text-center">{item.name}</td>
+                                            <td className="text-center">{item.quantity}</td>
+                                            <td className="text-center">{item.price}</td>
+                                            <td className="text-center">{item.size}</td>
+                                            <td className="text-center">{item.color}</td>
+                                            <td className="text-center">{item.deleted === false ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
+                                            <td className="text-center">
+                                                <div className="d-flex justify-content-center align-items-center">
+                                                    <button className="btn-update btn btn-dark mx-3 short-button"
+                                                        onClick={() => handleClickBtnUpdate(item)}
+                                                    >
+                                                        <FaPenSquare color='#ffffff' />
+                                                    </button>
+                                                    <button className="btn-delete btn btn-dark short-button"
+                                                        onClick={() => handleClickBtnDelete(item)}
+                                                    >
+                                                        <MdDeleteSweep />
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {productDetails.map((item, index) => {
-                                            return (
-                                                <tr key={`table-material-${index}`} className="room">
-                                                    <td className="text-center">
-                                                        <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
-                                                    </td>
-                                                    <td className="text-center">{index + 1}</td>
-                                                    {/* <td className="text-center">
-                                                        <img src={`${imageProductDetail}${item.imageUrl}`} />
-                                                    </td> */}
-                                                    <td className="text-center">{item.name}</td>
-                                                    <td className="text-center">{item.quantity}</td>
-                                                    <td className="text-center">{item.price}</td>
-                                                    <td className="text-center">{item.sizeId}</td>
-                                                    <td className="text-center">{item.colorId}</td>
-                                                    <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
-                                                    <td className="text-center">
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <button className="btn-update btn btn-dark mx-3 short-button"
-                                                                onClick={() => handleClickBtnUpdate(item)}
-                                                            >
-                                                                <FaPenSquare color='#ffffff' />
-                                                            </button>
-                                                            <button className="btn-delete btn btn-dark short-button"
-                                                                onClick={() => handleClickBtnDelete(item)}
-                                                            >
-                                                                <MdDeleteSweep />
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                        {listProduct && listProduct.length === 0 &&
-                                            <tr>
-                                                <td colSpan={7} className='text-center'>
-                                                    Not found data!
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </Tab>
-                    </Tabs>
-                </Tab>
-            </Tabs >
+                                    );
+                                })}
+                                {listProduct && listProduct.length === 0 &&
+                                    <tr>
+                                        <td colSpan={7} className='text-center'>
+                                            Không có dữ liệu!
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div className='justify-content-center'>
+                            <ReactPaginate
+                                previousLabel={<FaAngleLeft size={25} />}
+                                nextLabel={<FaAngleRight size={25} />}
+                                breakLabel={'...'}
+                                pageCount={totalPageProductDetails}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageProductDetailChange}
+                                containerClassName={'pagination'}
+                                subContainerClassName={'pages pagination'}
+                            />
+                        </div>
+                    </div>
+                </TabPane>
+            </Tabs>
             <ModalCreateProduct
                 show={showModalCreateProduct}
                 setShow={setShowModalCreateProduct}
                 fetchListProduct={fetchListProduct}
-            />
-            <ModalUpdateProduct
-                show={showModalUpdateProduct}
-                setShow={setShowModalUpdateProduct}
-                fetchListProduct={fetchListProduct}
-                dataUpdate={dataUpdate}
-                resetDataUpdate={resetDataUpdate}
+                productId={productId}
             />
             <ModalDeleteProduct
                 show={showModalDeleteProduct}
@@ -722,31 +720,6 @@ const ManageProduct = (props) => {
                 fetchListProduct={fetchListProduct}
                 dataDelete={dataDelete}
                 resetDataDelete={resetDataDelete}
-            />
-            <ModalCreateBrand
-                show={showModalCreateBrand}
-                setShow={setShowModalCreateBrand}
-                fetchListBrand={fetchListBrand}
-            />
-            <ModalCreateCategory
-                show={showModalCreateCategory}
-                setShow={setShowModalCreateCategory}
-                fetchListCategory={fetchListCategory}
-            />
-            <ModalCreateMaterial
-                show={showModalCreateMaterial}
-                setShow={setShowModalCreateMaterial}
-                fetchListMaterial={fetchListMaterial}
-            />
-            <ModalCreateCollar
-                show={showModalCreateCollar}
-                setShow={setShowModalCreateCollar}
-                fetchListCollar={fetchListCollar}
-            />
-            <ModalCreateSleeveLength
-                show={showModalCreateSleeveLength}
-                setShow={setShowModalCreateSleeveLength}
-                fetchListSleeveLength={fetchListSleeveLength}
             />
         </div >
     );

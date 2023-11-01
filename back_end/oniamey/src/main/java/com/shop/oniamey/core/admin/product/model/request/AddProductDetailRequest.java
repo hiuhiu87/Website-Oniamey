@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -17,25 +18,25 @@ public class AddProductDetailRequest {
 
     private Long categoryId;
 
-    private Set<Long> sizeId;
+    private List<Long> sizeId;
 
     private Long materialId;
 
     private Long brandId;
 
-    private Set<Long> colorId;
+    private List<Long> colorId;
 
     private Long collarId;
 
     private Long sleeveLengthId;
 
-    private String name;
+    private List<String> names;
 
     private Boolean gender;
 
-    private Float price;
+    private List<Float> prices;
 
-    private Long quantity;
+    private List<Long> quantities;
 
     private Float weight;
 

@@ -1,14 +1,19 @@
 package com.shop.oniamey.core.admin.product.controller;
 
 import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest;
+import com.shop.oniamey.core.admin.product.model.request.DeleteProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.request.ProductRequest;
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
+import com.shop.oniamey.core.admin.product.model.response.ProductDetailListResponse;
+import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
 import com.shop.oniamey.core.admin.product.model.response.ProductListResponse;
 import com.shop.oniamey.core.admin.product.model.response.ProductResponse;
 import com.shop.oniamey.core.admin.product.service.IProductDetailService;
 import com.shop.oniamey.core.admin.product.service.IProductService;
 import com.shop.oniamey.entity.Product;
+import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
+import com.shop.oniamey.repository.product.ProductDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,11 +27,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -92,16 +99,45 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAll());
     }
 
+    @GetMapping("/product-details-page")
+    public ResponseEntity<?> getAllWithPage(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        if (page < 0 || limit <= 0) {
+            return ResponseEntity.badRequest().body("Invalid page or limit");
+        }
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdAt").descending());
+        Page<ProductDetailResponse> productDetailPage = productDetailService.getAllWithPage(pageRequest);
+
+        int totalPages = productDetailPage.getTotalPages();
+        List<ProductDetailResponse> productDetails = productDetailPage.getContent();
+
+        return ResponseEntity.ok(new ProductDetailListResponse(productDetails, totalPages));
+    }
+
     @GetMapping("/product-details/{productId}")
-    public ResponseEntity<?> getAllProductDetailByProductId(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAllByProductId(productId));
+    public ResponseEntity<?> getAllByProductIdWithPage(
+            @PathVariable Long productId, @RequestParam("page") int page, @RequestParam("limit") int limit) {
+        if (page < 0 || limit <= 0) {
+            return ResponseEntity.badRequest().body("Invalid page or limit");
+        }
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdAt").descending());
+        Page<ProductDetailResponse> productDetailPage = productDetailService.getAllByProductId(productId, pageRequest);
+
+        int totalPages = productDetailPage.getTotalPages();
+        List<ProductDetailResponse> productDetails = productDetailPage.getContent();
+
+        return ResponseEntity.ok(new ProductDetailListResponse(productDetails, totalPages));
+    }
+
+    @GetMapping("/product-details/by-colorId/{colorId}")
+    public ResponseEntity<?> getAllProductDetailByColorId(@PathVariable Long colorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAllByColorId(colorId));
     }
 
     @PostMapping("/product-details")
     public ResponseEntity<?> createProductDetail(@ModelAttribute AddProductDetailRequest addProductDetailRequest) {
         try {
-            productDetailService.create(addProductDetailRequest);
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
+            List<ProductDetail> saveProductDetail = productDetailService.create(addProductDetailRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(saveProductDetail);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -127,5 +163,11 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+//    @DeleteMapping("/product-details")
+//    public ResponseEntity<String> deleteProductDetailByProperty(@ModelAttribute DeleteProductDetailRequest request) {
+//        productDetailService.deleteByColorIdAndSizeId(request);
+//        return ResponseEntity.ok("Xóa thông tin cũ thành công");
+//    }
 
 }
