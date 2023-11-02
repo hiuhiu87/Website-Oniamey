@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d9d104f6-0854-400b-aad6-d1936cb874db" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../back_end/oniamey/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../back_end/oniamey/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/palette.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/previews.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/useInitial.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="d9d104f6-0854-400b-aad6-d1936cb874db" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
