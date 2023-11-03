@@ -1,41 +1,60 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Modal, QRCode, Space, Upload } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
+import { ConsoleSqlOutlined, PlusOutlined } from '@ant-design/icons';
+import { MdLibraryAdd } from 'react-icons/md';
 import _ from 'lodash';
-import { getAllProperties } from '../../../../../services/apiService';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import ModalCreateProduct from './ModalCreateProduct';
+import ModalCreateBrand from '../brand/ModalCreateBrand';
+import ModalCreateMaterial from '../material/ModalCreateMaterial';
+import ModalCreateCategory from '../category/ModalCreateCategory';
+import ModalCreateCollar from '../collar/ModalCreateCollar';
+import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 
 const ModalDetailProductDetail = (props) => {
 
-    const [brandId, setBrandId] = useState('');
-    const [listBrand, setListBrand] = useState([]);
-    const [categoryId, setCategoryId] = useState('');
-    const [listCategory, setListCategory] = useState([]);
-    const [materialId, setMaterialId] = useState('');
-    const [listMaterial, setListMaterial] = useState([]);
-    const [collarId, setCollarId] = useState('');
-    const [listCollar, setListCollar] = useState([]);
-    const [sleeveLengthId, setSleeveLengthId] = useState('');
-    const [listSleeveLength, setListSleeveLength] = useState([]);
-    const [sizeId, setSizeId] = useState('');
-    const [listSize, setListSize] = useState([]);
-    const [colorId, setColorId] = useState('');
-    const [listColor, setListColor] = useState([]);
+    const { brandId, setBrandId, listBrand } = props;
+    const { categoryId, setCategoryId, listCategory } = props;
+    const { materialId, setMaterialId, listMaterial } = props;
+    const { collarId, setCollarId, listCollar } = props;
+    const { sleeveLengthId, setSleeveLengthId, listSleeveLength } = props;
+    const { sizeId, setSizeId, listSize } = props;
+    const { colorId, setColorId, listColor } = props;
+    const { dataDetail, resetDataDetail } = props;
+
+    const [quantity, setQuantity] = useState('');
+    const [price, setPrice] = useState('');
+    const [name, setName] = useState('');
+
+    console.log('data', dataDetail)
+    console.log('dataa', sizeId)
+
+    useEffect(() => {
+        setBrandId(dataDetail.brand);
+        setCategoryId(dataDetail.category);
+        setMaterialId(dataDetail.material);
+        setCollarId(dataDetail.collar);
+        setSleeveLengthId(dataDetail.sleeveLength);
+        setSizeId(dataDetail.size);
+        setColorId(dataDetail.color);
+        setName(dataDetail.name);
+        setPrice(dataDetail.price);
+        setQuantity(dataDetail.quantity);
+    }, [dataDetail])
 
     const { show, setShow } = props;
 
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [deleted, setDeleted] = useState(false);
+    const [showModalCreateBrand, setShowModalCreateBrand] = useState(false);
+    const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
+    const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
+    const [showModalCreateCollar, setShowModalCreateCollar] = useState(false);
+    const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
 
     const handleClose = () => {
         setShow(false);
-        setName('');
-        setDescription('');
-        setDeleted(false);
+        resetDataDetail();
     };
 
     const maxFileCount = 8; // Số lượng tệp ảnh tối đa
@@ -64,6 +83,9 @@ const ModalDetailProductDetail = (props) => {
         setFileList(fileList); // Cập nhật danh sách tệp ảnh
     };
 
+    console.log(props.productId)
+    // console.log('product name ', listProduct.find((product) => product.id === 1).description)
+
 
     return (
         <>
@@ -83,8 +105,7 @@ const ModalDetailProductDetail = (props) => {
                         <textarea
                             type="text"
                             className="form-control"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                        // value={listProduct.find((product) => product.id === props.productId).description}
                         />
                     </div>
                     <Row className="mt-5 mb-3 justify-content-md-center">
@@ -92,17 +113,16 @@ const ModalDetailProductDetail = (props) => {
                             <div className="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listBrand.map(brand => (
-                                            <option key={brand.id} value={brand.id}>
-                                                {brand.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={brandId} style={{ minWidth: '200px' }}>
+                                            {listBrand.map(brand => (
+                                                <option key={brand.id} value={brand.id}>
+                                                    {brand.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         <label htmlFor="floatingSelectGrid" className='text-floating'>Thương hiệu</label>
                                     </div>
-                                    <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                    <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
                                 </div>
                             </div>
                         </Col>
@@ -110,17 +130,16 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listCategory.map(category => (
-                                            <option key={category.id} value={category.id}>
-                                                {category.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={categoryId} style={{ minWidth: '200px' }}>
+                                            {listCategory.map(category => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         <label htmlFor="floatingSelectGrid" className='text-floating'>Danh mục</label>
                                     </div>
-                                    <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                    <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCategory(true)}><MdLibraryAdd /></button>
                                 </div>
                             </div>
                         </Col>
@@ -128,17 +147,16 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listMaterial.map(material => (
-                                            <option key={material.id} value={material.id}>
-                                                {material.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={materialId} style={{ minWidth: '200px' }}>
+                                            {listMaterial.map(material => (
+                                                <option key={material.id} value={material.id}>
+                                                    {material.name}
+                                                </option>
+                                            ))}
                                         </select>
-                                        <label htmlFor="floatingSelectGrid" className='text-floating'>Chất liệu</label>
+                                        <label htmlFor="floatingSelectGrid" className='text-floating' >Chất liệu</label>
                                     </div>
-                                    <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                    <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
                                 </div>
                             </div>
                         </Col>
@@ -148,17 +166,16 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listCollar.map(collar => (
-                                            <option key={collar.id} value={collar.id}>
-                                                {collar.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={collarId} style={{ minWidth: '200px' }}>
+                                            {listCollar.map(collar => (
+                                                <option key={collar.id} value={collar.id}>
+                                                    {collar.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         <label htmlFor="floatingSelectGrid" className='text-floating'>Cổ áo</label>
                                     </div>
-                                    <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                    <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
                                 </div>
                             </div>
                         </Col>
@@ -166,17 +183,16 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listSleeveLength.map(sleeveLength => (
-                                            <option key={sleeveLength.id} value={sleeveLength.id}>
-                                                {sleeveLength.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={sleeveLengthId} style={{ minWidth: '200px' }}>
+                                            {listSleeveLength.map(sleeveLength => (
+                                                <option key={sleeveLength.id} value={sleeveLength.id}>
+                                                    {sleeveLength.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         <label htmlFor="floatingSelectGrid" className='text-floating'>Chiều dài tay</label>
                                     </div>
-                                    <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
+                                    <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
                                 </div>
                             </div>
                         </Col>
@@ -184,13 +200,12 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listSleeveLength.map(sleeveLength => (
-                                            <option key={sleeveLength.id} value={sleeveLength.id}>
-                                                {sleeveLength.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={colorId} style={{ minWidth: '200px' }}>
+                                            {listColor.map(color => (
+                                                <option key={color.id} value={color.id}>
+                                                    {color.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
                                     </div>
@@ -202,15 +217,14 @@ const ModalDetailProductDetail = (props) => {
                             <div class="col-md-2">
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className="form-floating">
-                                        <select className="form-select" style={{ minWidth: '200px' }}>
-                                            <option value="">Chọn</option>
-                                            {/* {listSleeveLength.map(sleeveLength => (
-                                            <option key={sleeveLength.id} value={sleeveLength.id}>
-                                                {sleeveLength.name}
-                                            </option>
-                                        ))} */}
+                                        <select className="form-select" value={sizeId} style={{ minWidth: '200px' }}>
+                                            {listSize.map(size => (
+                                                <option key={size.id} value={size.id}>
+                                                    {size.name}
+                                                </option>
+                                            ))}
                                         </select>
-                                        <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
+                                        <label htmlFor="floatingSelectGrid" className='text-floating'>Kích cỡ</label>
                                     </div>
                                     <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                 </div>
@@ -225,6 +239,7 @@ const ModalDetailProductDetail = (props) => {
                                     <input
                                         type="number"
                                         className="form-control"
+                                        defaultValue={quantity}
                                     />
                                 </div>
                                 <div className="col-md-12">
@@ -232,13 +247,14 @@ const ModalDetailProductDetail = (props) => {
                                     <input
                                         type="number"
                                         className="form-control"
+                                        defaultValue={price}
                                     />
                                 </div>
                             </div>
                         </Col>
                         <Col className='ms-5 d-flex justify-content-center align-items-center'>
                             <Space>
-                                <QRCode type="canvas" value="https://ant.design/" />
+                                <img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${name}-QRCODE.png`} />
                             </Space>
                         </Col>
                     </Row>
@@ -268,7 +284,6 @@ const ModalDetailProductDetail = (props) => {
                             </div>
                         </Col>
                     </Row>
-
                 </Container>
             </Modal >
         </>

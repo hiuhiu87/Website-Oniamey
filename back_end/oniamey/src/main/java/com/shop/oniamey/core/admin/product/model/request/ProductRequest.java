@@ -21,6 +21,4 @@ public class ProductRequest {
 
     private String description;
 
-    private Boolean deleted;
-
 }

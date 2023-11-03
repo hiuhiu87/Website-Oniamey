@@ -1,20 +1,15 @@
 import { React, useState, useEffect } from 'react';
-import axios from "axios";
-import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { FaFilter, FaThList, FaProductHunt, FaPenSquare, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { FaFilter, FaThList, FaProductHunt, FaPenSquare } from 'react-icons/fa';
 import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
 import { AiFillEye } from 'react-icons/ai';
 import { getAllProducts } from '../../../../../services/apiService';
 import { getAllProductDetails } from '../../../../../services/apiService';
-import { getAllProductDetailsWithPage } from '../../../../../services/apiService';
-import { getAllProductsWithPage } from '../../../../../services/apiService';
 import './ManageProduct.scss';
 import ModalCreateProduct from './ModalCreateProduct';
-import ModalUpdateProduct from './UpdateProduct';
 import ModalDeleteProduct from './ModalDeleteProduct';
-import { Tabs } from 'antd';
-import { Col, Container, Form, Row, Button } from 'react-bootstrap';
+import { Tabs, Slider } from 'antd';
+import { Col, Form, Row, Button } from 'react-bootstrap';
 import 'antd-button-color/dist/css/style.css';
 
 const ManageProduct = (props) => {
@@ -22,7 +17,6 @@ const ManageProduct = (props) => {
     const { TabPane } = Tabs;
 
     const [showModalCreateProduct, setShowModalCreateProduct] = useState(false);
-    const [showModalUpdateProduct, setShowModalUpdateProduct] = useState(false);
     const [showModalDeleteProduct, setShowModalDeleteProduct] = useState(false);
 
     const [dataUpdate, setDataUpdate] = useState({});
@@ -72,7 +66,6 @@ const ManageProduct = (props) => {
     const handleClickBtnUpdate = (product) => {
         setDataUpdate(product);
         setProductId(product.id);
-        setShowModalUpdateProduct(true);
     }
 
     const handleClickBtnDelete = (product) => {
@@ -87,49 +80,6 @@ const ManageProduct = (props) => {
     const resetDataDelete = () => {
         setDataDelete({});
     }
-
-    const [products, setProducts] = useState([]);
-    const [productDetails, setProductDetails] = useState([]);
-    const [pageProduct, setPageProduct] = useState(0);
-    const [pageProductDetail, setPageProductDetail] = useState(0);
-    const limit = 5;
-    const [totalPageProducts, setTotalPageProducts] = useState(0);
-    const [totalPageProductDetails, setTotalPageProductDetails] = useState(0);
-
-    useEffect(() => {
-        fetchListProductWithPage(pageProduct, limit)
-        fetchListProductDetailWithPage(pageProductDetail, limit)
-    }, [pageProduct, pageProductDetail]);
-
-    const fetchListProductWithPage = async () => {
-        try {
-            let res = await getAllProductsWithPage(pageProduct, limit);
-            if (res.data.products) {
-                setProducts(res.data.products);
-                setTotalPageProducts(res.data.totalPages);
-            }
-        } catch (error) {
-            console.error('Lỗi khi gọi API:', error);
-        }
-    }
-
-    const handlePageProductChange = data => {
-        const selectedPage = data.selected;
-        setPageProduct(selectedPage);
-    };
-
-    const handlePageProductDetailChange = data => {
-        const selectedPage = data.selected;
-        setPageProductDetail(selectedPage);
-    };
-
-    const fetchListProductDetailWithPage = async () => {
-        let response = await getAllProductDetailsWithPage(pageProductDetail, limit);
-        setProductDetails(response.data.productDetails);
-        setTotalPageProductDetails(response.data.totalPages);
-    }
-
-    console.log('product detail', productDetails)
 
     return (
         <div class="manage-product-container">
@@ -162,9 +112,6 @@ const ManageProduct = (props) => {
                                 <Col sm="6" xs lg="4">
                                     <Form.Control type="text" />
                                 </Col>
-                                <Col xs lg="1">
-                                    <Button variant="secondary">Tìm Kiếm</Button>
-                                </Col>
                             </Row>
                             <Row className="mb-3 justify-content-md-center">
                                 <Form.Label column sm="1">
@@ -176,9 +123,6 @@ const ManageProduct = (props) => {
                                         <option value="option2">Option 2</option>
                                         <option value="option3">Option 3</option>
                                     </Form.Select>
-                                </Col>
-                                <Col xs lg="1">
-                                    <Button variant="secondary">Tìm Kiếm</Button>
                                 </Col>
                             </Row>
                         </Form>
@@ -208,7 +152,7 @@ const ManageProduct = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map((product, index) => (
+                                {listProduct.map((product, index) => (
                                     <tr key={`table-product-${index}`} className="room">
                                         <td className="text-center">{index + 1}</td>
                                         <td className="text-center">{product.code}</td>
@@ -217,11 +161,6 @@ const ManageProduct = (props) => {
                                         <td className="text-center">{product.deleted === false ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
                                         <td className="text-center">
                                             <div className="d-flex justify-content-center align-items-center">
-                                                <button className="btn-delete btn btn-dark short-button"
-                                                    onClick={() => handleClickBtnDelete(product)}
-                                                >
-                                                    <AiFillEye />
-                                                </button>
                                                 <Link to={`/admins/update-products/${product.id}`} state={{ productName: product.productName }}>
                                                     <button className="btn-update btn btn-dark mx-3 short-button"
                                                         onClick={() => handleClickBtnUpdate(product)}
@@ -229,25 +168,17 @@ const ManageProduct = (props) => {
                                                         <FaPenSquare color='#ffffff' />
                                                     </button>
                                                 </Link>
+                                                <button className="btn-delete btn btn-dark short-button"
+                                                // onClick={() => handleClickBtnDelete(item)}
+                                                >
+                                                    <MdDeleteSweep />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <div className='justify-content-center'>
-                            <ReactPaginate
-                                previousLabel={<FaAngleLeft size={25} />}
-                                nextLabel={<FaAngleRight size={25} />}
-                                breakLabel={'...'}
-                                pageCount={totalPageProducts}
-                                marginPagesDisplayed={2}
-                                pageRangeDisplayed={5}
-                                onPageChange={handlePageProductChange}
-                                containerClassName={'pagination'}
-                                subContainerClassName={'pages pagination'}
-                            />
-                        </div>
                     </div>
                 </TabPane>
                 <TabPane
@@ -280,7 +211,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listBrand.map(brand => (
                                             <option key={brand.id} value={brand.id}>
                                                 {brand.name}
@@ -289,7 +220,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Thương hiệu</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -298,7 +228,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listCategory.map(category => (
                                             <option key={category.id} value={category.id}>
                                                 {category.name}
@@ -307,7 +237,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Danh mục</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -316,7 +245,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listMaterial.map(material => (
                                             <option key={material.id} value={material.id}>
                                                 {material.name}
@@ -325,7 +254,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Chất liệu</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -336,7 +264,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listCollar.map(collar => (
                                             <option key={collar.id} value={collar.id}>
                                                 {collar.name}
@@ -345,7 +273,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Cổ áo</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -354,7 +281,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
@@ -363,7 +290,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Chiều dài tay</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -372,7 +298,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
@@ -381,7 +307,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -390,7 +315,7 @@ const ManageProduct = (props) => {
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className="form-floating">
                                                 <select className="form-select" style={{ minWidth: '200px' }}>
-                                                    <option value="">Chọn</option>
+                                                    <option value="">Tất cả</option>
                                                     {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
@@ -399,7 +324,6 @@ const ManageProduct = (props) => {
                                                 </select>
                                                 <label htmlFor="floatingSelectGrid" className='text-floating'>Màu sắc</label>
                                             </div>
-                                            <button type="button" className="btn btn-dark ms-2 btn-add-property"><MdLibraryAdd /></button>
                                         </div>
                                     </div>
                                 </Col>
@@ -408,10 +332,7 @@ const ManageProduct = (props) => {
                                 <Col xs={6}>
                                     <div className="col-md-12">
                                         <label className="form-label">Số lượng</label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                        />
+                                        <Slider defaultValue={0} />
                                     </div>
                                 </Col>
                                 <Col xs={6}>
@@ -447,14 +368,13 @@ const ManageProduct = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {productDetails.length > 0 && productDetails.map((item, index) => {
+                                {listProductDetail.length > 0 && listProductDetail.map((item, index) => {
                                     return (
                                         <tr key={`table-product-${index}`} className="room">
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">{item.cover}</td>
-                                            {/* <td className="text-center">
-                                                <img src={`${item.cover}`} />
-                                            </td> */}
+                                            <td className="text-center image-product-detail" style={{ verticalAlign: 'middle', width: '5%' }}>
+                                                <img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${item.cover}`} />
+                                            </td>
                                             <td className="text-center">{item.name}</td>
                                             <td className="text-center">{item.quantity}</td>
                                             <td className="text-center">{item.price}</td>
@@ -478,7 +398,7 @@ const ManageProduct = (props) => {
                                         </tr>
                                     );
                                 })}
-                                {listProduct && listProduct.length === 0 &&
+                                {listProductDetail && listProductDetail.length === 0 &&
                                     <tr>
                                         <td colSpan={7} className='text-center'>
                                             Không có dữ liệu!
@@ -487,19 +407,6 @@ const ManageProduct = (props) => {
                                 }
                             </tbody>
                         </table>
-                        <div className='justify-content-center'>
-                            <ReactPaginate
-                                previousLabel={<FaAngleLeft size={25} />}
-                                nextLabel={<FaAngleRight size={25} />}
-                                breakLabel={'...'}
-                                pageCount={totalPageProductDetails}
-                                marginPagesDisplayed={2}
-                                pageRangeDisplayed={5}
-                                onPageChange={handlePageProductDetailChange}
-                                containerClassName={'pagination'}
-                                subContainerClassName={'pages pagination'}
-                            />
-                        </div>
                     </div>
                 </TabPane>
             </Tabs>

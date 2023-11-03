@@ -97,12 +97,8 @@ const getAllProductDetails = () => {
     return instance.get(`api/v1/product/product-details`)
 }
 
-const getAllProductDetailsWithPage = (page, limit) => {
-    return instance.get(`api/v1/product/product-details-page?page=${page}&limit=${limit}`)
-}
-
-const getAllProductDetailsByProductId = (productId, page, limit) => {
-    return instance.get(`api/v1/product/product-details/${productId}?page=${page}&limit=${limit}`)
+const getAllProductDetailsByProductId = (productId) => {
+    return instance.get(`api/v1/product/product-details/${productId}`)
 }
 
 const getAllProperties = (property) => {
@@ -112,6 +108,6 @@ const getAllProperties = (property) => {
 export {
     getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty,
     postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductsWithPage,
-    getAllProductDetailsWithPage, getAllProductDetails, postProductDetail, deleteProductDetailsByProperty, getAllProductDetailsByProductId,
+    getAllProductDetails, postProductDetail, deleteProductDetailsByProperty, getAllProductDetailsByProductId,
     postImageForProductDetails
 };

@@ -57,9 +57,6 @@ public class ProductDetail extends BaseModel {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "gender")
-    private Boolean gender;
-
     @Column(name = "price")
     private Float price;
 

@@ -96,33 +96,9 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAll());
     }
 
-    @GetMapping("/product-details-page")
-    public ResponseEntity<?> getAllWithPage(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        if (page < 0 || limit <= 0) {
-            return ResponseEntity.badRequest().body("Invalid page or limit");
-        }
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdAt").descending());
-        Page<ProductDetailResponse> productDetailPage = productDetailService.getAllWithPage(pageRequest);
-
-        int totalPages = productDetailPage.getTotalPages();
-        List<ProductDetailResponse> productDetails = productDetailPage.getContent();
-
-        return ResponseEntity.ok(new ProductDetailListResponse(productDetails, totalPages));
-    }
-
     @GetMapping("/product-details/{productId}")
-    public ResponseEntity<?> getAllByProductIdWithPage(
-            @PathVariable Long productId, @RequestParam("page") int page, @RequestParam("limit") int limit) {
-        if (page < 0 || limit <= 0) {
-            return ResponseEntity.badRequest().body("Invalid page or limit");
-        }
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdAt").descending());
-        Page<ProductDetailResponse> productDetailPage = productDetailService.getAllByProductId(productId, pageRequest);
-
-        int totalPages = productDetailPage.getTotalPages();
-        List<ProductDetailResponse> productDetails = productDetailPage.getContent();
-
-        return ResponseEntity.ok(new ProductDetailListResponse(productDetails, totalPages));
+    public ResponseEntity<?> getAllByProductIdWithPage(@PathVariable Long productId) {
+        return ResponseEntity.ok(productDetailService.getAllByProductId(productId));
     }
 
     @GetMapping("/product-details/by-colorId/{colorId}")

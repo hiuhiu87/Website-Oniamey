@@ -79,11 +79,6 @@ public class ProductDetailService implements IProductDetailService {
     private final AmazonS3 s3Client;
 
     @Override
-    public Page<ProductDetailResponse> getAllWithPage(PageRequest pageRequest) {
-        return productDetailRepository.getAll(pageRequest);
-    }
-
-    @Override
     public List<ProductDetailResponse> getAll() {
         return productDetailRepository.getAll();
     }
@@ -95,8 +90,8 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
-    public Page<ProductDetailResponse> getAllByProductId(Long productId, PageRequest pageRequest) {
-        return productDetailRepository.getAllByProductId(productId, pageRequest);
+    public List<ProductDetailResponse> getAllByProductId(Long productId) {
+        return productDetailRepository.getAllByProductId(productId);
     }
 
     @Override
@@ -197,7 +192,6 @@ public class ProductDetailService implements IProductDetailService {
                         productDetail.setSleeveLength(existingSleeveLength);
                         productDetail.setCode(generateRandomCode());
                         productDetail.setName(name);
-                        productDetail.setGender(true);
                         productDetail.setPrice(price);
                         productDetail.setQuantity(quantity);
                         productDetail.setWeight(addProductDetailRequest.getWeight());
@@ -233,7 +227,6 @@ public class ProductDetailService implements IProductDetailService {
         existingProductDetail.setSleeveLength(existingSleeveLength);
         existingProductDetail.setName(updateProductDetailRequest.getName());
         existingProductDetail.setCode(generateRandomCode());
-        existingProductDetail.setGender(updateProductDetailRequest.getGender());
         existingProductDetail.setPrice(updateProductDetailRequest.getPrice());
         existingProductDetail.setQuantity(updateProductDetailRequest.getQuantity());
         existingProductDetail.setWeight(updateProductDetailRequest.getWeight());

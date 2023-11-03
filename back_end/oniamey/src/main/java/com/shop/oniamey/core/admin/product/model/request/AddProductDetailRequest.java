@@ -31,13 +31,10 @@ public class AddProductDetailRequest {
 
     private List<String> names;
 
-    private Boolean gender;
-
     private List<Float> prices;
 
     private List<Long> quantities;
 
     private Float weight;
 
-    private Boolean deleted;
 }

@@ -248,8 +248,8 @@ const AddProduct = (props) => {
                 };
                 newProductDetails.push(productDetail);
 
-                newQuantityInput.push(123);
-                newPriceInput.push(123);
+                newQuantityInput.push(10);
+                newPriceInput.push(100000);
                 newNames.push(name);
             });
         });

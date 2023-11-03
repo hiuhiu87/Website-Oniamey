@@ -2,8 +2,6 @@ package com.shop.oniamey.core.admin.product.model.response;
 
 public interface ProductDetailResponse {
 
-    Long getProduct();
-
     Long getCategory();
 
     Long getSize();
@@ -20,8 +18,6 @@ public interface ProductDetailResponse {
 
     String getName();
 
-    Boolean getGender();
-
     Float getPrice();
 
     Long getQuantity();
@@ -29,5 +25,7 @@ public interface ProductDetailResponse {
     Float getWeight();
 
     String getCover();
+
+    Boolean getDeleted();
 
 }

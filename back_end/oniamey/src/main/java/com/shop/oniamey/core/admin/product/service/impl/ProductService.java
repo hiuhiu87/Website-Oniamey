@@ -56,7 +56,7 @@ public class ProductService implements IProductService {
         product.setCode(generateRandomCode());
         product.setProductName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
-        product.setDeleted(productRequest.getDeleted());
+        product.setDeleted(false);
         Product savedProduct = productRepository.save(product);
         return savedProduct;
     }
@@ -65,14 +65,8 @@ public class ProductService implements IProductService {
     public Product update(Long productId, ProductRequest productRequest) throws DataNotFoundException, IOException, WriterException {
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Product not found"));
-        String randomCode = generateRandomCode();
-        existingProduct.setProductName(productRequest.getName());
-        existingProduct.setCode(randomCode);
         existingProduct.setDescription(productRequest.getDescription());
-
-        existingProduct.setDeleted(productRequest.getDeleted());
         productRepository.save(existingProduct);
-//        QRCodeProduct.generateQRCode(existingProduct);
         return existingProduct;
     }
 

@@ -4,17 +4,85 @@ import { FaFilter, FaThList, FaProductHunt, FaAngleLeft, FaAngleRight } from 're
 import { MdLibraryAdd } from 'react-icons/md';
 import { AiFillEye } from 'react-icons/ai';
 import { getAllProductDetailsByProductId } from '../../../../../services/apiService';
+import { getAllProperties } from '../../../../../services/apiService';
 import ModalDetailProductDetail from './ModalDetailProductDetail.js';
 import _ from 'lodash';
 import { useParams, useLocation } from 'react-router-dom';
 
 const UpdateProduct = (props) => {
 
+    const [brandId, setBrandId] = useState('');
+    const [listBrand, setListBrand] = useState([]);
+    const [categoryId, setCategoryId] = useState('');
+    const [listCategory, setListCategory] = useState([]);
+    const [materialId, setMaterialId] = useState('');
+    const [listMaterial, setListMaterial] = useState([]);
+    const [collarId, setCollarId] = useState('');
+    const [listCollar, setListCollar] = useState([]);
+    const [sleeveLengthId, setSleeveLengthId] = useState('');
+    const [listSleeveLength, setListSleeveLength] = useState([]);
+    const [sizeId, setSizeId] = useState('');
+    const [listSize, setListSize] = useState([]);
+    const [colorId, setColorId] = useState('');
+    const [listColor, setListColor] = useState([]);
+
     const [showModalDetailProductDetail, setShowModalDetailProductDetail] = useState(false);
 
     const [dataDetail, setDataDetail] = useState({});
 
-    const resetDataDelete = () => {
+    useEffect(() => {
+        fetchListBrand();
+        fetchListCategory();
+        fetchListCollar();
+        fetchListSleeveLength();
+        fetchListMaterial();
+        fetchListSize();
+        fetchListColor();
+    }, []);
+
+    const fetchListBrand = async () => {
+        let response = await getAllProperties('brand');
+        setListBrand(response.data);
+        setBrandId(response.data[0].id);
+    }
+
+    const fetchListCategory = async () => {
+        let response = await getAllProperties('category');
+        setListCategory(response.data);
+        setCategoryId(response.data[0].id)
+    }
+
+    const fetchListMaterial = async () => {
+        let response = await getAllProperties('material');
+        setListMaterial(response.data);
+        setMaterialId(response.data[0].id)
+    }
+
+    const fetchListCollar = async () => {
+        let response = await getAllProperties('collar');
+        setListCollar(response.data);
+        setCollarId(response.data[0].id)
+    }
+
+    const fetchListSleeveLength = async () => {
+        let response = await getAllProperties('sleeve-length');
+        setListSleeveLength(response.data);
+        setSleeveLengthId(response.data[0].id)
+    }
+
+    const fetchListColor = async () => {
+        let response = await getAllProperties('color');
+        setListColor(response.data);
+        setColorId(response.data[0].id)
+    }
+
+    const fetchListSize = async () => {
+        let response = await getAllProperties('size');
+        setListSize(response.data);
+        setSizeId(response.data[0].id)
+    }
+
+    const resetDataDetail = () => {
         setDataDetail({});
     }
 
@@ -48,35 +116,23 @@ const UpdateProduct = (props) => {
         setSelectedItems(newSelectedItems);
     };
 
-
-
-    const [pageProductDetail, setPageProductDetail] = useState(0);
-    const limit = 5;
-    const [totalPageProductDetails, setTotalPageProductDetails] = useState(0);
-
     useEffect(() => {
         fetchListProductDetailByProductId();
-        fetchListProductDetailByProductId(productId, pageProductDetail, limit);
-    }, [productId, pageProductDetail])
-
-    const handlePageProductDetailChange = data => {
-        const selectedPage = data.selected;
-        setPageProductDetail(selectedPage);
-    };
+    }, [productId])
 
     const fetchListProductDetailByProductId = async () => {
-        let response = await getAllProductDetailsByProductId(productId, pageProductDetail, limit);
-        setListProductDetail(response.data.productDetails);
-        console.log(response.data)
-        setTotalPageProductDetails(response.data.totalPages);
+        let response = await getAllProductDetailsByProductId(productId);
+        setListProductDetail(response.data);
     }
+
+    console.log(listProductDetail)
 
     return (
         <>
             <div class="manage-product-container">
                 <div className='manage-material-title'>
                     <div className="title">
-                        <FaProductHunt size={32} /> {productName}
+                        <FaProductHunt size={32} /> Sản phẩm: {productName}
                     </div>
                 </div>
                 <div className='manage-material-search'>
@@ -166,25 +222,36 @@ const UpdateProduct = (props) => {
 
                         </tbody>
                     </table>
-                    <div className='justify-content-center'>
-                        <ReactPaginate
-                            previousLabel={<FaAngleLeft size={25} />}
-                            nextLabel={<FaAngleRight size={25} />}
-                            breakLabel={'...'}
-                            pageCount={totalPageProductDetails}
-                            marginPagesDisplayed={2}
-                            pageRangeDisplayed={5}
-                            onPageChange={handlePageProductDetailChange}
-                            containerClassName={'pagination'}
-                            subContainerClassName={'pages pagination'}
-                        />
-                    </div>
                 </div>
             </div>
             <ModalDetailProductDetail
                 show={showModalDetailProductDetail}
                 setShow={setShowModalDetailProductDetail}
                 productName={productName}
+                productId={productId}
+                brandId={brandId}
+                setBrandId={setBrandId}
+                listBrand={listBrand}
+                categoryId={categoryId}
+                setCategoryId={setCategoryId}
+                listCategory={listCategory}
+                materialId={materialId}
+                setMaterialId={setMaterialId}
+                listMaterial={listMaterial}
+                collarId={collarId}
+                setCollarId={setCollarId}
+                listCollar={listCollar}
+                sleeveLengthId={sleeveLengthId}
+                setSleeveLengthId={setSleeveLengthId}
+                listSleeveLength={listSleeveLength}
+                sizeId={sizeId}
+                setSizeId={setSizeId}
+                listSize={listSize}
+                colorId={colorId}
+                setColorId={setColorId}
+                listColor={listColor}
+                dataDetail={dataDetail}
+                resetDataDetail={resetDataDetail}
             />
         </>
     );
