@@ -69,6 +69,7 @@ public class ProductDetail extends BaseModel {
     @Column(name = "weight")
     private Float weight;
 
-//    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Image> images;
+    @Column(name = "cover")
+    private String cover;
+
 }

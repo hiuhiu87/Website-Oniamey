@@ -18,7 +18,6 @@ import com.shop.oniamey.repository.product.ProductDetailRepository;
 import com.shop.oniamey.repository.product.ProductRepository;
 import com.shop.oniamey.repository.product.SizeRepository;
 import com.shop.oniamey.repository.product.SleeveLengthRepository;
-import com.shop.oniamey.util.QRCodeProduct;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -50,7 +49,7 @@ public class FakeData {
     @PostConstruct
     public void fakeAllDataWebsiteOniamey() {
 
-        fakeDataProduct();
+//        fakeDataProduct();
 
         fakeDataBrand();
 
@@ -68,42 +67,42 @@ public class FakeData {
 
     }
 
-    public void fakeDataProduct() {
-        Product product = new Product();
-        product.setProductName("Áo 1");
-        product.setCode(QRCodeProduct.generateRandomCode());
-        product.setDescription("Áo Phông cao cấp");
-        product.setDeleted(false);
-        productRepository.save(product);
-
-        Product product1 = new Product();
-        product1.setProductName("Áo 2");
-        product1.setCode(QRCodeProduct.generateRandomCode());
-        product1.setDescription("Áo Phông rẻ tiền");
-        product1.setDeleted(true);
-        productRepository.save(product1);
-
-        Product product2 = new Product();
-        product2.setProductName("Áo 3");
-        product2.setCode(QRCodeProduct.generateRandomCode());
-        product2.setDescription("Áo Phông cao cấp");
-        product2.setDeleted(false);
-        productRepository.save(product2);
-
-        Product product3 = new Product();
-        product3.setProductName("Áo 4");
-        product3.setCode(QRCodeProduct.generateRandomCode());
-        product3.setDescription("Áo Phông rẻ tiền");
-        product3.setDeleted(true);
-        productRepository.save(product3);
-
-        Product product4 = new Product();
-        product4.setProductName("Áo 5");
-        product4.setCode(QRCodeProduct.generateRandomCode());
-        product4.setDescription("Áo Phông cao cấp");
-        product4.setDeleted(false);
-        productRepository.save(product4);
-    }
+//    public void fakeDataProduct() {
+//        Product product = new Product();
+//        product.setProductName("Áo 1");
+//        product.setCode(QRCodeProduct.generateRandomCode());
+//        product.setDescription("Áo Phông cao cấp");
+//        product.setDeleted(false);
+//        productRepository.save(product);
+//
+//        Product product1 = new Product();
+//        product1.setProductName("Áo 2");
+//        product1.setCode(QRCodeProduct.generateRandomCode());
+//        product1.setDescription("Áo Phông rẻ tiền");
+//        product1.setDeleted(true);
+//        productRepository.save(product1);
+//
+//        Product product2 = new Product();
+//        product2.setProductName("Áo 3");
+//        product2.setCode(QRCodeProduct.generateRandomCode());
+//        product2.setDescription("Áo Phông cao cấp");
+//        product2.setDeleted(false);
+//        productRepository.save(product2);
+//
+//        Product product3 = new Product();
+//        product3.setProductName("Áo 4");
+//        product3.setCode(QRCodeProduct.generateRandomCode());
+//        product3.setDescription("Áo Phông rẻ tiền");
+//        product3.setDeleted(true);
+//        productRepository.save(product3);
+//
+//        Product product4 = new Product();
+//        product4.setProductName("Áo 5");
+//        product4.setCode(QRCodeProduct.generateRandomCode());
+//        product4.setDescription("Áo Phông cao cấp");
+//        product4.setDeleted(false);
+//        productRepository.save(product4);
+//    }
 
     public void fakeDataBrand() {
         Brand brand = new Brand();

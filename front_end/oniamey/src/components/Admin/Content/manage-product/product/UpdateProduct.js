@@ -138,21 +138,21 @@ const UpdateProduct = (props) => {
                             {listProductDetail.length > 0 && listProductDetail.map((item, index) => {
                                 return (
                                     <tr key={`table-material-${index}`} className="room">
-                                        <td className="text-center">
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>
                                             <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
                                         </td>
-                                        <td className="text-center">{index + 1}</td>
-                                        <td className="text-center">
-                                            <img src={`abc.png`} />
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{index + 1}</td>
+                                        <td className="text-center image-product-detail" style={{ verticalAlign: 'middle', width: '5%' }}>
+                                            <img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${item.cover}`} />
                                         </td>
-                                        <td className="text-center">{item.name}</td>
-                                        <td className="text-center">{item.quantity}</td>
-                                        <td className="text-center">{item.price}</td>
-                                        <td className="text-center">{item.size}</td>
-                                        <td className="text-center">{item.color}</td>
-                                        <td className="text-center">{item.deleted === false ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
-                                        <td className="text-center">
-                                            <div className="d-flex justify-content-center align-items-center">
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.name}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.quantity}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.price}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.size}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.color}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>{item.deleted === false ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>
+                                            <div className="d-flex justify-content-center align-items-center" >
                                                 <button className="btn-update btn btn-dark mx-3 short-button"
                                                     onClick={() => handleClickBtnDetail(item)}
                                                 >

@@ -1,10 +1,8 @@
 package com.shop.oniamey.core.admin.product.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.shop.oniamey.core.admin.product.model.request.ImageRequest;
 import com.shop.oniamey.core.admin.product.service.IImageService;
 import com.shop.oniamey.entity.Image;
@@ -55,19 +53,9 @@ public class ImageService implements IImageService {
         return imageExtensions.contains(fileExtension.toLowerCase());
     }
 
-//    private boolean bucketIsEmpty() {
-//        ListObjectsV2Result result = s3Client.listObjectsV2(this.bucketName);
-//        if (result == null){
-//            return false;
-//        }
-//        List<S3ObjectSummary> objects = result.getObjectSummaries();
-//        return objects.isEmpty();
-//    }
-
     @Override
     public List<Image> uploadImages(ImageRequest imageRequest) throws DataNotFoundException, IOException {
         List<Image> images = new ArrayList<>();
-
         for (Long productDetailId : imageRequest.getProductDetailId()) {
             ProductDetail existingProductDetail = productDetailRepository.findById(productDetailId)
                     .orElseThrow(() -> new DataNotFoundException("ProductDetail not found"));
@@ -75,6 +63,9 @@ public class ImageService implements IImageService {
             if (existingProductDetail.getColor().getId() != imageRequest.getColorId()) {
                 continue;
             }
+
+            List<Image> temporaryImages = new ArrayList<>();
+
             for (MultipartFile imageFile : imageRequest.getImageUrl()) {
                 if (imageFile.getSize() == 0) {
                     continue;
@@ -106,7 +97,13 @@ public class ImageService implements IImageService {
                 image.setUpdatedBy(1L);
                 image.setDeleted(false);
 
+                temporaryImages.add(image);
+
                 images.add(imageRepository.save(image));
+                if (!temporaryImages.isEmpty()) {
+                    existingProductDetail.setCover(temporaryImages.get(0).getImageUrl());
+                    productDetailRepository.save(existingProductDetail);
+                }
             }
         }
         return images;

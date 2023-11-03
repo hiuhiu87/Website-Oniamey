@@ -2,16 +2,13 @@ package com.shop.oniamey.repository.product;
 
 import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
 import com.shop.oniamey.entity.ProductDetail;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Long> {
@@ -37,6 +34,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             pd.created_by as createdBy,
             pd.updated_by as updatedBy,
             pd.deleted as deleted,
+            pd.cover as cover,
             i.image_url as imageUrl
             FROM product_detail pd
             LEFT JOIN image i ON pd.id = i.id_product_detail;
@@ -63,6 +61,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             pd.created_by as createdBy,
             pd.updated_by as updatedBy,
             pd.deleted as deleted,
+            pd.cover as cover,
             i.image_url as imageUrl
             FROM product_detail pd
             LEFT JOIN image i ON pd.id = i.id_product_detail
@@ -89,6 +88,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             pd.created_by as createdBy,
             pd.updated_by as updatedBy,
             pd.deleted as deleted,
+            pd.cover as cover,
             i.image_url as imageUrl
             FROM product_detail pd
             LEFT JOIN image i ON pd.id = i.id_product_detail
@@ -111,6 +111,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             pd.price as price,
             pd.quantity as quantity,
             pd.weight as weight,
+            pd.cover as cover,
             pd.created_at as createdAt,
             pd.updated_at as updatedAt,
             pd.created_by as createdBy,
@@ -139,7 +140,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
                     SELECT 
                      pd.id, pd.id_product, pd.id_category, pd.id_size, pd.id_material, pd.id_brand,
                      pd.id_color, pd.id_collar, pd.id_sleeve_length, pd.code, pd.name, pd.gender,
-                     pd.price, pd.quantity, pd.weight, pd.created_at, pd.updated_at, pd.created_by,
+                     pd.price, pd.quantity, pd.weight, pd.cover, pd.created_at, pd.updated_at, pd.created_by,
                      pd.updated_by, pd.deleted
                      FROM product_detail pd
                     WHERE pd.id_product = :productId
@@ -153,25 +154,5 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
     ProductDetail getProductByProperty(Long productId, Long colorId, Long sizeId,
                                        Long materialId, Long brandId, Long collarId, Long sleeveLengthId);
 
-    @Modifying
-    @Query(value = """
-            DELETE FROM product_detail
-            WHERE id_product = :productId
-            AND id_size IN :sizeId
-            AND id_color IN :colorId
-            """, nativeQuery = true)
-    void deleteByProperty(Long productId, List<Long> sizeId, List<Long> colorId);
-
-    @Modifying
-    @Query(value = "DELETE FROM product_detail " +
-            "WHERE id_product = :productId " +
-            "  AND id_color = :colorId " +
-            "  AND id_size = :sizeId " +
-            "  AND id_material = :materialId " +
-            "  AND id_brand = :brandId " +
-            "  AND id_collar = :collarId " +
-            "  AND id_sleeve_length = :sleeveLengthId", nativeQuery = true)
-    @Transactional
-    void deleteByProductAndAttributes(Long productId, Long colorId, Long sizeId, Long materialId, Long brandId, Long collarId, Long sleeveLengthId);
 
 }

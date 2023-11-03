@@ -1,7 +1,6 @@
 package com.shop.oniamey.core.admin.product.controller;
 
 import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest;
-import com.shop.oniamey.core.admin.product.model.request.DeleteProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.request.ProductRequest;
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.response.ProductDetailListResponse;
@@ -13,7 +12,6 @@ import com.shop.oniamey.core.admin.product.service.IProductService;
 import com.shop.oniamey.entity.Product;
 import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
-import com.shop.oniamey.repository.product.ProductDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -163,11 +160,5 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-//    @DeleteMapping("/product-details")
-//    public ResponseEntity<String> deleteProductDetailByProperty(@ModelAttribute DeleteProductDetailRequest request) {
-//        productDetailService.deleteByColorIdAndSizeId(request);
-//        return ResponseEntity.ok("Xóa thông tin cũ thành công");
-//    }
 
 }

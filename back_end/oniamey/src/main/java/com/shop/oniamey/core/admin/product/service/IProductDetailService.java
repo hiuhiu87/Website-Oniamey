@@ -2,10 +2,8 @@ package com.shop.oniamey.core.admin.product.service;
 
 import com.google.zxing.WriterException;
 import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest;
-import com.shop.oniamey.core.admin.product.model.request.DeleteProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
-import com.shop.oniamey.core.admin.product.model.response.ProductResponse;
 import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import org.springframework.data.domain.Page;
@@ -31,7 +29,5 @@ public interface IProductDetailService {
     ProductDetail update(Long id, UpdateProductDetailRequest updateProductDetailRequest) throws DataNotFoundException;
 
     void delete(Long id) throws DataNotFoundException;
-
-//    void deleteByColorIdAndSizeId(DeleteProductDetailRequest deleteProductDetailRequest);
 
 }

@@ -28,6 +28,6 @@ public interface ProductDetailResponse {
 
     Float getWeight();
 
-    String getImageUrl();
+    String getCover();
 
 }

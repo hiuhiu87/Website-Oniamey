@@ -260,7 +260,7 @@ const AddProduct = (props) => {
         setNames(newNames);
     };
 
-    const maxFileCount = 3;
+    const maxFileCount = 5;
     const uniqueColorGroups = useMemo(() => {
         return Array.from(new Set(productDetails.map(item => item.colorId)));
     }, [productDetails]);

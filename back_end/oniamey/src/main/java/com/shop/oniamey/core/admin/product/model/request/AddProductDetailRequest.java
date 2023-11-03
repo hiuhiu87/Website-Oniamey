@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -41,5 +40,4 @@ public class AddProductDetailRequest {
     private Float weight;
 
     private Boolean deleted;
-
 }

@@ -23,6 +23,4 @@ public class ProductRequest {
 
     private Boolean deleted;
 
-//    List<ProductDetailRequest> productDetail;
-
 }

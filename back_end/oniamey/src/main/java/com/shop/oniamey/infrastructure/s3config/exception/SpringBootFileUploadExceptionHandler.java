@@ -19,7 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class SpringBootFileUploadExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value
-            = { FileEmptyException.class})
+            = {FileEmptyException.class})
     protected ResponseEntity<Object> handleFileEmptyException(
             FileEmptyException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
@@ -28,15 +28,16 @@ public class SpringBootFileUploadExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler(value
-            = { FileDownloadException.class})
+            = {FileDownloadException.class})
     protected ResponseEntity<Object> handleFileDownloadException(
             FileDownloadException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
     @ExceptionHandler(value
-            = { SpringBootFileUploadException.class})
+            = {SpringBootFileUploadException.class})
     protected ResponseEntity<Object> handleConflict(
             SpringBootFileUploadException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
@@ -44,10 +45,8 @@ public class SpringBootFileUploadExceptionHandler extends ResponseEntityExceptio
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    // Handle exceptions that occur when the call was transmitted successfully, but Amazon S3 couldn't process
-    // it, so it returned an error response.
     @ExceptionHandler(value
-            = { AmazonServiceException.class})
+            = {AmazonServiceException.class})
     protected ResponseEntity<Object> handleAmazonServiceException(
             RuntimeException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
@@ -55,11 +54,8 @@ public class SpringBootFileUploadExceptionHandler extends ResponseEntityExceptio
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    // Handle exceptions that occur when Amazon S3 couldn't be contacted for a response, or the client
-    // couldn't parse the response from Amazon S3.
-
     @ExceptionHandler(value
-            = { SdkClientException.class})
+            = {SdkClientException.class})
     protected ResponseEntity<Object> handleSdkClientException(
             RuntimeException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();

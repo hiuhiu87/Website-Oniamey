@@ -11,7 +11,6 @@ import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import com.shop.oniamey.repository.product.ImageRepository;
 import com.shop.oniamey.repository.product.ProductDetailRepository;
 import com.shop.oniamey.repository.product.ProductRepository;
-import com.shop.oniamey.util.QRCodeProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,16 +46,18 @@ public class ProductService implements IProductService {
         return productRepository.getAll();
     }
 
+    private String generateRandomCode() {
+        return "Oniamey-" + UUID.randomUUID().toString().substring(0, 8);
+    }
+
     @Override
     public Product create(ProductRequest productRequest) throws IOException, WriterException {
-        String randomCode = QRCodeProduct.generateRandomCode();
         Product product = new Product();
-        product.setCode(randomCode);
+        product.setCode(generateRandomCode());
         product.setProductName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
         product.setDeleted(productRequest.getDeleted());
         Product savedProduct = productRepository.save(product);
-//        QRCodeProduct.generateQRCode(savedProduct);
         return savedProduct;
     }
 
@@ -63,7 +65,7 @@ public class ProductService implements IProductService {
     public Product update(Long productId, ProductRequest productRequest) throws DataNotFoundException, IOException, WriterException {
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Product not found"));
-        String randomCode = QRCodeProduct.generateRandomCode();
+        String randomCode = generateRandomCode();
         existingProduct.setProductName(productRequest.getName());
         existingProduct.setCode(randomCode);
         existingProduct.setDescription(productRequest.getDescription());
@@ -89,55 +91,4 @@ public class ProductService implements IProductService {
         productDetailRepository.saveAll(existingProductDetail);
         productRepository.save(existingProduct);
     }
-
-
-    //    @Override
-//    public Product create(ProductRequest productRequest) throws IOException, WriterException {
-//        String randomCode = QRCodeProduct.generateRandomCode();
-//        Product product = new Product();
-//        product.setCode(randomCode);
-//        product.setName(productRequest.getName());
-//        product.setDescription(productRequest.getDescription());
-//        product.setCreatedBy(productRequest.getCreatedBy());
-//        product.setUpdatedBy(productRequest.getUpdatedBy());
-//
-//        Product savedProduct = productRepository.save(product);
-//
-////        if (savedProduct != null) {
-////            List<ProductDetailRequest> productDetailRequests = productRequest.getProductDetail();
-////            if (productDetailRequests != null) {
-////                for (ProductDetailRequest productDetailRequest : productDetailRequests) {
-////                    Set<Long> colorIds = productDetailRequest.getColorId();
-////                    Set<Long> sizeIds = productDetailRequest.getSizeId();
-////
-////                    for (Long colorId : colorIds) {
-////                        for (Long sizeId : sizeIds) {
-////
-////                            ProductDetail productDetail = new ProductDetail();
-////
-////                            productDetail.setProduct(savedProduct);
-////                            productDetail.setColor(colorRepository.findById(colorId).orElse(null));
-////                            productDetail.setSize(sizeRepository.findById(sizeId).orElse(null));
-////                            productDetail.setCategory(categoryRepository.findById(productDetailRequest.getCategoryId()).orElse(null));
-////                            productDetail.setMaterial(materialRepository.findById(productDetailRequest.getMaterialId()).orElse(null));
-////                            productDetail.setBrand(brandRepository.findById(productDetailRequest.getBrandId()).orElse(null));
-////                            productDetail.setCollar(collarRepository.findById(productDetailRequest.getCollarId()).orElse(null));
-////                            productDetail.setSleeveLenght(sleeveLenghtRepository.findById(productDetailRequest.getSleeveLengthId()).orElse(null));
-////                            productDetail.setGender(productDetailRequest.getGender());
-////                            productDetail.setPrice(productDetailRequest.getPrice());
-////                            productDetail.setQuantity(productDetailRequest.getQuantity());
-////                            productDetail.setWeight(productDetailRequest.getWeight());
-////                            productDetail.setCreatedBy(productDetailRequest.getCreatedBy());
-////                            productDetail.setUpdatedBy(productDetailRequest.getUpdatedBy());
-////                            productDetailRepository.save(productDetail);
-////
-////                        }
-////                    }
-////                }
-////            }
-//            QRCodeProduct.generateQRCode(savedProduct);
-//            return savedProduct;
-//        }
-////        return null;
-////    }
 }

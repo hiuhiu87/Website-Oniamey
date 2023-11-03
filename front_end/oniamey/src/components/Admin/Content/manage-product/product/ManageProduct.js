@@ -19,8 +19,6 @@ import 'antd-button-color/dist/css/style.css';
 
 const ManageProduct = (props) => {
 
-    const imageProductDetail = "D:\\Product\\Website-Oniamey\\front_end\\oniamey\\src\\assets\\uploads\\";
-
     const { TabPane } = Tabs;
 
     const [showModalCreateProduct, setShowModalCreateProduct] = useState(false);
@@ -131,6 +129,8 @@ const ManageProduct = (props) => {
         setTotalPageProductDetails(response.data.totalPages);
     }
 
+    console.log('product detail', productDetails)
+
     return (
         <div class="manage-product-container">
             <div className='manage-product-title'>
@@ -138,212 +138,6 @@ const ManageProduct = (props) => {
                     <FaProductHunt size={32} /> Quản Lý Sản Phẩm
                 </div>
             </div>
-            {/* <Tabs
-                defaultActiveKey="product"
-                transition={false}
-                id="noanim-tab-example"
-                className="mb-3 px-3 ms-3 tab-product"
-            >
-                <Tab eventKey="product" title="Sản phẩm">
-                    <div className='manage-material-search'>
-                        <div className='search-material-title'>
-                            <div className="title">
-                                <FaFilter size={26} /> Bộ Lọc
-                            </div>
-
-                        </div>
-                        <div className='main-search'>
-                            <div className='w-50'>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Sản phẩm</label>
-                                    <div class="col d-flex align-content-between">
-                                        <input type="text" class="form-control me-4" id="inputEmail3" />
-                                        <button type="button" class="btn btn-secondary">Tìm kiếm</button>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng thái</label>
-                                    <div class="col d-flex">
-                                        <select class="form-select me-4" id="inputPassword3">
-                                            <option value="option1">Option 1</option>
-                                            <option value="option2">Option 2</option>
-                                            <option value="option3">Option 3</option>
-                                        </select>
-                                        <button type="button" class="btn btn-secondary">Làm Mới</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='manage-material-table'>
-                        <div className='list-material-title'>
-                            <div className="title">
-                                <FaThList size={26} /> Danh Sách Sản Phẩm
-                            </div>
-                            <Link to="/admins/add-products">
-                                <button type="button" class="btn btn-dark btn-add">
-                                    <MdLibraryAdd /> Thêm
-                                </button>
-                            </Link>
-
-                        </div>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" className='px-1 text-center'>
-                                        <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                                    </th>
-                                    <th scope="col" className='px-5 text-center'>#</th>
-                                    <th scope="col" className='px-5 text-center'>Mã sản phẩm</th>
-                                    <th scope="col" className='px-5 text-center'>Tên sản phẩm</th>
-                                    <th scope="col" className='px-5 text-center'>Ngày cập nhật</th>
-                                    <th scope="col" className='px-5 text-center'>Trạng thái</th>
-                                    <th scope="col" className='px-5 text-center'>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listProduct.length > 0 && listProduct.map((item, index) => {
-                                    return (
-                                        <tr key={`table-material-${index}`} className="room">
-                                            <td className="text-center">
-                                                <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
-                                            </td>
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">{item.code}</td>
-                                            <td className="text-center">{item.productName}</td>
-                                            <td className="text-center">{item.updatedAt}</td>
-                                            <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
-                                            <td className="text-center">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <button className="btn-update btn btn-dark mx-3 short-button"
-                                                        onClick={() => handleClickBtnUpdate(item)}
-                                                    >
-                                                        <FaPenSquare color='#ffffff' />
-                                                    </button>
-                                                    <button className="btn-delete btn btn-dark short-button"
-                                                        onClick={() => handleClickBtnDelete(item)}
-                                                    >
-                                                        <MdDeleteSweep />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                                {listProduct && listProduct.length === 0 &&
-                                    <tr>
-                                        <td colSpan={7} className='text-center'>
-                                            Không có dữ liệu!
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </Tab>
-                <Tab eventKey="product-detail" title="Sản phẩm chi tiết">
-                    <div className='manage-material-search'>
-                        <div className='search-material-title'>
-                            <div className="title">
-                                <FaFilter size={26} /> Bộ Lọc
-                            </div>
-
-                        </div>
-                        <div className='main-search'>
-                            <div className='w-50'>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Sản phẩm</label>
-                                    <div class="col d-flex align-content-between">
-                                        <input type="text" class="form-control me-4" id="inputEmail3" />
-                                        <button type="button" class="btn btn-secondary">Tìm kiếm</button>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Trạng thái</label>
-                                    <div class="col d-flex">
-                                        <select class="form-select me-4" id="inputPassword3">
-                                            <option value="option1">Option 1</option>
-                                            <option value="option2">Option 2</option>
-                                            <option value="option3">Option 3</option>
-                                        </select>
-                                        <button type="button" class="btn btn-secondary">Làm mới</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='manage-material-table'>
-                        <div className='list-material-title'>
-                            <div className="title">
-                                <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
-                            </div>
-                            <button type="button" class="btn btn-dark">
-                                <MdLibraryAdd /> Thêm</button>
-
-                        </div>
-                        <table className="table">
-                            <thead style={{ backgroundColor: "black" }}>
-                                <tr>
-                                    <th scope="col" className='px-1 text-center'>
-                                        <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                                    </th>
-                                    <th scope="col" className='px-5 text-center'>#</th>
-                                    <th scope="col" className='px-5 text-center'>Ảnh</th>
-                                    <th scope="col" className='px-5 text-center'>Tên</th>
-                                    <th scope="col" className='px-5 text-center'>SL</th>
-                                    <th scope="col" className='px-5 text-center'>GB</th>
-                                    <th scope="col" className='px-5 text-center'>KC</th>
-                                    <th scope="col" className='px-5 text-center'>Màu</th>
-                                    <th scope="col" className='px-5 text-center'>TT</th>
-                                    <th scope="col" className='px-5 text-center'>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listProductDetail.length > 0 && listProductDetail.map((item, index) => {
-                                    return (
-                                        <tr key={`table-material-${index}`} className="room">
-                                            <td className="text-center">
-                                                <input type="checkbox" checked={selectedItems[index]} onChange={() => handleSelectRow(index)} />
-                                            </td>
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">
-                                                <img src={`${imageProductDetail}${item.imageUrl}`} />
-                                            </td>
-                                            <td className="text-center">{item.name}</td>
-                                            <td className="text-center">{item.quantity}</td>
-                                            <td className="text-center">{item.price}</td>
-                                            <td className="text-center">{item.size}</td>
-                                            <td className="text-center">{item.color}</td>
-                                            <td className="text-center">{item.deleted === false ? 'Active' : 'DeActive'}</td>
-                                            <td className="text-center">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <button className="btn-update btn btn-dark mx-3 short-button"
-                                                        onClick={() => handleClickBtnUpdate(item)}
-                                                    >
-                                                        <FaPenSquare color='#ffffff' />
-                                                    </button>
-                                                    <button className="btn-delete btn btn-dark short-button"
-                                                        onClick={() => handleClickBtnDelete(item)}
-                                                    >
-                                                        <MdDeleteSweep />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                                {listProduct && listProduct.length === 0 &&
-                                    <tr>
-                                        <td colSpan={7} className='text-center'>
-                                            Không có dữ liệu!
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </Tab >
-            </Tabs > */}
             <Tabs defaultActiveKey="1" className="mb-3 px-3 tab-product">
                 <TabPane
                     tab={
@@ -657,9 +451,10 @@ const ManageProduct = (props) => {
                                     return (
                                         <tr key={`table-product-${index}`} className="room">
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">
-                                                <img src={`${imageProductDetail}${item.imageUrl}`} />
-                                            </td>
+                                            <td className="text-center">{item.cover}</td>
+                                            {/* <td className="text-center">
+                                                <img src={`${item.cover}`} />
+                                            </td> */}
                                             <td className="text-center">{item.name}</td>
                                             <td className="text-center">{item.quantity}</td>
                                             <td className="text-center">{item.price}</td>
