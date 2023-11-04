@@ -11,6 +11,7 @@ import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { useAuth } from "../../authentication/AuthCustom";
 import Swal from "sweetalert2";
+import {Container} from "react-bootstrap";
 
 const Admin = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -35,11 +36,13 @@ const Admin = () => {
         <a
           onClick={() => {
             Swal.fire({
-              title: "Bạn có chắc muốn đăng xuất?",
+              title: "Thông báo",
               icon: "warning",
+              text: "Bạn có chắc muốn đăng xuất?",
               showCancelButton: true,
               confirmButtonText: "Đăng xuất",
               cancelButtonText: "Hủy",
+                confirmButtonColor: "#d33",
             }).then((result) => {
               if (result.isConfirmed) {
                 logout();
@@ -90,40 +93,40 @@ const Admin = () => {
       <div className={`admin-content ${adminContentClass}`}>
         <div className="admin-header d-flex justify-content-between">
           <BiSidebar className="cick" size={25} onClick={toggleSidebar} />
-          <div className="user-infor pe-5 d-flex align-items-stretch">
-            <div className="">
-              <img
-                src={
-                  currentUser.imageUrl ? currentUser.imageUrl : defaultAvatar
-                }
-                alt="user"
-                className="user-avatar"
-                width={30}
-              />
-            </div>
-            <div>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                trigger={["click"]}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <div class="d-flex flex-column ms-2">
-                      <span className="user-name">{currentUser.username}</span>
-                      <span className="user-role" style={{ fontSize: "12px" }}>
+            <div className="user-infor pe-5 d-flex align-items-center">
+              <div className="">
+                <img
+                    src={
+                      currentUser.imageUrl ? currentUser.imageUrl : defaultAvatar
+                    }
+                    alt="user"
+                    className="user-avatar"
+                    width={30}
+                />
+              </div>
+              <div>
+                <Dropdown
+                    menu={{
+                      items,
+                    }}
+                    trigger={["click"]}
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <div className="d-flex flex-column ms-2">
+                        <span className="user-name">{currentUser.username}</span>
+                        <span className="user-role" style={{fontSize: "12px"}}>
                         {currentUser.role === "ROLE_ADMIN"
-                          ? "Quản Lý"
-                          : "Nhân Viên"}
+                            ? "Quản Lý"
+                            : "Nhân Viên"}
                       </span>
-                    </div>
-                    <DownOutlined />
-                  </Space>
-                </a>
-              </Dropdown>
+                      </div>
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
             </div>
-          </div>
         </div>
         <div className="admin-main">
           <Outlet />

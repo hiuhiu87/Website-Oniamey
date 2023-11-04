@@ -18,11 +18,17 @@
   transform: scaleY(4px);
 }
 .admin-container .admin-content .admin-header {
-  height: 50px;
+  height: 60px;
   padding-top: 10px;
   padding-left: 20px;
   background-color: #ddd;
   margin-bottom: 15px;
+}
+.admin-container .admin-content .user-infor span {
+  color: black;
+}
+.admin-container .admin-content .user-infor img {
+  opacity: unset;
 }
 
 /* width */
@@ -56,4 +62,6 @@
 .admin-content-collapsed {
   width: 96vw;
   /* Add other styling as needed */
-}/*# sourceMappingURL=Admin.css.map */
+}
+
+/*# sourceMappingURL=Admin.css.map */

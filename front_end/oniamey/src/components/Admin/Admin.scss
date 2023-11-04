@@ -23,11 +23,20 @@
         }
 
         .admin-header {
-            height: 50px;
+            height: 60px;
             padding-top: 10px;
             padding-left: 20px;
             background-color: #ddd;
             margin-bottom: 15px;
+        }
+
+        .user-infor{
+            span{
+                color: black;
+            }
+            img{
+                opacity: unset;
+            }
         }
 
         // .admin-main {
