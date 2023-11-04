@@ -192,13 +192,7 @@ const Employee = (props) => {
 
   const handleStatus = (e) => {
     const value = e.target.value;
-    const filter = allUser.filter((user) => {
-      if (value === "true") {
-        return user.status === true;
-      } else if (value === "false") {
-        return user.status === false;
-      }
-    });
+    const filter = allUser.filter((user) => user.status === value.toString());
     setRecords(filter);
     if (value === "all") {
       setRecords(allUser);
