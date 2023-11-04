@@ -277,7 +277,6 @@ const ModalDetailProductDetail = (props) => {
                                         </div>
                                     )}
                                 </Upload>
-
                                 <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
                                     <img alt="example" style={{ width: '100%' }} src={previewImage} />
                                 </Modal>

@@ -2,6 +2,8 @@ package com.shop.oniamey.core.admin.product.model.response;
 
 public interface ProductDetailResponse {
 
+    Long getId();
+
     Long getCategory();
 
     Long getSize();

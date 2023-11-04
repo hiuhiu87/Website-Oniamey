@@ -7,7 +7,9 @@ import ModalCreateBrand from './ModalCreateBrand';
 import ModalUpdateBrand from './ModalUpdateBrand';
 import ModalDeleteBrand from './ModalDeleteBrand';
 import { getAllProperties } from '../../../../../services/apiService';
-import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import DataTable from "react-data-table-component";
+// import DataTable from "react-data-table-component";
 
 const ManageBrand = (props) => {
 
@@ -49,6 +51,58 @@ const ManageBrand = (props) => {
     const resetDataUpdate = () => {
         setDataUpdate({});
     }
+
+    const columnsBrand = [
+        {
+            name: "STT",
+            selector: (row) => listBrand.indexOf(row) + 1,
+            minWidth: "40px",
+            maxWidth: "80px",
+            center: "true",
+        },
+        {
+            name: "Tên",
+            selector: (row) => row.name,
+            center: "true",
+        },
+        {
+            name: "Ngày cập nhật",
+            selector: (row) => row.updatedAt,
+            center: "true",
+        },
+        {
+            name: "Trạng thái",
+            selector: (row) => row.deleted === false ? 'Active' : 'Deactive',
+            center: "true",
+        },
+        {
+            name: "Hành động",
+            cell: (row) => (
+                <>
+                    <Button
+                        variant="dark"
+                        onClick={() => handleShowModalUpdateBrand(row)}
+                    >
+                        <FaPenSquare />
+                    </Button>
+                    <Button
+                        variant="dark"
+                        onClick={() => handleShowModalDeleteBrand(row)}
+                    >
+                        <MdDeleteSweep />
+                    </Button>
+                </>
+            ),
+            center: "true",
+        },
+    ];
+
+    const paginationComponentOptions = {
+        rowsPerPageText: "Số Bản Ghi Một Trang",
+        rangeSeparatorText: "Trên",
+        selectAllRowsItem: true,
+        selectAllRowsItemText: "Tất Cả",
+    };
 
     return (
         <div className="manage-brand-container">
@@ -105,7 +159,7 @@ const ManageBrand = (props) => {
                         <MdLibraryAdd /> Thêm
                     </Button>
                 </div>
-                <Table striped hover responsive>
+                {/* <Table striped hover responsive>
                     <thead>
                         <tr>
                             <th scope="col" className='px-5 text-center'>STT</th>
@@ -154,7 +208,18 @@ const ManageBrand = (props) => {
                             </tr>
                         )}
                     </tbody>
-                </Table>
+                </Table> */}
+                <DataTable
+                    rounded-3
+                    columns={columnsBrand}
+                    data={listBrand}
+                    pagination
+                    paginationComponentOptions={paginationComponentOptions}
+                    highlightOnHover
+                    pointerOnHover
+                    paginationRowsPerPageOptions={[5, 10, 15]}
+                // onRowClicked={(row) => handleClickTable(row)}
+                />
             </div>
             <ModalCreateBrand
                 show={showModalCreateBrand}

@@ -15,7 +15,6 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
 
     @Query(value = """
                         SELECT pd.id,
-                        pd.id_product as product,
                         pd.id_category as category,
                         pd.id_size as size,
                         pd.id_material as material,
