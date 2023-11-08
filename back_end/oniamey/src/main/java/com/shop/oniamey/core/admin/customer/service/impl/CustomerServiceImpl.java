@@ -8,6 +8,7 @@ import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.entity.Customer;
 import com.shop.oniamey.repository.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerResponse> getAllCustomers(Pageable pageable) {
+    public Page<List<CustomerResponse>> getAllCustomers(Pageable pageable) {
         return customerRepository.getAllCustomers(pageable);
     }
 
@@ -34,6 +35,10 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.getCustomerById(id);
     }
 
+    /**
+     * @param modifyUserRequest - hứng request thêm user từ client
+     * @return result - trả về kết quả thêm user
+     */
     @Override
     public Object createCustomer(ModifyCustomerRequest modifyUserRequest) {
 
@@ -57,6 +62,11 @@ public class CustomerServiceImpl implements CustomerService {
         return id;
     }
 
+    /**
+     * @param id                - nhận id của user cần update
+     * @param modifyUserRequest - hứng request update user từ client
+     * @return result - trả về kết quả update user
+     */
     @Override
     public String updateCustomer(Long id, ModifyCustomerRequest modifyUserRequest) {
         Optional<Customer> checkUser = customerRepository.findById(id);
@@ -71,6 +81,10 @@ public class CustomerServiceImpl implements CustomerService {
         return "Update customer successfully";
     }
 
+    /**
+     * @param modifyUserRequest - hứng request thông tin user từ client
+     * @param customer          - hứng thông tin user từ database
+     */
     private void getDataRequest(ModifyCustomerRequest modifyUserRequest, Customer customer) {
         customer.setUsername(modifyUserRequest.getUsername());
         customer.setIdentityCard(modifyUserRequest.getIdentityCard());
@@ -85,6 +99,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    /**
+     * @param id - nhận id của user cần cập nhật trạng thái
+     * @return result - trả về kết quả cập nhật trạng thái
+     */
     @Override
     public String updateStatus(Long id) {
         Optional<Customer> checkUser = customerRepository.findById(id);
@@ -98,6 +116,11 @@ public class CustomerServiceImpl implements CustomerService {
         return "Update status successfully";
     }
 
+    /**
+     * @param id                    - nhận id của customer cần đổi mật khẩu
+     * @param changePasswordRequest - hứng request đổi mật khẩu từ client
+     * @return result - trả về kết quả đổi mật khẩu
+     */
     @Override
     public String changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
         Optional<Customer> checkUser = customerRepository.findById(id);
@@ -119,37 +142,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerResponse> getAllCustomers() {
         return customerRepository.getAllCustomers();
-    }
-
-    @Override
-    public Long getTotalPage() {
-        long totalPage = customerRepository.count();
-        Long endPage = totalPage / 10;
-        if (totalPage % 10 != 0) {
-            endPage = endPage + 1;
-        }
-        System.out.println(endPage);
-        return endPage;
-    }
-
-    @Override
-    public Long getTotalPageDeleted() {
-        return null;
-    }
-
-    @Override
-    public Long getTotalPageActive() {
-        return null;
-    }
-
-    @Override
-    public List<CustomerResponse> getTotalPageInactive(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public List<CustomerResponse> getTotalPageActive(Pageable pageable) {
-        return null;
     }
 
 }

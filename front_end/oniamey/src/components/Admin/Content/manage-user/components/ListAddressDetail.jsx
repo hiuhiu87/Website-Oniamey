@@ -23,6 +23,7 @@ const ListAddressDetail = ({
   customerId,
   refreshList,
   checkedSwitch,
+  key,
 }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -122,7 +123,7 @@ const ListAddressDetail = ({
       .then((res) => {
         setProvinces(res.data);
         const selectedProvince = res.data.find(
-          (province) => province.name === finalAddress.province
+          (province) => province.name === finalAddress.province,
         );
         setProvinceId(selectedProvince.code);
       })
@@ -136,7 +137,7 @@ const ListAddressDetail = ({
         .then((res) => {
           setDistricts(res.data.districts);
           const selectedDistrict = res.data.districts.find(
-            (district) => district.name === finalAddress.district
+            (district) => district.name === finalAddress.district,
           );
           setDistrictId(selectedDistrict.code);
         })

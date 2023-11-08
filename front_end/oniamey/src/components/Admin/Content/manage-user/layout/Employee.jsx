@@ -10,6 +10,7 @@ import {
   faLock,
   faUnlock,
 } from "@fortawesome/free-solid-svg-icons";
+import { Tag } from "antd";
 import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -67,28 +68,21 @@ const Employee = (props) => {
       name: "Trạng Thái",
       selector: (row) => {
         if (!row.status) {
-          return <span className="text-danger">Đã Nghỉ</span>;
+          return <Tag color={"red"}>Đã Nghỉ</Tag>;
         } else {
-          return <span className="text-success">Đang Làm</span>;
+          return <Tag color={"green"}>Đang Làm</Tag>;
         }
       },
       sortable: "true",
       compact: "true",
       maxWidth: "80px",
       minWidth: "80px",
-      center: "true",
     },
     {
       name: "Số Điện Thoại",
       selector: (row) => row.phoneNumber,
       sortable: "true",
       center: "true",
-    },
-    {
-      name: "Ngày Tham Gia",
-      selector: (row) => row.createdAt,
-      center: "true",
-      width: "150px",
     },
     {
       name: "Thao Tác",
