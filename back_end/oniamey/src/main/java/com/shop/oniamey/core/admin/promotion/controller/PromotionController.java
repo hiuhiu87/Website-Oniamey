@@ -1,6 +1,8 @@
 package com.shop.oniamey.core.admin.promotion.controller;
 
 import com.shop.oniamey.core.admin.promotion.model.request.AddPromotionRequest;
+import com.shop.oniamey.core.admin.promotion.model.request.FindPromotionRequest;
+import com.shop.oniamey.core.admin.promotion.repository.AdminProductDetailForPromotionRepository;
 import com.shop.oniamey.core.admin.promotion.repository.AdminPromotionProductDetailRepository;
 import com.shop.oniamey.core.admin.promotion.repository.AdminPromotionRepository;
 import com.shop.oniamey.core.admin.promotion.service.PromotionService;
@@ -11,11 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,6 +35,9 @@ public class PromotionController {
 
     @Autowired
     private AdminPromotionProductDetailRepository adminPromotionProductDetailRepository;
+
+    @Autowired
+    private AdminProductDetailForPromotionRepository adminProductDetailForPromotionRepository;
 
     @GetMapping("/get-all-promotion")
     public ResponseEntity<?> getAllPromotions() {
@@ -60,6 +67,16 @@ public class PromotionController {
     @PutMapping("/update-promotion/{id}")
     public ResponseEntity<?> updatePromotion(@PathVariable Long id, @RequestBody Promotion promotion) {
         return new ResponseEntity<>(promotionService.updatePromotion(id, promotion), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-by-search")
+    public ResponseEntity<?> searchPromotion(FindPromotionRequest findPromotionRequest){
+        return new ResponseEntity<>(adminPromotionRepository.getAllPromotionsSearch(findPromotionRequest), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-withProduct")
+    public ResponseEntity<?> searchPromotionForPromotion(){
+        return new ResponseEntity<>(adminProductDetailForPromotionRepository.getAllProductForPromotion(), HttpStatus.OK);
     }
 
 }

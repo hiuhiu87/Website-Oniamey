@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.promotion.repository;
 
+import com.shop.oniamey.core.admin.promotion.model.request.FindPromotionRequest;
 import com.shop.oniamey.core.admin.promotion.model.response.ProductDetailResponse;
 import com.shop.oniamey.core.admin.promotion.model.response.PromotionDetailResponse;
 import com.shop.oniamey.entity.Promotion;
@@ -20,12 +21,44 @@ public interface AdminPromotionRepository extends PromotionRepository {
                 p.value as promotionValue,
                 p.deleted as promotionDeleted,
                 p.updated_by as promotionUpdatedBy,
-                DATE_FORMAT(p.start_date, '%H:%i:%s %Y-%m-%d') as promotionStartDate,
-                DATE_FORMAT(p.end_date, '%H:%i:%s %Y-%m-%d') as promotionEndDate,
+                p.start_date as promotionStartDate,
+                p.end_date as promotionEndDate,
                 DATE_FORMAT(p.updated_at, '%H:%i:%s %Y-%m-%d') as promotionUpdatedDate
             FROM banquanaooniamey.promotion p;      
             """, nativeQuery = true)
     List<PromotionDetailResponse> getAllPromotions();
+
+    @Query(value = """
+                SELECT
+                    p.promotion_code as promotionCode,
+                    p.promotion_name as promotionName,
+                    p.id as promotionID,
+                    p.type as promotionType,
+                    p.value as promotionValue,
+                    p.deleted as promotionDeleted,
+                    p.updated_by as promotionUpdatedBy,
+                    p.start_date as promotionStartDate,
+                    p.end_date as promotionEndDate,
+                    DATE_FORMAT(p.updated_at, '%H:%i:%s %Y-%m-%d') as promotionUpdatedDate
+                FROM banquanaooniamey.promotion p
+                WHERE (:#{#findPromotionRequest.promotionInput} IS NULL OR 
+                p.promotion_code LIKE (%:#{#findPromotionRequest.promotionInput}%) OR 
+                p.promotion_name LIKE (%:#{#findPromotionRequest.promotionInput}%) OR 
+                CAST(p.value AS CHAR) LIKE (%:#{#findPromotionRequest.promotionInput}%)) AND
+                (   :#{#findPromotionRequest.promotionType} IS NULL OR
+                 p.type LIKE (%:#{#findPromotionRequest.promotionType}%)) AND
+                (   :#{#findPromotionRequest.promotionStatus} IS NULL OR
+                 p.deleted = :#{#findPromotionRequest.promotionStatus}) AND
+                (   
+                    :#{#findPromotionRequest.promotionStartDate} IS NULL OR
+                    :#{#findPromotionRequest.promotionEndDate} IS NULL OR
+                    
+                    (
+                    p.start_date between (:#{#findPromotionRequest.promotionStartDate}) AND (:#{#findPromotionRequest.promotionEndDate})
+                    )
+                )
+            """, nativeQuery = true)
+    List<PromotionDetailResponse> getAllPromotionsSearch(FindPromotionRequest findPromotionRequest);
 
     Optional<Promotion> findByPromotionCode(String promotionCode);
 
@@ -38,8 +71,8 @@ public interface AdminPromotionRepository extends PromotionRepository {
                 p.value as promotionValue,
                 p.deleted as promotionDeleted,
                 p.updated_by as promotionUpdatedBy,
-                DATE_FORMAT(p.start_date, '%H:%i:%s %Y-%m-%d') as promotionStartDate,
-                DATE_FORMAT(p.end_date, '%H:%i:%s %Y-%m-%d') as promotionEndDate,
+                p.start_date as promotionStartDate,
+                p.end_date as promotionEndDate,
                 DATE_FORMAT(p.updated_at, '%H:%i:%s %Y-%m-%d') as promotionUpdatedDate
             FROM banquanaooniamey.promotion p
             where p.id = :id
@@ -55,6 +88,7 @@ public interface AdminPromotionRepository extends PromotionRepository {
                     	pd.name as productDetailName,
                     	pd.weight as productDetailWeight,
                     	pd.quantity as productDetailQuantity,
+                    	pd.deleted as productDetailDeleted,
                     	i.cover as productDetailImage
                 FROM banquanaooniamey.product_detail pd
                 JOIN banquanaooniamey.image i on pd.id = i.id_product_detail
@@ -63,7 +97,6 @@ public interface AdminPromotionRepository extends PromotionRepository {
                 WHERE p.id = :id
             """, nativeQuery = true)
     List<ProductDetailResponse> getProductDetailByIdPromotion(Long id);
-
 
     Optional<Promotion> findByPromotionName(String promotionName);
 
