@@ -12,11 +12,11 @@ import {
   faTrash,
   faHouseChimneyMedical,
 } from "@fortawesome/free-solid-svg-icons";
-import apiUploadAvater from "../../../../../services/ApiUploadAvater";
+import apiUploadAvatar from "../../../../../services/ApiUploadAvatar";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Col } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { message, Spin, Upload } from "antd";
+import { message, Upload } from "antd";
 import { Modal } from "antd";
 import QrReader from "react-qr-scanner";
 import validator from "validator";
@@ -29,7 +29,6 @@ import FormatString from "../../../../../utils/FormatString";
 import formatDate from "../../../../../utils/FormatDate";
 import service from "../../../../../services/CustomerService";
 import "../style/DetailCustomer.css";
-// import "../style/Table.css";
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -43,7 +42,7 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 
-const DetaiCustomer = () => {
+const DetailCustomer = () => {
   const [customer, setCustomer] = useState({
     username: "",
     fullName: "",
@@ -80,12 +79,11 @@ const DetaiCustomer = () => {
   const [hadId, setHadId] = useState(false);
   const { id } = useParams();
   const [allAddress, setAllAddress] = useState([]);
-  const [progressPending, setProgressPending] = useState(false);
 
   const validateCustomerField = () => {
     const messageValidate = {};
 
-    if (validator.isEmpty(customer.username)) {
+    if (validator.isEmpty(customer.username + "")) {
       messageValidate.username = "Username không được để trống";
     } else if (customer.username.length < 6) {
       messageValidate.username = "Username phải có ít nhất 6 ký tự";
@@ -93,7 +91,7 @@ const DetaiCustomer = () => {
       messageValidate.username = "Username phải có ít hơn 32 ký tự";
     }
 
-    if (validator.isEmpty(customer.fullName)) {
+    if (validator.isEmpty(customer.fullName + "")) {
       messageValidate.fullName = "Họ Và Tên không được để trống";
     } else if (customer.fullName.length < 6) {
       messageValidate.fullName = "Họ và Tên phải có ít nhất 6 ký tự";
@@ -101,7 +99,7 @@ const DetaiCustomer = () => {
       messageValidate.fullName = "Họ và Tên phải có ít hơn 32 ký tự";
     }
 
-    if (validator.isEmpty(customer.identityCard)) {
+    if (validator.isEmpty(customer.identityCard + "")) {
       messageValidate.identityCard = "Mã Định Danh không được để trống";
     } else if (customer.identityCard.length < 9) {
       messageValidate.identityCard = "Mã Định Danh phải có ít nhất 9 ký tự";
@@ -109,7 +107,7 @@ const DetaiCustomer = () => {
       messageValidate.identityCard = "Mã Định Danh phải có ít hơn 12 ký tự";
     }
 
-    if (validator.isEmpty(customer.phoneNumber)) {
+    if (validator.isEmpty(customer.phoneNumber + "")) {
       messageValidate.phoneNumber = "Số Điện Thoại không được để trống";
     } else if (customer.phoneNumber.length < 10) {
       messageValidate.phoneNumber = "Số Điện Thoại phải có ít nhất 10 ký tự";
@@ -136,8 +134,7 @@ const DetaiCustomer = () => {
     }
 
     setMessageValidate(messageValidate);
-    if (Object.keys(messageValidate).length > 0) return false;
-    return true;
+    return Object.keys(messageValidate).length <= 0;
   };
 
   const validateAddressField = () => {
@@ -168,13 +165,17 @@ const DetaiCustomer = () => {
 
     setMessageValidateAddress(messageValidate);
     console.log(customerAddress);
-    if (Object.keys(messageValidate).length > 0) return false;
-    return true;
+    return Object.keys(messageValidate).length <= 0;
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setCustomer({ ...customer, [name]: value });
+
+    if (name === "gender") {
+      setCustomer({ ...customer, [name]: parseInt(value) });
+    } else {
+      setCustomer({ ...customer, [name]: value });
+    }
   };
 
   const handleError = (err) => {
@@ -201,7 +202,7 @@ const DetaiCustomer = () => {
       let identityCard = parts[0];
       let fullName = parts[1];
       fullName = FormatString.upperCaseFirstLetter(
-        FormatString.lowerCaseAllWordsExceptFirstLetters(fullName)
+        FormatString.lowerCaseAllWordsExceptFirstLetters(fullName),
       );
       let birthDate = parts[2];
       birthDate = birthDate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
@@ -213,11 +214,6 @@ const DetaiCustomer = () => {
         birthDate: birthDate,
         gender: gender === "Nam" ? 1 : 2,
       });
-
-      // setCustomerAddress({
-      //   ...address,
-      //   line: address,
-      // });
     }
   };
 
@@ -232,7 +228,7 @@ const DetaiCustomer = () => {
     videoElem.srcObject = null;
   };
 
-  const handleCancel = () => {
+  const handleCancelScan = () => {
     stopStreamedVideo(document.querySelector("video"));
     setOpen(false);
   };
@@ -243,7 +239,7 @@ const DetaiCustomer = () => {
       const parts = customer.avatar.split("/");
       const fileName = parts[parts.length - 1];
       console.log(fileName);
-      await apiUploadAvater
+      await apiUploadAvatar
         .deleteAvatar(fileName)
         .then((response) => {
           console.log(response.data);
@@ -254,7 +250,9 @@ const DetaiCustomer = () => {
           toast.error("Delete failed!");
         });
     };
-    deleteFromServer();
+    deleteFromServer()
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
     setCustomer({ ...customer, avatar: "" });
     setShowDeleteButton(false);
     setLoading(false);
@@ -287,14 +285,14 @@ const DetaiCustomer = () => {
     setCustomerAddress({ ...customerAddress, [name]: value });
     if (name === "province") {
       const selectedProvince = provinces.find(
-        (province) => province.name === value
+        (province) => province.name === value,
       );
       setProvinceId(selectedProvince ? selectedProvince.code : null);
     }
 
     if (name === "district") {
       const selectedDistrict = districts.find(
-        (district) => district.name === value
+        (district) => district.name === value,
       );
       setDistrictId(selectedDistrict ? selectedDistrict.code : null);
     }
@@ -306,9 +304,9 @@ const DetaiCustomer = () => {
       .then((response) => {
         console.log(response.data);
         if (response.status === "Address already exists") {
-          toast.dismiss("Address already exists");
+          toast.dismiss("Thêm địa chỉ thất bại!");
         } else {
-          toast.success("Create successfully!");
+          toast.success("Thêm địa chỉ thành công!");
           refreshAddressList();
           setCustomerAddress({
             ...customerAddress,
@@ -374,23 +372,20 @@ const DetaiCustomer = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (id) {
-          setProgressPending(true);
+          setLoading(true);
           setHadId(true);
           service
             .updateCustomer(customer, id)
             .then((response) => {
               console.log(response.data);
-              setProgressPending(false);
-              if (progressPending === false) {
-                toast.success("Cập nhật thành công!");
-              }
+              setLoading(false);
+              toast.success("Cập nhật thành công!");
             })
             .catch((error) => {
               console.log(error);
               toast.error("Cập nhật thất bại!");
             });
         } else {
-          setProgressPending(true);
           service
             .createCustomer(customer)
             .then((response) => {
@@ -403,7 +398,6 @@ const DetaiCustomer = () => {
                   phoneNumber: customer.phoneNumber,
                   customerId: response.data,
                 });
-                setProgressPending(false);
                 toast.success("Tạo thành công!");
               } else if (response.data === "Email already exists") {
                 toast.error("Email đã tồn tại!");
@@ -423,8 +417,6 @@ const DetaiCustomer = () => {
       }
     });
   };
-
-  const customLoadingIcon = <LoadingOutlined style={{ fontSize: 104 }} spin />;
 
   useEffect(() => {
     provinceService
@@ -522,422 +514,411 @@ const DetaiCustomer = () => {
       setWards([]);
     };
   }, [districtId, customerAddress.district]);
-
   return (
-    <Spin spinning={progressPending} size="large" indicator={customLoadingIcon}>
-      <Container className="detail-customer mt-4">
-        <div className="d-flex justify-content-between align-items-center">
-          <Link to="/admins/manage-customers">
-            <Button variant="secondary" className="m-3">
-              <FontAwesomeIcon icon={faBackward} />
-            </Button>
-          </Link>
-          <Button variant="success" onClick={showModal} className="m-3">
-            <FontAwesomeIcon icon={faQrcode} className="me-2" />
-            Quét CCCD
+    <Container className="detail-customer mt-4">
+      <div className="d-flex justify-content-between align-items-center">
+        <Link to="/admins/manage-customers">
+          <Button variant="secondary" className="m-3">
+            <FontAwesomeIcon icon={faBackward} />
           </Button>
-        </div>
-        <Container className="d-flex justify-content-center">
-          <Col md={4}>
-            <h4 className="mb-4">Thông Tin Khách Hàng</h4>
-            <Container className="d-flex flex-column justify-content-between pb-0">
-              <div className="image-container d-flex justify-content-center align-items-center mb-2">
-                <Upload
-                  name="file"
-                  listType="picture-circle"
-                  className="avatar-uploader d-flex justify-content-center align-items-center"
-                  showUploadList={false}
-                  action={apiUploadAvater.uploadAvatar}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  {customer.avatar ? (
-                    <div className="">
-                      <img
-                        src={customer.avatar}
-                        alt="avatar"
-                        style={{ width: "100%" }}
-                      />
-                      {showDeleteButton && (
-                        <Button
-                          variant="outline-light-*"
-                          onClick={(e) => handleDeleteImage(e)}
-                          className="delete-button"
-                        >
-                          <FontAwesomeIcon icon={faTrash} color="red" />
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
-              </div>
-              <div>
-                <Form.Group controlId="usernameInput" className="mb-4">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="vana123"
-                    name="username"
-                    value={customer.username}
-                    onChange={handleInputChange}
-                    isValid={
-                      !messageValidate.username && customer.username !== ""
-                    }
-                    isInvalid={messageValidate.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.username}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="fullNameInput" className="mb-4">
-                  <Form.Label>Tên Khách Hàng</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Nguyễn Văn A"
-                    name="fullName"
-                    value={customer.fullName}
-                    onChange={handleInputChange}
-                    isValid={
-                      !messageValidate.fullName && customer.fullName !== ""
-                    }
-                    isInvalid={messageValidate.fullName}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.fullName}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="indentifyCardInput" className="mb-4">
-                  <Form.Label>Mã Định Danh</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="0123*********"
-                    name="identityCard"
-                    value={customer.identityCard}
-                    onChange={handleInputChange}
-                    isValid={
-                      !messageValidate.identityCard &&
-                      customer.identityCard !== ""
-                    }
-                    isInvalid={messageValidate.identityCard}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.identityCard}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="phoneNumberInput" className="mb-4">
-                  <Form.Label>Số Điện Thoại</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="0123456789"
-                    name="phoneNumber"
-                    value={customer.phoneNumber}
-                    onChange={handleInputChange}
-                    isValid={
-                      !messageValidate.phoneNumber &&
-                      customer.phoneNumber !== ""
-                    }
-                    isInvalid={messageValidate.phoneNumber}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.phoneNumber}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="emailInput" className="mb-4">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="vana@gmail.com"
-                    name="email"
-                    value={customer.email}
-                    onChange={handleInputChange}
-                    isValid={!messageValidate.email && customer.email !== ""}
-                    isInvalid={messageValidate.email}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.email}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="dateOfBirthInput" className="mb-4">
-                  <Form.Label>Ngày Sinh</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="birthDate"
-                    value={customer.birthDate}
-                    onChange={handleInputChange}
-                    isValid={
-                      !messageValidate.birthDate && customer.birthDate !== ""
-                    }
-                    isInvalid={messageValidate.birthDate}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {messageValidate.birthDate}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group className="mb-4" controlId="genderCheckRadio">
-                  <Form.Label>Giới Tính</Form.Label>
-                  <div className="d-flex">
-                    <Form.Check
-                      inline
-                      label="Nam"
-                      name="gender"
-                      type="radio"
-                      checked={customer.gender === 1}
-                      value="1"
-                      onChange={handleInputChange}
-                    />
-                    <Form.Check
-                      inline
-                      label="Nữ"
-                      name="gender"
-                      type="radio"
-                      value="2"
-                      checked={customer.gender === 2}
-                      onChange={handleInputChange}
-                    />
-                    <Form.Check
-                      inline
-                      label="Khác"
-                      name="gender"
-                      type="radio"
-                      checked={customer.gender === 3}
-                      value="3"
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </Form.Group>
-                <div className="d-flex justify-content-end">
-                  <Button
-                    variant="warning"
-                    className="mt-4 "
-                    onClick={handleSubmit}
-                  >
-                    {hadId ? (
-                      <div className="text-light">
-                        <BsPencilSquare className="me-2" color="white" />
-                        Cập Nhật
-                      </div>
-                    ) : (
-                      <div className="text-light">
-                        <BsPersonPlusFill className="me-2" color="white" />
-                        Thêm Mới
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </Container>
-          </Col>
-          <Col>
-            <h4 className="mb-5">Thông Tin Địa Chỉ</h4>
-            <div className="d-flex justify-content-between flex-column">
-              <Collapse
-                defaultActiveKey={hadId ? "1" : ""}
-                expandIcon={({ isActive }) =>
-                  isActive ? (
-                    <CloseCircleFilled color="red" />
-                  ) : (
-                    <PlusCircleFilled color="green" />
-                  )
-                }
-                collapsible={hadId ? "" : "disabled"}
-                size="large"
+        </Link>
+        <Button variant="success" onClick={showModal} className="m-3">
+          <FontAwesomeIcon icon={faQrcode} className="me-2" />
+          Quét CCCD
+        </Button>
+      </div>
+      <Container className="d-flex justify-content-center">
+        <Col md={4}>
+          <h4 className="mb-4">Thông Tin Khách Hàng</h4>
+          <Container className="d-flex flex-column justify-content-between pb-0">
+            <div className="image-container d-flex justify-content-center align-items-center mb-2">
+              <Upload
+                name="file"
+                listType="picture-circle"
+                className="avatar-uploader d-flex justify-content-center align-items-center"
+                showUploadList={false}
+                action={apiUploadAvatar.uploadAvatar}
+                beforeUpload={beforeUpload}
+                onChange={handleChange}
               >
-                <Collapse.Panel header="Tạo Địa Chỉ" key="1">
-                  <Container className="d-flex flex-column justify-content-between pb-0">
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="receiverInput" className="mb-4">
-                          <Form.Label>Người Nhận</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Nguyễn Văn A"
-                            name="receiver"
-                            value={customerAddress.receiver}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.receiver &&
-                              customerAddress.receiver !== ""
-                            }
-                            isInvalid={messageValidateAddress.receiver}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.receiver}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group
-                          controlId="phoneNumberInput"
-                          className="mb-4"
-                        >
-                          <Form.Label>Số Điện Thoại</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="0123456789"
-                            name="phoneNumber"
-                            value={customerAddress.phoneNumber}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.phoneNumber &&
-                              customerAddress.phoneNumber !== ""
-                            }
-                            isInvalid={messageValidateAddress.phoneNumber}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.phoneNumber}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Form.Group controlId="lineInput" className="mb-4">
-                      <Form.Label>Số Nhà, Đường</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Số nhà, đường"
-                        name="line"
-                        value={messageValidateAddress.line}
-                        onChange={(e) => handleChangeAddress(e)}
-                        isValid={
-                          !messageValidateAddress.line &&
-                          customerAddress.line !== ""
-                        }
-                        isInvalid={messageValidateAddress.line}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {messageValidateAddress.line}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="provinceInput" className="mb-4">
-                          <Form.Label>Tỉnh/Thành Phố</Form.Label>
-                          <Form.Select
-                            name="province"
-                            value={customerAddress.province}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.province &&
-                              customerAddress.province !== ""
-                            }
-                            isInvalid={messageValidateAddress.province}
-                          >
-                            <option>Chọn Tỉnh/Thành Phố</option>
-                            {provinces.map((province) => (
-                              <option key={province.code} value={province.name}>
-                                {province.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.province}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group controlId="districtInput" className="mb-4">
-                          <Form.Label>Quận/Huyện</Form.Label>
-                          <Form.Select
-                            name="district"
-                            value={customerAddress.district}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.district &&
-                              customerAddress.district !== ""
-                            }
-                            isInvalid={messageValidateAddress.district}
-                          >
-                            <option>Chọn Quận/Huyện</option>
-                            {districts.map((district) => (
-                              <option key={district.code} value={district.name}>
-                                {district.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.district}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group controlId="wardInput" className="mb-4">
-                          <Form.Label>Phường/Xã</Form.Label>
-                          <Form.Select
-                            name="ward"
-                            value={customerAddress.ward}
-                            onChange={(e) => handleChangeAddress(e)}
-                            isValid={
-                              !messageValidateAddress.ward &&
-                              customerAddress.ward !== ""
-                            }
-                            isInvalid={messageValidateAddress.ward}
-                          >
-                            <option value="">Chọn Phường/Xã</option>
-                            {wards.map((ward) => (
-                              <option key={ward.code} value={ward.name}>
-                                {ward.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {messageValidateAddress.ward}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <div className="d-flex justify-content-end">
+                {customer.avatar ? (
+                  <div className="">
+                    <img
+                      src={customer.avatar}
+                      alt="avatar"
+                      className={"w-100 rounded-circle"}
+                    />
+                    {showDeleteButton && (
                       <Button
-                        variant="success"
-                        className="mt-4"
-                        onClick={handleAddAddress}
+                        variant="outline-light-*"
+                        onClick={(e) => handleDeleteImage(e)}
+                        className="delete-button"
                       >
-                        <FontAwesomeIcon
-                          icon={faHouseChimneyMedical}
-                          className="me-2"
-                        />
-                        Lưu Địa Chỉ
+                        <FontAwesomeIcon icon={faTrash} color="red" />
                       </Button>
-                    </div>
-                  </Container>
-                </Collapse.Panel>
-              </Collapse>
-              <hr />
-              {allAddress.map((address, index) => (
-                <div className="">
-                  <br />
-                  <ListAddressDetail
-                    address={address}
-                    index={index}
-                    key={address.id}
-                    customerId={id}
-                    refreshList={() => refreshAddressList()}
-                    checkedSwitch={address.isDefault}
+                    )}
+                  </div>
+                ) : (
+                  uploadButton
+                )}
+              </Upload>
+            </div>
+            <div>
+              <Form.Group controlId="usernameInput" className="mb-4">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="vana123"
+                  name="username"
+                  value={customer.username}
+                  onChange={handleInputChange}
+                  isValid={
+                    !messageValidate.username && customer.username !== ""
+                  }
+                  isInvalid={messageValidate.username}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.username}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="fullNameInput" className="mb-4">
+                <Form.Label>Tên Khách Hàng</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nguyễn Văn A"
+                  name="fullName"
+                  value={customer.fullName}
+                  onChange={handleInputChange}
+                  isValid={
+                    !messageValidate.fullName && customer.fullName !== ""
+                  }
+                  isInvalid={messageValidate.fullName}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.fullName}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="indentifyCardInput" className="mb-4">
+                <Form.Label>Mã Định Danh</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="0123*********"
+                  name="identityCard"
+                  value={customer.identityCard}
+                  onChange={handleInputChange}
+                  isValid={
+                    !messageValidate.identityCard &&
+                    customer.identityCard !== ""
+                  }
+                  isInvalid={messageValidate.identityCard}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.identityCard}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="phoneNumberInput" className="mb-4">
+                <Form.Label>Số Điện Thoại</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="0123456789"
+                  name="phoneNumber"
+                  value={customer.phoneNumber}
+                  onChange={handleInputChange}
+                  isValid={
+                    !messageValidate.phoneNumber && customer.phoneNumber !== ""
+                  }
+                  isInvalid={messageValidate.phoneNumber}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.phoneNumber}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="emailInput" className="mb-4">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="vana@gmail.com"
+                  name="email"
+                  value={customer.email}
+                  onChange={handleInputChange}
+                  isValid={!messageValidate.email && customer.email !== ""}
+                  isInvalid={messageValidate.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="dateOfBirthInput" className="mb-4">
+                <Form.Label>Ngày Sinh</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="birthDate"
+                  value={customer.birthDate}
+                  onChange={handleInputChange}
+                  isValid={
+                    !messageValidate.birthDate && customer.birthDate !== ""
+                  }
+                  isInvalid={messageValidate.birthDate}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {messageValidate.birthDate}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-4" controlId="genderCheckRadio">
+                <Form.Label>Giới Tính</Form.Label>
+                <div className="d-flex">
+                  <Form.Check
+                    inline
+                    label="Nam"
+                    name="gender"
+                    type="radio"
+                    value={1}
+                    checked={customer.gender === 1}
+                    onChange={handleInputChange}
+                  />
+                  <Form.Check
+                    inline
+                    label="Nữ"
+                    name="gender"
+                    type="radio"
+                    value={2}
+                    checked={customer.gender === 2}
+                    onChange={handleInputChange}
+                  />
+                  <Form.Check
+                    inline
+                    label="Khác"
+                    name="gender"
+                    type="radio"
+                    value={3}
+                    checked={customer.gender === 3}
+                    onChange={handleInputChange}
                   />
                 </div>
-              ))}
+              </Form.Group>
+              <div className="d-flex justify-content-end">
+                <Button
+                  variant="warning"
+                  className="mt-4"
+                  onClick={handleSubmit}
+                >
+                  {hadId ? (
+                    <div className="text-light">
+                      <BsPencilSquare className="me-2" color="white" />
+                      Cập Nhật
+                    </div>
+                  ) : (
+                    <div className="text-light">
+                      <BsPersonPlusFill className="me-2" color="white" />
+                      Thêm Mới
+                    </div>
+                  )}
+                </Button>
+              </div>
             </div>
-          </Col>
-        </Container>
-        <Modal
-          title="Quét Mã QR"
-          open={open}
-          onCancel={handleCancel}
-          onOk={handleCancel}
-        >
-          <div className="qrcode-container">
-            {open ? (
-              <QrReader
-                delay={delay}
-                onError={handleError}
-                onScan={handleScan}
-              />
-            ) : null}
+          </Container>
+        </Col>
+        <Col>
+          <h4 className="mb-5">Thông Tin Địa Chỉ</h4>
+          <div className="d-flex justify-content-between flex-column">
+            <Collapse
+              defaultActiveKey={hadId ? "1" : ""}
+              expandIcon={({ isActive }) =>
+                isActive ? (
+                  <CloseCircleFilled color="red" />
+                ) : (
+                  <PlusCircleFilled color="green" />
+                )
+              }
+              collapsible={hadId ? "" : "disabled"}
+              size="large"
+            >
+              <Collapse.Panel header="Tạo Địa Chỉ" key="1">
+                <Container className="d-flex flex-column justify-content-between pb-0">
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="receiverInput" className="mb-4">
+                        <Form.Label>Người Nhận</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Nguyễn Văn A"
+                          name="receiver"
+                          value={customerAddress.receiver}
+                          onChange={(e) => handleChangeAddress(e)}
+                          isValid={
+                            !messageValidateAddress.receiver &&
+                            customerAddress.receiver !== ""
+                          }
+                          isInvalid={messageValidateAddress.receiver}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {messageValidateAddress.receiver}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="phoneNumberInput" className="mb-4">
+                        <Form.Label>Số Điện Thoại</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="0123456789"
+                          name="phoneNumber"
+                          value={customerAddress.phoneNumber}
+                          onChange={(e) => handleChangeAddress(e)}
+                          isValid={
+                            !messageValidateAddress.phoneNumber &&
+                            customerAddress.phoneNumber !== ""
+                          }
+                          isInvalid={messageValidateAddress.phoneNumber}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {messageValidateAddress.phoneNumber}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Form.Group controlId="lineInput" className="mb-4">
+                    <Form.Label>Số Nhà, Đường</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Số nhà, đường"
+                      name="line"
+                      value={customerAddress.line}
+                      onChange={(e) => handleChangeAddress(e)}
+                      isValid={
+                        !messageValidateAddress.line &&
+                        customerAddress.line !== ""
+                      }
+                      isInvalid={messageValidateAddress.line}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {messageValidateAddress.line}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="provinceInput" className="mb-4">
+                        <Form.Label>Tỉnh/Thành Phố</Form.Label>
+                        <Form.Select
+                          name="province"
+                          value={customerAddress.province}
+                          onChange={(e) => handleChangeAddress(e)}
+                          isValid={
+                            !messageValidateAddress.province &&
+                            customerAddress.province !== ""
+                          }
+                          isInvalid={messageValidateAddress.province}
+                        >
+                          <option>Chọn Tỉnh/Thành Phố</option>
+                          {provinces.map((province) => (
+                            <option key={province.code} value={province.name}>
+                              {province.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {messageValidateAddress.province}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="districtInput" className="mb-4">
+                        <Form.Label>Quận/Huyện</Form.Label>
+                        <Form.Select
+                          name="district"
+                          value={customerAddress.district}
+                          onChange={(e) => handleChangeAddress(e)}
+                          isValid={
+                            !messageValidateAddress.district &&
+                            customerAddress.district !== ""
+                          }
+                          isInvalid={messageValidateAddress.district}
+                        >
+                          <option>Chọn Quận/Huyện</option>
+                          {districts.map((district) => (
+                            <option key={district.code} value={district.name}>
+                              {district.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {messageValidateAddress.district}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="wardInput" className="mb-4">
+                        <Form.Label>Phường/Xã</Form.Label>
+                        <Form.Select
+                          name="ward"
+                          value={customerAddress.ward}
+                          onChange={(e) => handleChangeAddress(e)}
+                          isValid={
+                            !messageValidateAddress.ward &&
+                            customerAddress.ward !== ""
+                          }
+                          isInvalid={messageValidateAddress.ward}
+                        >
+                          <option value="">Chọn Phường/Xã</option>
+                          {wards.map((ward) => (
+                            <option key={ward.code} value={ward.name}>
+                              {ward.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {messageValidateAddress.ward}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <div className="d-flex justify-content-end">
+                    <Button
+                      variant="success"
+                      className="mt-4"
+                      onClick={handleAddAddress}
+                    >
+                      <FontAwesomeIcon
+                        icon={faHouseChimneyMedical}
+                        className="me-2"
+                      />
+                      Lưu Địa Chỉ
+                    </Button>
+                  </div>
+                </Container>
+              </Collapse.Panel>
+            </Collapse>
+            <hr />
+            {allAddress.map((address, index) => (
+              <div className="">
+                <br />
+                <ListAddressDetail
+                  address={address}
+                  index={index}
+                  key={address.id}
+                  customerId={id}
+                  refreshList={() => refreshAddressList()}
+                  checkedSwitch={address.isDefault}
+                />
+              </div>
+            ))}
           </div>
-        </Modal>
+        </Col>
       </Container>
-    </Spin>
+      <Modal
+        title="Quét Mã QR"
+        open={open}
+        onCancel={handleCancelScan}
+        onOk={handleCancelScan}
+      >
+        <div className="qrcode-container">
+          {open ? (
+            <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+          ) : null}
+        </div>
+      </Modal>
+    </Container>
   );
 };
 
-export default DetaiCustomer;
+export default DetailCustomer;

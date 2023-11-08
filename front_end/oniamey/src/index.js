@@ -25,7 +25,7 @@ import ManageEmployee from "./components/Admin/Content/manage-user/layout/Employ
 import ManageCustomer from "./components/Admin/Content/manage-user/layout/Customer";
 import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
 import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
-import DetaiCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
+import DetailCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
 import LoginPage from "./components/Admin/Content/login-page/LoginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -70,15 +70,15 @@ root.render(
           <Route path="manage-customers" element={<ManageCustomer />} />
           <Route
             path="manage-customers/detail-customer/:id"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-customers/update-customer/:id"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-customers/add-customer"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-statisticals"

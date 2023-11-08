@@ -3,6 +3,7 @@ package com.shop.oniamey.repository.customer;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerDetailResponse;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerResponse;
 import com.shop.oniamey.entity.Customer;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,11 +31,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
                         """, nativeQuery = true)
-    List<CustomerResponse> getAllCustomers(Pageable pageable);
-
-    List<Customer> findAllByDeletedFalse(Pageable pageable);
-
-    List<Customer> findAllByDeletedTrue(Pageable pageable);
+    Page<List<CustomerResponse>> getAllCustomers(Pageable pageable);
 
     @Query(value = """
             select c.id
