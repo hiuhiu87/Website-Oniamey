@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AiOutlineUnorderedList, AiOutlineFileSearch } from "react-icons/ai";
 import Swal from "sweetalert2";
+import { Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import service from "../../../../../services/CustomerService";
@@ -106,7 +107,7 @@ const Customer = (props) => {
     }
   };
 
-  const columns = useMemo (() =>[
+  const columns = useMemo(() => [
     {
       name: renderNameColumns(),
       selector: (row) => {
@@ -146,21 +147,15 @@ const Customer = (props) => {
       name: "Trạng Thái",
       selector: (row) => {
         if (row.status === "false") {
-          return <span style={{ color: "red" }}>Khóa</span>;
+          return <Tag color={"red"}>Khóa</Tag>;
         } else {
-          return <span style={{ color: "green" }}>Kích Hoạt</span>;
+          return <Tag color={"green"}>Kích Hoạt</Tag>;
         }
       },
       sortable: "true",
       compact: "true",
       maxWidth: "100px",
       minWidth: "100px",
-      center: "true",
-    },
-    {
-      name: "Ngày Tham Gia",
-      selector: (row) => row.createdAt,
-      sortable: "true",
       center: "true",
     },
     {
@@ -191,7 +186,7 @@ const Customer = (props) => {
         </>
       ),
     },
-  ]) ;
+  ]);
 
   const getAllCustomer = () => {
     service

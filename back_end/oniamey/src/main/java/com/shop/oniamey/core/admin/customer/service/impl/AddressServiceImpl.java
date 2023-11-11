@@ -22,6 +22,10 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    /**
+     * @param id - nhận id của địa chỉ cần set mặc định
+     * @return trả về kết quả set mặc định
+     */
     @Override
     public String setDefaultAddress(Long id) {
         Optional<Address> checkAddress = addressRepository.findById(id);
@@ -36,6 +40,10 @@ public class AddressServiceImpl implements AddressService {
         }
     }
 
+    /**
+     * @param modifyAddressRequest - hứng request thêm địa chỉ từ client
+     * @return result - trả về kết quả thêm địa chỉ
+     */
     @Override
     public String addAddress(ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());
@@ -54,6 +62,11 @@ public class AddressServiceImpl implements AddressService {
         return "Add address success";
     }
 
+    /**
+     * @param modifyAddressRequest - hứng request thêm địa chỉ từ client
+     * @param checkCustomer        - kiểm tra xem customer có tồn tại không
+     * @param address              - địa chỉ cần thêm
+     */
     private void getRequestData(ModifyAddressRequest modifyAddressRequest, Optional<Customer> checkCustomer, Address address) {
         address.setReceiverName(modifyAddressRequest.getReceiver());
         address.setReceiverPhoneNumber(modifyAddressRequest.getPhoneNumber());
@@ -67,6 +80,10 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.save(address);
     }
 
+    /**
+     * @param id - nhận id của địa chỉ cần xóa
+     * @return result - trả về kết quả xóa địa chỉ
+     */
     @Override
     public String deleteAddress(Long id) {
         Optional<Address> checkAddress = addressRepository.findById(id);
@@ -80,6 +97,12 @@ public class AddressServiceImpl implements AddressService {
         return "Delete address success";
     }
 
+    /**
+     *
+     * @param id - nhận id của địa chỉ cần update
+     * @param modifyAddressRequest - hứng request thông tin update địa chỉ từ client
+     * @return result - trả về kết quả update địa chỉ
+     */
     @Override
     public String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest) {
         Optional<Customer> checkCustomer = customerRepository.findById(modifyAddressRequest.getCustomerId());

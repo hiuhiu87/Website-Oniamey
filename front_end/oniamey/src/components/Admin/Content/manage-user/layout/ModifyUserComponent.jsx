@@ -9,7 +9,7 @@ import { message, Upload } from "antd";
 import { useState } from "react";
 import { useEffect } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
@@ -19,7 +19,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { BsPersonPlusFill } from "react-icons/bs";
 
 import formatDate from "../../../../../utils/FormatDate";
-import apiUploadAvater from "../../../../../services/ApiUploadAvater";
+import apiUploadAvater from "../../../../../services/ApiUploadAvatar";
 import provinceService from "../../../../../services/ProvinceService";
 import userService from "../../../../../services/UserService";
 import "../style/UserStyle.css";
@@ -71,6 +71,7 @@ const ModifyUserComponent = () => {
   const [districtId, setDistrictId] = useState();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [open, setOpen] = useState(false);
@@ -187,7 +188,7 @@ const ModifyUserComponent = () => {
       let identityCard = parts[0];
       let fullName = parts[1];
       fullName = FormatString.upperCaseFirstLetter(
-        FormatString.lowerCaseAllWordsExceptFirstLetters(fullName)
+        FormatString.lowerCaseAllWordsExceptFirstLetters(fullName),
       );
       let birthDate = parts[2];
       birthDate = birthDate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
@@ -244,7 +245,9 @@ const ModifyUserComponent = () => {
           toast.error("Delete failed!");
         });
     };
-    deleteFromServer();
+    deleteFromServer()
+      .then((r) => console.log(r))
+      .catch((e) => console.log(e));
     setUser({ ...user, avatar: "" });
     setShowDeleteButton(false);
     setLoading(false);
@@ -269,6 +272,7 @@ const ModifyUserComponent = () => {
             .then((response) => {
               console.log(response.data);
               toast.success("Update successfully!");
+              navigate("/admins/manage-employees");
             })
             .catch((error) => {
               console.log(error);
@@ -280,6 +284,7 @@ const ModifyUserComponent = () => {
             .then((response) => {
               console.log(response.data);
               toast.success("Add successfully!");
+              navigate("/admins/manage-employees");
             })
             .catch((error) => {
               console.log(error);
@@ -295,14 +300,14 @@ const ModifyUserComponent = () => {
     setAddress({ ...address, [name]: value });
     if (name === "province") {
       const selectedProvince = provinces.find(
-        (province) => province.name === value
+        (province) => province.name === value,
       );
       setProvinceId(selectedProvince ? selectedProvince.code : null);
     }
 
     if (name === "district") {
       const selectedDistrict = districts.find(
-        (district) => district.name === value
+        (district) => district.name === value,
       );
       setDistrictId(selectedDistrict ? selectedDistrict.code : null);
     }
@@ -320,7 +325,7 @@ const ModifyUserComponent = () => {
         console.log(response.data);
         setProvinces(response.data);
         const selectedProvince = response.data.find(
-          (province) => province.name === address.province
+          (province) => province.name === address.province,
         );
         setProvinceId(selectedProvince.code);
       })
@@ -336,7 +341,7 @@ const ModifyUserComponent = () => {
         console.log(response.data);
         setProvinces(response.data);
         const selectedProvince = response.data.find(
-          (province) => province.name === address.province
+          (province) => province.name === address.province,
         );
         setProvinceId(selectedProvince.code);
       })
@@ -392,7 +397,7 @@ const ModifyUserComponent = () => {
         .then((res) => {
           setDistricts(res.data.districts);
           const selectedDistrict = res.data.districts.find(
-            (district) => district.name === address.district
+            (district) => district.name === address.district,
           );
           setDistrictId(selectedDistrict.code);
         })
