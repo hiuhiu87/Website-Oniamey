@@ -1,9 +1,10 @@
 import * as OrdersApi from '../../../../../services/OrdersApi'
 import './OrderContent.scss';
+import '../common/text-custom.scss';
 import { Pagination } from 'antd';
 import { Input, Select } from 'antd';
 import NavOrder from '../nav-order/NavOrder';
-import { FaFilter, FaThList, FaEye } from 'react-icons/fa';
+import { FaFilter, FaThList, FaEye } from 'react-icons/fa'; 
 import { Link } from 'react-router-dom';
 import { FaMoneyBill } from 'react-icons/fa';
 import { useState, useEffect, useMemo } from "react";
@@ -74,7 +75,7 @@ const OrderContent = (Props) => {
                         Tìm kiếm
                     </Form.Label>
                     <Col sm="6" xs lg="4">
-                        <Input placeholder="Tìm kiếm" onChange={e => { handleSearch(e.target.value) }} />
+                        <Input placeholder="Tìm kiếm hóa đơn" onChange={e => { handleSearch(e.target.value) }} />
                     </Col>
                 </Row>
                 <Row className="mb-3 justify-content-md-center ">
@@ -158,7 +159,7 @@ const OrderContent = (Props) => {
                             <td>{item.userName}</td>
                             <td>{item.phoneNumber}</td>
                             <td>{item.totalMoney}</td>
-                            <td>{item.type}</td>
+                           <td > <div id={`text-id-${item.type}`}>{item.type}</div></td> 
                             <td>{item.status}</td>
                             <td><Link to={`../${item.id}`}>{<FaEye style={{ color: 'black', fontSize: '24px' }} />}</Link></td>
                         </tr>)

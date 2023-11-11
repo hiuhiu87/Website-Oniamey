@@ -13,6 +13,7 @@ import { AiOutlineFileDone } from 'react-icons/ai';
 import { BsFillCalendarCheckFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import './OrderDetail.scss'
+import '../common/text-custom.scss'
 import { Col, Container, Row } from 'react-bootstrap';
 const { TextArea } = Input;
 const OrderContent = (props) => {
@@ -171,7 +172,7 @@ const OrderContent = (props) => {
                         ]}
                     >
                         <TextArea style={{ height: '100px' }} placeholder='Mô tả'
-                        value={descript} showCount maxLength={200} onChange={(e) => { setDescript(e.target.value) }} /> <br /><br />
+                            value={descript} showCount maxLength={200} onChange={(e) => { setDescript(e.target.value) }} /> <br /><br />
                     </Modal>
                     <Modal
                         open={openDetail}
@@ -220,63 +221,71 @@ const OrderContent = (props) => {
                     <h4>Thông tin hóa đơn</h4>
                 </div>
                 <div className='information-order'>
-                    <Row>
-                        <Col xs lg={2}>
-                            <div>Trạng thái:</div>
-                            <div>Tên nhân viên: </div>
-                            <div>Số điện thoại:</div>
-                            <div>  {order.type === 'ONLINE' ?'Ngày nhận dự kiến:' : null}</div>
-                        </Col>
-                        <Col className='price-col-order-detail2' xs lg={4}>
-                            <div>{order.status === 'PENDING' ? "Chờ xác nhận" : null}
-                                {order.status === 'CONFIRMED' ? "Đã xác nhận" : null}
-                                {order.status === 'SHIPPING' ? "Đang giao" : null}
-                                {order.status === 'SHIPPED' ? "Đã giao" : null}
-                                {order.status === 'SUCCESS' ? "Hoàn thành" : null}
-                                {order.status === 'CANCEL' ? "Hủy" : null}</div>
-                            <div>{order.tenNhanVien}</div>
-                            <div>{order.phoneNumber || "-"}</div>
-                            <div >{order.type === 'ONLINE' ?  OrderApi.formatDateTime(order.shipDate)  : null} </div> 
-                        </Col>
-                        <Col xs lg={2}>
-                            <div>Loại:</div>
-                            <div>Tên khách hàng:</div>
-                            <div>Ghi chú đơn hàng:</div>
-                            <div>{order.type === 'ONLINE' ? 
-                                'Địa chỉ: ': null}</div>
-                        </Col>
-                        <Col xs lg={4} className='price-col-order-detail2'>
-                            <div>{order.type === 'OFFLINE' ? "Tại quầy" : "Giao hàng"}   </div>
-                            <div>{order.userName}</div>
-                            <div>{order.type === 'ONLINE' ?order.address || "-" : null}</div>
-                                      <div>{order.note || "-"}   </div>
-                        </Col>
-                        
-                    </Row>
-                    <hr />
-                    {/* <h6>Danh sách sản phẩm</h6> */}
-                    <div>
-                        {listProduct && listProduct.map((item, index) => {
-                            return <Container key={index}>
-                                <Row className='d-flex justify-content-sm-center align-items-center'>
-                                    <Col xs lg={3}>
-                                        <img src='./path/to/decorative-ima' alt='ảnh lỗi vl' />
-                                    </Col>
-                                    <Col xs lg={3}>
-                                        <div><h6>{item.productDetailName}</h6></div>
-                                        {item.sizeName?<div>{`Kích cỡ: ${item.sizeName}`}</div>:null}
-                                        {item.colorName?<div>{`Màu: ${item.colorName}`}</div>:null}
-                                        <div>{`x ${item.quantity}`}</div>
-                                    </Col>
-                                    <Col xs lg={3}>
-                                        {`Đơn giá: ${item.price} VND`}
-                                    </Col>
-                                    <Col xs lg={3}>
-                                        {`Thành tiền: ${item.totalMoney} VND`}
-                                    </Col>
-                                </Row>
-                            </Container>
-                        })}
+                    <div className='information-order-detail'>
+                        <Row>
+                            <Col xs lg={2}>
+                                <div>Trạng thái:</div>
+                                <div>Tên nhân viên: </div>
+                                <div>Số điện thoại:</div>
+                                <div>  {order.type === 'ONLINE' ? 'Ngày nhận dự kiến:' : null}</div>
+                            </Col>
+                            <Col className='price-col-order-detail2' xs lg={4}>
+                                <div>{order.status === 'PENDING' ? "Chờ xác nhận" : null}
+                                    {order.status === 'CONFIRMED' ? "Đã xác nhận" : null}
+                                    {order.status === 'SHIPPING' ? "Đang giao" : null}
+                                    {order.status === 'SHIPPED' ? "Đã giao" : null}
+                                    {order.status === 'SUCCESS' ? "Hoàn thành" : null}
+                                    {order.status === 'CANCEL' ? "Hủy" : null}</div>
+                                <div>{order.tenNhanVien}</div>
+                                <div>{order.phoneNumber || "-"}</div>
+                                <div >{order.type === 'ONLINE' ? OrderApi.formatDateTime(order.shipDate) : null} </div>
+                            </Col>
+                            <Col xs lg={2}>
+                                <div>Loại:</div>
+                                <div>Tên khách hàng:</div>
+                                <div>Ghi chú đơn hàng:</div>
+                                <div>{order.type === 'ONLINE' ?
+                                    'Địa chỉ: ' : null}</div>
+                            </Col>
+                            <Col xs lg={4} className='price-col-order-detail2'>
+                                <div id={`text-id-${order.type}`}>{order.type === 'OFFLINE' ? "Tại quầy" : "Giao hàng"}   </div>
+                                <div>{order.userName}</div>
+                                <div>{order.type === 'ONLINE' ? order.address || "-" : null}</div>
+                                <div>{order.note || "-"}   </div>
+                            </Col>
+
+                        </Row>
+                    </div>
+                    <div className='table-order-detail'>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>STT</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Kích Cỡ</th>
+                                    <th>Màu Sắc</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đơn Giá</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {listProduct && listProduct.map((item, index) => {
+                                    return (<tr key={index}>
+                                        <td style={{width:'10px'}}><img src='./OrderDetail.js' width={80} height={80} /></td>
+                                        <td>{index + 1}</td>
+                                        <td>{item.productDetailName}</td>
+                                        <td>{item.sizeName}</td>
+                                        <td>{item.colorName}</td>
+                                        <td>{item.quantity}</td>
+                                        <td>{item.price}</td>
+                                        <td>{item.totalMoney}</td>
+
+                                    </tr>)
+                                })}
+                            </tbody>
+                        </table>
                     </div>
                     <hr />
                     <div>
@@ -291,12 +300,12 @@ const OrderContent = (props) => {
                                 <div>{`${order && order.moneyReduced ? productTotalMoney.toFixed(2) : 0} VND`}</div>
                                 <div>{`${order && order.moneyReduced ? order.moneyShip.toFixed(2) : 0} VND`}</div>
                                 <div>{`${(order && order.moneyReduced ? (+(order.moneyReduced)).toFixed(2) : 0)} VND`}</div>
-                                <div>{`${order && order.moneyReduced ? (+(productTotalMoney) + (+(order.moneyShip)) + (+(order.moneyReduced))).toFixed(2) : 0} VND`}</div>
+                                <div>{`${order && order.moneyReduced ? (+(productTotalMoney) + (+(order.moneyShip)) + (+(order.moneyReduced))).toFixed(0) : 0} VND`}</div>
                             </Col>
                             <Col className=' d-flex justify-content-center'>
                                 <div className='btn-confirm-order-detail'>
                                     <div>
-                                    {order.status==='SUCCESS'|| order.status==='CANCEL'?null:<button className="btn  btn-dark" onClick={handleXacNhanThanhToan}>
+                                        {order.status === 'SUCCESS' || order.status === 'CANCEL' ? null : <button className="btn  btn-dark" onClick={handleXacNhanThanhToan}>
                                             Xác nhận thanh toán
                                         </button>}</div>
                                     <Modal
@@ -347,14 +356,14 @@ const OrderContent = (props) => {
                                             </Col>
                                             <Col className='price-col-order-detail'>
                                                 <br />
-                                                <div>{`${((+(productTotalMoney) + (+(order.moneyShip)) + (+(order.moneyReduced))) - daThanhToan).toFixed(2)} VND`}</div>
-                                                <div>{`${daThanhToan.toFixed(2)} VND`}</div>
+                                                <div>{`${((+(productTotalMoney) + (+(order.moneyShip)) + (+(order.moneyReduced))) - daThanhToan).toFixed(0)} VND`}</div>
+                                                <div>{`${daThanhToan.toFixed(0)} VND`}</div>
                                             </Col>
 
                                         </Row>
                                     </Modal>
                                     <div>
-                                        {order.status==='SUCCESS'|| order.status==='CANCEL'?null:<button className="btn  btn-dark" onClick={handleLichSuThanhToan}>
+                                        {order.status === 'SUCCESS' || order.status === 'CANCEL' ? null : <button className="btn  btn-dark" onClick={handleLichSuThanhToan}>
                                             Lịch sử thanh toán
                                         </button>}
                                         <Modal
