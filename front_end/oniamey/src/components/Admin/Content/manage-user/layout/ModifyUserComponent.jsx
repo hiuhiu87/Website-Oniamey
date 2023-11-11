@@ -19,7 +19,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { BsPersonPlusFill } from "react-icons/bs";
 
 import formatDate from "../../../../../utils/FormatDate";
-import apiUploadAvater from "../../../../../services/ApiUploadAvatar";
+import apiUploadAvatar from "../../../../../services/ApiUploadAvatar";
 import provinceService from "../../../../../services/ProvinceService";
 import userService from "../../../../../services/UserService";
 import "../style/UserStyle.css";
@@ -234,7 +234,7 @@ const ModifyUserComponent = () => {
       const parts = user.avatar.split("/");
       const fileName = parts[parts.length - 1];
       console.log(fileName);
-      await apiUploadAvater
+      await apiUploadAvatar
         .deleteAvatar(fileName)
         .then((response) => {
           console.log(response.data);
@@ -457,7 +457,7 @@ const ModifyUserComponent = () => {
                 listType="picture-circle"
                 className="avatar-uploader d-flex justify-content-center align-items-center"
                 showUploadList={false}
-                action={apiUploadAvater.uploadAvatar}
+                action={apiUploadAvatar.uploadAvatar}
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
               >
