@@ -1,32 +1,32 @@
 $odd-row-color: #f2f2f2;
 
-.manage-material-title {
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-left: 20px;
+.manage-category-title {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    margin-left: 20px;
 }
 
-.manage-material-search {
-  max-width: 1800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  margin-bottom: 20px;
-  height: 200px;
-  border-radius: 5px;
+.manage-category-search {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 32px;
+    height: 200px;
+    border-radius: 5px;
 }
 
-.manage-material-table {
-  max-width: 1800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  height: 560px;
-  border-radius: 5px;
+.manage-category-table {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 560px;
+    border-radius: 5px;
 }
 
 .table {

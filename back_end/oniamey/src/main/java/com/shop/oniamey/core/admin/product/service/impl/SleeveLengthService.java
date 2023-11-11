@@ -38,8 +38,7 @@ public class SleeveLengthService implements IPropertyService<SleeveLength, Long>
     public SleeveLength create(PropertyRequest propertyRequest) {
         SleeveLength sleeveLength = new SleeveLength();
         sleeveLength.setName(propertyRequest.getName());
-        sleeveLength.setCreatedBy(propertyRequest.getCreatedBy());
-        sleeveLength.setUpdatedBy(propertyRequest.getUpdatedBy());
+        sleeveLength.setDeleted(propertyRequest.getDeleted());
         return sleeveLengthRepository.save(sleeveLength);
     }
 
@@ -47,7 +46,6 @@ public class SleeveLengthService implements IPropertyService<SleeveLength, Long>
     public SleeveLength update(Long id, PropertyRequest propertyRequest) throws DataNotFoundException {
         SleeveLength existingSleeveLength = getById(id);
         existingSleeveLength.setName(propertyRequest.getName());
-        existingSleeveLength.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingSleeveLength.setDeleted(propertyRequest.getDeleted());
         sleeveLengthRepository.save(existingSleeveLength);
         return existingSleeveLength;

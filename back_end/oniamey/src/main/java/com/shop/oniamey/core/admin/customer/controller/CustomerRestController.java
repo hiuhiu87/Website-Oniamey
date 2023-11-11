@@ -1,11 +1,10 @@
 package com.shop.oniamey.core.admin.customer.controller;
 
-import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.customer.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.customer.service.CustomerService;
+import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +59,6 @@ public class CustomerRestController {
     @PutMapping("/change-password/{id}")
     public ResponseEntity<?> changePassword(@PathVariable Long id, @Valid @RequestBody ChangePasswordRequest request) {
         return new ResponseEntity<>(customerService.changePassword(id, request), HttpStatus.OK);
-    }
-
-    @GetMapping("/get-total-page")
-    public Long getTotalPage() {
-        return customerService.getTotalPage();
     }
 
     @GetMapping("/get-all-customers")

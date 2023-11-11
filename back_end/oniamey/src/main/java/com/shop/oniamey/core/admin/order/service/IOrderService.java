@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface IOrderService {
     List<OrderResponse> getAllOrder();
-
     Page<OrderResponse> getAllOrder(Pageable pageable);
 
     OrderResponse getOrderById(Long id);

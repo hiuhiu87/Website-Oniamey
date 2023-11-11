@@ -1,62 +1,65 @@
 package com.shop.oniamey.infrastructure.config;
 
+import com.shop.oniamey.entity.Promotion;
+import com.shop.oniamey.entity.PromotionProductDetail;
+import com.shop.oniamey.infrastructure.constant.RoleType;
+import com.shop.oniamey.repository.promotion.PromotionProductDetailRepository;
+import com.shop.oniamey.repository.promotion.PromotionRepository;
+import com.shop.oniamey.util.DateTimeUtil;
+import com.shop.oniamey.util.QRCodeProduct;
 import org.springframework.stereotype.Component;
+import com.shop.oniamey.entity.Address;
+import com.shop.oniamey.entity.Brand;
+import com.shop.oniamey.entity.Cart;
+import com.shop.oniamey.entity.CartDetail;
+import com.shop.oniamey.entity.Category;
+import com.shop.oniamey.entity.Collar;
+import com.shop.oniamey.entity.Color;
+import com.shop.oniamey.entity.Customer;
+import com.shop.oniamey.entity.Image;
+import com.shop.oniamey.entity.Material;
+import com.shop.oniamey.entity.OrderDetail;
+import com.shop.oniamey.entity.OrderHistory;
+import com.shop.oniamey.entity.OrderPaymentMethod;
+import com.shop.oniamey.entity.Orders;
+import com.shop.oniamey.entity.PaymentMethod;
+import com.shop.oniamey.entity.Product;
+import com.shop.oniamey.entity.ProductDetail;
+import com.shop.oniamey.entity.Size;
+import com.shop.oniamey.entity.SleeveLength;
+import com.shop.oniamey.entity.User;
+import com.shop.oniamey.entity.Voucher;
+import com.shop.oniamey.entity.base.EnumStatus;
+import com.shop.oniamey.repository.customer.AddressRepository;
+import com.shop.oniamey.repository.customer.CartDetailRepository;
+import com.shop.oniamey.repository.customer.CartRepository;
+import com.shop.oniamey.repository.customer.CustomerRepository;
+import com.shop.oniamey.repository.order.OrderDetailRepository;
+import com.shop.oniamey.repository.order.OrderHistoryRepository;
+import com.shop.oniamey.repository.order.OrderPaymentMethodRepository;
+import com.shop.oniamey.repository.order.OrderRepository;
+import com.shop.oniamey.repository.order.PaymentMethodRepository;
+import com.shop.oniamey.repository.product.BrandRepository;
+import com.shop.oniamey.repository.product.CategoryRepository;
+import com.shop.oniamey.repository.product.CollarRepository;
+import com.shop.oniamey.repository.product.ColorRepository;
+import com.shop.oniamey.repository.product.ImageRepository;
+import com.shop.oniamey.repository.product.MaterialRepository;
+import com.shop.oniamey.repository.product.ProductDetailRepository;
+import com.shop.oniamey.repository.product.ProductRepository;
+import com.shop.oniamey.repository.product.SizeRepository;
+import com.shop.oniamey.repository.product.SleeveLengthRepository;
+import com.shop.oniamey.repository.user.UserRepository;
+import com.shop.oniamey.repository.voucher.VoucherRepository;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
-//
-//import com.shop.oniamey.entity.Address;
-//import com.shop.oniamey.entity.Brand;
-//import com.shop.oniamey.entity.Cart;
-//import com.shop.oniamey.entity.CartDetail;
-//import com.shop.oniamey.entity.Category;
-//import com.shop.oniamey.entity.Collar;
-//import com.shop.oniamey.entity.Color;
-//import com.shop.oniamey.entity.Customer;
-//import com.shop.oniamey.entity.Image;
-//import com.shop.oniamey.entity.Material;
-//import com.shop.oniamey.entity.OrderDetail;
-//import com.shop.oniamey.entity.OrderHistory;
-//import com.shop.oniamey.entity.OrderPaymentMethod;
-//import com.shop.oniamey.entity.Orders;
-//import com.shop.oniamey.entity.PaymentMethod;
-//import com.shop.oniamey.entity.Product;
-//import com.shop.oniamey.entity.ProductDetail;
-//import com.shop.oniamey.entity.Role;
-//import com.shop.oniamey.entity.Size;
-//import com.shop.oniamey.entity.SleeveLength;
-//import com.shop.oniamey.entity.User;
-//import com.shop.oniamey.entity.Voucher;
-//import com.shop.oniamey.infrastructure.constant.EnumStatus;
-//import com.shop.oniamey.infrastructure.constant.RoleName;
-//import com.shop.oniamey.repository.customer.AddressRepository;
-//import com.shop.oniamey.repository.customer.CartDetailRepository;
-//import com.shop.oniamey.repository.customer.CartRepository;
-//import com.shop.oniamey.repository.customer.CustomerRepository;
-//import com.shop.oniamey.repository.order.OrderDetailRepository;
-//import com.shop.oniamey.repository.order.OrderHistoryRepository;
-//import com.shop.oniamey.repository.order.OrderPaymentMethodRepository;
-//import com.shop.oniamey.repository.order.OrderRepository;
-//import com.shop.oniamey.repository.order.PaymentMethodRepository;
-//import com.shop.oniamey.repository.product.BrandRepository;
-//import com.shop.oniamey.repository.product.CategoryRepository;
-//import com.shop.oniamey.repository.product.CollarRepository;
-//import com.shop.oniamey.repository.product.ColorRepository;
-//import com.shop.oniamey.repository.product.ImageRepository;
-//import com.shop.oniamey.repository.product.MaterialRepository;
-//import com.shop.oniamey.repository.product.ProductDetailRepository;
-//import com.shop.oniamey.repository.product.ProductRepository;
-//import com.shop.oniamey.repository.product.SizeRepository;
-//import com.shop.oniamey.repository.product.SleeveLengthRepository;
-//import com.shop.oniamey.repository.user.RoleRepository;
-//import com.shop.oniamey.repository.user.UserRepository;
-//import com.shop.oniamey.repository.voucher.VoucherRepository;
-//import jakarta.annotation.PostConstruct;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
-//
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Optional;
-//
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+
+
 @Component
 public class FakeData {
 //
@@ -117,14 +120,18 @@ public class FakeData {
 //    @Autowired
 //    private SleeveLengthRepository sleeveLengthRepository;
 //
-//    @Autowired
-//    private RoleRepository roleRepository;
 //
 //    @Autowired
 //    private UserRepository userRepository;
 //
 //    @Autowired
 //    private VoucherRepository voucherRepository;
+//
+//    @Autowired
+//    private PromotionRepository promotionRepository;
+//
+//    @Autowired
+//    private PromotionProductDetailRepository promotionProductDetailRepository;
 //
 //    @PostConstruct
 //    public void fakeAllDataWebsiteOniamey() {
@@ -153,8 +160,6 @@ public class FakeData {
 //
 //        // done imageProductDetail
 //
-//        fakeDataRole();
-//
 //        fakeDataUser();
 //
 //        // done User
@@ -175,7 +180,8 @@ public class FakeData {
 //
 //        // done Voucher
 //
-//        fakeDataOrders();;
+//        fakeDataOrders();
+//        ;
 //
 //        fakeDataOrderDetail();
 //
@@ -185,19 +191,23 @@ public class FakeData {
 //
 //        fakeDataOrderPaymentMethod();
 //
+//        fakeDataPromotion();
+//
+//        fakeDataPromotionProductDetail();
+//
 //    }
 //
 //    public void fakeDataProduct() {
 //        Product product = new Product();
 //        product.setName("sản phẩm 1");
-//        product.setCode("SP02");
+//        product.setCode(QRCodeProduct.generateRandomCode());
 //        product.setDescription("Áo Phông cao cấp");
 //        product.setDeleted(false);
 //        productRepository.save(product);
 //
 //        Product product1 = new Product();
 //        product1.setName("sản phẩm 2");
-//        product1.setCode("SP03");
+//        product1.setCode(QRCodeProduct.generateRandomCode());
 //        product1.setDescription("Áo Phông rẻ tiền");
 //        product1.setDeleted(true);
 //        productRepository.save(product1);
@@ -205,20 +215,20 @@ public class FakeData {
 //
 //        Product product2 = new Product();
 //        product2.setName("sản phẩm 3");
-//        product2.setCode("SP04");
+//        product2.setCode(QRCodeProduct.generateRandomCode());
 //        product2.setDescription("Áo Phông cao cấp");
 //        product2.setDeleted(false);
 //        productRepository.save(product2);
 //        Product product3 = new Product();
 //        product3.setName("sản phẩm 4");
-//        product3.setCode("SP05");
+//        product3.setCode(QRCodeProduct.generateRandomCode());
 //        product3.setDescription("Áo Phông rẻ tiền");
 //        product3.setDeleted(true);
 //        productRepository.save(product3);
 //
 //        Product product4 = new Product();
 //        product4.setName("sản phẩm 5");
-//        product4.setCode("SP06");
+//        product4.setCode(QRCodeProduct.generateRandomCode());
 //        product4.setDescription("Áo Phông cao cấp");
 //        product4.setDeleted(false);
 //        productRepository.save(product4);
@@ -450,13 +460,13 @@ public class FakeData {
 //        productDetail1.setColor(optionalColor1.get());
 //        productDetail1.setCollar(optionalCollar1.get());
 //        productDetail1.setSleeveLength(optionalSleeveLength1.get());
-//
+//        productDetail1.setCode(QRCodeProduct.generateRandomCode());
 //        productDetail1.setName("Tên sản phẩm 1");
 //        productDetail1.setGender(true);
 //        productDetail1.setPrice(100.0f);
 //        productDetail1.setQuantity(50L);
 //        productDetail1.setWeight(0.5f);
-//
+//        productDetail1.setDeleted(true);
 //        productDetailRepository.save(productDetail1);
 //
 //        // Sản phẩm chi tiết 2
@@ -479,12 +489,13 @@ public class FakeData {
 //        productDetail2.setColor(optionalColor2.get());
 //        productDetail2.setCollar(optionalCollar2.get());
 //        productDetail2.setSleeveLength(optionalSleeveLength2.get());
-//
+//        productDetail2.setCode(QRCodeProduct.generateRandomCode());
 //        productDetail2.setName("Tên sản phẩm 2");
 //        productDetail2.setGender(false);
 //        productDetail2.setPrice(75.0f);
 //        productDetail2.setQuantity(30L);
 //        productDetail2.setWeight(0.4f);
+//        productDetail2.setDeleted(true);
 //
 //        productDetailRepository.save(productDetail2);
 //
@@ -507,12 +518,13 @@ public class FakeData {
 //        productDetail3.setColor(optionalColor3.get());
 //        productDetail3.setCollar(optionalCollar3.get());
 //        productDetail3.setSleeveLength(optionalSleeveLength3.get());
-//
+//        productDetail3.setCode(QRCodeProduct.generateRandomCode());
 //        productDetail3.setName("Tên sản phẩm 3");
 //        productDetail3.setGender(false);
 //        productDetail3.setPrice(100.0f);
 //        productDetail3.setQuantity(20L);
 //        productDetail3.setWeight(0.5f);
+//        productDetail3.setDeleted(true);
 //
 //        productDetailRepository.save(productDetail3);
 //
@@ -534,13 +546,13 @@ public class FakeData {
 //        productDetail4.setColor(optionalColor4.get());
 //        productDetail4.setCollar(optionalCollar4.get());
 //        productDetail4.setSleeveLength(optionalSleeveLength4.get());
-//
+//        productDetail4.setCode(QRCodeProduct.generateRandomCode());
 //        productDetail4.setName("Tên sản phẩm 4");
 //        productDetail4.setGender(true);
 //        productDetail4.setPrice(110.0f);
 //        productDetail4.setQuantity(30L);
 //        productDetail4.setWeight(0.6f);
-//
+//        productDetail4.setDeleted(true);
 //        productDetailRepository.save(productDetail4);
 //
 //// Sản phẩm chi tiết 5
@@ -563,78 +575,70 @@ public class FakeData {
 //        productDetail5.setColor(optionalColor5.get());
 //        productDetail5.setCollar(optionalCollar5.get());
 //        productDetail5.setSleeveLength(optionalSleeveLength5.get());
-//
+//        productDetail5.setCode(QRCodeProduct.generateRandomCode());
 //        productDetail5.setName("Tên sản phẩm 5");
 //        productDetail5.setGender(false);
 //        productDetail5.setPrice(120.0f);
 //        productDetail5.setQuantity(25L);
 //        productDetail5.setWeight(0.7f);
-//
+//        productDetail5.setDeleted(false);
 //        productDetailRepository.save(productDetail5);
 //
 //
 //    }
 //
 //    public void fakeDataImage() {
-//        Optional<ProductDetail> optionalProductDetail = productDetailRepository.findById(1L);
 //
-//        if (optionalProductDetail.isPresent()) {
-//            ProductDetail productDetail = optionalProductDetail.get();
+//        for (int j = 0; j < 5; j++) {
 //
-//            // Tạo và lưu danh sách các hình ảnh cho sản phẩm chi tiết
-//            for (int i = 1; i <= Image.MAXIMUM_IMAGE_PER_PRODUCT; i++) {
-//                Image image = new Image();
-//                image.setProductDetail(productDetail);
-//                image.setCover("Image Cover " + i);
-//                image.setImageUrl("Image URL " + i);
+//            Long id = j + 1L;
 //
-//                imageRepository.save(image);
+//            Optional<ProductDetail> optionalProductDetail = productDetailRepository.findById(id);
+//
+//            if (optionalProductDetail.isPresent()) {
+//                ProductDetail productDetail = optionalProductDetail.get();
+//
+//                // Tạo và lưu danh sách các hình ảnh cho sản phẩm chi tiết
+//                for (int i = 1; i <= Image.MAXIMUM_IMAGE_PER_PRODUCT; i++) {
+//                    Image image = new Image();
+//                    image.setProductDetail(productDetail);
+//                    image.setImageUrl("Image URL " + i);
+//                    image.setCover("imageCover");
+//                    imageRepository.save(image);
+//                }
 //            }
 //        }
-//    }
 //
-//    public void fakeDataRole() {
-//        Role roleAdmin = new Role();
-//        roleAdmin.setName(RoleName.ROLE_ADMIN);
-//        roleRepository.save(roleAdmin);
-//
-//        Role roleUser = new Role();
-//        roleUser.setName(RoleName.ROLE_USER);
-//        roleRepository.save(roleUser);
-//
-////        Role roleManager = new Role();
-////        roleManager.setName(RoleName.);
-////        roleRepository.save(roleManager);
 //    }
 //
 //    public void fakeDataUser() {
 //        // Tạo người dùng với vai trò USER
-//        Role roleUser = roleRepository.findByName(RoleName.ROLE_USER);
-//        if (roleUser != null) {
-//            User user1 = new User();
-//            user1.setFullName("User 1");
-//            user1.setBirthDate(new Date());
-//            user1.setPhoneNumber("1234567890");
-//            user1.setPassword("password1");
-//            user1.setEmail("user1@example.com");
-//            user1.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
-//            user1.setRole(roleUser);
-//            userRepository.save(user1);
-//        }
+//        User user1 = new User();
+//        user1.setFullName("User 1");
+//        user1.setBirthDate(new Date());
+//        user1.setPhoneNumber("1234567890");
+//        user1.setPassword("password1");
+//        user1.setEmail("user1@example.com");
+//        user1.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
+//        user1.setRole(RoleType.ROLE_USER);
+//        user1.setIdentityCard("34534");
+//        user1.setUsername("Nghia");
+//        user1.setDeleted(true);
+//        userRepository.save(user1);
 //
 //        // Tạo người dùng với vai trò ADMIN
-//        Role roleAdmin = roleRepository.findByName(RoleName.ROLE_ADMIN);
-//        if (roleAdmin != null) {
-//            User admin = new User();
-//            admin.setFullName("Admin");
-//            admin.setBirthDate(new Date());
-//            admin.setPhoneNumber("9876543210");
-//            admin.setPassword("adminpassword");
-//            admin.setEmail("admin@example.com");
-//            admin.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
-//            admin.setRole(roleAdmin);
-//            userRepository.save(admin);
-//        }
+//        User admin = new User();
+//        admin.setFullName("Admin");
+//        admin.setBirthDate(new Date());
+//        admin.setPhoneNumber("9876543210");
+//        admin.setPassword("ádssa");
+//        admin.setEmail("admin@example.com");
+//        admin.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
+//        admin.setRole(RoleType.ROLE_ADMIN);
+//        admin.setIdentityCard("23423");
+//        admin.setUsername("Hieu");
+//        user1.setDeleted(true);
+//        userRepository.save(admin);
 //    }
 //
 //    public void fakeDataCustomer() {
@@ -648,6 +652,7 @@ public class FakeData {
 //            customer.setEmail("customer" + i + "@example.com"); // Email
 //            customer.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
 //            customer.setAvatar("avatar-url-" + i); // Đường dẫn đến ảnh đại diện
+//            customer.setDeleted(true);
 //            // Lưu khách hàng vào cơ sở dữ liệu
 //            customerRepository.save(customer);
 //        }
@@ -665,11 +670,13 @@ public class FakeData {
 //            Address address1 = new Address();
 //            address1.setLine("123 Main St");
 //            address1.setWard("Ward 1");
-//            address1.setCity("Ho Chi Minh City");
+//            address1.setDistrict("Ho Chi Minh City");
 //            address1.setProvince("HCM");
 //            address1.setCountry("Vietnam");
 //            address1.setIsDefault(true);
 //            address1.setCustomer(customer1);
+////            address1.setReceiverPhoneNumber("1234567890");
+////            address1.setReceiverName("Receiver 1");
 //            addressRepository.save(address1);
 //        }
 //
@@ -677,11 +684,13 @@ public class FakeData {
 //            Address address2 = new Address();
 //            address2.setLine("456 Elm St");
 //            address2.setWard("Ward 2");
-//            address2.setCity("Hanoi");
+//            address2.setDistrict("Hanoi");
 //            address2.setProvince("HN");
 //            address2.setCountry("Vietnam");
 //            address2.setIsDefault(true);
 //            address2.setCustomer(customer2);
+////            address2.setReceiverPhoneNumber("1234367890");
+////            address2.setReceiverName("Receiver 9");
 //            addressRepository.save(address2);
 //        }
 //
@@ -689,11 +698,13 @@ public class FakeData {
 //            Address address3 = new Address();
 //            address3.setLine("789 Oak St");
 //            address3.setWard("Ward 3");
-//            address3.setCity("Danang");
+//            address3.setDistrict("Danang");
 //            address3.setProvince("DN");
 //            address3.setCountry("Vietnam");
 //            address3.setIsDefault(true);
 //            address3.setCustomer(customer3);
+////            address3.setReceiverPhoneNumber("1214567890");
+////            address3.setReceiverName("Receiver 0");
 //            addressRepository.save(address3);
 //        }
 //
@@ -701,11 +712,13 @@ public class FakeData {
 //            Address address4 = new Address();
 //            address4.setLine("101 Pine St");
 //            address4.setWard("Ward 4");
-//            address4.setCity("Hue");
+//            address4.setDistrict("Hue");
 //            address4.setProvince("HUE");
 //            address4.setCountry("Vietnam");
 //            address4.setIsDefault(true);
 //            address4.setCustomer(customer4);
+////            address4.setReceiverPhoneNumber("12345678934");
+////            address4.setReceiverName("Receiver 21");
 //            addressRepository.save(address4);
 //        }
 //
@@ -713,11 +726,13 @@ public class FakeData {
 //            Address address5 = new Address();
 //            address5.setLine("111 Cedar St");
 //            address5.setWard("Ward 5");
-//            address5.setCity("Nha Trang");
+//            address5.setDistrict("Nha Trang");
 //            address5.setProvince("NT");
 //            address5.setCountry("Vietnam");
 //            address5.setIsDefault(true);
 //            address5.setCustomer(customer5);
+////            address5.setReceiverPhoneNumber("12974567890");
+////            address5.setReceiverName("Receiver 15");
 //            addressRepository.save(address5);
 //        }
 //    }
@@ -807,7 +822,7 @@ public class FakeData {
 //    public void fakeDataVoucher() {
 //        Voucher voucher1 = new Voucher();
 //        voucher1.setVoucherName("Voucher A");
-//        voucher1.setVoucherCode("CODE_A");
+//        voucher1.setVoucherCode(QRCodeProduct.generateRandomCode());
 //        voucher1.setQuantity(100L);
 //        voucher1.setValue(10.0);
 //        voucher1.setMinimumDiscount(5.0);
@@ -819,7 +834,7 @@ public class FakeData {
 //
 //        Voucher voucher2 = new Voucher();
 //        voucher2.setVoucherName("Voucher B");
-//        voucher2.setVoucherCode("CODE_B");
+//        voucher2.setVoucherCode(QRCodeProduct.generateRandomCode());
 //        voucher2.setQuantity(50L);
 //        voucher2.setValue(15.0);
 //        voucher2.setMinimumDiscount(10.0);
@@ -831,7 +846,7 @@ public class FakeData {
 //
 //        Voucher voucher3 = new Voucher();
 //        voucher3.setVoucherName("Voucher C");
-//        voucher3.setVoucherCode("CODE_C");
+//        voucher3.setVoucherCode(QRCodeProduct.generateRandomCode());
 //        voucher3.setQuantity(75L);
 //        voucher3.setValue(5.0);
 //        voucher3.setMinimumDiscount(3.0);
@@ -843,7 +858,7 @@ public class FakeData {
 //
 //        Voucher voucher4 = new Voucher();
 //        voucher4.setVoucherName("Voucher D");
-//        voucher4.setVoucherCode("CODE_D");
+//        voucher4.setVoucherCode(QRCodeProduct.generateRandomCode());
 //        voucher4.setQuantity(200L);
 //        voucher4.setValue(20.0);
 //        voucher4.setMinimumDiscount(10.0);
@@ -855,7 +870,7 @@ public class FakeData {
 //
 //        Voucher voucher5 = new Voucher();
 //        voucher5.setVoucherName("Voucher E");
-//        voucher5.setVoucherCode("CODE_E");
+//        voucher5.setVoucherCode(QRCodeProduct.generateRandomCode());
 //        voucher5.setQuantity(150L);
 //        voucher5.setValue(10.0);
 //        voucher5.setMinimumDiscount(5.0);
@@ -880,7 +895,7 @@ public class FakeData {
 //        order1.setType("Loại 1");
 //        order1.setNote("Ghi chú 1");
 //        order1.setMoneyShip(10.0);
-//        order1.setStatus(EnumStatus.SUCCESS); // Chọn trạng thái tương ứng
+//        order1.setStatus(EnumStatus.AWAITING_PAYMENT); // Chọn trạng thái tương ứng
 //
 //        // Lấy user, customer, và voucher từ cơ sở dữ liệu và gán cho order1
 //        User user1 = userRepository.findById(1L).orElse(null);
@@ -977,7 +992,7 @@ public class FakeData {
 //        order5.setType("Loại 5");
 //        order5.setNote("Ghi chú 5");
 //        order5.setMoneyShip(25.0);
-//        order5.setStatus(EnumStatus.SUCCESS); // Chọn trạng thái tương ứng
+//        order5.setStatus(EnumStatus.CANCEL); // Chọn trạng thái tương ứng
 //
 //        User user5 = userRepository.findById(5L).orElse(null);
 //        Customer customer5 = customerRepository.findById(5L).orElse(null);
@@ -1115,7 +1130,7 @@ public class FakeData {
 //        orderHistoryRepository.save(orderHistory5);
 //    }
 //
-//    public void fakeDataPaymentMethod(){
+//    public void fakeDataPaymentMethod() {
 //        PaymentMethod paymentMethod1 = new PaymentMethod();
 //// Điền thông tin của paymentMethod1
 //        paymentMethod1.setMethodName("Thanh toán bằng thẻ Visa");
@@ -1153,7 +1168,7 @@ public class FakeData {
 //
 //    }
 //
-//    public void fakeDataOrderPaymentMethod(){
+//    public void fakeDataOrderPaymentMethod() {
 //        OrderPaymentMethod orderPaymentMethod1 = new OrderPaymentMethod();
 //// Điền thông tin của orderPaymentMethod1
 //        PaymentMethod paymentMethod1 = paymentMethodRepository.findById(1L).orElse(null);
@@ -1161,7 +1176,7 @@ public class FakeData {
 //        orderPaymentMethod1.setPaymentMethod(paymentMethod1);
 //        orderPaymentMethod1.setOrder(order1);
 //        orderPaymentMethod1.setTotalMoney(100.0);
-//        orderPaymentMethod1.setCode("PM001");
+//        orderPaymentMethod1.setCode(QRCodeProduct.generateRandomCode());
 //
 //        orderPaymentMethodRepository.save(orderPaymentMethod1);
 //
@@ -1172,7 +1187,7 @@ public class FakeData {
 //        orderPaymentMethod2.setPaymentMethod(paymentMethod2);
 //        orderPaymentMethod2.setOrder(order2);
 //        orderPaymentMethod2.setTotalMoney(150.0);
-//        orderPaymentMethod2.setCode("PM002");
+//        orderPaymentMethod2.setCode(QRCodeProduct.generateRandomCode());
 //
 //        orderPaymentMethodRepository.save(orderPaymentMethod2);
 //
@@ -1183,7 +1198,7 @@ public class FakeData {
 //        orderPaymentMethod3.setPaymentMethod(paymentMethod3);
 //        orderPaymentMethod3.setOrder(order3);
 //        orderPaymentMethod3.setTotalMoney(120.0);
-//        orderPaymentMethod3.setCode("PM003");
+//        orderPaymentMethod3.setCode(QRCodeProduct.generateRandomCode());
 //
 //        orderPaymentMethodRepository.save(orderPaymentMethod3);
 //
@@ -1194,7 +1209,7 @@ public class FakeData {
 //        orderPaymentMethod4.setPaymentMethod(paymentMethod4);
 //        orderPaymentMethod4.setOrder(order4);
 //        orderPaymentMethod4.setTotalMoney(180.0);
-//        orderPaymentMethod4.setCode("PM004");
+//        orderPaymentMethod4.setCode(QRCodeProduct.generateRandomCode());
 //
 //        orderPaymentMethodRepository.save(orderPaymentMethod4);
 //
@@ -1205,11 +1220,150 @@ public class FakeData {
 //        orderPaymentMethod5.setPaymentMethod(paymentMethod5);
 //        orderPaymentMethod5.setOrder(order5);
 //        orderPaymentMethod5.setTotalMoney(130.0);
-//        orderPaymentMethod5.setCode("PM005");
+//        orderPaymentMethod5.setCode(QRCodeProduct.generateRandomCode());
 //
 //        orderPaymentMethodRepository.save(orderPaymentMethod5);
 //
 //    }
 //
+//    public void fakeDataPromotion() {
+//        DateTimeUtil dateTimeUtil = new DateTimeUtil();
 //
+//        Promotion promotion1 = new Promotion();
+//        promotion1.setPromotionCode(QRCodeProduct.generateRandomCode());
+//        promotion1.setPromotionName("asdas");
+//        Long startDate = dateTimeUtil.convertDateToTimeStampSecond();
+//        Long endDate = dateTimeUtil.convertDateToTimeStampSecond();
+//        promotion1.setStartDate(startDate);
+//        promotion1.setEndDate(endDate);
+//        promotion1.setValue(20D);
+//        promotion1.setType("Percentage");
+//        promotion1.setDeleted(true);
+//        promotionRepository.save(promotion1);
+//
+//        Promotion promotion2 = new Promotion();
+//        promotion2.setPromotionCode(QRCodeProduct.generateRandomCode());
+//        promotion2.setPromotionName("Promo2");
+//        promotion2.setStartDate(endDate);
+//        promotion2.setEndDate(endDate);
+//        promotion2.setValue(15D);
+//        promotion2.setType("Percentage"); // Set the promotion type as a string, e.g., "Percentage"
+//        promotion2.setDeleted(false);
+//        promotionRepository.save(promotion2);
+//
+//// Promotion 3
+//        Promotion promotion3 = new Promotion();
+//        promotion3.setPromotionCode(QRCodeProduct.generateRandomCode());
+//        promotion3.setPromotionName("Promo3");
+//        promotion3.setStartDate(endDate);
+//        promotion3.setEndDate(endDate);
+//        promotion3.setValue(30D);
+//        promotion3.setType("Fixed Amount"); // Set the promotion type as a string, e.g., "Fixed Amount"
+//        promotion3.setDeleted(false);
+//        promotionRepository.save(promotion3);
+//
+//// Promotion 4
+//        Promotion promotion4 = new Promotion();
+//        promotion4.setPromotionCode(QRCodeProduct.generateRandomCode());
+//        promotion4.setPromotionName("Promo4");
+//        promotion4.setStartDate(endDate);
+//        promotion4.setEndDate(endDate);
+//        promotion4.setValue(25D);
+//        promotion4.setType("Percentage"); // Set the promotion type as a string, e.g., "Percentage"
+//        promotion4.setDeleted(true);
+//        promotionRepository.save(promotion4);
+//
+//// Promotion 5
+//        Promotion promotion5 = new Promotion();
+//        promotion5.setPromotionCode(QRCodeProduct.generateRandomCode());
+//        promotion5.setPromotionName("Promo5");
+//        promotion5.setStartDate(endDate);
+//        promotion5.setEndDate(endDate);
+//        promotion5.setValue(50D);
+//        promotion5.setType("Fixed Amount"); // Set the promotion type as a string, e.g., "Fixed Amount"
+//        promotion5.setDeleted(false);
+//        promotionRepository.save(promotion5);
+//
+//    }
+//
+//    public void fakeDataPromotionProductDetail() {
+//        // Create and save 5 PromotionProductDetail records
+//
+//        // PromotionProductDetail 1
+//        Optional<Promotion> promotion1 = promotionRepository.findById(1L);
+//        Optional<ProductDetail> productDetail1 = productDetailRepository.findById(1L);
+//        PromotionProductDetail ppd1 = new PromotionProductDetail();
+//        ppd1.setPromotion(promotion1.get()); // Assuming you have a Promotion object named 'promotion1'
+//        ppd1.setProductDetail(productDetail1.get()); // Assuming you have a ProductDetail object named 'productDetail1'
+//        promotionProductDetailRepository.save(ppd1);
+//
+//        Optional<Promotion> promotion11 = promotionRepository.findById(1L);
+//        Optional<ProductDetail> productDetail11 = productDetailRepository.findById(3L);
+//        PromotionProductDetail ppd11 = new PromotionProductDetail();
+//        ppd11.setPromotion(promotion11.get()); // Assuming you have a Promotion object named 'promotion1'
+//        ppd11.setProductDetail(productDetail11.get()); // Assuming you have a ProductDetail object named 'productDetail1'
+//        promotionProductDetailRepository.save(ppd11);
+//
+//        // PromotionProductDetail 2
+//        Optional<Promotion> promotion2 = promotionRepository.findById(2L);
+//        Optional<ProductDetail> productDetail2 = productDetailRepository.findById(2L);
+//        PromotionProductDetail ppd2 = new PromotionProductDetail();
+//        ppd2.setPromotion(promotion2.get()); // Assuming you have a Promotion object named 'promotion2'
+//        ppd2.setProductDetail(productDetail2.get()); // Assuming you have a ProductDetail object named 'productDetail2'
+//        promotionProductDetailRepository.save(ppd2);
+//
+//        Optional<Promotion> promotion22 = promotionRepository.findById(2L);
+//        Optional<ProductDetail> productDetail22 = productDetailRepository.findById(5L);
+//        PromotionProductDetail ppd22 = new PromotionProductDetail();
+//        ppd22.setPromotion(promotion22.get()); // Assuming you have a Promotion object named 'promotion2'
+//        ppd22.setProductDetail(productDetail22.get()); // Assuming you have a ProductDetail object named 'productDetail2'
+//        promotionProductDetailRepository.save(ppd22);
+//
+//        // PromotionProductDetail 3
+//        Optional<Promotion> promotion3 = promotionRepository.findById(3L);
+//        Optional<ProductDetail> productDetail3 = productDetailRepository.findById(3L);
+//        PromotionProductDetail ppd3 = new PromotionProductDetail();
+//        ppd3.setPromotion(promotion3.get()); // Assuming you have a Promotion object named 'promotion3'
+//        ppd3.setProductDetail(productDetail3.get()); // Assuming you have a ProductDetail object named 'productDetail3'
+//        promotionProductDetailRepository.save(ppd3);
+//
+//        Optional<Promotion> promotion33 = promotionRepository.findById(3L);
+//        Optional<ProductDetail> productDetail33 = productDetailRepository.findById(1L);
+//        PromotionProductDetail ppd33 = new PromotionProductDetail();
+//        ppd33.setPromotion(promotion33.get()); // Assuming you have a Promotion object named 'promotion3'
+//        ppd33.setProductDetail(productDetail33.get()); // Assuming you have a ProductDetail object named 'productDetail3'
+//        promotionProductDetailRepository.save(ppd33);
+//
+//        // PromotionProductDetail 4
+//        Optional<Promotion> promotion4 = promotionRepository.findById(4L);
+//        Optional<ProductDetail> productDetail4 = productDetailRepository.findById(4L);
+//        PromotionProductDetail ppd4 = new PromotionProductDetail();
+//        ppd4.setPromotion(promotion4.get()); // Assuming you have a Promotion object named 'promotion4'
+//        ppd4.setProductDetail(productDetail4.get()); // Assuming you have a ProductDetail object named 'productDetail4'
+//        promotionProductDetailRepository.save(ppd4);
+//
+//        Optional<Promotion> promotion44 = promotionRepository.findById(4L);
+//        Optional<ProductDetail> productDetail44 = productDetailRepository.findById(2L);
+//        PromotionProductDetail ppd44 = new PromotionProductDetail();
+//        ppd44.setPromotion(promotion44.get()); // Assuming you have a Promotion object named 'promotion4'
+//        ppd44.setProductDetail(productDetail44.get()); // Assuming you have a ProductDetail object named 'productDetail4'
+//        promotionProductDetailRepository.save(ppd44);
+//
+//        // PromotionProductDetail 5
+//        Optional<Promotion> promotion5 = promotionRepository.findById(5L);
+//        Optional<ProductDetail> productDetail5 = productDetailRepository.findById(5L);
+//        PromotionProductDetail ppd5 = new PromotionProductDetail();
+//        ppd5.setPromotion(promotion5.get()); // Assuming you have a Promotion object named 'promotion5'
+//        ppd5.setProductDetail(productDetail5.get()); // Assuming you have a ProductDetail object named 'productDetail5'
+//        promotionProductDetailRepository.save(ppd5);
+//
+//        Optional<Promotion> promotion55 = promotionRepository.findById(5L);
+//        Optional<ProductDetail> productDetail55 = productDetailRepository.findById(3L);
+//        PromotionProductDetail ppd55 = new PromotionProductDetail();
+//        ppd55.setPromotion(promotion55.get()); // Assuming you have a Promotion object named 'promotion5'
+//        ppd55.setProductDetail(productDetail55.get()); // Assuming you have a ProductDetail object named 'productDetail5'
+//        promotionProductDetailRepository.save(ppd55);
+//
+//
+//    }
 }

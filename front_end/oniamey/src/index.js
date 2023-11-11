@@ -11,7 +11,7 @@ import Admin from "./components/Admin/Admin";
 import HomePage from "./components/Home/HomePage";
 import DashBoard from "./components/Admin/Content/dashboard/DashBoard";
 import SalesAtTheCounter from "./components/Admin/Content/sales-at-the-counter/SalesAtTheCounter";
-import ManageProduct from "./components/Admin/Content/manage-product/product/Product";
+import ManageProduct from "./components/Admin/Content/manage-product/product/ManageProduct";
 import ManageCategory from "./components/Admin/Content/manage-product/category/ManageCategory";
 import ManageBrand from "./components/Admin/Content/manage-product/brand/ManageBrand";
 import ManageMaterial from "./components/Admin/Content/manage-product/material/ManageMaterial";
@@ -22,11 +22,14 @@ import ManageSleeveLength from "./components/Admin/Content/manage-product/sleeve
 import Order from "./components/Admin/Content/manage-oder/Order";
 import OrderDetail from "./components/Admin/Content/manage-oder/order-detail/OrderDetail";
 import ManageVoucher from "./components/Admin/Content/manage-voucher/Voucher";
-import ManageEmployee from "./components/Admin/Content/manage-user/Employee";
-import ManageCustomer from "./components/Admin/Content/manage-user/Customer";
+import ManageEmployee from "./components/Admin/Content/manage-user/layout/Employee";
+import ManageCustomer from "./components/Admin/Content/manage-user/layout/Customer";
 import ManageStatistical from "./components/Admin/Content/manage-statistical/Statistical";
-import ModifyUserComponent from "./components/Admin/Content/manage-user/ModifyUserComponent";
-import DetaiCustomer from "./components/Admin/Content/manage-user/DetailCustomer";
+import ModifyUserComponent from "./components/Admin/Content/manage-user/layout/ModifyUserComponent";
+import DetailCustomer from "./components/Admin/Content/manage-user/layout/DetailCustomer";
+import LoginPage from "./components/Admin/Content/login-page/LoginPage";
+import ManagePromotion from "./components/Admin/Content/manage-promotion/ManagePromotion";
+import ModifyPromotion from "./components/Admin/Content/manage-promotion/ModifyPromotion";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -38,7 +41,7 @@ root.render(
                     <Route index element={<HomePage/>}></Route>
                     <Route path="users" element={<User/>}></Route>
                 </Route>
-
+                <Route path="login" element={<LoginPage/>}/>
                 <Route path="/admins" element={<Admin/>}>
                     <Route index element={<DashBoard/>}></Route>
                     <Route
@@ -59,23 +62,40 @@ root.render(
                     <Route path="manage-orders/*" element={<Order/>}></Route>
                     <Route path="manage-vouchers" element={<ManageVoucher/>}></Route>
                     <Route path="manage-employees" element={<ManageEmployee/>}></Route>
-                    <Route path="manage-customers" element={<ManageCustomer/>}></Route>
+                    <Route
+                        path="manage-employees/add-employee"
+                        element={<ModifyUserComponent/>}
+                    ></Route>
+                    <Route
+                        path="manage-employees/update-employee/:id"
+                        element={<ModifyUserComponent/>}
+                    ></Route>
+                    <Route path="manage-customers" element={<ManageCustomer/>}/>
+                    <Route
+                        path="manage-customers/detail-customer/:id"
+                        element={<DetailCustomer/>}
+                    />
+                    <Route
+                        path="manage-customers/update-customer/:id"
+                        element={<DetailCustomer/>}
+                    />
+                    <Route
+                        path="manage-customers/add-customer"
+                        element={<DetailCustomer/>}
+                    />
                     <Route
                         path="manage-statisticals"
                         element={<ManageStatistical/>}
                     ></Route>
+                    <Route path="manage-promotion" element={<ManagePromotion/>}/>
                     <Route
-                        path="manage-customers/add-employee"
-                        element={<ModifyUserComponent/>}
-                    ></Route>
+                        path="manage-promotion/add-promotion"
+                        element={<ModifyPromotion/>}
+                    />
                     <Route
-                        path="manage-customers/update-employee"
-                        element={<ModifyUserComponent/>}
-                    ></Route>
-                    <Route
-                        path="manage-customers/detail-customer/:id"
-                        element={<DetaiCustomer/>}
-                    ></Route>
+                        path="manage-promotion/update-promotion/:id"
+                        element={<ModifyPromotion/>}
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>

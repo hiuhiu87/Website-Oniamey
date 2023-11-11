@@ -53,18 +53,30 @@ public class OrderService implements IOrderService {
     }
 
 
+<<<<<<< HEAD
     @Override
     public String createOrder(OrderRequest orderRequest) {
         Orders orders = new Orders();
         String randomCode = QRCodeProduct.generateRandomCode();
         orders.setDeleted(false);
         if (UserRepository.findById(orderRequest.getUserId()).isEmpty()) {
+=======
+    public String createOrder(OrderRequest orderRequest){
+        Orders orders= new Orders();
+        String randomCode= QRCodeProduct.generateRandomCode();
+        orders.setDeleted(false);
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
+>>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
             return "user not found";
         }
         if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
             return "customer not found";
         }
+<<<<<<< HEAD
         if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
+=======
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+>>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
             return "voucher not found";
         }
         orders.setCode(randomCode);
@@ -126,6 +138,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+<<<<<<< HEAD
     public CountStatusResponse getCountStatus(String orderType,String keySearch) {
         String type="%"+orderType+"%";
         String search="%"+keySearch+"%";
@@ -136,8 +149,22 @@ public class OrderService implements IOrderService {
             type="%";
         }
         return orderRepository.getCountStatus(type,search);
+=======
+    public CountStatusResponse getCountStatus() {
+        return orderRepository.getCountStatus();
     }
 
+
+    @Override
+    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
+        return orderRepository.getOrdersByStatus(pageable,status);
+>>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
+    }
+
+    @Override
+    public List<OrderResponse> getByStatus(String status) {
+        return orderRepository.getByStatus(status);
+    }
 
     @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status , String orderType,String keySearch) {

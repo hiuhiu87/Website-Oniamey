@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyCustomerRequest {
+
+    private String username;
+
+    private String identityCard;
 
     @NotEmpty(message = "Full name is required")
     private String fullName;

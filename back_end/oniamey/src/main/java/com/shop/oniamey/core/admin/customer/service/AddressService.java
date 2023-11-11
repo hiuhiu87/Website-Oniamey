@@ -11,7 +11,7 @@ public interface AddressService {
 
     String deleteAddress(Long id);
 
-    String updateAddress(ModifyAddressRequest modifyAddressRequest);
+    String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest);
 
     AddressResponse getAddressById(Long id);
 

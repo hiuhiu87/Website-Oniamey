@@ -45,6 +45,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createStaff(ModifyUserRequest modifyUserRequest) {
         Optional<User> checkUser = userRepository.findByEmail(modifyUserRequest.getEmail());
+        Optional<User> checkUserByUsername = userRepository.findByUsername(modifyUserRequest.getUsername());
+        Optional<User> checkUserByIdentityCard = userRepository.findByIdentityCard(modifyUserRequest.getIdentityCard());
+
+        if (checkUserByIdentityCard.isPresent()) {
+            return "Identity card already exists";
+        }
+
+        if (checkUserByUsername.isPresent()) {
+            return "Username already exists";
+        }
 
         if (checkUser.isPresent()) {
             return "Email already exists";
@@ -59,6 +69,8 @@ public class UserServiceImpl implements UserService {
 
 
         User user = new User();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -86,6 +98,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = checkUser.get();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());

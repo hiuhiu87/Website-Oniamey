@@ -42,16 +42,20 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<ProductResponse> getAllProduct() {
+        return productRepository.getAll();
+    }
+
+    @Override
     public Product create(ProductRequest productRequest) throws IOException, WriterException {
         String randomCode = QRCodeProduct.generateRandomCode();
         Product product = new Product();
         product.setCode(randomCode);
         product.setName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
-        product.setCreatedBy(productRequest.getCreatedBy());
-        product.setUpdatedBy(productRequest.getUpdatedBy());
+        product.setDeleted(productRequest.getDeleted());
         Product savedProduct = productRepository.save(product);
-        QRCodeProduct.generateQRCode(savedProduct);
+//        QRCodeProduct.generateQRCode(savedProduct);
         return savedProduct;
     }
 
@@ -63,11 +67,10 @@ public class ProductService implements IProductService {
         existingProduct.setName(productRequest.getName());
         existingProduct.setCode(randomCode);
         existingProduct.setDescription(productRequest.getDescription());
-        existingProduct.setCreatedBy(productRequest.getCreatedBy());
-        existingProduct.setUpdatedBy(productRequest.getUpdatedBy());
+
         existingProduct.setDeleted(productRequest.getDeleted());
         productRepository.save(existingProduct);
-        QRCodeProduct.generateQRCode(existingProduct);
+//        QRCodeProduct.generateQRCode(existingProduct);
         return existingProduct;
     }
 

@@ -30,7 +30,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 /* Track */
@@ -46,5 +46,18 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+    background: #555;
 }
+
+/* Admin.scss */
+/* Expanded state */
+.admin-content-expanded {
+    width: 86vw;
+    /* Add other styling as needed */
+  }
+  
+  /* Collapsed state */
+  .admin-content-collapsed {
+    width: 96vw;
+    /* Add other styling as needed */
+  }

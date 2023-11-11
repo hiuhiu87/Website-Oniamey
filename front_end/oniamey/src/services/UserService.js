@@ -19,9 +19,15 @@ class UserService {
         return axios.put(BASE_API_URL + "/update-staff/" + id, user);
     }
 
+<<<<<<< HEAD
     changeStatusUser(id) {
         return axios.put(BASE_API_URL + "/update-user-status/" + id);
     }
+=======
+  changeStatusUser(id) {
+    return axios.put(BASE_API_URL + "/update-staff-status/" + id);
+  }
+>>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
 
     getTotalPages() {
         return axios.get(BASE_API_URL + "/total-page");

@@ -14,10 +14,12 @@ import java.util.Optional;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    Optional<Address> findByLineAndWardAndProvinceAndCustomerId(String line, String ward, String province, Long customerId);
+    Optional<Address> findByLineAndWardAndDistrictAndProvinceAndCustomerIdAndDeletedIsFalse(String line, String ward, String district, String province, Long customerId);
 
     @Query(value = """
             select a.id,
+            a.receiver_name as receiver,
+            a.receiver_phone_number as phoneNumber,
              a.line as line,
             a.ward as ward ,
             a.province as province ,
@@ -25,7 +27,8 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             a.is_default as isDefault
             from address a
             join customer c on c.id = a.customer_id
-            where c.id = :idCustomer
+            where c.id = :idCustomer and a.deleted = false
+            order by a.is_default desc
             """, nativeQuery = true)
     List<AddressResponse> getAllAddressByCustomerId(Long idCustomer);
 

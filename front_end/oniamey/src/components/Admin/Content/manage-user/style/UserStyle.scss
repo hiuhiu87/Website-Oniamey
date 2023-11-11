@@ -1,0 +1,40 @@
+
+.ant-upload.ant-upload-select {
+    width: 200px !important;
+    height: 200px !important;
+    border-color: #cc9966 !important;
+    border-style: none !important;
+}
+
+.content-user-container {
+    width: 95%;
+    box-shadow: 0 0 10px 0 gray;
+    border-radius: 10px;
+}
+
+.delete-button {
+    position: absolute;
+
+    &:hover {
+        color: transparent !important;
+        outline: transparent !important;
+    }
+
+    &:focus {
+        color: transparent !important;
+        outline: transparent !important;
+    }
+
+}
+
+.qrcode-container {
+    width: inherit;
+    height: inherit;
+
+    video {
+        position: unset !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}

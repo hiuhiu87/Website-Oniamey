@@ -190,7 +190,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                         where o.deleted = 0 and o.status like :status
                        """, nativeQuery = true)
     List<OrderResponse> getByStatus(String status);
-
+ 
     @Modifying
     @Query(value = """
             update orders set deleted=1 where id =?1
