@@ -7,6 +7,7 @@ import promotionService from "../../../../services/promotion/PromotionService";
 import { useState } from "react";
 import { useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { Tag } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLock,
@@ -23,8 +24,6 @@ import { DatePicker, Space } from "antd";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { format } from "date-fns";
-
-
 
 const ManagePromotion = (props) => {
   const [promotions, setPromotions] = useState([]);
@@ -43,11 +42,11 @@ const ManagePromotion = (props) => {
 
   const noDataComponent = () => {
     return (
-        <div className="no-data-component">
-          <h5>Không có dữ liệu</h5>
-        </div>
+      <div className="no-data-component">
+        <h5>Không có dữ liệu</h5>
+      </div>
     );
-  }
+  };
 
   const { startTime, promotionInput, promotionStatus, promotionType, endTime } =
     dataSearch;
@@ -120,9 +119,9 @@ const ManagePromotion = (props) => {
       name: "Trạng Thái",
       selector: (row) => {
         if (row.promotionDeleted === true) {
-          return <span className="text-success">Hoạt Động</span>;
+          return <Tag color={"red"}>Ngừng Hoạt Động</Tag>;
         } else {
-          return <span className="text-danger">Ngừng Hoạt Động</span>;
+          return <Tag color={"green"}>Hoạt Động</Tag>;
         }
       },
       center: "true",
@@ -287,8 +286,8 @@ const ManagePromotion = (props) => {
 
   const handleDetailPromotion = (promotionID) => {
     setShowModalDetailPromotion(true);
-    setPromotionID(promotionID)
-  }
+    setPromotionID(promotionID);
+  };
 
   // const handleClickTable = (row) => {
   //   navigate(`update-promotion/${row.promotionID}`);

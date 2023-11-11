@@ -49,7 +49,7 @@ public class PromotionServiceImpl implements PromotionService {
         String code = QRCodeProduct.generateRandomCode();
         promotion.setPromotionCode(code);
         promotion.setPromotionName(addPromotionRequest.getPromotionName());
-        promotion.setDeleted(true);
+        promotion.setDeleted(false);
         promotion.setValue(addPromotionRequest.getPromotionValue());
         promotion.setType(addPromotionRequest.getPromotionType());
         promotion.setStartDate(addPromotionRequest.getPromotionStartDate());
