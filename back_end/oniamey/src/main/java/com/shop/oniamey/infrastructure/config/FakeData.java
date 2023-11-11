@@ -5,6 +5,7 @@ import com.shop.oniamey.entity.PromotionProductDetail;
 import com.shop.oniamey.infrastructure.constant.RoleType;
 import com.shop.oniamey.repository.promotion.PromotionProductDetailRepository;
 import com.shop.oniamey.repository.promotion.PromotionRepository;
+import com.shop.oniamey.util.DateTimeUtil;
 import com.shop.oniamey.util.QRCodeProduct;
 import org.springframework.stereotype.Component;
 import com.shop.oniamey.entity.Address;
@@ -56,6 +57,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+
 
 @Component
 public class FakeData {
@@ -463,7 +466,7 @@ public class FakeData {
         productDetail1.setPrice(100.0f);
         productDetail1.setQuantity(50L);
         productDetail1.setWeight(0.5f);
-
+        productDetail1.setDeleted(true);
         productDetailRepository.save(productDetail1);
 
         // Sản phẩm chi tiết 2
@@ -492,6 +495,7 @@ public class FakeData {
         productDetail2.setPrice(75.0f);
         productDetail2.setQuantity(30L);
         productDetail2.setWeight(0.4f);
+        productDetail2.setDeleted(true);
 
         productDetailRepository.save(productDetail2);
 
@@ -520,6 +524,7 @@ public class FakeData {
         productDetail3.setPrice(100.0f);
         productDetail3.setQuantity(20L);
         productDetail3.setWeight(0.5f);
+        productDetail3.setDeleted(true);
 
         productDetailRepository.save(productDetail3);
 
@@ -547,7 +552,7 @@ public class FakeData {
         productDetail4.setPrice(110.0f);
         productDetail4.setQuantity(30L);
         productDetail4.setWeight(0.6f);
-
+        productDetail4.setDeleted(true);
         productDetailRepository.save(productDetail4);
 
 // Sản phẩm chi tiết 5
@@ -576,7 +581,7 @@ public class FakeData {
         productDetail5.setPrice(120.0f);
         productDetail5.setQuantity(25L);
         productDetail5.setWeight(0.7f);
-
+        productDetail5.setDeleted(false);
         productDetailRepository.save(productDetail5);
 
 
@@ -618,6 +623,7 @@ public class FakeData {
         user1.setRole(RoleType.ROLE_USER);
         user1.setIdentityCard("34534");
         user1.setUsername("Nghia");
+        user1.setDeleted(true);
         userRepository.save(user1);
 
         // Tạo người dùng với vai trò ADMIN
@@ -625,12 +631,13 @@ public class FakeData {
         admin.setFullName("Admin");
         admin.setBirthDate(new Date());
         admin.setPhoneNumber("9876543210");
-        admin.setPassword("adminpassword");
+        admin.setPassword("ádssa");
         admin.setEmail("admin@example.com");
         admin.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
         admin.setRole(RoleType.ROLE_ADMIN);
         admin.setIdentityCard("23423");
         admin.setUsername("Hieu");
+        user1.setDeleted(true);
         userRepository.save(admin);
     }
 
@@ -645,6 +652,7 @@ public class FakeData {
             customer.setEmail("customer" + i + "@example.com"); // Email
             customer.setGender(1); // Ví dụ: 1 cho nam, 0 cho nữ
             customer.setAvatar("avatar-url-" + i); // Đường dẫn đến ảnh đại diện
+            customer.setDeleted(true);
             // Lưu khách hàng vào cơ sở dữ liệu
             customerRepository.save(customer);
         }
@@ -667,6 +675,8 @@ public class FakeData {
             address1.setCountry("Vietnam");
             address1.setIsDefault(true);
             address1.setCustomer(customer1);
+//            address1.setReceiverPhoneNumber("1234567890");
+//            address1.setReceiverName("Receiver 1");
             addressRepository.save(address1);
         }
 
@@ -679,6 +689,8 @@ public class FakeData {
             address2.setCountry("Vietnam");
             address2.setIsDefault(true);
             address2.setCustomer(customer2);
+//            address2.setReceiverPhoneNumber("1234367890");
+//            address2.setReceiverName("Receiver 9");
             addressRepository.save(address2);
         }
 
@@ -691,6 +703,8 @@ public class FakeData {
             address3.setCountry("Vietnam");
             address3.setIsDefault(true);
             address3.setCustomer(customer3);
+//            address3.setReceiverPhoneNumber("1214567890");
+//            address3.setReceiverName("Receiver 0");
             addressRepository.save(address3);
         }
 
@@ -703,6 +717,8 @@ public class FakeData {
             address4.setCountry("Vietnam");
             address4.setIsDefault(true);
             address4.setCustomer(customer4);
+//            address4.setReceiverPhoneNumber("12345678934");
+//            address4.setReceiverName("Receiver 21");
             addressRepository.save(address4);
         }
 
@@ -715,6 +731,8 @@ public class FakeData {
             address5.setCountry("Vietnam");
             address5.setIsDefault(true);
             address5.setCustomer(customer5);
+//            address5.setReceiverPhoneNumber("12974567890");
+//            address5.setReceiverName("Receiver 15");
             addressRepository.save(address5);
         }
     }
@@ -1209,21 +1227,25 @@ public class FakeData {
     }
 
     public void fakeDataPromotion() {
+        DateTimeUtil dateTimeUtil = new DateTimeUtil();
+
         Promotion promotion1 = new Promotion();
         promotion1.setPromotionCode(QRCodeProduct.generateRandomCode());
         promotion1.setPromotionName("asdas");
-        promotion1.setStartDate(new Date());
-        promotion1.setEndDate(new Date());
+        Long startDate = dateTimeUtil.convertDateToTimeStampSecond();
+        Long endDate = dateTimeUtil.convertDateToTimeStampSecond();
+        promotion1.setStartDate(startDate);
+        promotion1.setEndDate(endDate);
         promotion1.setValue(20D);
-        promotion1.setType("%");
+        promotion1.setType("Percentage");
         promotion1.setDeleted(true);
         promotionRepository.save(promotion1);
 
         Promotion promotion2 = new Promotion();
         promotion2.setPromotionCode(QRCodeProduct.generateRandomCode());
         promotion2.setPromotionName("Promo2");
-        promotion2.setStartDate(new Date());
-        promotion2.setEndDate(new Date());
+        promotion2.setStartDate(endDate);
+        promotion2.setEndDate(endDate);
         promotion2.setValue(15D);
         promotion2.setType("Percentage"); // Set the promotion type as a string, e.g., "Percentage"
         promotion2.setDeleted(false);
@@ -1233,8 +1255,8 @@ public class FakeData {
         Promotion promotion3 = new Promotion();
         promotion3.setPromotionCode(QRCodeProduct.generateRandomCode());
         promotion3.setPromotionName("Promo3");
-        promotion3.setStartDate(new Date());
-        promotion3.setEndDate(new Date());
+        promotion3.setStartDate(endDate);
+        promotion3.setEndDate(endDate);
         promotion3.setValue(30D);
         promotion3.setType("Fixed Amount"); // Set the promotion type as a string, e.g., "Fixed Amount"
         promotion3.setDeleted(false);
@@ -1244,8 +1266,8 @@ public class FakeData {
         Promotion promotion4 = new Promotion();
         promotion4.setPromotionCode(QRCodeProduct.generateRandomCode());
         promotion4.setPromotionName("Promo4");
-        promotion4.setStartDate(new Date());
-        promotion4.setEndDate(new Date());
+        promotion4.setStartDate(endDate);
+        promotion4.setEndDate(endDate);
         promotion4.setValue(25D);
         promotion4.setType("Percentage"); // Set the promotion type as a string, e.g., "Percentage"
         promotion4.setDeleted(true);
@@ -1255,8 +1277,8 @@ public class FakeData {
         Promotion promotion5 = new Promotion();
         promotion5.setPromotionCode(QRCodeProduct.generateRandomCode());
         promotion5.setPromotionName("Promo5");
-        promotion5.setStartDate(new Date());
-        promotion5.setEndDate(new Date());
+        promotion5.setStartDate(endDate);
+        promotion5.setEndDate(endDate);
         promotion5.setValue(50D);
         promotion5.setType("Fixed Amount"); // Set the promotion type as a string, e.g., "Fixed Amount"
         promotion5.setDeleted(false);

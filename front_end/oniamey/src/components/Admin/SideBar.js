@@ -114,7 +114,6 @@ const SideBar = (props) => {
                                 <Link to="/admins/manage-sleeve-lengths"></Link>
                             </MenuItem>
                         </SubMenu>
-
                     </Menu>
                     <Menu iconShape="circle">
                         <MenuItem

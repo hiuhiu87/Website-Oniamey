@@ -39,12 +39,10 @@ public class Promotion extends BaseModel {
 //    private Double maximumDiscount;
 
     @Column(name = "start_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    private Long startDate;
 
     @Column(name = "end_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endDate;
+    private Long endDate;
 
     @Column(name = "type", nullable = false)
     private String type;

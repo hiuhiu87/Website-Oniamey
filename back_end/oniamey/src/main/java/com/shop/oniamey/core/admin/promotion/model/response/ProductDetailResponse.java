@@ -18,4 +18,8 @@ public interface ProductDetailResponse {
 
     Long getProductDetailQuantity();
 
+    Boolean getProductDetailDeleted();
+
+    Long getProductID();
+
 }
