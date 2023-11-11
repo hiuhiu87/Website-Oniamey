@@ -1,25 +1,25 @@
 $odd-row-color: #f2f2f2;
 
-.manage-material-title {
+.manage-category-title {
     font-size: 24px;
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
     margin-left: 20px;
 }
 
-.manage-material-search {
+.manage-category-search {
     max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
     background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
+    margin-bottom: 32px;
     height: 200px;
     border-radius: 5px;
 }
 
-.manage-material-table {
+.manage-category-table {
     max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
@@ -34,7 +34,8 @@ $odd-row-color: #f2f2f2;
     border-collapse: collapse;
     border-radius: 20px;
 
-    th, td {
+    th,
+    td {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #ddd;
@@ -56,14 +57,14 @@ $odd-row-color: #f2f2f2;
     }
 }
 
-.search-material-title {
+.search-category-title {
     font-size: 20px;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.list-material-title {
+.list-category-title {
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -82,5 +83,3 @@ button {
 form {
     // padding-left: 200px;
 }
-
-
