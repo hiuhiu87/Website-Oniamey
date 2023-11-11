@@ -1,22 +1,5 @@
 import { React, useState, useEffect } from 'react';
 import './ManageSleeveLength.scss';
-<<<<<<< HEAD
-import {CgDetailsLess} from 'react-icons/cg';
-import {FaFilter, FaThList} from 'react-icons/fa';
-import {MdLibraryAdd} from 'react-icons/md';
-import {Container} from 'react-bootstrap';
-import BreadcrumbsPage from '../../../BreadCrumbs/BreadcrumbsPage';
-
-const ManageSleeveLength = (props) => {
-    return (
-        <div class="manage-sleeve-length-container">
-            <div className='manage-sleeve-length-title'>
-                <div className="title">
-                    <CgDetailsLess size={32}/> Quản Lý Chiều Dài Tay
-                </div>
-            </div>
-            <BreadcrumbsPage/>
-=======
 import { CgDetailsLess } from 'react-icons/cg';
 import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
 import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
@@ -27,7 +10,6 @@ import { getAllProperties } from '../../../../../services/apiService';
 import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 
 const ManageSleeveLength = (props) => {
->>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
 
     const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
     const [showModalUpdateSleeveLength, setShowModalUpdateSleeveLength] = useState(false);
@@ -73,20 +55,6 @@ const ManageSleeveLength = (props) => {
             <div class="manage-sleeve-length-container">
                 <div className='manage-sleeve-length-title'>
                     <div className="title">
-<<<<<<< HEAD
-                        <FaFilter size={26}/> Bộ Lọc
-                    </div>
-                </div>
-
-                <div className='main-container'>
-                    <div className='w-50'>
-                        <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Chiều Dài Tay</label>
-                            <div class="col d-flex align-content-between">
-                                <input type="text" class="form-control me-4" id="inputEmail3"/>
-                                <button type="button" class="btn btn-secondary">Tìm Kiếm</button>
-                            </div>
-=======
                         <CgDetailsLess size={32} /> Quản Lý Chiều Dài Tay
                     </div>
                 </div>
@@ -94,7 +62,6 @@ const ManageSleeveLength = (props) => {
                     <div className='search-sleeve-length-title'>
                         <div className="title">
                             <FaFilter size={26} /> Bộ Lọc
->>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
                         </div>
                     </div>
                     <Form>
@@ -185,70 +152,6 @@ const ManageSleeveLength = (props) => {
                         </tbody>
                     </Table>
                 </div>
-<<<<<<< HEAD
-
-
-            </div>
-            <div className='manage-sleeve-length-table'>
-                <div className='list-sleeve-length-title'>
-                    <div className="title">
-                        <FaThList size={26}/> Danh Sách Chiều Dài Tay
-                    </div>
-                    <button type="button" class="btn btn-dark">
-                        <MdLibraryAdd/> Thêm
-                    </button>
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên</th>
-                        <th>Ngày cập nhật</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                    </tr>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                    </tr>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                    </tr>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                    </tr>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                        <td>Data 3</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-=======
                 <ModalCreateSleeveLength
                     show={showModalCreateSleeveLength}
                     setShow={setShowModalCreateSleeveLength}
@@ -270,7 +173,6 @@ const ManageSleeveLength = (props) => {
                 />
             </div >
         </Container>
->>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
     );
 }
 

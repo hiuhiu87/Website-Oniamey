@@ -47,11 +47,6 @@ class CustomerService {
         return axios.get(BASE_API_URL_ADDRESS + "/get-all-address/" + id);
     }
 
-<<<<<<< HEAD
-    changeDefaultAddress(id) {
-        return axios.put(BASE_API_URL_ADDRESS + "/set-default-address/" + id);
-    }
-=======
   changeDefaultAddress(id) {
     return axios.put(BASE_API_URL_ADDRESS + "/set-default-address/" + id);
   }
@@ -64,7 +59,6 @@ class CustomerService {
     return axios.put(BASE_API_URL_ADDRESS + "/delete-address/" + id);
   }
 
->>>>>>> 2688de69465689eb80f298b598da8f3ce3565eca
 }
 
 const service = new CustomerService();
