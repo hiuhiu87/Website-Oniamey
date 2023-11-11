@@ -1,39 +1,31 @@
 .admin-container {
-    display: flex;
-    .admin-sidebar {
-        .pro-sidebar {
-            height: 100vh !important;
-            // width: 40vh !important;
-        }
+  display: flex;
+
+  .admin-sidebar {
+    .pro-sidebar {
+      height: 120vh !important;
+      // width: 40vh !important;
+    }
+  }
+
+  .admin-content {
+    width: 100%;
+
+    .admin-header {
+      height: 40px;
+      // border: 1px solid red;
     }
 
-    .admin-content {
-        transition: width 0.3s;
-        position: absolute;
-        right: 0;
+    .admin-main {
+      // border: 1px solid red;
+      height: 50px;
+      padding-top: 10px;
+      padding-left: 20px;
+      background-color: #ddd;
+      margin-bottom: 15px;
 
-        .cick{
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .cick :hover{
-            color: #cc9966;
-            transform: scaleY(4px);
-        }
-
-        .admin-header {
-            height: 50px;
-            padding-top: 10px;
-            padding-left: 20px;
-            background-color: #ddd;
-            margin-bottom: 15px;
-        }
-
-        // .admin-main {
-        //     height: 60px;
-        // }
     }
+  }
 }
 
 /* width */
@@ -43,13 +35,13 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    //   box-shadow: inset 0 0 5px grey; 
+  background: #f1f1f1;
+  //   box-shadow: inset 0 0 5px grey;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #888;
+  background: #888;
 }
 
 /* Handle on hover */

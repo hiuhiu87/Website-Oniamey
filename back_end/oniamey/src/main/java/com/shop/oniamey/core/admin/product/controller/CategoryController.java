@@ -35,7 +35,7 @@ public class CategoryController {
         try {
             categoryService.create(propertyRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -45,7 +45,7 @@ public class CategoryController {
         try {
             categoryService.update(id, propertyRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

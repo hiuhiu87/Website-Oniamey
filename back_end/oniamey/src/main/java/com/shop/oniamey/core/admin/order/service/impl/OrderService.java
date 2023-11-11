@@ -5,7 +5,7 @@ import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
 import com.shop.oniamey.core.admin.order.service.IOrderService;
 import com.shop.oniamey.entity.Orders;
-import com.shop.oniamey.entity.base.EnumStatus;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
 import com.shop.oniamey.infrastructure.exception.RestApiException;
 import com.shop.oniamey.repository.customer.CustomerRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
@@ -34,7 +34,8 @@ public class OrderService implements IOrderService {
     @Autowired
     private VoucherRepository voucherRepository;
 
-    public List<OrderResponse> getAllOrder(){
+    @Override
+    public List<OrderResponse> getAllOrder() {
         return orderRepository.findAllOrder();
     }
 
@@ -45,7 +46,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderResponse getOrderById(Long id) {
-        if(orderRepository.getOrdersById(id).isPresent()){
+        if (orderRepository.getOrdersById(id).isPresent()) {
             return orderRepository.getOrdersById(id).get();
         }
         throw new RestApiException("ORDER NOT EXISTS");
@@ -59,10 +60,10 @@ public class OrderService implements IOrderService {
         if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
             return "user not found";
         }
-        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+        if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
             return "customer not found";
         }
-        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
             return "voucher not found";
         }
         orders.setCode(randomCode);
@@ -73,14 +74,11 @@ public class OrderService implements IOrderService {
         orders.setAddress(orderRequest.getAddress());
         orders.setUserName(orderRequest.getUserName());
         orders.setTotalMoney(orderRequest.getTotalMoney());
-        orders.setConfirmationDate(orderRequest.getConfirmationDate());
         orders.setShipDate(orderRequest.getShipDate());
-        orders.setReceiveDate(orderRequest.getReceiveDate());
-        orders.setCompletionDate(orderRequest.getCompletionDate());
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
-        orders.setStatus(EnumStatus.PENDING);
+        orders.setStatus(orderRequest.getStatus());
         orderRepository.save(orders);
         return "Create order success";
     }
@@ -88,7 +86,7 @@ public class OrderService implements IOrderService {
     @Transactional
     @Override
     public String deleteOrder(Long id) {
-        if (orderRepository.findById(id).isEmpty()){
+        if (orderRepository.findById(id).isEmpty()) {
             return "order id not found";
         }
         orderRepository.deleteOrder(id);
@@ -97,17 +95,17 @@ public class OrderService implements IOrderService {
 
     @Override
     public String updateOrder(Long id, OrderRequest orderRequest) {
-        if (orderRepository.findById(id).isEmpty()){
+        if (orderRepository.findById(id).isEmpty()) {
             return "order id not found";
         }
         Orders orders = orderRepository.findById(id).get();
-        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()){
+        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()) {
             return "user not found";
         }
-        if(customerRepository.findById(orderRequest.getCustomerId()).isEmpty()){
+        if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
             return "customer not found";
         }
-        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()){
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
             return "voucher not found";
         }
         orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
@@ -117,27 +115,43 @@ public class OrderService implements IOrderService {
         orders.setAddress(orderRequest.getAddress());
         orders.setUserName(orderRequest.getUserName());
         orders.setTotalMoney(orderRequest.getTotalMoney());
-        orders.setConfirmationDate(orderRequest.getConfirmationDate());
         orders.setShipDate(orderRequest.getShipDate());
-        orders.setReceiveDate(orderRequest.getReceiveDate());
-        orders.setCompletionDate(orderRequest.getCompletionDate());
         orders.setType(orderRequest.getType());
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
-        orders.setStatus(EnumStatus.PENDING);
+        orders.setStatus(OrderStatus.PENDING);
         orderRepository.save(orders);
         return "Update order success";
     }
 
     @Override
-    public CountStatusResponse getCountStatus() {
-        return orderRepository.getCountStatus();
+    public CountStatusResponse getCountStatus(String orderType,String keySearch) {
+        String type="%"+orderType+"%";
+        String search="%"+keySearch+"%";
+        if (keySearch.equalsIgnoreCase( "none")){
+            search="%";
+        }
+        if (orderType.equalsIgnoreCase("none")){
+            type="%";
+        }
+        return orderRepository.getCountStatus(type,search);
     }
-
+ 
 
     @Override
-    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status) {
-        return orderRepository.getOrdersByStatus(pageable,status);
+    public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status , String orderType,String keySearch) {
+        String type="%"+orderType+"%";
+        String search="%"+keySearch+"%";
+        if (keySearch.equalsIgnoreCase( "none")){
+            search="%";
+        }
+        if (orderType.equalsIgnoreCase("none")){
+            type="%";
+        }
+        if (status.equalsIgnoreCase("ALL")) {
+            return orderRepository.getOrdersByStatus(pageable, "%",type,search);
+        }
+        return orderRepository.getOrdersByStatus(pageable, status,type,search);
     }
 
     @Override

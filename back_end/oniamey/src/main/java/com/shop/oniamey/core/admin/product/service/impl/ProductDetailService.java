@@ -103,7 +103,7 @@ public class ProductDetailService implements IProductDetailService {
                     ProductDetail productDetail = new ProductDetail();
 
                     productDetail.setProduct(existingProduct);
-                    productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() ->new DataNotFoundException("Color not found")));
+                    productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() -> new DataNotFoundException("Color not found")));
                     productDetail.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new DataNotFoundException("Size not found")));
                     productDetail.setCategory(existingCategory);
                     productDetail.setMaterial(existingMaterial);

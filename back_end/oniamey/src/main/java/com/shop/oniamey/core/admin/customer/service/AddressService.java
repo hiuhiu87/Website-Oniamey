@@ -17,7 +17,7 @@ public interface AddressService {
 
     List<AddressResponse> getAllAddressByCustomerId(Long idCustomer);
 
-    List<AddressResponse>  getAllAddress();
+    List<AddressResponse> getAllAddress();
 
     String setDefaultAddress(Long id);
 

@@ -60,7 +60,8 @@ public class AmazonClient {
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
-        s3client.putObject(new PutObjectRequest(bucketName, folderName + fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
+        s3client.putObject(new PutObjectRequest(bucketName, "productimage/" + fileName, file)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     public String uploadFile(MultipartFile multipartFile) {
