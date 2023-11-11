@@ -2,26 +2,29 @@ package com.shop.oniamey.core.admin.promotion.service.impl;
 
 import com.shop.oniamey.core.admin.promotion.model.request.AddPromotionRequest;
 import com.shop.oniamey.core.admin.promotion.model.response.PromotionDetailResponse;
-import com.shop.oniamey.core.admin.promotion.model.response.PromotionResponse;
+import com.shop.oniamey.core.admin.promotion.repository.AdminProductDetailForPromotionRepository;
+import com.shop.oniamey.core.admin.promotion.repository.AdminPromotionProductDetailRepository;
 import com.shop.oniamey.core.admin.promotion.repository.AdminPromotionRepository;
 import com.shop.oniamey.core.admin.promotion.service.PromotionService;
+import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.entity.Promotion;
-import com.shop.oniamey.repository.promotion.PromotionRepository;
+import com.shop.oniamey.entity.PromotionProductDetail;
+import com.shop.oniamey.util.QRCodeProduct;
 import jakarta.transaction.Transactional;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
 
-//    @Autowired
-//    private PromotionRepository promotionRepository;
+    @Autowired
+    private AdminProductDetailForPromotionRepository adminProductDetailForPromotionRepository;
+
+    @Autowired
+    private AdminPromotionProductDetailRepository adminPromotionProductDetailRepository;
 
     @Autowired
     AdminPromotionRepository adminPromotionRepository;
@@ -38,31 +41,39 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public String createPromotion(AddPromotionRequest addPromotionRequest) {
-        Optional<Promotion> checkPromotionCode = adminPromotionRepository.findByPromotionCode(addPromotionRequest.getPromotionCode());
         Optional<Promotion> checkPromotionName = adminPromotionRepository.findByPromotionName(addPromotionRequest.getPromotionName());
         if (checkPromotionName.isPresent()) {
-            return "Tên khuyến mãi đã tồn tại";
-        }
-        if (checkPromotionCode.isPresent()) {
-            return "Mã khuyến mãi đã tồn tại";
+            return "Tên khuyến mại đã tồn tại";
         }
         Promotion promotion = new Promotion();
-        promotion.setPromotionCode(addPromotionRequest.getPromotionCode());
+        String code = QRCodeProduct.generateRandomCode();
+        promotion.setPromotionCode(code);
         promotion.setPromotionName(addPromotionRequest.getPromotionName());
-        promotion.setDeleted(addPromotionRequest.getPromotionDeleted());
+        promotion.setDeleted(true);
         promotion.setValue(addPromotionRequest.getPromotionValue());
         promotion.setType(addPromotionRequest.getPromotionType());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date startDate = dateFormat.parse(addPromotionRequest.getPromotionStartDate());
-            Date endDate = dateFormat.parse(addPromotionRequest.getPromotionEndDate());
-            promotion.setStartDate(startDate);
-            promotion.setEndDate(endDate);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        promotion.setStartDate(addPromotionRequest.getPromotionStartDate());
+        promotion.setEndDate(addPromotionRequest.getPromotionEndDate());
         adminPromotionRepository.save(promotion);
-        return "Done";
+        if (!((addPromotionRequest.getPromotionProductID()) == null)) {
+            if (!(addPromotionRequest.getPromotionProductDetailID() == null)) {
+                for (Long productDetailID : addPromotionRequest.getPromotionProductDetailID()
+                ) {
+                    PromotionProductDetail promotionProductDetail = new PromotionProductDetail();
+                    Optional<Promotion> getPromotionByCode = adminPromotionRepository.findByPromotionCode(code);
+                    promotionProductDetail.setPromotion(getPromotionByCode.get());
+                    Optional<ProductDetail> getProductDetailByID =
+                            adminProductDetailForPromotionRepository.findById(productDetailID);
+                    promotionProductDetail.setProductDetail(getProductDetailByID.get());
+                    adminPromotionProductDetailRepository.save(promotionProductDetail);
+                }
+                return "Add vào ProductDetai";
+            } else {
+                return "Chưa chọn ProductDetail muốn thêm - Thêm mềm khuyến mại _ Cập nhật khuyến mãi đê";
+            }
+        } else {
+            return "Chưa chọn Product - Thêm mềm khuyến mại _ Cập nhật khuyến mãi đê";
+        }
     }
 
     @Transactional

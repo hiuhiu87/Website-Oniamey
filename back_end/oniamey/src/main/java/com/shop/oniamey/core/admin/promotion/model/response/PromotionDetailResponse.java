@@ -10,9 +10,9 @@ public interface PromotionDetailResponse {
 
     Double getPromotionValue();
 
-    String getPromotionStartDate();
+    Long getPromotionStartDate();
 
-    String getPromotionEndDate();
+    Long getPromotionEndDate();
 
     Boolean getPromotionDeleted();
 
@@ -22,6 +22,6 @@ public interface PromotionDetailResponse {
 
     String getPromotionUpdatedBy();
 
-    String getProductDetails();
+//    String getProductDetails();
 
 }

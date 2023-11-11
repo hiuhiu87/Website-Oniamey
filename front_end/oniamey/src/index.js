@@ -71,15 +71,15 @@ root.render(
           <Route path="manage-customers" element={<ManageCustomer />} />
           <Route
             path="manage-customers/detail-customer/:id"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-customers/update-customer/:id"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-customers/add-customer"
-            element={<DetaiCustomer />}
+            element={<DetailCustomer />}
           />
           <Route
             path="manage-statisticals"
