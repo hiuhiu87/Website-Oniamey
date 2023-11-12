@@ -1,13 +1,15 @@
 import { React, useEffect, useState } from 'react';
 import { Modal } from 'antd';
-import _ from 'lodash';
 import { putUpdateProperty } from '../../../../../services/apiService';
+import Swal from "sweetalert2";
+import {toast} from "react-toastify";
 
 const ModalUpdateSize = (props) => {
 
     const { show, setShow, dataUpdate, resetDataUpdate } = props;
 
     const [name, setName] = useState('');
+    const nameError = name === "" ? "Tên không được để trống!" : "";
     const [deleted, setDeleted] = useState(false);
 
     const handleClose = () => {
@@ -22,10 +24,28 @@ const ModalUpdateSize = (props) => {
         setDeleted(dataUpdate.deleted);
     }, [dataUpdate])
 
-    const handleSubmitUpdateSize = async () => {
-        await putUpdateProperty('size', dataUpdate.id, name, deleted);
-        props.fetchListSize();
-        handleClose();
+    const handleSubmitUpdateSize = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận cập nhật!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError !== "") {
+                    return;
+                }
+
+                await putUpdateProperty("size", dataUpdate.id, name, deleted);
+                props.fetchListSize();
+                toast.success("Cập nhật thành công!");
+                handleClose();
+            }
+        });
     };
 
     return (
@@ -37,9 +57,12 @@ const ModalUpdateSize = (props) => {
                         <input
                             type="text"
                             className="form-control"
-                            defaultValue={name}
+                            value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                        {nameError && (
+                            <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                        )}
                     </div>
                     <div className="col-md-12">
                         <label className="form-label">Trạng thái</label>

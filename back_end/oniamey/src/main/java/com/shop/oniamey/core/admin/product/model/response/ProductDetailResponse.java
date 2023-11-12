@@ -4,19 +4,33 @@ public interface ProductDetailResponse {
 
     Long getId();
 
-    Long getCategory();
+    Long getCategoryId();
 
-    Long getSize();
+    Long getSizeId();
 
-    Long getMaterial();
+    Long getMaterialId();
 
-    Long getBrand();
+    Long getBrandId();
 
-    Long getColor();
+    Long getColorId();
 
-    Long getCollar();
+    Long getCollarId();
 
-    Long getSleeveLength();
+    Long getSleeveLengthId();
+
+    String getCategory();
+
+    String getSize();
+
+    String getMaterial();
+
+    String getBrand();
+
+    String getColor();
+
+    String getCollar();
+
+    String getSleeveLength();
 
     String getName();
 

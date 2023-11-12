@@ -42,10 +42,6 @@ const getAllProducts = () => {
     return instance.get(`api/v1/product/getAll`);
 }
 
-const getAllProductsWithPage = (page, limit) => {
-    return instance.get(`api/v1/product?page=${page}&limit=${limit}`);
-}
-
 const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId, names, quantities, prices) => {
     const data = new FormData();
     data.append('productId', productId);
@@ -66,6 +62,15 @@ const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId,
     return instance.post(`api/v1/product/product-details`, data);
 }
 
+const putUpdateProductDetail = (productId, id, sizeId, colorId, price, quantity) => {
+    const data = new FormData();
+    data.append('sizeId', sizeId);
+    data.append('colorId', colorId);
+    data.append('price', price);
+    data.append('quantity', quantity);
+    return instance.put(`api/v1/product/product-details/${productId}/${id}`, data);
+}
+
 const postImageForProductDetails = (colorId, productDetailIds, imageUrl) => {
     const data = new FormData();
     data.append('colorId', colorId);
@@ -79,18 +84,6 @@ const postImageForProductDetails = (colorId, productDetailIds, imageUrl) => {
         }
     });
     return instance.post(`api/v1/images/upload`, data);
-}
-
-const deleteProductDetailsByProperty = (productId, sizeIds, colorIds) => {
-    const data = new FormData();
-    data.append('productId', productId);
-    sizeIds.forEach(sizeId => {
-        data.append('sizeId', sizeId);
-    });
-    colorIds.forEach(colorId => {
-        data.append('colorId', colorId);
-    });
-    return instance.post(`api/v1/product/product-details`, data);
 }
 
 const getAllProductDetails = () => {
@@ -107,7 +100,7 @@ const getAllProperties = (property) => {
 
 export {
     getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty,
-    postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductsWithPage,
-    getAllProductDetails, postProductDetail, deleteProductDetailsByProperty, getAllProductDetailsByProductId,
+    postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts,
+    getAllProductDetails, postProductDetail, putUpdateProductDetail, getAllProductDetailsByProductId,
     postImageForProductDetails
 };

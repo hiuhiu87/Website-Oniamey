@@ -14,7 +14,9 @@ import java.util.List;
 public class DeleteProductDetailRequest {
 
     private Long productId;
+
     private List<Long> sizeId;
+
     private List<Long> colorId;
 
 }

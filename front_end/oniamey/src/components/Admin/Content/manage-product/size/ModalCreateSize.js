@@ -1,13 +1,15 @@
 import { React, useState } from 'react';
 import { Modal } from 'antd';
-import _ from 'lodash';
 import { postCreateProperty } from '../../../../../services/apiService';
+import Swal from "sweetalert2";
+import {toast} from "react-toastify";
 
 const ModalCreateSize = (props) => {
 
     const { show, setShow } = props;
 
     const [name, setName] = useState('');
+    const nameError = name.trim() === "" ? "Tên không được để trống!" : "";
     const [deleted, setDeleted] = useState(false);
 
     const handleClose = () => {
@@ -16,11 +18,28 @@ const ModalCreateSize = (props) => {
         setDeleted(false);
     };
 
-    const handleSubmitCreateSize = async () => {
-        let data = await postCreateProperty('size', name, deleted);
-        props.fetchListSize();
-        console.log(data);
-        handleClose();
+    const handleSubmitCreateSize = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận thêm!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError) {
+                    return;
+                }
+
+                await postCreateProperty("size", name, deleted);
+                toast.success("Thêm thành công!");
+                props.fetchListSize();
+                handleClose();
+            }
+        });
     };
 
     return (
@@ -35,6 +54,9 @@ const ModalCreateSize = (props) => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                        {nameError && (
+                            <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                        )}
                     </div>
                     <div className="col-md-12">
                         <label className="form-label">Trạng thái</label>
