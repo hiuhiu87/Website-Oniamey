@@ -42,12 +42,12 @@ const getAllProducts = () => {
     return instance.get(`api/v1/product/getAll`);
 }
 
-const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId) => {
+const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId, brandId, collarId, sleeveLengthId, names, quantities, prices) => {
     const data = new FormData();
     data.append('productId', productId);
     data.append('categoryId', categoryId);
     sizeIds.forEach(sizeId => {
-        data.append('colorId', sizeId);
+        data.append('sizeId', sizeId);
     });
     colorIds.forEach(colorId => {
         data.append('colorId', colorId);
@@ -56,15 +56,51 @@ const postProductDetail = (productId, categoryId, sizeIds, colorIds, materialId,
     data.append('brandId', brandId);
     data.append('collarId', collarId);
     data.append('sleeveLengthId', sleeveLengthId);
+    data.append('names', names);
+    data.append('quantities', quantities);
+    data.append('prices', prices);
     return instance.post(`api/v1/product/product-details`, data);
+}
+
+const putUpdateProductDetail = (productId, id, sizeId, colorId, price, quantity) => {
+    const data = new FormData();
+    data.append('sizeId', sizeId);
+    data.append('colorId', colorId);
+    data.append('price', price);
+    data.append('quantity', quantity);
+    return instance.put(`api/v1/product/product-details/${productId}/${id}`, data);
+}
+
+const postImageForProductDetails = (colorId, productDetailIds, imageUrl) => {
+    const data = new FormData();
+    data.append('colorId', colorId);
+    if (!Array.isArray(productDetailIds)) {
+        productDetailIds = [productDetailIds];
+    }
+    productDetailIds.forEach((productDetailId, index) => {
+        data.append('productDetailId', productDetailId);
+        if (imageUrl[index] && imageUrl[index].originFileObj) {
+            data.append('imageUrl', imageUrl[index].originFileObj);
+        }
+    });
+    return instance.post(`api/v1/images/upload`, data);
 }
 
 const getAllProductDetails = () => {
     return instance.get(`api/v1/product/product-details`)
 }
 
+const getAllProductDetailsByProductId = (productId) => {
+    return instance.get(`api/v1/product/product-details/${productId}`)
+}
+
 const getAllProperties = (property) => {
     return instance.get(`api/v1/` + property);
 }
 
-export { getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty, postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts, getAllProductDetails, postProductDetail };
+export {
+    getAllProperties, postCreateProperty, putUpdateProperty, deleteProperty,
+    postCreateProduct, putUpdateProduct, deleteProduct, getAllProducts,
+    getAllProductDetails, postProductDetail, putUpdateProductDetail, getAllProductDetailsByProductId,
+    postImageForProductDetails
+};

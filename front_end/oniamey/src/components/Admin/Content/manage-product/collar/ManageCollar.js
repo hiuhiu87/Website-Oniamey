@@ -1,180 +1,197 @@
-import { React, useState, useEffect } from 'react';
-import './ManageCollar.scss';
-import { GiHeavyCollar } from 'react-icons/gi';
-import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
-import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
-import ModalCreateCollar from './ModalCreateCollar';
-import ModalUpdateCollar from './ModalUpdateCollar';
-import ModalDeleteCollar from './ModalDeleteCollar';
-import { getAllProperties } from '../../../../../services/apiService';
-import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import { React, useState, useEffect } from "react";
+import "./ManageCollar.scss";
+import { GiHeavyCollar } from "react-icons/gi";
+import { FaFilter, FaThList, FaPenSquare } from "react-icons/fa";
+import { MdLibraryAdd, MdDeleteSweep } from "react-icons/md";
+import ModalCreateCollar from "./ModalCreateCollar";
+import ModalUpdateCollar from "./ModalUpdateCollar";
+import {
+    deleteProperty,
+    getAllProperties,
+} from "../../../../../services/apiService";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import DataTable from "react-data-table-component";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ManageCollar = (props) => {
-
     const [showModalCreateCollar, setShowModalCreateCollar] = useState(false);
     const [showModalUpdateCollar, setShowModalUpdateCollar] = useState(false);
-    const [showModalDeleteCollar, setShowModalDeleteCollar] = useState(false);
 
     const [dataUpdate, setDataUpdate] = useState({});
-    const [dataDelete, setDataDelete] = useState({});
 
     const [listCollar, setListCollar] = useState([]);
-    const [CollarId, setCollarId] = useState('');
+    const [collarId, setCollarId] = useState("");
 
     useEffect(() => {
         fetchListCollar();
     }, []);
 
     const fetchListCollar = async () => {
-        let res = await getAllProperties('collar');
+        let res = await getAllProperties("collar");
         setListCollar(res.data);
-        setCollarId(res.data[0].id)
-        console.log(res);
-    }
+        setCollarId(res.data[0].id);
+    };
 
     const handleShowModalUpdateCollar = (collar) => {
         setShowModalUpdateCollar(true);
         setDataUpdate(collar);
-    }
-
-    const handleShowModalDeleteCollar = (collar) => {
-        setShowModalDeleteCollar(true);
-        setDataDelete(collar);
-    }
-
-    const resetDataDelete = () => {
-        setDataDelete({});
-    }
+    };
 
     const resetDataUpdate = () => {
         setDataUpdate({});
-    }
+    };
+
+    const handleSubmitDeleteCollar = (collar) => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận xóa!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteProperty("collar", collar.id);
+                fetchListCollar();
+                toast.success("Xóa thành công!");
+            }
+        });
+    };
+
+    const columnsCollar = [
+        {
+            name: "STT",
+            selector: (row) => listCollar.indexOf(row) + 1,
+            minWidth: "40px",
+            maxWidth: "80px",
+            center: "true",
+        },
+        {
+            name: "Tên",
+            selector: (row) => row.name,
+            center: "true",
+        },
+        {
+            name: "Ngày cập nhật",
+            selector: (row) => row.updatedAt,
+            center: "true",
+        },
+        {
+            name: "Trạng thái",
+            selector: (row) => {
+                const status = row.deleted === false ? "Hoạt động" : "Ngừng hoạt động";
+                const color = row.deleted === false ? "green" : "red";
+
+                return <span style={{ color }}>{status}</span>;
+            },
+            center: "true",
+        },
+        {
+            name: "Hành động",
+            cell: (row) => (
+                <>
+                    <Button
+                        variant="dark"
+                        className="w-25 me-2"
+                        onClick={() => handleShowModalUpdateCollar(row)}
+                    >
+                        <FaPenSquare />
+                    </Button>
+                    <Button
+                        variant="dark"
+                        className="w-25"
+                        onClick={() => handleSubmitDeleteCollar(row)}
+                    >
+                        <MdDeleteSweep />
+                    </Button>
+                </>
+            ),
+            center: "true",
+        },
+    ];
+
+    const paginationComponentOptions = {
+        rowsPerPageText: "Số Bản Ghi Một Trang",
+        rangeSeparatorText: "Trên",
+        selectAllRowsItem: true,
+        selectAllRowsItemText: "Tất Cả",
+    };
 
     return (
-        <Container>
-            <div class="manage-collar-container">
-                <div className='manage-collar-title'>
+        <div class="manage-collar-container">
+            <div className="manage-collar-title">
+                <div className="title">
+                    <GiHeavyCollar size={32} /> Quản Lý Cổ Áo
+                </div>
+            </div>
+            <div className="manage-collar-search">
+                <div className="search-collar-title">
                     <div className="title">
-                        <GiHeavyCollar size={32} /> Quản Lý Cổ Áo
+                        <FaFilter size={26} /> Bộ Lọc
                     </div>
                 </div>
-                <div className='manage-collar-search'>
-                    <div className='search-collar-title'>
-                        <div className="title">
-                            <FaFilter size={26} /> Bộ Lọc
-                        </div>
-
-                    </div>
-                    <Form>
-                        <Row className="mb-3 justify-content-md-center">
-                            <Form.Label column sm="1">
-                                Cổ áo
-                            </Form.Label>
-                            <Col sm="6" xs lg ="4">
-                                <Form.Control type="text" />
-                            </Col>
-                            <Col xs lg="1">
-                                <Button variant="secondary">Tìm Kiếm</Button>
-                            </Col>
-                        </Row>
-                        <Row className="mb-3 justify-content-md-center">
-                            <Form.Label column sm="1">
-                                Trạng Thái
-                            </Form.Label>
-                            <Col sm="6" xs lg ="4">
+                <Form>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Col lg="4">
+                            <FloatingLabel controlId="floatingInput" label="Tìm kiếm">
+                                <Form.Control type="text" placeholder="name@example.com" />
+                            </FloatingLabel>
+                        </Col>
+                        <Col lg="2">
+                            <FloatingLabel controlId="floatingSelect" label="Trạng thái">
                                 <Form.Select>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
+                                    <option>Tất cả</option>
+                                    <option value={false}>Hoạt động</option>
+                                    <option value={true}>Ngừng hoạt động</option>
                                 </Form.Select>
-                            </Col>
-                            <Col xs lg="1">
-                                <Button variant="secondary">Tìm Kiếm</Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </div>
-                <div className='manage-collar-table'>
-                    <div className='list-collar-title'>
-                        <div className="title">
-                            <FaThList size={26} /> Danh Sách Cổ Áo
-                        </div>
-                        <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateCollar(true)}>
-                            <MdLibraryAdd /> Thêm</button>
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+            <div className="manage-collar-table">
+                <div className="list-collar-title">
+                    <div className="title">
+                        <FaThList size={26} /> Danh Sách Cổ Áo
                     </div>
-                    <Table striped bordered hover responsive>
-                        <thead>
-                            <tr>
-                                <th scope="col" className='px-5 text-center'>STT</th>
-                                <th scope="col" className='px-5 text-center'>Tên</th>
-                                <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
-                                <th scope="col" className='px-5 text-center'>Trạng Thái</th>
-                                <th scope="col" className='px-5 text-center'>Hành Động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listCollar.length > 0 && listCollar.map((collar, index) => {
-                                return (
-                                    <tr key={`table-brand-${index}`}>
-                                        <td className="text-center">{index + 1}</td>
-                                        <td className="text-center">{collar.name}</td>
-                                        <td className="text-center">{collar.updatedAt}</td>
-                                        <td className="text-center">{collar.deleted === false ? 'Active' : 'DeActive'}</td>
-                                        <td className="text-center">
-                                            <Row className='justify-content-md-center'>
-                                                <Col md="auto">
-                                                    <Button
-                                                        variant="dark"
-                                                        onClick={() => handleShowModalUpdateCollar(collar)}
-                                                    >
-                                                        <FaPenSquare />
-                                                    </Button>
-                                                </Col>
-                                                <Col xs lg="2">
-                                                    <Button
-                                                        variant="dark"
-                                                        onClick={() => handleShowModalDeleteCollar(collar)}
-                                                    >
-                                                        <MdDeleteSweep />
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                            {listCollar && listCollar.length === 0 &&
-                                <tr>
-                                    <td colSpan={5}>
-                                        Không có Data!
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </Table>
+                    <button
+                        type="button"
+                        class="btn btn-dark"
+                        onClick={() => setShowModalCreateCollar(true)}
+                    >
+                        <MdLibraryAdd /> Thêm
+                    </button>
                 </div>
-                <ModalCreateCollar
-                    show={showModalCreateCollar}
-                    setShow={setShowModalCreateCollar}
-                    fetchListCollar={fetchListCollar}
+                <DataTable
+                    rounded-3
+                    columns={columnsCollar}
+                    data={listCollar}
+                    pagination
+                    paginationComponentOptions={paginationComponentOptions}
+                    highlightOnHover
+                    pointerOnHover
+                    paginationRowsPerPageOptions={[5, 10, 15]}
+                    // onRowClicked={(row) => handleClickTable(row)}
                 />
-                <ModalUpdateCollar
-                    show={showModalUpdateCollar}
-                    setShow={setShowModalUpdateCollar}
-                    fetchListCollar={fetchListCollar}
-                    dataUpdate={dataUpdate}
-                    resetDataUpdate={resetDataUpdate}
-                />
-                <ModalDeleteCollar
-                    show={showModalDeleteCollar}
-                    setShow={setShowModalDeleteCollar}
-                    fetchListCollar={fetchListCollar}
-                    dataDelete={dataDelete}
-                    resetDataDelete={resetDataDelete}
-                />
-            </div >
-        </Container>
+            </div>
+            <ModalCreateCollar
+                show={showModalCreateCollar}
+                setShow={setShowModalCreateCollar}
+                fetchListCollar={fetchListCollar}
+            />
+            <ModalUpdateCollar
+                show={showModalUpdateCollar}
+                setShow={setShowModalUpdateCollar}
+                fetchListCollar={fetchListCollar}
+                dataUpdate={dataUpdate}
+                resetDataUpdate={resetDataUpdate}
+            />
+        </div>
     );
-}
+};
 
 export default ManageCollar;

@@ -1,71 +1,81 @@
-import { React, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { toast } from 'react-toastify';
-import { postCreateProperty } from '../../../../../services/apiService';
+import { React, useState } from "react";
+import { Modal } from "antd";
+import { toast } from "react-toastify";
+import { postCreateProperty } from "../../../../../services/apiService";
+import Swal from "sweetalert2";
 
 const ModalCreateBrand = (props) => {
-
     const { show, setShow } = props;
+
+    const [name, setName] = useState("");
+    const nameError = name.trim() === "" ? "Tên không được để trống!" : "";
+    const [deleted, setDeleted] = useState(false);
 
     const handleClose = () => {
         setShow(false);
-        setName('');
+        setName("");
         setDeleted(false);
     };
 
-    const [name, setName] = useState('');
-    const [deleted, setDeleted] = useState(false);
+    const handleSubmitCreateBrand = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận thêm!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError) {
+                    return;
+                }
 
-    const handleSubmitCreateBrand = async () => {
-        await postCreateProperty('brand', name, deleted);
-        props.fetchListBrand();
-        toast.success('oke');
-        handleClose();
+                await postCreateProperty("brand", name, deleted);
+                toast.success("Thêm thành công!");
+                props.fetchListBrand();
+                handleClose();
+            }
+        });
     };
 
     return (
-        <Modal
-            show={show}
-            onHide={handleClose}
-            size="x"
-            backdrop="static"
-            className='modal-add-brand'
-            centered
-        >
-            <Modal.Header>
-                <Modal.Title>Add New Brand</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <>
+            <Modal
+                open={show}
+                title="Thêm mới thương hiệu"
+                onOk={handleSubmitCreateBrand}
+                onCancel={handleClose}
+            >
                 <form className="row g-3">
                     <div className="col-md-12">
-                        <label className="form-label">Name</label>
+                        <label className="form-label">Tên</label>
                         <input
                             type="text"
                             className="form-control"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                        {nameError && (
+                            <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                        )}
                     </div>
                     <div className="col-md-12">
-                        <label className="form-label">Status</label>
-                        <select className="form-select" onChange={(e) => setDeleted(e.target.value)}>
-                            <option value={false}>Active</option>
-                            <option value={true}>DeActive</option>
+                        <label className="form-label">Trạng thái</label>
+                        <select
+                            className="form-select"
+                            onChange={(e) => setDeleted(e.target.value)}
+                        >
+                            <option value={false}>Hoạt động</option>
+                            <option value={true}>Ngừng hoạt động</option>
                         </select>
                     </div>
                 </form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="dark" onClick={() => handleSubmitCreateBrand()}>
-                    Save
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
+            </Modal>
+        </>
     );
-}
+};
 
 export default ModalCreateBrand;

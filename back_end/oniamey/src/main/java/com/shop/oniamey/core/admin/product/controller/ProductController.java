@@ -3,12 +3,16 @@ package com.shop.oniamey.core.admin.product.controller;
 import com.shop.oniamey.core.admin.product.model.request.AddProductDetailRequest;
 import com.shop.oniamey.core.admin.product.model.request.ProductRequest;
 import com.shop.oniamey.core.admin.product.model.request.UpdateProductDetailRequest;
+import com.shop.oniamey.core.admin.product.model.response.ProductDetailListResponse;
+import com.shop.oniamey.core.admin.product.model.response.ProductDetailResponse;
 import com.shop.oniamey.core.admin.product.model.response.ProductListResponse;
 import com.shop.oniamey.core.admin.product.model.response.ProductResponse;
 import com.shop.oniamey.core.admin.product.service.IProductDetailService;
 import com.shop.oniamey.core.admin.product.service.IProductService;
 import com.shop.oniamey.entity.Product;
+import com.shop.oniamey.entity.ProductDetail;
 import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +63,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@ModelAttribute ProductRequest productRequest) {
+    public ResponseEntity<Product> create(@Valid @ModelAttribute ProductRequest productRequest) {
         try {
             Product savedProduct = productService.create(productRequest);
             return ResponseEntity.ok(savedProduct);
@@ -68,7 +73,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute ProductRequest productRequest) {
+    public ResponseEntity<?> update(@Valid @PathVariable Long id, @ModelAttribute ProductRequest productRequest) {
         try {
             productService.update(id, productRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
@@ -93,25 +98,30 @@ public class ProductController {
     }
 
     @GetMapping("/product-details/{productId}")
-    public ResponseEntity<?> getAllProductDetailByProductId(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAllByProductId(productId));
+    public ResponseEntity<?> getAllByProductIdWithPage(@PathVariable Long productId) {
+        return ResponseEntity.ok(productDetailService.getAllByProductId(productId));
+    }
+
+    @GetMapping("/product-details/by-colorId/{colorId}")
+    public ResponseEntity<?> getAllProductDetailByColorId(@PathVariable Long colorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productDetailService.getAllByColorId(colorId));
     }
 
     @PostMapping("/product-details")
-    public ResponseEntity<?> createProductDetail(@ModelAttribute AddProductDetailRequest addProductDetailRequest) {
+    public ResponseEntity<?> createProductDetail(@Valid @ModelAttribute AddProductDetailRequest addProductDetailRequest) {
         try {
-            productDetailService.create(addProductDetailRequest);
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
+            List<ProductDetail> saveProductDetail = productDetailService.create(addProductDetailRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(saveProductDetail);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PutMapping("/product-details/{id}")
+    @PutMapping("/product-details/{productId}/{id}")
     public ResponseEntity<?> updateProductDetail(
-            @PathVariable Long id, @ModelAttribute UpdateProductDetailRequest updateProductDetailRequest) {
+            @Valid @PathVariable Long productId, @PathVariable Long id, @ModelAttribute UpdateProductDetailRequest updateProductDetailRequest) {
         try {
-            productDetailService.update(id, updateProductDetailRequest);
+            productDetailService.update(id, productId, updateProductDetailRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

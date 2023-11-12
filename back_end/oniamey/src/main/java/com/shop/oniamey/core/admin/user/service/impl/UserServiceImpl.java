@@ -45,16 +45,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createStaff(ModifyUserRequest modifyUserRequest) {
         Optional<User> checkUser = userRepository.findByEmail(modifyUserRequest.getEmail());
-        Optional<User> checkUserByUsername = userRepository.findByUsername(modifyUserRequest.getUsername());
-        Optional<User> checkUserByIdentityCard = userRepository.findByIdentityCard(modifyUserRequest.getIdentityCard());
-
-        if (checkUserByIdentityCard.isPresent()) {
-            return "Identity card already exists";
-        }
-
-        if (checkUserByUsername.isPresent()) {
-            return "Username already exists";
-        }
 
         if (checkUser.isPresent()) {
             return "Email already exists";

@@ -1,5 +1,8 @@
 package com.shop.oniamey.core.admin.product.service.impl;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.shop.oniamey.core.admin.product.model.request.ImageRequest;
 import com.shop.oniamey.core.admin.product.service.IImageService;
 import com.shop.oniamey.entity.Image;
@@ -8,21 +11,22 @@ import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 import com.shop.oniamey.repository.product.ImageRepository;
 import com.shop.oniamey.repository.product.ProductDetailRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ImageService implements IImageService {
 
@@ -30,15 +34,28 @@ public class ImageService implements IImageService {
 
     private final ImageRepository imageRepository;
 
+    @Value("${aws.bucket.name}")
+    private String bucketName;
+
+    private final AmazonS3 s3Client;
+
     @Override
     public Image getById(Long id) throws DataNotFoundException {
         return imageRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Image not found"));
     }
 
+    private String generateFileName(MultipartFile multiPart) {
+        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
+    }
+
+    private boolean isImageFile(String fileExtension) {
+        List<String> imageExtensions = Arrays.asList("jpg", "jpeg", "png", "gif", "bmp");
+        return imageExtensions.contains(fileExtension.toLowerCase());
+    }
+
     @Override
     public List<Image> uploadImages(ImageRequest imageRequest) throws DataNotFoundException, IOException {
         List<Image> images = new ArrayList<>();
-
         for (Long productDetailId : imageRequest.getProductDetailId()) {
             ProductDetail existingProductDetail = productDetailRepository.findById(productDetailId)
                     .orElseThrow(() -> new DataNotFoundException("ProductDetail not found"));
@@ -47,27 +64,46 @@ public class ImageService implements IImageService {
                 continue;
             }
 
+            List<Image> temporaryImages = new ArrayList<>();
+
             for (MultipartFile imageFile : imageRequest.getImageUrl()) {
                 if (imageFile.getSize() == 0) {
                     continue;
                 }
-                if (imageFile.getSize() > 10 * 1024 * 1024) {
-                    throw new IllegalArgumentException("File is too large");
-                }
-                if (!isImageFile(imageFile)) {
-                    throw new IllegalArgumentException("File must be an image");
+
+                String fileExtension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
+                if (!isImageFile(fileExtension)) {
+                    continue;
                 }
 
-                String filename = storeFile(imageFile);
+                File file = new File(imageFile.getOriginalFilename());
+                try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                    fileOutputStream.write(imageFile.getBytes());
+                }
+                String fileName = generateFileName(imageFile);
+
+                PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file);
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentType("plain/" + FilenameUtils.getExtension(imageFile.getOriginalFilename()));
+                metadata.addUserMetadata("Title", "File Upload - " + fileName);
+                metadata.setContentLength(file.length());
+                request.setMetadata(metadata);
+                s3Client.putObject(request);
 
                 Image image = new Image();
                 image.setProductDetail(existingProductDetail);
-                image.setImageUrl(filename);
+                image.setImageUrl(fileName);
                 image.setCreatedBy(1L);
                 image.setUpdatedBy(1L);
                 image.setDeleted(false);
 
+                temporaryImages.add(image);
+
                 images.add(imageRepository.save(image));
+                if (!temporaryImages.isEmpty()) {
+                    existingProductDetail.setCover(temporaryImages.get(0).getImageUrl());
+                    productDetailRepository.save(existingProductDetail);
+                }
             }
         }
         return images;
@@ -79,66 +115,5 @@ public class ImageService implements IImageService {
         existingImage.setDeleted(true);
         imageRepository.save(existingImage);
     }
-
-    private String storeFile(MultipartFile file) throws IOException {
-        if (!isImageFile(file) || file.getOriginalFilename() == null) {
-            throw new IOException(("Invalid image format"));
-        }
-        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
-        Path uploadDir = Paths.get("D:\\Product\\Website-Oniamey\\front_end\\oniamey\\src\\assets\\uploads");
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
-        }
-        Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-        return uniqueFilename;
-    }
-
-    private boolean isImageFile(MultipartFile file) {
-        String contentType = file.getContentType();
-        return contentType != null && contentType.startsWith("image/");
-    }
-
-    //    @Override
-//    public List<Image> uploadImagesForMultipleProductDetails(List<Long> productDetailIds, Long colorId, List<MultipartFile> imageFiles) throws DataNotFoundException, IOException {
-//        List<Image> images = new ArrayList<>();
-//
-//        for (Long productDetailId : productDetailIds) {
-//            ProductDetail existingProductDetail = productDetailRepository.findById(productDetailId)
-//                    .orElseThrow(() -> new DataNotFoundException("ProductDetail not found"));
-//
-//            if (existingProductDetail.getColor().getId() != colorId) {
-//                continue;
-//            }
-//
-//            for (MultipartFile imageFile : imageFiles) {
-//
-//                if (imageFile.getSize() == 0) {
-//                    continue;
-//                }
-//
-//                if (imageFile.getSize() > 10 * 1024 * 1024) {
-//                    throw new IllegalArgumentException("File is too large");
-//                }
-//
-//                if (!isImageFile(imageFile)) {
-//                    throw new IllegalArgumentException("File must be an image");
-//                }
-//
-//                String filename = storeFile(imageFile);
-//
-//                Image image = new Image();
-//                image.setProductDetail(existingProductDetail);
-//                image.setImageUrl(filename);
-//                image.setCreatedBy(1L);
-//                image.setUpdatedBy(1L);
-//                image.setDeleted(false);
-//
-//                images.add(imageRepository.save(image));
-//            }
-//        }
-//        return images;
-//    }
 
 }

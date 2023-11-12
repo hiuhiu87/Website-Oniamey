@@ -83,7 +83,8 @@ const SideBar = (props) => {
                         >
                             <MenuItem icon={<FaTshirt color='#CC9966' />}>
                                 Sản Phẩm
-                                <Link to="/admins/manage-products"></Link>
+                                <Link to="/admins/manage-products">
+                                </Link>
                             </MenuItem>
                             <MenuItem icon={<MdCategory color='#CC9966' />}>
                                 Danh Mục
