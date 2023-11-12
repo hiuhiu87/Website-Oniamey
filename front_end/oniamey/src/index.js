@@ -20,10 +20,11 @@ import ManageColor from './components/Admin/Content/manage-product/color/Color';
 import ManageCollar from './components/Admin/Content/manage-product/collar/Collar';
 import ManageSleeveLength from './components/Admin/Content/manage-product/sleeve-length/SleeveLength';
 import ManageOrder from './components/Admin/Content/manage-oder/Order';
-import ManageVoucher from './components/Admin/Content/manage-voucher/Voucher';
+import ManageVoucher from './components/Admin/Content/manage-voucher/voucher/ManagerVoucher';
 import ManageEmployee from './components/Admin/Content/manage-user/Employee';
 import ManageCustomer from './components/Admin/Content/manage-user/Customer';
 import ManageStatistical from './components/Admin/Content/manage-statistical/Statistical';
+import CreateVoucher from './components/Admin/Content/manage-voucher/voucher/CreateVoucher';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -49,6 +50,7 @@ root.render(
           <Route path='manage-sleeve-lengths' element={<ManageSleeveLength />}></Route>
           <Route path='manage-orders' element={<ManageOrder />}></Route>
           <Route path='manage-vouchers' element={<ManageVoucher />}></Route>
+          <Route path='create-vouchers' element={<CreateVoucher />}></Route>
           <Route path='manage-employees' element={<ManageEmployee />}></Route>
           <Route path='manage-customers' element={<ManageCustomer />}></Route>
           <Route path='manage-statisticals' element={<ManageStatistical />}></Route>

@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModifyVoucherRequest {
+public class ModifyUpdateVoucherRequest {
 
     @NotEmpty(message = "Voucher name is required")
     private String voucherName;
@@ -36,11 +36,9 @@ public class ModifyVoucherRequest {
     private Double maximumDiscount;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Future
     private Date startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Future
     private Date endDate;
 
     @NotEmpty(message = "Type is required")

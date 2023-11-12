@@ -117,13 +117,27 @@ const SideBar = (props) => {
                             <Link to="/admins/manage-orders"></Link>
                         </MenuItem>
                     </Menu>
-                    <Menu iconShape="circle">
+                    {/* <Menu iconShape="circle">
                         <MenuItem
                             icon={<FaTag />}
                         >
                             Khuyến Mãi
                             <Link to="/admins/manage-vouchers"></Link>
                         </MenuItem>
+                    </Menu> */}
+                    <Menu iconShape="circle">
+                        <SubMenu
+                            icon={<FaTag />}
+                            title="Quản lý voucher">
+                            <MenuItem>
+                                Danh Sách Voucher
+                                <Link to="/admins/manage-vouchers"></Link>
+                            </MenuItem>
+                            <MenuItem>
+                                Tạo Voucher
+                                <Link to="/admins/create-vouchers"></Link>
+                            </MenuItem>
+                        </SubMenu>
                     </Menu>
                     <Menu iconShape="circle">
                         <SubMenu

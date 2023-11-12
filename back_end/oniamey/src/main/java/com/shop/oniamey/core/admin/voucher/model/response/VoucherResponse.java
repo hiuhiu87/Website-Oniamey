@@ -2,7 +2,7 @@ package com.shop.oniamey.core.admin.voucher.model.response;
 
 import java.util.Date;
 
-public interface VoucherRespone {
+public interface VoucherResponse {
 
     Long getId();
 
@@ -24,12 +24,14 @@ public interface VoucherRespone {
 
     String getType();
 
-    String getCreatedAt();
+    Date getCreatedAt();
 
-    String getUpdatedAt();
+    Date getUpdatedAt();
 
     String getCreatedBy();
 
     String getUpdatedBy();
+
+    Boolean getDeleted();
 
 }

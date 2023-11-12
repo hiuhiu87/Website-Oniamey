@@ -33,6 +33,7 @@ public class Voucher extends BaseModel {
     @Column(name = "value", nullable = false)
     private Double value;
 
+    // Điều kiện
     @Column(name = "minimum_discount", nullable = false)
     private Double minimumDiscount;
 
