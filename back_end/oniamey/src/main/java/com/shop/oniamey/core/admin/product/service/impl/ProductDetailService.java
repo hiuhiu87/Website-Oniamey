@@ -35,8 +35,6 @@ import com.shop.oniamey.repository.product.SizeRepository;
 import com.shop.oniamey.repository.product.SleeveLengthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +42,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -99,7 +96,8 @@ public class ProductDetailService implements IProductDetailService {
         return productDetailRepository.getAllByColorId(colorId);
     }
 
-    private <T> T getPropertyById(Long id, JpaRepository<T, Long> repository, String propertyName) throws DataNotFoundException {
+    private <T> T getPropertyById(Long id, JpaRepository<T, Long> repository, String propertyName)
+            throws DataNotFoundException {
         return repository.findById(id)
                 .orElseThrow(() ->
                         new DataNotFoundException(propertyName + " not found" + " with id: " + id));
@@ -113,13 +111,13 @@ public class ProductDetailService implements IProductDetailService {
         String qrCodeName = productDetail.getName() + "-QRCODE.png";
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "Code: " + productDetail.getCode() + "\n"
-                        + "Name: " + productDetail.getName() + "\n"
-                        + "Category: " + productDetail.getCategory().getName() + "\n"
-                        + "Brand: " + productDetail.getBrand().getName() + "\n"
-                        + "Material: " + productDetail.getMaterial().getName() + "\n"
-                        + "Color: " + productDetail.getColor().getName() + "\n"
-                        + "Size: " + productDetail.getSize().getName() + "\n"
+                "Mã sản phẩm: " + productDetail.getCode() + "\n"
+                        + "Tên sản phẩm: " + productDetail.getName() + "\n"
+                        + "Thể loại: " + productDetail.getCategory().getName() + "\n"
+                        + "Thương hiệu: " + productDetail.getBrand().getName() + "\n"
+                        + "Chất liệu: " + productDetail.getMaterial().getName() + "\n"
+                        + "Màu sắc: " + productDetail.getColor().getName() + "\n"
+                        + "Kích cỡ: " + productDetail.getSize().getName() + "\n"
                 , BarcodeFormat.QR_CODE, 400, 400);
 
         // Tạo ảnh từ BitMatrix
@@ -143,13 +141,20 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
-    public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException, WriterException {
-        Product existingProduct = getPropertyById(addProductDetailRequest.getProductId(), productRepository, "Product");
-        Category existingCategory = getPropertyById(addProductDetailRequest.getCategoryId(), categoryRepository, "Category");
-        Material existingMaterial = getPropertyById(addProductDetailRequest.getMaterialId(), materialRepository, "Material");
-        Brand existingBrand = getPropertyById(addProductDetailRequest.getBrandId(), brandRepository, "Brand");
-        Collar existingCollar = getPropertyById(addProductDetailRequest.getCollarId(), collarRepository, "Collar");
-        SleeveLength existingSleeveLength = getPropertyById(addProductDetailRequest.getSleeveLengthId(), sleeveLengthRepository, "SleeveLength");
+    public List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest)
+            throws IOException, DataNotFoundException, WriterException {
+        Product existingProduct =
+                getPropertyById(addProductDetailRequest.getProductId(), productRepository, "Product");
+        Category existingCategory =
+                getPropertyById(addProductDetailRequest.getCategoryId(), categoryRepository, "Category");
+        Material existingMaterial =
+                getPropertyById(addProductDetailRequest.getMaterialId(), materialRepository, "Material");
+        Brand existingBrand =
+                getPropertyById(addProductDetailRequest.getBrandId(), brandRepository, "Brand");
+        Collar existingCollar =
+                getPropertyById(addProductDetailRequest.getCollarId(), collarRepository, "Collar");
+        SleeveLength existingSleeveLength =
+                getPropertyById(addProductDetailRequest.getSleeveLengthId(), sleeveLengthRepository, "SleeveLength");
 
         List<ProductDetail> productDetails = new ArrayList<>();
         if (existingProduct != null) {
@@ -183,8 +188,10 @@ public class ProductDetailService implements IProductDetailService {
                     } else {
                         ProductDetail productDetail = new ProductDetail();
                         productDetail.setProduct(existingProduct);
-                        productDetail.setColor(colorRepository.findById(colorId).orElseThrow(() -> new DataNotFoundException("Color not found")));
-                        productDetail.setSize(sizeRepository.findById(sizeId).orElseThrow(() -> new DataNotFoundException("Size not found")));
+                        productDetail.setColor(colorRepository.findById(colorId)
+                                .orElseThrow(() -> new DataNotFoundException("Color not found")));
+                        productDetail.setSize(sizeRepository.findById(sizeId)
+                                .orElseThrow(() -> new DataNotFoundException("Size not found")));
                         productDetail.setCategory(existingCategory);
                         productDetail.setMaterial(existingMaterial);
                         productDetail.setBrand(existingBrand);
@@ -206,37 +213,87 @@ public class ProductDetailService implements IProductDetailService {
         return productDetails;
     }
 
+    private ProductDetail findProductDetailById(Long id, Long productId) {
+        List<ProductDetail> listProductDetail = productDetailRepository.getAllByProductIdByUpdate(productId);
+        for (ProductDetail productDetail : listProductDetail) {
+            if (productDetail.getId().equals(id)) {
+                return productDetail;
+            }
+        }
+        return null;
+    }
+
+    private ProductDetail findProductWithSameColorAndSize(Long productId, Long colorId, Long sizeId) {
+        List<ProductDetail> listProductDetail = productDetailRepository.getAllByProductIdByUpdate(productId);
+        for (ProductDetail productDetail : listProductDetail) {
+            if (productDetail.getColor().getId().equals(colorId) && productDetail.getSize().getId().equals(sizeId)) {
+                return productDetail;
+            }
+        }
+        return null;
+    }
+
+    private void deleteProductDetail(Long id, Long productId) throws DataNotFoundException {
+        List<Image> relatedImages = imageRepository.findByProductDetailId(id);
+        imageRepository.deleteAll(relatedImages);
+
+        ProductDetail existingProductDetail = findProductDetailById(id, productId);
+        if (existingProductDetail != null) {
+            productDetailRepository.delete(existingProductDetail);
+        } else {
+            throw new DataNotFoundException("ProductDetail with ID " + id + " not found");
+        }
+    }
+
+
     @Override
-    public ProductDetail update(Long id, UpdateProductDetailRequest updateProductDetailRequest) throws DataNotFoundException {
-        ProductDetail existingProductDetail = productDetailRepository.findById(id)
-                .orElseThrow(() -> new DateTimeException("ProductDetail not found"));
-        Category existingCategory = getPropertyById(updateProductDetailRequest.getCategoryId(), categoryRepository, "Category");
-        Material existingMaterial = getPropertyById(updateProductDetailRequest.getMaterialId(), materialRepository, "Material");
-        Brand existingBrand = getPropertyById(updateProductDetailRequest.getBrandId(), brandRepository, "Brand");
-        Collar existingCollar = getPropertyById(updateProductDetailRequest.getCollarId(), collarRepository, "Collar");
-        SleeveLength existingSleeveLength = getPropertyById(updateProductDetailRequest.getSleeveLengthId(), sleeveLengthRepository, "SleeveLength");
-        Color existingColor = getPropertyById(updateProductDetailRequest.getColorId(), colorRepository, "Color");
-        Size existingSize = getPropertyById(updateProductDetailRequest.getSizeId(), sizeRepository, "Size");
+    public ProductDetail update(Long id, Long productId, UpdateProductDetailRequest updateProductDetailRequest)
+            throws DataNotFoundException {
+        ProductDetail existingProductDetail = findProductDetailById(id, productId);
 
-        existingProductDetail.setCategory(existingCategory);
-        existingProductDetail.setSize(existingSize);
-        existingProductDetail.setMaterial(existingMaterial);
-        existingProductDetail.setBrand(existingBrand);
-        existingProductDetail.setColor(existingColor);
-        existingProductDetail.setCollar(existingCollar);
-        existingProductDetail.setSleeveLength(existingSleeveLength);
-        existingProductDetail.setName(updateProductDetailRequest.getName());
-        existingProductDetail.setCode(generateRandomCode());
-        existingProductDetail.setPrice(updateProductDetailRequest.getPrice());
-        existingProductDetail.setQuantity(updateProductDetailRequest.getQuantity());
-        existingProductDetail.setWeight(updateProductDetailRequest.getWeight());
-        existingProductDetail.setUpdatedBy(updateProductDetailRequest.getUpdatedBy());
-        existingProductDetail.setDeleted(updateProductDetailRequest.getDeleted());
+        if (existingProductDetail != null) {
+            Color existingColor =
+                    getPropertyById(updateProductDetailRequest.getColorId(), colorRepository, "Color");
+            Size existingSize =
+                    getPropertyById(updateProductDetailRequest.getSizeId(), sizeRepository, "Size");
 
-        productDetailRepository.save(existingProductDetail);
+            ProductDetail existingSameColorAndSize =
+                    findProductWithSameColorAndSize(productId, updateProductDetailRequest.getColorId(),
+                            updateProductDetailRequest.getSizeId());
+
+            if (existingSameColorAndSize != null) {
+                existingSameColorAndSize
+                        .setQuantity(existingSameColorAndSize.getQuantity() + updateProductDetailRequest.getQuantity());
+                existingSameColorAndSize.setPrice(updateProductDetailRequest.getPrice());
+                existingSameColorAndSize.setWeight(updateProductDetailRequest.getWeight());
+                productDetailRepository.save(existingSameColorAndSize);
+
+                if (!existingSameColorAndSize.equals(existingProductDetail)) {
+                    deleteProductDetail(id, productId);
+                }
+            } else {
+                existingProductDetail.setName(existingProductDetail.getProduct().getProductName() + " - ["
+                        + existingColor.getName() + "][" + existingSize.getName() + "]");
+                existingProductDetail.setSize(existingSize);
+                existingProductDetail.setColor(existingColor);
+                existingProductDetail.setPrice(updateProductDetailRequest.getPrice());
+                existingProductDetail.setQuantity(updateProductDetailRequest.getQuantity());
+                existingProductDetail.setWeight(updateProductDetailRequest.getWeight());
+                existingProductDetail.setUpdatedBy(updateProductDetailRequest.getUpdatedBy());
+                existingProductDetail.setDeleted(updateProductDetailRequest.getDeleted());
+
+                productDetailRepository.save(existingProductDetail);
+
+                deleteProductDetail(id, productId);
+            }
+
+        } else {
+            throw new DataNotFoundException("ProductDetail with ID " + id + " not found.");
+        }
 
         return existingProductDetail;
     }
+
 
     @Override
     public void delete(Long id) throws DataNotFoundException {

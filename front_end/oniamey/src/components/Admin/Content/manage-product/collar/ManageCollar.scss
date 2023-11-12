@@ -1,86 +1,67 @@
-$odd-row-color: #f2f2f2;
-
-.manage-collar-title {
+.manage-collar-container {
+  .manage-collar-title {
     font-size: 24px;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     margin-left: 20px;
-}
 
-.manage-collar-search {
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-collar-search {
     max-width: 98%;
     margin: 0 auto;
     padding: 20px;
     background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    height: 200px;
     border-radius: 5px;
-}
 
-.manage-collar-table {
+    .search-collar-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-collar-table {
     max-width: 98%;
     margin: 0 auto;
     padding: 20px;
     background: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    height: 560px;
     border-radius: 5px;
+
+    .list-collar-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: space-between;
+
+      .title {
+        font-weight: bold;
+      }
+    }
+
+    .rdt_TableCol_Sortable {
+      background-color: #cc9966;
+    }
+
+    .rdt_TableCol {
+      background-color: #cc9966;
+    }
+  }
 }
 
-// .table {
-//     width: 100%;
-//     border-collapse: collapse;
-//     border-radius: 20px;
 
-//     th, td {
-//         padding: 12px;
-//         text-align: left;
-//         border-bottom: 1px solid #ddd;
-//     }
-
-//     th {
-//         background-color: #cc9966;
-//         font-weight: bold;
-//     }
-
-//     tbody tr {
-//         &:hover {
-//             background-color: rgba(207, 182, 156, 0.199);
-//         }
-
-//         &:nth-child(odd) {
-//             background-color: $odd-row-color;
-//         }
-//     }
-// }
-
-.search-collar-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.list-collar-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    justify-content: space-between;
-}
-
-.title {
-    font-weight: bold;
-}
-
-button {
-    width: 180px;
-}
-
-form {
-    // padding-left: 200px;
-}
 
 

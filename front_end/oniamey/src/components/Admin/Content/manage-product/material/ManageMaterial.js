@@ -1,177 +1,198 @@
-import { React, useState, useEffect } from 'react';
-import './ManageMaterial.scss';
-import { GiExplosiveMaterials } from 'react-icons/gi';
-import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
-import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
-import ModalCreateMaterial from './ModalCreateMaterial';
-import ModalUpdateMaterial from './ModalUpdateMaterial';
-import ModalDeleteMaterial from './ModalDeleteMaterial';
-import { getAllProperties } from '../../../../../services/apiService';
-import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import { React, useState, useEffect } from "react";
+import "./ManageMaterial.scss";
+import { GiExplosiveMaterials } from "react-icons/gi";
+import { FaFilter, FaThList, FaPenSquare } from "react-icons/fa";
+import { MdLibraryAdd, MdDeleteSweep } from "react-icons/md";
+import ModalCreateMaterial from "./ModalCreateMaterial";
+import ModalUpdateMaterial from "./ModalUpdateMaterial";
+import {
+  deleteProperty,
+  getAllProperties,
+} from "../../../../../services/apiService";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import DataTable from "react-data-table-component";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ManageMaterial = (props) => {
+  const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
+  const [showModalUpdateMaterial, setShowModalUpdateMaterial] = useState(false);
 
-    const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
-    const [showModalUpdateMaterial, setShowModalUpdateMaterial] = useState(false);
-    const [showModalDeleteMaterial, setShowModalDeleteMaterial] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState({});
 
-    const [dataUpdate, setDataUpdate] = useState({});
-    const [dataDelete, setDataDelete] = useState({});
+  const [listMaterial, setListMaterial] = useState([]);
+  const [materialId, setMaterialId] = useState("");
 
-    const [listMaterial, setListMaterial] = useState([]);
-    const [materialId, setMaterialId] = useState('');
+  useEffect(() => {
+    fetchListMaterial();
+  }, []);
 
-    useEffect(() => {
+  const fetchListMaterial = async () => {
+    let res = await getAllProperties("material");
+    setListMaterial(res.data);
+    setMaterialId(res.data[0].id);
+    console.log(res);
+  };
+
+  const handleShowModalUpdateMaterial = (material) => {
+    setShowModalUpdateMaterial(true);
+    setDataUpdate(material);
+  };
+
+  const resetDataUpdate = () => {
+    setDataUpdate({});
+  };
+
+  const handleSubmitDeleteMaterial = (material) => {
+    Swal.fire({
+      title: "Thông báo",
+      text: "Xác nhận xóa!",
+      icon: "infor",
+      showCancelButton: true,
+      confirmButtonColor: "#000",
+      cancelButtonColor: "#000",
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteProperty("material", material.id);
         fetchListMaterial();
-    }, []);
+        toast.success("Xóa thành công!");
+      }
+    });
+  };
 
-    const fetchListMaterial = async () => {
-        let res = await getAllProperties('material');
-        setListMaterial(res.data);
-        setMaterialId(res.data[0].id)
-        console.log(res);
-    }
+  const columnsMaterial = [
+    {
+      name: "STT",
+      selector: (row) => listMaterial.indexOf(row) + 1,
+      minWidth: "40px",
+      maxWidth: "80px",
+      center: "true",
+    },
+    {
+      name: "Tên",
+      selector: (row) => row.name,
+      center: "true",
+    },
+    {
+      name: "Ngày cập nhật",
+      selector: (row) => row.updatedAt,
+      center: "true",
+    },
+    {
+      name: "Trạng thái",
+      selector: (row) => {
+        const status = row.deleted === false ? "Hoạt động" : "Ngừng hoạt động";
+        const color = row.deleted === false ? "green" : "red";
 
-    const handleShowModalUpdateMaterial = (material) => {
-        setShowModalUpdateMaterial(true);
-        setDataUpdate(material);
-    }
+        return <span style={{ color }}>{status}</span>;
+      },
+      center: "true",
+    },
+    {
+      name: "Hành động",
+      cell: (row) => (
+        <>
+          <Button
+            variant="dark"
+            className="w-25 me-2"
+            onClick={() => handleShowModalUpdateMaterial(row)}
+          >
+            <FaPenSquare />
+          </Button>
+          <Button
+            variant="dark"
+            className="w-25"
+            onClick={() => handleSubmitDeleteMaterial(row)}
+          >
+            <MdDeleteSweep />
+          </Button>
+        </>
+      ),
+      center: "true",
+    },
+  ];
 
-    const handleShowModalDeleteMaterial = (material) => {
-        setShowModalDeleteMaterial(true);
-        setDataDelete(material);
-    }
+  const paginationComponentOptions = {
+    rowsPerPageText: "Số Bản Ghi Một Trang",
+    rangeSeparatorText: "Trên",
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "Tất Cả",
+  };
 
-    const resetDataDelete = () => {
-        setDataDelete({});
-    }
-
-    const resetDataUpdate = () => {
-        setDataUpdate({});
-    }
-
-    return (
-        <div class="manage-material-container">
-            <div className='manage-material-title'>
-                <div className="title">
-                    <GiExplosiveMaterials size={32} /> Quản Lý Chất Liệu
-                </div>
-            </div>
-            <div className='manage-material-search'>
-                <div className='search-material-title'>
-                    <div className="title">
-                        <FaFilter size={26} /> Bộ Lọc
-                    </div>
-                </div>
-                <Form>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Form.Label column sm="1">
-                            Chất liệu
-                        </Form.Label>
-                        <Col sm="6" xs lg="4">
-                            <Form.Control type="text" />
-                        </Col>
-                        <Col xs lg="1">
-                            <Button variant="secondary">Tìm Kiếm</Button>
-                        </Col>
-                    </Row>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Form.Label column sm="1">
-                            Trạng Thái
-                        </Form.Label>
-                        <Col sm="6" xs lg="4">
-                            <Form.Select>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                            </Form.Select>
-                        </Col>
-                        <Col xs lg="1">
-                            <Button variant="secondary">Tìm Kiếm</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div className='manage-material-table'>
-                <div className='list-material-title'>
-                    <div className="title">
-                        <FaThList size={26} /> Danh Sách Chất Liệu
-                    </div>
-                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateMaterial(true)}>
-                        <MdLibraryAdd /> Thêm</button>
-                </div>
-                <Table striped hover responsive>
-                    <thead>
-                        <tr>
-                            <th scope="col" className='px-5 text-center'>STT</th>
-                            <th scope="col" className='px-5 text-center'>Tên</th>
-                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
-                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
-                            <th scope="col" className='px-5 text-center'>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listMaterial.length > 0 && listMaterial.map((material, index) => {
-                            return (
-                                <tr key={`table-brand-${index}`}>
-                                    <td className="text-center">{index + 1}</td>
-                                    <td className="text-center">{material.name}</td>
-                                    <td className="text-center">{material.updatedAt}</td>
-                                    <td className="text-center">{material.deleted === false ? 'Active' : 'DeActive'}</td>
-                                    <td className="text-center">
-                                        <Row className='justify-content-md-center'>
-                                            <Col md="auto">
-                                                <Button
-                                                    variant="dark"
-                                                    onClick={() => handleShowModalUpdateMaterial(material)}
-                                                >
-                                                    <FaPenSquare />
-                                                </Button>
-                                            </Col>
-                                            <Col xs lg="2">
-                                                <Button
-                                                    variant="dark"
-                                                    onClick={() => handleShowModalDeleteMaterial(material)}
-                                                >
-                                                    <MdDeleteSweep />
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                        {listMaterial && listMaterial.length === 0 &&
-                            <tr>
-                                <td colSpan={5}>
-                                    Không có Data!
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </Table>
-            </div>
-            <ModalCreateMaterial
-                show={showModalCreateMaterial}
-                setShow={setShowModalCreateMaterial}
-                fetchListMaterial={fetchListMaterial}
-            />
-            <ModalUpdateMaterial
-                show={showModalUpdateMaterial}
-                setShow={setShowModalUpdateMaterial}
-                fetchListMaterial={fetchListMaterial}
-                dataUpdate={dataUpdate}
-                resetDataUpdate={resetDataUpdate}
-            />
-            <ModalDeleteMaterial
-                show={showModalDeleteMaterial}
-                setShow={setShowModalDeleteMaterial}
-                fetchListMaterial={fetchListMaterial}
-                dataDelete={dataDelete}
-                resetDataDelete={resetDataDelete}
-            />
-        </div >
-    );
-}
+  return (
+    <div class="manage-material-container">
+      <div className="manage-material-title">
+        <div className="title">
+          <GiExplosiveMaterials size={32} /> Quản Lý Chất Liệu
+        </div>
+      </div>
+      <div className="manage-material-search">
+        <div className="search-material-title">
+          <div className="title">
+            <FaFilter size={26} /> Bộ Lọc
+          </div>
+        </div>
+        <Form>
+          <Row className="justify-content-md-center">
+            <Col lg="4">
+              <FloatingLabel controlId="floatingInput" label="Tìm kiếm">
+                <Form.Control type="text" placeholder="name@example.com" />
+              </FloatingLabel>
+            </Col>
+            <Col lg="2">
+              <FloatingLabel controlId="floatingSelect" label="Trạng thái">
+                <Form.Select>
+                  <option>Tất cả</option>
+                  <option value={false}>Hoạt động</option>
+                  <option value={true}>Ngừng hoạt động</option>
+                </Form.Select>
+              </FloatingLabel>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+      <div className="manage-material-table">
+        <div className="list-material-title">
+          <div className="title">
+            <FaThList size={26} /> Danh Sách Chất Liệu
+          </div>
+          <button
+            type="button"
+            class="btn btn-dark"
+            onClick={() => setShowModalCreateMaterial(true)}
+          >
+            <MdLibraryAdd /> Thêm
+          </button>
+        </div>
+        <DataTable
+          rounded-3
+          columns={columnsMaterial}
+          data={listMaterial}
+          pagination
+          paginationComponentOptions={paginationComponentOptions}
+          highlightOnHover
+          pointerOnHover
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          // onRowClicked={(row) => handleClickTable(row)}
+        />
+      </div>
+      <ModalCreateMaterial
+        show={showModalCreateMaterial}
+        setShow={setShowModalCreateMaterial}
+        fetchListMaterial={fetchListMaterial}
+      />
+      <ModalUpdateMaterial
+        show={showModalUpdateMaterial}
+        setShow={setShowModalUpdateMaterial}
+        fetchListMaterial={fetchListMaterial}
+        dataUpdate={dataUpdate}
+        resetDataUpdate={resetDataUpdate}
+      />
+    </div>
+  );
+};
 
 export default ManageMaterial;

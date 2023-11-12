@@ -1,177 +1,200 @@
-import { React, useState, useEffect } from 'react';
-import './ManageSleeveLength.scss';
-import { CgDetailsLess } from 'react-icons/cg';
-import { FaFilter, FaThList, FaPenSquare } from 'react-icons/fa';
-import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
-import ModalCreateSleeveLength from './ModalCreateSleeveLength';
-import ModalUpdateSleeveLength from './ModalUpdateSleeveLength';
-import ModalDeleteSleeveLength from './ModalDeleteSleeveLength';
-import { getAllProperties } from '../../../../../services/apiService';
-import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import { React, useState, useEffect } from "react";
+import "./ManageSleeveLength.scss";
+import { CgDetailsLess } from "react-icons/cg";
+import { FaFilter, FaThList, FaPenSquare } from "react-icons/fa";
+import { MdLibraryAdd, MdDeleteSweep } from "react-icons/md";
+import ModalCreateSleeveLength from "./ModalCreateSleeveLength";
+import ModalUpdateSleeveLength from "./ModalUpdateSleeveLength";
+import {
+  deleteProperty,
+  getAllProperties,
+} from "../../../../../services/apiService";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import DataTable from "react-data-table-component";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ManageSleeveLength = (props) => {
+  const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] =
+    useState(false);
+  const [showModalUpdateSleeveLength, setShowModalUpdateSleeveLength] =
+    useState(false);
 
-    const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
-    const [showModalUpdateSleeveLength, setShowModalUpdateSleeveLength] = useState(false);
-    const [showModalDeleteSleeveLength, setShowModalDeleteSleeveLength] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState({});
 
-    const [dataUpdate, setDataUpdate] = useState({});
-    const [dataDelete, setDataDelete] = useState({});
+  const [listSleeveLength, setListSleeveLength] = useState([]);
+  const [sleeveLengthId, setSleeveLengthId] = useState("");
 
-    const [listSleeveLength, setListSleeveLength] = useState([]);
-    const [SleeveLengthId, setSleeveLengthId] = useState('');
+  useEffect(() => {
+    fetchListSleeveLength();
+  }, []);
 
-    useEffect(() => {
+  const fetchListSleeveLength = async () => {
+    let res = await getAllProperties("sleeve-length");
+    setListSleeveLength(res.data);
+    setSleeveLengthId(res.data[0].id);
+    console.log(res);
+  };
+
+  const handleShowModalUpdateSleeveLength = (sleeveLength) => {
+    setShowModalUpdateSleeveLength(true);
+    setDataUpdate(sleeveLength);
+  };
+
+  const resetDataUpdate = () => {
+    setDataUpdate({});
+  };
+
+  const handleSubmitDeleteSleeveLength = (sleeveLength) => {
+    Swal.fire({
+      title: "Thông báo",
+      text: "Xác nhận xóa!",
+      icon: "infor",
+      showCancelButton: true,
+      confirmButtonColor: "#000",
+      cancelButtonColor: "#000",
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteProperty("sleeve-length", sleeveLength.id);
         fetchListSleeveLength();
-    }, []);
+        toast.success("Xóa thành công!");
+      }
+    });
+  };
 
-    const fetchListSleeveLength = async () => {
-        let res = await getAllProperties('sleeve-length');
-        setListSleeveLength(res.data);
-        setSleeveLengthId(res.data[0].id)
-        console.log(res);
-    }
+  const columnsSleeveLength = [
+    {
+      name: "STT",
+      selector: (row) => listSleeveLength.indexOf(row) + 1,
+      minWidth: "40px",
+      maxWidth: "80px",
+      center: "true",
+    },
+    {
+      name: "Tên",
+      selector: (row) => row.name,
+      center: "true",
+    },
+    {
+      name: "Ngày cập nhật",
+      selector: (row) => row.updatedAt,
+      center: "true",
+    },
+    {
+      name: "Trạng thái",
+      selector: (row) => {
+        const status = row.deleted === false ? "Hoạt động" : "Ngừng hoạt động";
+        const color = row.deleted === false ? "green" : "red";
 
-    const handleShowModalUpdateSleeveLength = (sleeveLength) => {
-        setShowModalUpdateSleeveLength(true);
-        setDataUpdate(sleeveLength);
-    }
+        return <span style={{ color }}>{status}</span>;
+      },
+      center: "true",
+    },
+    {
+      name: "Hành động",
+      cell: (row) => (
+        <>
+          <Button
+            variant="dark"
+            className="w-25 me-2"
+            onClick={() => handleShowModalUpdateSleeveLength(row)}
+          >
+            <FaPenSquare />
+          </Button>
+          <Button
+            variant="dark"
+            className="w-25"
+            onClick={() => handleSubmitDeleteSleeveLength(row)}
+          >
+            <MdDeleteSweep />
+          </Button>
+        </>
+      ),
+      center: "true",
+    },
+  ];
 
-    const handleShowModalDeleteSleeveLength = (sleeveLength) => {
-        setShowModalDeleteSleeveLength(true);
-        setDataDelete(sleeveLength);
-    }
+  const paginationComponentOptions = {
+    rowsPerPageText: "Số Bản Ghi Một Trang",
+    rangeSeparatorText: "Trên",
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "Tất Cả",
+  };
 
-    const resetDataDelete = () => {
-        setDataDelete({});
-    }
-
-    const resetDataUpdate = () => {
-        setDataUpdate({});
-    }
-
-    return (
-        <div class="manage-sleeve-length-container">
-            <div className='manage-sleeve-length-title'>
-                <div className="title">
-                    <CgDetailsLess size={32} /> Quản Lý Chiều Dài Tay
-                </div>
-            </div>
-            <div className='manage-sleeve-length-search'>
-                <div className='search-sleeve-length-title'>
-                    <div className="title">
-                        <FaFilter size={26} /> Bộ Lọc
-                    </div>
-                </div>
-                <Form>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Form.Label column sm="1">
-                            Chiều dài
-                        </Form.Label>
-                        <Col sm="6" xs lg="4">
-                            <Form.Control type="text" />
-                        </Col>
-                        <Col xs lg="1">
-                            <Button variant="secondary">Tìm Kiếm</Button>
-                        </Col>
-                    </Row>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Form.Label column sm="1">
-                            Trạng Thái
-                        </Form.Label>
-                        <Col sm="6" xs lg="4">
-                            <Form.Select>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                            </Form.Select>
-                        </Col>
-                        <Col xs lg="1">
-                            <Button variant="secondary">Tìm Kiếm</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div className='manage-sleeve-length-table'>
-                <div className='list-sleeve-length-title'>
-                    <div className="title">
-                        <FaThList size={26} /> Danh Sách Chiều Dài Tay
-                    </div>
-                    <button type="button" class="btn btn-dark" onClick={() => setShowModalCreateSleeveLength(true)}>
-                        <MdLibraryAdd /> Thêm</button>
-                </div>
-                <Table striped hover responsive>
-                    <thead>
-                        <tr>
-                            <th scope="col" className='px-5 text-center'>STT</th>
-                            <th scope="col" className='px-5 text-center'>Tên</th>
-                            <th scope="col" className='px-5 text-center'>Ngày Cập Nhật</th>
-                            <th scope="col" className='px-5 text-center'>Trạng Thái</th>
-                            <th scope="col" className='px-5 text-center'>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listSleeveLength.length > 0 && listSleeveLength.map((sleeveLength, index) => {
-                            return (
-                                <tr key={`table-brand-${index}`}>
-                                    <td className="text-center">{index + 1}</td>
-                                    <td className="text-center">{sleeveLength.name}</td>
-                                    <td className="text-center">{sleeveLength.updatedAt}</td>
-                                    <td className="text-center">{sleeveLength.deleted === false ? 'Active' : 'DeActive'}</td>
-                                    <td className="text-center">
-                                        <Row className='justify-content-md-center'>
-                                            <Col md="auto">
-                                                <Button
-                                                    variant="dark"
-                                                    onClick={() => handleShowModalUpdateSleeveLength(sleeveLength)}
-                                                >
-                                                    <FaPenSquare />
-                                                </Button>
-                                            </Col>
-                                            <Col xs lg="2">
-                                                <Button
-                                                    variant="dark"
-                                                    onClick={() => handleShowModalDeleteSleeveLength(sleeveLength)}
-                                                >
-                                                    <MdDeleteSweep />
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                        {listSleeveLength && listSleeveLength.length === 0 &&
-                            <tr>
-                                <td colSpan={5}>
-                                    Không có Data!
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </Table>
-            </div>
-            <ModalCreateSleeveLength
-                show={showModalCreateSleeveLength}
-                setShow={setShowModalCreateSleeveLength}
-                fetchListSleeveLength={fetchListSleeveLength}
-            />
-            <ModalUpdateSleeveLength
-                show={showModalUpdateSleeveLength}
-                setShow={setShowModalUpdateSleeveLength}
-                fetchListSleeveLength={fetchListSleeveLength}
-                dataUpdate={dataUpdate}
-                resetDataUpdate={resetDataUpdate}
-            />
-            <ModalDeleteSleeveLength
-                show={showModalDeleteSleeveLength}
-                setShow={setShowModalDeleteSleeveLength}
-                fetchListSleeveLength={fetchListSleeveLength}
-                dataDelete={dataDelete}
-                resetDataDelete={resetDataDelete}
-            />
-        </div >
-    );
-}
+  return (
+    <div class="manage-sleeve-length-container">
+      <div className="manage-sleeve-length-title">
+        <div className="title">
+          <CgDetailsLess size={32} /> Quản Lý Chiều Dài Tay
+        </div>
+      </div>
+      <div className="manage-sleeve-length-search">
+        <div className="search-sleeve-length-title">
+          <div className="title">
+            <FaFilter size={26} /> Bộ Lọc
+          </div>
+        </div>
+        <Form>
+          <Row className="justify-content-md-center">
+            <Col lg="4">
+              <FloatingLabel controlId="floatingInput" label="Tìm kiếm">
+                <Form.Control type="text" placeholder="name@example.com" />
+              </FloatingLabel>
+            </Col>
+            <Col lg="2">
+              <FloatingLabel controlId="floatingSelect" label="Trạng thái">
+                <Form.Select>
+                  <option>Tất cả</option>
+                  <option value={false}>Hoạt động</option>
+                  <option value={true}>Ngừng hoạt động</option>
+                </Form.Select>
+              </FloatingLabel>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+      <div className="manage-sleeve-length-table">
+        <div className="list-sleeve-length-title">
+          <div className="title">
+            <FaThList size={26} /> Danh Sách Chiều Dài Tay
+          </div>
+          <button
+            type="button"
+            class="btn btn-dark"
+            onClick={() => setShowModalCreateSleeveLength(true)}
+          >
+            <MdLibraryAdd /> Thêm
+          </button>
+        </div>
+        <DataTable
+          rounded-3
+          columns={columnsSleeveLength}
+          data={listSleeveLength}
+          pagination
+          paginationComponentOptions={paginationComponentOptions}
+          highlightOnHover
+          pointerOnHover
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          // onRowClicked={(row) => handleClickTable(row)}
+        />
+      </div>
+      <ModalCreateSleeveLength
+        show={showModalCreateSleeveLength}
+        setShow={setShowModalCreateSleeveLength}
+        fetchListSleeveLength={fetchListSleeveLength}
+      />
+      <ModalUpdateSleeveLength
+        show={showModalUpdateSleeveLength}
+        setShow={setShowModalUpdateSleeveLength}
+        fetchListSleeveLength={fetchListSleeveLength}
+        dataUpdate={dataUpdate}
+        resetDataUpdate={resetDataUpdate}
+      />
+    </div>
+  );
+};
 
 export default ManageSleeveLength;

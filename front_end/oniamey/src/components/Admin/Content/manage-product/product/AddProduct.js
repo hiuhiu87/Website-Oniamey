@@ -1,12 +1,11 @@
 import { React, useState, useEffect, Fragment, useMemo } from 'react';
 import './ManageProduct.scss';
 import { Modal, Button } from 'antd';
-import { Col, Row } from 'react-bootstrap';
+import {Col, Form, Row} from 'react-bootstrap';
 import { FaMousePointer, FaThList } from 'react-icons/fa';
 import { MdLibraryAdd, MdDeleteSweep } from 'react-icons/md';
 import { TbLayoutGridAdd } from 'react-icons/tb';
-import { getAllProducts } from '../../../../../services/apiService';
-import { getAllProductDetails } from '../../../../../services/apiService';
+import {getAllProducts} from '../../../../../services/apiService';
 import { getAllProperties } from '../../../../../services/apiService';
 import { postProductDetail } from '../../../../../services/apiService';
 import { postCreateProduct } from '../../../../../services/apiService';
@@ -19,6 +18,11 @@ import ModalCreateCollar from '../collar/ModalCreateCollar';
 import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 import { Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { Spin } from 'antd';
+import {toast} from "react-toastify";
 
 const AddProduct = (props) => {
 
@@ -48,10 +52,8 @@ const AddProduct = (props) => {
     const [listProduct, setListProduct] = useState([]);
     const [productId, setProductId] = useState('');
     const [productName, setProductName] = useState('');
+    const nameError = productName.trim() === "" ? "* Tên không được để trống!" : "";
     const [description, setDescription] = useState('');
-
-    const [listProductDetail, setListProductDetail] = useState([]);
-    const [productDetailId, setProductDetailId] = useState('');
 
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
@@ -61,6 +63,10 @@ const AddProduct = (props) => {
     const [isColorModalVisible, setColorModalVisible] = useState(false);
     const [isSizeModalVisible, setSizeModalVisible] = useState(false);
 
+    const navigation = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         fetchListProduct();
         fetchListBrand();
@@ -68,25 +74,14 @@ const AddProduct = (props) => {
         fetchListCollar();
         fetchListSleeveLength();
         fetchListMaterial();
-        // fetchListProductDetail();
         fetchListSize();
         fetchListColor();
     }, []);
-
-    // useEffect(() => {
-    //     fetchListProductDetail();
-    // }, [productDetails])
 
     const fetchListProduct = async () => {
         let response = await getAllProducts();
         setListProduct(response.data);
     }
-
-    // const fetchListProductDetail = async () => {
-    //     let response = await getAllProductDetails();
-    //     setListProductDetail(response.data);
-    //     setProductDetailId(response.data[0].id);
-    // }
 
     const fetchListBrand = async () => {
         let response = await getAllProperties('brand');
@@ -147,6 +142,7 @@ const AddProduct = (props) => {
             setSelectedColors([...selectedColors, color]);
         }
         setProductDetails([]);
+        console.log('Mau',selectedSizes)
     };
 
     const handleSizeChange = (size) => {
@@ -156,6 +152,7 @@ const AddProduct = (props) => {
             setSelectedSizes([...selectedSizes, size]);
         }
         setProductDetails([]);
+        console.log('Size',selectedSizes)
     };
 
     const renderColorButtons = () => {
@@ -344,55 +341,80 @@ const AddProduct = (props) => {
         }
     };
 
-    const addProductDetails = async () => {
-        try {
-            const newProduct = await postCreateProduct(productName, description, false);
-            setProductId(newProduct.data.id);
-            setListProduct([newProduct, ...listProduct]);
+    const handleSubmitCreateProduct = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận thêm!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError) {
+                    return;
+                }
 
-            const quantities = quantityInput.map((quantity) => parseInt(quantity) || 10);
-            const prices = priceInput.map((price) => parseFloat(price) || 100000);
+                // if(selectedColorIds.length === 0) {
+                //     return;
+                // }
+                //
+                // if(selectedSizes.length === 0) {
+                //     return;
+                // }
 
-            const productDetailIds = [];
-            for (const colorId of selectedColorIds) {
-                const productDetailsForColor = productDetails.filter((item) => item.colorId === colorId);
-                const idsForColor = productDetailsForColor.map((item) => item.id);
-                productDetailIds.push(...idsForColor);
+                try {
+                    setLoading(true);
+                    const newProduct = await postCreateProduct(productName, description, false);
+                    setProductId(newProduct.data.id);
+                    setListProduct([newProduct, ...listProduct]);
+
+                    const quantities = quantityInput.map((quantity) => parseInt(quantity) || 10);
+                    const prices = priceInput.map((price) => parseFloat(price) || 100000);
+
+                    const productDetailIds = [];
+                    for (const colorId of selectedColorIds) {
+                        const productDetailsForColor = productDetails.filter((item) => item.colorId === colorId);
+                        const idsForColor = productDetailsForColor.map((item) => item.id);
+                        productDetailIds.push(...idsForColor);
+                    }
+
+                    let res = await postProductDetail(
+                        newProduct.data.id,
+                        categoryId,
+                        selectedSizes,
+                        selectedColors,
+                        materialId,
+                        brandId,
+                        collarId,
+                        sleeveLengthId,
+                        names,
+                        quantities,
+                        prices
+                    );
+
+                    const addedProductDetailIds = res.data.map((productDetail) => productDetail);
+
+                    for (const colorId of selectedColorIds) {
+                        const productDetailIds = addedProductDetailIds
+                            .filter((item) => item.color.id === colorId)
+                            .map((item) => item.id);
+                        console.log(productDetailIds)
+
+                        const images = fileLists[colorId];
+                        await postImageForProductDetails(colorId, productDetailIds, images);
+                        setLoading(false);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+
+                navigation('/admins/manage-products');
             }
-
-            let res = await postProductDetail(
-                newProduct.data.id,
-                categoryId,
-                selectedSizes,
-                selectedColors,
-                materialId,
-                brandId,
-                collarId,
-                sleeveLengthId,
-                names,
-                quantities,
-                prices
-            );
-
-            const addedProductDetailIds = res.data.map((productDetail) => productDetail);
-            console.log(addedProductDetailIds)
-
-            for (const colorId of selectedColorIds) {
-                const productDetailIds = addedProductDetailIds
-                    .filter((item) => item.color.id === colorId)
-                    .map((item) => item.id);
-                console.log(productDetailIds)
-
-                const images = fileLists[colorId];
-
-                await postImageForProductDetails(colorId, productDetailIds, images);
-                console.log('oke')
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        });
     };
-
 
     useEffect(() => {
         fetchListSize();
@@ -404,8 +426,9 @@ const AddProduct = (props) => {
         setSizeId(res.data[0].id)
         console.log(res);
     }
-
+    
     return (
+        <Spin spinning={loading} delay={500}>
         <div className="manage-product-add-container">
             <div className='manage-product-add-title'>
                 <div className="title">
@@ -419,112 +442,100 @@ const AddProduct = (props) => {
                     </div>
                 </div>
                 <div className='main-search row d-flex justify-content-center'>
-                    <div className='col-10 mb-4'>
-                        <div className="col-md-12 mb-4">
-                            <label className="form-label">Tên</label>
-                            <input
-                                type="text"
-                                className="form-control"
+                    <Row className="mb-3 justify-content-md-center">
+                        <Col lg="4">
+                            <FloatingLabel
+                                controlId="floatingInput"
+                                label="Tên sản phẩm"
                                 value={productName}
                                 onChange={(e) => setProductName(e.target.value)}
-                            />
-                        </div>
-                        <div className="col-md-12">
-                            <label className="form-label">Mô tả</label>
-                            <textarea
-                                type="text"
-                                className="form-control"
+                            >
+                                <Form.Control type="text" placeholder="name@example.com" />
+                            </FloatingLabel>
+                            {nameError && (
+                                <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                            )}
+                        </Col>
+                        <Col lg="4">
+                            <FloatingLabel
+                                controlId="floatingInput"
+                                label="Mô tả"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='row d-flex justify-content-center align-items-center mb-3'>
-                        <div className="col-md-2">
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div className="form-floating">
-                                    <select className="form-select" value={brandId} onChange={handleBrandChange} style={{ minWidth: '200px' }}>
-                                        {listBrand.map(brand => (
-                                            <option key={brand.id} value={brand.id}>
-                                                {brand.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Thương hiệu</label>
-                                </div>
-                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div className="form-floating">
-                                    <select className="form-select" value={categoryId} onChange={handleCategoryChange} style={{ minWidth: '200px' }}>
+                            >
+                                <Form.Control type="text" placeholder="name@example.com" />
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3 justify-content-md-center">
+                        <Col lg="2">
+                            <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
+                                <Form.Select value={brandId} onChange={handleBrandChange}>
+                                    {listBrand.map(brand => (
+                                        <option key={brand.id} value={brand.id}>
+                                            {brand.name}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </FloatingLabel>
+                        </Col>
+                        <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
+                            <Col lg="2">
+                                <FloatingLabel controlId="floatingSelect" label="Danh mục">
+                                    <Form.Select value={categoryId} onChange={handleCategoryChange}>
                                         {listCategory.map(category => (
                                             <option key={category.id} value={category.id}>
                                                 {category.name}
                                             </option>
                                         ))}
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Danh mục</label>
-                                </div>
-                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCategory(true)}><MdLibraryAdd /></button>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div className="form-floating">
-                                    <select className="form-select" value={materialId} onChange={handleMaterialChange} style={{ minWidth: '200px' }}>
-                                        {listMaterial.map(material => (
-                                            <option key={material.id} value={material.id}>
-                                                {material.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Chất liệu</label>
-                                </div>
-                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div className="form-floating">
-                                    <select className="form-select" value={collarId} onChange={handleCollarChange} style={{ minWidth: '200px' }}>
-                                        {listCollar.map(collar => (
-                                            <option key={collar.id} value={collar.id}>
-                                                {collar.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Cổ áo</label>
-                                </div>
-                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <div className="form-floating">
-                                    <select className="form-select" value={sleeveLengthId} onChange={handleSleeveLengthChange} style={{ minWidth: '200px' }}>
-                                        {listSleeveLength.map(sleeveLength => (
-                                            <option key={sleeveLength.id} value={sleeveLength.id}>
-                                                {sleeveLength.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <label htmlFor="floatingSelectGrid" className='text-floating'>Chiều dài tay</label>
-                                </div>
-                                <button type="button" className="btn btn-dark ms-2 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
-                            </div>
-                        </div>
-                    </div>
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                            <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateCategory(true)}><MdLibraryAdd /></button>
+                      <Col lg="2">
+                        <FloatingLabel controlId="floatingSelect" label="Chất liệu">
+                          <Form.Select value={materialId} onChange={handleMaterialChange}>
+                            {listMaterial.map(material => (
+                                <option key={material.id} value={material.id}>
+                                  {material.name}
+                                </option>
+                            ))}
+                          </Form.Select>
+                        </FloatingLabel>
+                      </Col>
+                      <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
+                      <Col lg="2">
+                        <FloatingLabel controlId="floatingSelect" label="Cổ áo">
+                          <Form.Select value={collarId} onChange={handleCollarChange}>
+                            {listCollar.map(collar => (
+                                <option key={collar.id} value={collar.id}>
+                                  {collar.name}
+                                </option>
+                            ))}
+                          </Form.Select>
+                        </FloatingLabel>
+                      </Col>
+                      <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
+                      <Col lg="2">
+                        <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
+                          <Form.Select value={sleeveLengthId} onChange={handleSleeveLengthChange}>
+                            {listSleeveLength.map(sleeveLength => (
+                                <option key={sleeveLength.id} value={sleeveLength.id}>
+                                  {sleeveLength.name}
+                                </option>
+                            ))}
+                          </Form.Select>
+                        </FloatingLabel>
+                      </Col>
+                      <button type="button" className="btn btn-dark mt-3 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
+                    </Row>
                     <div className='d-flex justify-content-center align-items-center' >
-                        <Button variant="secondary" onClick={showColorModal} className="button-main mb-2 mt-2">
+                        <Button onClick={showColorModal} className="button-color mb-2">
                             Màu sắc
                         </Button>
-                        <Button variant="secondary" onClick={showSizeModal} className="button-main mb-2 mt-2 ms-2">
+                        <Button onClick={showSizeModal} className="button-size mb-2 ms-2">
                             Kích cỡ
                         </Button>
-
                         <Modal
                             maskClosable={false}
                             open={isColorModalVisible}
@@ -553,7 +564,6 @@ const AddProduct = (props) => {
                         <Col className='d-flex justify-content-center align-items-center flex-wrap'>
                             {selectedColors.map((colorId, index) => (
                                 <Button
-                                    // variant="dark"
                                     variant="outline-dark"
                                     key={`color-${index}`}
                                     className="selected-button m-1"
@@ -564,7 +574,6 @@ const AddProduct = (props) => {
                             ))}
                             {selectedSizes.map((sizeId, index) => (
                                 <Button
-                                    // variant="dark"
                                     variant="outline-dark"
                                     key={`size-${index}`}
                                     className="selected-button m-1"
@@ -579,10 +588,10 @@ const AddProduct = (props) => {
             <div className='manage-product-add-table'>
                 <div className='list-product-add-title'>
                     <div className="title">
-                        <FaThList size={26} /> Sản Phẩm Chi Tiết
+                        <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
                     </div>
-                    <button type="button" className="btn btn-dark" onClick={addProductDetails}>
-                        <MdLibraryAdd /> Thêm</button>
+                    <button type="button" className="btn btn-dark" onClick={handleSubmitCreateProduct}>
+                        <MdLibraryAdd /> Hoàn Tất</button>
 
                 </div>
                 <table className="table">
@@ -703,6 +712,7 @@ const AddProduct = (props) => {
                 fetchListSleeveLength={fetchListSleeveLength}
             />
         </div >
+        </Spin>
     );
 }
 
