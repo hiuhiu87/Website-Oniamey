@@ -1,7 +1,8 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
-import com.shop.oniamey.entity.base.EnumStatus;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
+import com.shop.oniamey.infrastructure.constant.OrderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,20 +39,15 @@ public class Orders extends BaseModel {
     @Column(name = "total_money", nullable = false)
     private Double totalMoney;
 
-    @Column(name = "confirmation_date", nullable = false)
-    private Date confirmationDate;
+    @Column(name = "money_reduced", nullable = false)
+    private Double moneyReduced=0.0;
 
     @Column(name = "ship_date", nullable = false)
-    private Date shipDate;
-
-    @Column(name = "receive_date", nullable = false)
-    private Date receiveDate;
-
-    @Column(name = "completion_date", nullable = false)
-    private Date completionDate;
+    private Date shipDate; //ngày giao hàng dự kiến
 
     @Column(name = "type", nullable = false, length = 100)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
 
     @Column(name = "note", nullable = false, length = 1000)
     private String note;
@@ -60,10 +56,13 @@ public class Orders extends BaseModel {
     private Double moneyShip;
 
     @Enumerated(EnumType.STRING)
-    @Column( name = "status" ,length = 50)
-    private EnumStatus status;
+    @Column(name = "status", length = 50)
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "id_voucher")
     private Voucher voucher;
+
+    @Column(name = "code")
+    private String code;
 }

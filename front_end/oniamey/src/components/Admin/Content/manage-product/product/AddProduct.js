@@ -426,60 +426,60 @@ const AddProduct = (props) => {
         setSizeId(res.data[0].id)
         console.log(res);
     }
-    
+
     return (
         <Spin spinning={loading} delay={500}>
-        <div className="manage-product-add-container">
-            <div className='manage-product-add-title'>
-                <div className="title">
-                    <TbLayoutGridAdd size={32} /> Thêm Sản Phẩm
-                </div>
-            </div>
-            <div className='manage-product-add-search'>
-                <div className='search-product-add-title'>
+            <div className="manage-product-add-container">
+                <div className='manage-product-add-title'>
                     <div className="title">
-                        <FaMousePointer size={26} /> Lựa chọn thuộc tính
+                        <TbLayoutGridAdd size={32} /> Thêm Sản Phẩm
                     </div>
                 </div>
-                <div className='main-search row d-flex justify-content-center'>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Col lg="4">
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label="Tên sản phẩm"
-                                value={productName}
-                                onChange={(e) => setProductName(e.target.value)}
-                            >
-                                <Form.Control type="text" placeholder="name@example.com" />
-                            </FloatingLabel>
-                            {nameError && (
-                                <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
-                            )}
-                        </Col>
-                        <Col lg="4">
-                            <FloatingLabel
-                                controlId="floatingInput"
-                                label="Mô tả"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            >
-                                <Form.Control type="text" placeholder="name@example.com" />
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row className="mb-3 justify-content-md-center">
-                        <Col lg="2">
-                            <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
-                                <Form.Select value={brandId} onChange={handleBrandChange}>
-                                    {listBrand.map(brand => (
-                                        <option key={brand.id} value={brand.id}>
-                                            {brand.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
+                <div className='manage-product-add-search'>
+                    <div className='search-product-add-title'>
+                        <div className="title">
+                            <FaMousePointer size={26} /> Lựa chọn thuộc tính
+                        </div>
+                    </div>
+                    <div className='main-search row d-flex justify-content-center'>
+                        <Row className="mb-3 justify-content-md-center">
+                            <Col lg="4">
+                                <FloatingLabel
+                                    controlId="floatingInput"
+                                    label="Tên sản phẩm"
+                                    value={productName}
+                                    onChange={(e) => setProductName(e.target.value)}
+                                >
+                                    <Form.Control type="text" placeholder="name@example.com" />
+                                </FloatingLabel>
+                                {nameError && (
+                                    <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                                )}
+                            </Col>
+                            <Col lg="4">
+                                <FloatingLabel
+                                    controlId="floatingInput"
+                                    label="Mô tả"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                >
+                                    <Form.Control type="text" placeholder="name@example.com" />
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3 justify-content-md-center">
+                            <Col lg="2">
+                                <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
+                                    <Form.Select value={brandId} onChange={handleBrandChange}>
+                                        {listBrand.map(brand => (
+                                            <option key={brand.id} value={brand.id}>
+                                                {brand.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                            <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateBrand(true)}><MdLibraryAdd /></button>
                             <Col lg="2">
                                 <FloatingLabel controlId="floatingSelect" label="Danh mục">
                                     <Form.Select value={categoryId} onChange={handleCategoryChange}>
@@ -492,110 +492,110 @@ const AddProduct = (props) => {
                                 </FloatingLabel>
                             </Col>
                             <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateCategory(true)}><MdLibraryAdd /></button>
-                      <Col lg="2">
-                        <FloatingLabel controlId="floatingSelect" label="Chất liệu">
-                          <Form.Select value={materialId} onChange={handleMaterialChange}>
-                            {listMaterial.map(material => (
-                                <option key={material.id} value={material.id}>
-                                  {material.name}
-                                </option>
-                            ))}
-                          </Form.Select>
-                        </FloatingLabel>
-                      </Col>
-                      <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
-                      <Col lg="2">
-                        <FloatingLabel controlId="floatingSelect" label="Cổ áo">
-                          <Form.Select value={collarId} onChange={handleCollarChange}>
-                            {listCollar.map(collar => (
-                                <option key={collar.id} value={collar.id}>
-                                  {collar.name}
-                                </option>
-                            ))}
-                          </Form.Select>
-                        </FloatingLabel>
-                      </Col>
-                      <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
-                      <Col lg="2">
-                        <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
-                          <Form.Select value={sleeveLengthId} onChange={handleSleeveLengthChange}>
-                            {listSleeveLength.map(sleeveLength => (
-                                <option key={sleeveLength.id} value={sleeveLength.id}>
-                                  {sleeveLength.name}
-                                </option>
-                            ))}
-                          </Form.Select>
-                        </FloatingLabel>
-                      </Col>
-                      <button type="button" className="btn btn-dark mt-3 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
-                    </Row>
-                    <div className='d-flex justify-content-center align-items-center' >
-                        <Button onClick={showColorModal} className="button-color mb-2">
-                            Màu sắc
-                        </Button>
-                        <Button onClick={showSizeModal} className="button-size mb-2 ms-2">
-                            Kích cỡ
-                        </Button>
-                        <Modal
-                            maskClosable={false}
-                            open={isColorModalVisible}
-                            onOk={hideColorModal}
-                            onCancel={hideColorModal}
-                        >
-                            <div className='mb-3 mt-3'>
-                                <h5>Màu sắc:</h5>
-                                {renderColorButtons()}
-                            </div>
-                        </Modal>
+                            <Col lg="2">
+                                <FloatingLabel controlId="floatingSelect" label="Chất liệu">
+                                    <Form.Select value={materialId} onChange={handleMaterialChange}>
+                                        {listMaterial.map(material => (
+                                            <option key={material.id} value={material.id}>
+                                                {material.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                            <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateMaterial(true)}><MdLibraryAdd /></button>
+                            <Col lg="2">
+                                <FloatingLabel controlId="floatingSelect" label="Cổ áo">
+                                    <Form.Select value={collarId} onChange={handleCollarChange}>
+                                        {listCollar.map(collar => (
+                                            <option key={collar.id} value={collar.id}>
+                                                {collar.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                            <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateCollar(true)}><MdLibraryAdd /></button>
+                            <Col lg="2">
+                                <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
+                                    <Form.Select value={sleeveLengthId} onChange={handleSleeveLengthChange}>
+                                        {listSleeveLength.map(sleeveLength => (
+                                            <option key={sleeveLength.id} value={sleeveLength.id}>
+                                                {sleeveLength.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                            <button type="button" className="btn btn-dark mt-3 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
+                        </Row>
+                        <div className='d-flex justify-content-center align-items-center' >
+                            <Button onClick={showColorModal} className="button-color mb-2">
+                                Màu sắc
+                            </Button>
+                            <Button onClick={showSizeModal} className="button-size mb-2 ms-2">
+                                Kích cỡ
+                            </Button>
+                            <Modal
+                                maskClosable={false}
+                                open={isColorModalVisible}
+                                onOk={hideColorModal}
+                                onCancel={hideColorModal}
+                            >
+                                <div className='mb-3 mt-3'>
+                                    <h5>Màu sắc:</h5>
+                                    {renderColorButtons()}
+                                </div>
+                            </Modal>
 
-                        <Modal
-                            maskClosable={false}
-                            open={isSizeModalVisible}
-                            onOk={hideSizeModal}
-                            onCancel={hideSizeModal}
-                        >
-                            <div>
-                                <h5>Kích cỡ:</h5>
-                                {renderSizeButtons()}
-                            </div>
-                        </Modal>
+                            <Modal
+                                maskClosable={false}
+                                open={isSizeModalVisible}
+                                onOk={hideSizeModal}
+                                onCancel={hideSizeModal}
+                            >
+                                <div>
+                                    <h5>Kích cỡ:</h5>
+                                    {renderSizeButtons()}
+                                </div>
+                            </Modal>
+                        </div>
+                        <Row>
+                            <Col className='d-flex justify-content-center align-items-center flex-wrap'>
+                                {selectedColors.map((colorId, index) => (
+                                    <Button
+                                        variant="outline-dark"
+                                        key={`color-${index}`}
+                                        className="selected-button m-1"
+                                        onClick={() => handleColorChange(colorId)}
+                                    >
+                                        {listColor.find(color => color.id === colorId).name}
+                                    </Button>
+                                ))}
+                                {selectedSizes.map((sizeId, index) => (
+                                    <Button
+                                        variant="outline-dark"
+                                        key={`size-${index}`}
+                                        className="selected-button m-1"
+                                        onClick={() => handleSizeChange(sizeId)}
+                                    >
+                                        {listSize.find(size => size.id === sizeId).name}
+                                    </Button>
+                                ))}</Col>
+                        </Row>
                     </div>
-                    <Row>
-                        <Col className='d-flex justify-content-center align-items-center flex-wrap'>
-                            {selectedColors.map((colorId, index) => (
-                                <Button
-                                    variant="outline-dark"
-                                    key={`color-${index}`}
-                                    className="selected-button m-1"
-                                    onClick={() => handleColorChange(colorId)}
-                                >
-                                    {listColor.find(color => color.id === colorId).name}
-                                </Button>
-                            ))}
-                            {selectedSizes.map((sizeId, index) => (
-                                <Button
-                                    variant="outline-dark"
-                                    key={`size-${index}`}
-                                    className="selected-button m-1"
-                                    onClick={() => handleSizeChange(sizeId)}
-                                >
-                                    {listSize.find(size => size.id === sizeId).name}
-                                </Button>
-                            ))}</Col>
-                    </Row>
                 </div>
-            </div>
-            <div className='manage-product-add-table'>
-                <div className='list-product-add-title'>
-                    <div className="title">
-                        <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
-                    </div>
-                    <button type="button" className="btn btn-dark" onClick={handleSubmitCreateProduct}>
-                        <MdLibraryAdd /> Hoàn Tất</button>
+                <div className='manage-product-add-table'>
+                    <div className='list-product-add-title'>
+                        <div className="title">
+                            <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
+                        </div>
+                        <button type="button" className="btn btn-dark" onClick={handleSubmitCreateProduct}>
+                            <MdLibraryAdd /> Hoàn Tất</button>
 
-                </div>
-                <table className="table">
-                    <thead style={{ backgroundColor: "black" }}>
+                    </div>
+                    <table className="table">
+                        <thead style={{ backgroundColor: "black" }}>
                         <tr>
                             <th scope="col" className='px-2 text-center'>#</th>
                             <th scope="col" className='px-5 text-center'>Sản phẩm</th>
@@ -605,8 +605,8 @@ const AddProduct = (props) => {
                             <th scope="col" className='px-2 text-center'>Màu sắc</th>
                             <th scope="col" className='px-2 text-center'>Hành động</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         {uniqueColorGroups.map((colorId, colorIndex) => {
                             return (
                                 <Fragment key={`color-group-${colorIndex}`}>
@@ -677,41 +677,41 @@ const AddProduct = (props) => {
                                 </Fragment>
                             );
                         })}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
+                </div >
+                <ModalCreateProduct
+                    show={showModalCreateProduct}
+                    setShow={setShowModalCreateProduct}
+                    fetchListProduct={fetchListProduct}
+                />
+                <ModalCreateBrand
+                    show={showModalCreateBrand}
+                    setShow={setShowModalCreateBrand}
+                    fetchListBrand={fetchListBrand}
+                />
+                <ModalCreateCategory
+                    show={showModalCreateCategory}
+                    setShow={setShowModalCreateCategory}
+                    fetchListCategory={fetchListCategory}
+                />
+                <ModalCreateMaterial
+                    show={showModalCreateMaterial}
+                    setShow={setShowModalCreateMaterial}
+                    fetchListMaterial={fetchListMaterial}
+                />
+                <ModalCreateCollar
+                    show={showModalCreateCollar}
+                    setShow={setShowModalCreateCollar}
+                    fetchListCollar={fetchListCollar}
+                />
+                <ModalCreateSleeveLength
+                    show={showModalCreateSleeveLength}
+                    setShow={setShowModalCreateSleeveLength}
+                    fetchListSleeveLength={fetchListSleeveLength}
+                />
             </div >
-            <ModalCreateProduct
-                show={showModalCreateProduct}
-                setShow={setShowModalCreateProduct}
-                fetchListProduct={fetchListProduct}
-            />
-            <ModalCreateBrand
-                show={showModalCreateBrand}
-                setShow={setShowModalCreateBrand}
-                fetchListBrand={fetchListBrand}
-            />
-            <ModalCreateCategory
-                show={showModalCreateCategory}
-                setShow={setShowModalCreateCategory}
-                fetchListCategory={fetchListCategory}
-            />
-            <ModalCreateMaterial
-                show={showModalCreateMaterial}
-                setShow={setShowModalCreateMaterial}
-                fetchListMaterial={fetchListMaterial}
-            />
-            <ModalCreateCollar
-                show={showModalCreateCollar}
-                setShow={setShowModalCreateCollar}
-                fetchListCollar={fetchListCollar}
-            />
-            <ModalCreateSleeveLength
-                show={showModalCreateSleeveLength}
-                setShow={setShowModalCreateSleeveLength}
-                fetchListSleeveLength={fetchListSleeveLength}
-            />
-        </div >
         </Spin>
     );
 }

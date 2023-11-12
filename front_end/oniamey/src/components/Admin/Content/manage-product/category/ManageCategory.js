@@ -173,7 +173,7 @@ const ManageCategory = (props) => {
                     highlightOnHover
                     pointerOnHover
                     paginationRowsPerPageOptions={[5, 10, 15]}
-                // onRowClicked={(row) => handleClickTable(row)}
+                    // onRowClicked={(row) => handleClickTable(row)}
                 />
             </div>
             <ModalCreateCategory

@@ -24,3 +24,4 @@ public class ProductRequest {
     private String description;
 
 }
+

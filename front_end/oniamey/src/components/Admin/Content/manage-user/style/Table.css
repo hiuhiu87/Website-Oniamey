@@ -1,74 +1,22 @@
-/* .rdt_Table {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  border: 1px solid #ddd;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1rem;
-  background-color: #fff;
-  border-radius: 0.25rem;
-  color: #212529;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: left;
-}
-
-.rdt_TableRow {
-  border-bottom: 1px solid #ddd;
-  transition: all 0.3s ease;
-}
-
 .rdt_TableCol {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
 
-.rdt_TableCol_Sortable {
-  cursor: pointer;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
 }
 
-.rdt_TableCell {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
+.table-container {
+    box-shadow: 0 0 10px gray;
+    border-radius: 10px;
+    padding: 0 20px 20px 20px;
+    min-height: 460px;
 }
 
-.rdt_TableHeader {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
+button {
+    width: unset !important;
 }
-
-.rdt_TableFooter {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
-}
-
-.rdt_TableHead {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
-}
-
-.rdt_TableHeadRow {
-  border-bottom: 1px solid #ddd;
-}
-
-.rdt_TableBody {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #ddd;
-  text-align: left;
-}
-
-.rdt_ExpanderRow {
-  background-color: #f9f9f9;
-} */

@@ -1,46 +1,63 @@
 .admin-container {
-    display: flex;
-    .admin-sidebar {
-        .pro-sidebar {
-            height: 100vh !important;
-            // width: 40vh !important;
-        }
+  display: flex;
+
+  .admin-sidebar {
+    .pro-sidebar {
+      height: 120vh !important;
+      // width: 40vh !important;
+    }
+  }
+
+  .admin-content {
+    width: 100%;
+
+    .admin-header {
+      height: 40px;
+      // border: 1px solid red;
     }
 
-    .admin-content {
-        width: 100%;
-        .admin-header {
-            height: 50px;
-            padding-top: 10px;
-            padding-left: 20px;
-            background-color: #ddd;
-            margin-bottom: 15px;
+    .admin-main {
+      // border: 1px solid red;
+      height: 50px;
+      padding-top: 10px;
+      padding-left: 20px;
+      background-color: #ddd;
+      margin-bottom: 15px;
 
-        }
-
-        .admin-main {
-            height: 60px;
-        }
     }
+  }
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-//   box-shadow: inset 0 0 5px grey; 
+  background: #f1f1f1;
+  //   box-shadow: inset 0 0 5px grey;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+    background: #555;
 }
+
+/* Admin.scss */
+/* Expanded state */
+.admin-content-expanded {
+    width: 86vw;
+    /* Add other styling as needed */
+  }
+  
+  /* Collapsed state */
+  .admin-content-collapsed {
+    width: 96vw;
+    /* Add other styling as needed */
+  }

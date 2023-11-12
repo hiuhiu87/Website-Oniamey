@@ -19,17 +19,23 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Address extends BaseModel {
 
+    @Column(name = "receiver_name", nullable = false)
+    private String receiverName; // tên người nhận
+
+    @Column(name = "receiver_phone_number", nullable = false)
+    private String receiverPhoneNumber; // số điện thoại người nhận
+
     @Column(name = "line", nullable = false)
     private String line; // số nhà, tên đường
 
     @Column(name = "ward", nullable = false)
-    private String ward; // phường
+    private String ward; // phường / xã
 
-    @Column(name = "city", nullable = false)
-    private String city; // thành phố
+    @Column(name = "district", nullable = false)
+    private String district; // quận / huyện
 
     @Column(name = "province", nullable = false)
-    private String province; // tỉnh
+    private String province; // tỉnh / thành phố
 
     @Column(name = "country", nullable = false)
     private String country; // quốc gia

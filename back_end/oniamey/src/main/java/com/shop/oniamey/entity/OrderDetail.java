@@ -19,14 +19,14 @@ public class OrderDetail extends BaseModel {
     @JoinColumn(name = "id_product_detail")
     private ProductDetail productDetail;
 
-    @Column (name = "quantity",nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @Column(name = "price",nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "total_money",nullable = false)
-    private Double total_money;
+    @Column(name = "total_money", nullable = false)
+    private Double totalMoney;
 
     @ManyToOne
     @JoinColumn(name = "id_order")

@@ -59,6 +59,8 @@ public class UserServiceImpl implements UserService {
 
 
         User user = new User();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -86,6 +88,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = checkUser.get();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
