@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.product.model.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,16 +18,10 @@ public class ProductRequest {
 
     private String code;
 
+    @NotBlank(message = "Product name cannot be left blank!")
     private String name;
 
     private String description;
 
-    private Long createdBy;
-
-    private Long updatedBy;
-
-    private Boolean deleted;
-
-//    List<ProductDetailRequest> productDetail;
-
 }
+

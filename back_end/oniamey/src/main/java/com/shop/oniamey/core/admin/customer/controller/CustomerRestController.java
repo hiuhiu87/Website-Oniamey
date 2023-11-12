@@ -1,8 +1,8 @@
 package com.shop.oniamey.core.admin.customer.controller;
 
-import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.customer.model.request.ModifyCustomerRequest;
 import com.shop.oniamey.core.admin.customer.service.CustomerService;
+import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class CustomerRestController {
 
     @GetMapping("/get-all-customers/{page}")
     public ResponseEntity<?> getAllCustomers(@PathVariable int page) {
-        Pageable pageable = Pageable.ofSize(5).withPage(page - 1);
+        Pageable pageable = Pageable.ofSize(10).withPage(page - 1);
         return new ResponseEntity<>(customerService.getAllCustomers(pageable), HttpStatus.OK);
     }
 
@@ -59,11 +59,6 @@ public class CustomerRestController {
     @PutMapping("/change-password/{id}")
     public ResponseEntity<?> changePassword(@PathVariable Long id, @Valid @RequestBody ChangePasswordRequest request) {
         return new ResponseEntity<>(customerService.changePassword(id, request), HttpStatus.OK);
-    }
-
-    @GetMapping("/get-total-page")
-    public Long getTotalPage() {
-        return customerService.getTotalPage();
     }
 
     @GetMapping("/get-all-customers")

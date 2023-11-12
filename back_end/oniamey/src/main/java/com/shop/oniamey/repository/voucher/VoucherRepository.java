@@ -118,5 +118,4 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
          OR v.maximum_discount like %:code% ) AND v.type like %:type%
     """, nativeQuery = true)
     List<VoucherResponse> searchByCode(String code, String type);
-
 }

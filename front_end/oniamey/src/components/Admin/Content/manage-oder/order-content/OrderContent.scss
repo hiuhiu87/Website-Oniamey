@@ -1,0 +1,53 @@
+.manage-order-content-table {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+
+    //   display: flex; flex-direction: column;
+    .form-search-order {
+        display: flex;
+    }
+
+    .or-title {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        justify-content: space-between;
+    }
+
+    .page-footer {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        position: relative;
+    }
+
+    .page-item {
+        display: flex;
+        position: absolute;
+        top: 30px;
+
+        .item {
+            margin: 2px;
+            border-radius: 5px;
+            // border: #806345 solid 1px;
+            text-align: center;
+            // width: 25px;
+        }
+    }
+
+    .page-active {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        border: #cc9966 solid 1px !important;
+        border-radius: 5px;
+        background-color: #cc9966;
+    }
+    
+    .table {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+}

@@ -2,25 +2,37 @@ package com.shop.oniamey.core.admin.product.model.response;
 
 public interface ProductDetailResponse {
 
-    Long getProduct();
+    Long getId();
 
-    Long getCategory();
+    Long getCategoryId();
 
-    Long getSize();
+    Long getSizeId();
 
-    Long getMaterial();
+    Long getMaterialId();
 
-    Long getBrand();
+    Long getBrandId();
 
-    Long getColor();
+    Long getColorId();
 
-    Long getCollar();
+    Long getCollarId();
 
-    Long getSleeveLength();
+    Long getSleeveLengthId();
+
+    String getCategory();
+
+    String getSize();
+
+    String getMaterial();
+
+    String getBrand();
+
+    String getColor();
+
+    String getCollar();
+
+    String getSleeveLength();
 
     String getName();
-
-    Boolean getGender();
 
     Float getPrice();
 
@@ -28,6 +40,8 @@ public interface ProductDetailResponse {
 
     Float getWeight();
 
-    String getImageUrl();
+    String getCover();
+
+    Boolean getDeleted();
 
 }

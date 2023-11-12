@@ -15,13 +15,10 @@ import lombok.Setter;
 @Getter
 public class PaymentMethod extends BaseModel {
 
-
-    @Column(name="method",nullable = false,length = 100)
+    @Column(name = "method", nullable = false, length = 100)
     private String methodName;
 
-    @Column(name="description" ,nullable = false, length = 1000)
+    @Column(name = "description", nullable = false, length = 1000)
     private String description;
-
-
 
 }

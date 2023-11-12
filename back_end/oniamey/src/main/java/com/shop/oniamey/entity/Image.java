@@ -26,9 +26,6 @@ public class Image extends BaseModel {
     @JoinColumn(name = "id_product_detail")
     private ProductDetail productDetail;
 
-    @Column(name = "cover")
-    private String cover;
-
     @Column(name = "image_url")
     private String imageUrl;
 

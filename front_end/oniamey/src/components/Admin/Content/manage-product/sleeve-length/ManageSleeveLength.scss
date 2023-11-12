@@ -1,0 +1,64 @@
+.manage-sleeve-length-container {
+  .manage-sleeve-length-title {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-sleeve-length-search {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    .search-sleeve-length-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-sleeve-length-table {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+
+    .list-sleeve-length-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: space-between;
+
+      .title {
+        font-weight: bold;
+      }
+    }
+  }
+
+
+  .rdt_TableCol_Sortable {
+    background-color: #cc9966;
+  }
+
+  .rdt_TableCol {
+    background-color: #cc9966;
+  }
+}

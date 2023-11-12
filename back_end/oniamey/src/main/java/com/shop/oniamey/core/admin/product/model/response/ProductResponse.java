@@ -8,7 +8,9 @@ public interface ProductResponse {
 
     String getCode();
 
-    String getName();
+    String getProductName();
+
+    Long getQuantity();
 
     String getDescription();
 

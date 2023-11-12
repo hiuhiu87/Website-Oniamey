@@ -1,10 +1,11 @@
 package com.shop.oniamey.entity;
 
 import com.shop.oniamey.entity.base.BaseModel;
+import com.shop.oniamey.infrastructure.constant.RoleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -23,6 +24,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class User extends BaseModel {
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "identity_card", nullable = false, unique = true)
+    private String identityCard;
+
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
@@ -33,7 +40,7 @@ public class User extends BaseModel {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "address")
@@ -48,8 +55,8 @@ public class User extends BaseModel {
     @Column(name = "avatar")
     private String avatar;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false, table = "user")
-    private Role role;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
 }

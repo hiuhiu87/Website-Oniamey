@@ -1,0 +1,46 @@
+.container {
+    box-shadow: none;
+}
+
+.active > .page-link,
+.active .page-link.active {
+    z-index: 3;
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+.page-link {
+    color: black;
+}
+
+.page-link:hover {
+  color: black;
+}
+
+.detail-customer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 95% !important;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+}
+
+.manager-customer-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 95% !important;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+.manager-customer-container .filter-customer-container {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+  margin-bottom: 20px;
+}
+.manager-customer-container .list-customer-container {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+}/*# sourceMappingURL=CustomerStyle.css.map */
