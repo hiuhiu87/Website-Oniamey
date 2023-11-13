@@ -16,7 +16,39 @@
 .page-link {
   color: black;
 
-  &:hover {
-    color: black;
-  }
+    &:hover {
+        color: black;
+    }
+}
+
+.detail-customer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: 95% !important;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+.manager-customer-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    // border-radius: 10px;
+    // box-shadow: 0 0 10px gray;
+    width: 95% !important;
+    overflow-x: auto;
+    box-sizing: border-box;
+
+    .filter-customer-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+        margin-bottom: 20px;
+    }
+
+    .list-customer-container {
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 rgb(193, 193, 193) !important;
+    }
+
 }

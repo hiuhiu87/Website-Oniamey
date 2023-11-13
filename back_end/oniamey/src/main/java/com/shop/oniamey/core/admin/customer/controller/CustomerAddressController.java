@@ -37,14 +37,20 @@ public class CustomerAddressController {
         return addressService.addAddress(modifyAddressRequest);
     }
 
-    @PostMapping("/update-address")
-    public String updateAddress(@Valid @RequestBody ModifyAddressRequest modifyAddressRequest) {
-        return addressService.updateAddress(modifyAddressRequest);
+    @PutMapping("/update-address/{id}")
+    public String updateAddress(@Valid @RequestBody ModifyAddressRequest modifyAddressRequest, @PathVariable Long id) {
+        return addressService.updateAddress(id, modifyAddressRequest);
     }
 
     @PutMapping("/set-default-address/{id}")
     public String setDefaultAddress(@PathVariable Long id) {
         return addressService.setDefaultAddress(id);
     }
+
+    @PutMapping("/delete-address/{id}")
+    public String deleteAddress(@PathVariable Long id) {
+        return addressService.deleteAddress(id);
+    }
+
 
 }

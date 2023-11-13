@@ -26,4 +26,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     FROM product
             """, nativeQuery = true)
     Page<ProductResponse> getAll(Pageable pageable);
+
+    @Query(value = """
+                    SELECT id,
+                    code as code,
+                    name as name,
+                    description as description,
+                    created_at as createdAt,
+                    updated_at as updatedAt,
+                    created_by as createdBy,
+                    updated_by as updatedBy,
+                    deleted as deleted
+                    FROM product order by created_at desc
+            """, nativeQuery = true)
+    List<ProductResponse> getAll();
 }

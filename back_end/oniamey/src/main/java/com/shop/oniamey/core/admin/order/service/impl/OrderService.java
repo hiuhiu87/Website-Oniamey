@@ -138,6 +138,10 @@ public class OrderService implements IOrderService {
         return orderRepository.getCountStatus(type,search);
     }
 
+    @Override
+    public List<OrderResponse> getByStatus(String status) {
+        return orderRepository.getByStatus(status);
+    }
 
     @Override
     public Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status , String orderType,String keySearch) {
@@ -154,11 +158,7 @@ public class OrderService implements IOrderService {
         }
         return orderRepository.getOrdersByStatus(pageable, status,type,search);
     }
-
-    @Override
-    public List<OrderResponse> getByStatus(String status) {
-        return orderRepository.getByStatus(status);
-    }
+ 
 
 
 }

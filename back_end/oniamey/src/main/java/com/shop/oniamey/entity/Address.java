@@ -19,6 +19,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Address extends BaseModel {
 
+    @Column(name = "receiver_name", nullable = false)
+    private String receiverName; // tên người nhận
+
+    @Column(name = "receiver_phone_number", nullable = false)
+    private String receiverPhoneNumber; // số điện thoại người nhận
+
     @Column(name = "line", nullable = false)
     private String line; // số nhà, tên đường
 

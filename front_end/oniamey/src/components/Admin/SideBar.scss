@@ -26,7 +26,26 @@
     }
 
     &:hover {
-      color: #dee2ec;;
+      color: #dee2ec;
+      ;
     }
   }
+}
+
+.logo_slibar {
+  .img_logo_slibar {
+    width: 100%;
+  }
+}
+
+.nav-sidebar {
+  opacity: 1;
+  width: 10vw;
+  position: fixed;
+  top: 0;
+  z-index: 20;
+}
+
+.pro-sidebar{
+  min-width: 280px;
 }

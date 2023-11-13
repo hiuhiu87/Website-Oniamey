@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .manage-brand-title {
     font-size: 24px;
     display: flex;
@@ -76,3 +77,50 @@ button {
 }
 
 /*# sourceMappingURL=ManageBrand.css.map */
+=======
+.manage-brand-container .manage-brand-title {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+.manage-brand-container .manage-brand-search {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  height: 200px;
+  border-radius: 5px;
+}
+.manage-brand-container .manage-brand-table {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 560px;
+  border-radius: 5px;
+}
+.manage-brand-container .search-brand-title {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.manage-brand-container .list-brand-title {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+.manage-brand-container .title {
+  font-weight: bold;
+}
+.manage-brand-container button {
+  width: 180px;
+}/*# sourceMappingURL=ManageBrand.css.map */
+>>>>>>> develop_merge_branch

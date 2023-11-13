@@ -13,6 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModifyAddressRequest {
 
+    @NotEmpty(message = "Name is required")
+    private String receiver;
+
+    @NotEmpty(message = "Phone number is required")
+    private String phoneNumber;
+
     @NotEmpty(message = "Line is required")
     private String line;
 

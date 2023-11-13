@@ -47,9 +47,18 @@ class CustomerService {
         return axios.get(BASE_API_URL_ADDRESS + "/get-all-address/" + id);
     }
 
-    changeDefaultAddress(id) {
-        return axios.put(BASE_API_URL_ADDRESS + "/set-default-address/" + id);
-    }
+  changeDefaultAddress(id) {
+    return axios.put(BASE_API_URL_ADDRESS + "/set-default-address/" + id);
+  }
+
+  updateAddress(address, id) {
+    return axios.put(BASE_API_URL_ADDRESS + "/update-address/" + id, address);
+  }
+
+  deleteAddress(id) {
+    return axios.put(BASE_API_URL_ADDRESS + "/delete-address/" + id);
+  }
+
 }
 
 const service = new CustomerService();

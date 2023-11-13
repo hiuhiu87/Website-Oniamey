@@ -86,7 +86,7 @@ public class ImageService implements IImageService {
         }
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
-        Path uploadDir = Paths.get("uploads");
+        Path uploadDir = Paths.get("D:\\Product\\Website-Oniamey\\front_end\\oniamey\\src\\assets\\uploads");
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }

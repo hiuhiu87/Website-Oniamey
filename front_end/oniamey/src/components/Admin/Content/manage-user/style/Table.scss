@@ -1,9 +1,10 @@
 .rdt_Table {
-  background-color: #cc9966;
-  background-color: #cc9966;
-  // min-height: 460px;
-  border-radius: 10px;
-  // min-height: 460px;
+    background-color: #cc9966;
+    background-color: #cc9966;
+    // min-height: 460px;
+    border-radius: 10px;
+    // min-height: 460px;
+    // border: 1px solid #cc9966;
 }
 
 .rdt_TableRow {
@@ -12,9 +13,8 @@
 }
 
 .rdt_TableCol {
-  text-align: left;
-  background-color: #cc9966;
-
+    text-align: left;
+    background-color: #cc9966;
 }
 
 .rdt_TableCol_Sortable {
@@ -51,9 +51,9 @@
 }
 
 .rdt_TableBody {
-  border-radius: 10px;
-  box-shadow: 0 0 10px gray;
-  min-height: 400px;
+    border-radius: 10px;
+    // box-shadow: 0 0 10px gray;
+    min-height: 400px;
 }
 
 .rdt_ExpanderRow {
@@ -70,10 +70,10 @@
 }
 
 .table-container {
-  box-shadow: 0 0 10px gray;
-  border-radius: 10px;
-  padding: 0 20px 20px 20px;
-  min-height: 460px;
+    // box-shadow: 0 0 10px gray;
+    border-radius: 10px;
+    // padding: 0 20px 20px 20px;
+    min-height: 460px;
 
 }
 
