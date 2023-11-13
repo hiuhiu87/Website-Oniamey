@@ -1,71 +1,81 @@
-import { React, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import _ from 'lodash';
-import { postCreateProperty } from '../../../../../services/apiService';
+import { React, useState } from "react";
+import { Modal } from "antd";
+import { postCreateProperty } from "../../../../../services/apiService";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ModalCreateCollar = (props) => {
-
     const { show, setShow } = props;
 
-    const [name, setName] = useState('');
+    const [name, setName] = useState("");
+    const nameError = name.trim() === "" ? "Tên không được để trống!" : "";
     const [deleted, setDeleted] = useState(false);
 
     const handleClose = () => {
         setShow(false);
-        setName('');
+        setName("");
         setDeleted(false);
     };
 
-    const handleSubmitCreateCollar = async () => {
-        let data = await postCreateProperty('collar', name, deleted);
-        props.fetchListCollar();
-        handleClose();
-        console.log(data);
+    const handleSubmitCreateCollar = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận thêm!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError) {
+                    return;
+                }
+
+                await postCreateProperty("collar", name, deleted);
+                toast.success("Thêm thành công!");
+                props.fetchListCollar();
+                handleClose();
+            }
+        });
     };
 
     return (
-        <Modal
-            show={show}
-            onHide={handleClose}
-            size="x"
-            backdrop="static"
-            className='modal-add-collar'
-            centered
-        >
-            <Modal.Header>
-                <Modal.Title>Add New Collar</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <>
+            <Modal
+                title="Thêm Cổ Áo"
+                open={show}
+                onOk={() => handleSubmitCreateCollar()}
+                onCancel={handleClose}
+            >
                 <form className="row g-3">
                     <div className="col-md-12">
-                        <label className="form-label">Name</label>
+                        <label className="form-label">Tên</label>
                         <input
                             type="text"
                             className="form-control"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                        {nameError && (
+                            <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                        )}
                     </div>
                     <div className="col-md-12">
-                        <label className="form-label">Status</label>
-                        <select className="form-select" onChange={(e) => setDeleted(e.target.value)}>
-                            <option value={false}>Active</option>
-                            <option value={true}>DeActive</option>
+                        <label className="form-label">Trạng thái</label>
+                        <select
+                            className="form-select"
+                            onChange={(e) => setDeleted(e.target.value)}
+                        >
+                            <option value={false}>Hoạt động</option>
+                            <option value={true}>Ngừng hoạt động</option>
                         </select>
                     </div>
                 </form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="dark" onClick={() => handleSubmitCreateCollar()}>
-                    Save
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
+            </Modal>
+        </>
     );
-}
+};
 
 export default ModalCreateCollar;

@@ -1,75 +1,63 @@
-$odd-row-color: #f2f2f2;
-
-.manage-category-title {
+.manage-category-container {
+  .manage-category-title {
     font-size: 24px;
     display: flex;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     margin-left: 20px;
-}
 
-.manage-category-search {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin-bottom: 32px;
-    height: 200px;
-    border-radius: 5px;
-}
-
-.manage-category-table {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    height: 560px;
-    border-radius: 5px;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 20px;
-
-    th,
-    td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    &:nth-child(odd) {
-      background-color: $odd-row-color;
+    .title {
+      font-weight: bold;
     }
   }
 
-
-.search-category-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
+  .manage-category-search {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-}
+    border-radius: 5px;
 
-.list-category-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    justify-content: space-between;
-}
+    .search-category-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-.title {
-  font-weight: bold;
-}
+    .title {
+      font-weight: bold;
+    }
+  }
 
-button {
-  width: 180px;
-}
+  .manage-category-table {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 
-form {
-    // padding-left: 200px;
+    .list-category-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: space-between;
+
+      .title {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .rdt_TableCol_Sortable {
+    background-color: #cc9966;
+  }
+
+  .rdt_TableCol {
+    background-color: #cc9966;
+  }
 }

@@ -22,5 +22,4 @@ public class PaymentMethod extends BaseModel {
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
-
 }

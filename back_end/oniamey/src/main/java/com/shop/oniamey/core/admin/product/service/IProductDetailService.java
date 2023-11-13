@@ -18,9 +18,15 @@ public interface IProductDetailService {
 
     List<ProductDetailResponse> getAllByProductId(Long productId);
 
-    List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest) throws IOException, DataNotFoundException, WriterException;
+    List<ProductDetailResponse> getAllByColorId(Long colorId);
 
-    ProductDetail update(Long id, UpdateProductDetailRequest updateProductDetailRequest) throws DataNotFoundException;
+    List<ProductDetail> create(AddProductDetailRequest addProductDetailRequest)
+            throws IOException, DataNotFoundException, WriterException;
+
+//    ProductDetail update(Long id, UpdateProductDetailRequest updateProductDetailRequest) throws DataNotFoundException;
+
+    ProductDetail update(Long id, Long productId, UpdateProductDetailRequest updateProductDetailRequest)
+            throws DataNotFoundException;
 
     void delete(Long id) throws DataNotFoundException;
 

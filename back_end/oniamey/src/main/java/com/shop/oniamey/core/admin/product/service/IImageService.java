@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface IImageService {
 
-//    List<Image> uploadImagesForMultipleProductDetails(List<Long> productDetailIds, Long colorId, List<MultipartFile> imageFiles) throws DataNotFoundException, IOException;
-
     Image getById(Long id) throws DataNotFoundException;
 
     List<Image> uploadImages(ImageRequest imageRequest) throws DataNotFoundException, IOException;

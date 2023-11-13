@@ -22,5 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD
+=======
 # Editor directories and files
+>>>>>>> develop_merge_branch
 .idea
