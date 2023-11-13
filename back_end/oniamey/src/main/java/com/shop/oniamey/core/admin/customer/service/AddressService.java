@@ -11,12 +11,14 @@ public interface AddressService {
 
     String deleteAddress(Long id);
 
-    String updateAddress(ModifyAddressRequest modifyAddressRequest);
+    String updateAddress(Long id, ModifyAddressRequest modifyAddressRequest);
 
     AddressResponse getAddressById(Long id);
 
     List<AddressResponse> getAllAddressByCustomerId(Long idCustomer);
 
     List<AddressResponse>  getAllAddress();
+
+    String setDefaultAddress(Long id);
 
 }

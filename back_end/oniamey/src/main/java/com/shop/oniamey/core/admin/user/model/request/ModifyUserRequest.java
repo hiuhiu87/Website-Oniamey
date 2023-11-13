@@ -21,6 +21,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class ModifyUserRequest {
 
+    @NotEmpty(message = "Username is required")
+    private String username;
+
+    @NotEmpty(message = "Identity card is required")
+    private String identityCard;
+
     @NotEmpty(message = "Full name is required")
     private String fullName;
 

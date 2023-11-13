@@ -13,20 +13,23 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModifyAddressRequest {
 
+    @NotEmpty(message = "Name is required")
+    private String receiver;
+
+    @NotEmpty(message = "Phone number is required")
+    private String phoneNumber;
+
     @NotEmpty(message = "Line is required")
     private String line;
 
     @NotEmpty(message = "Ward is required")
     private String ward;
 
-    @NotEmpty(message = "City is required")
-    private String city;
+    @NotEmpty(message = "District is required")
+    private String district;
 
     @NotEmpty(message = "Province is required")
     private String province;
-
-    @NotEmpty(message = "Country is required")
-    private String country;
 
     @NotNull(message = "Customer id is required")
     private Long customerId;

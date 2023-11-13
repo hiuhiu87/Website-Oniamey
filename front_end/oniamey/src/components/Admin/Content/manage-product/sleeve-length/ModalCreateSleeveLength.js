@@ -6,77 +6,77 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
 const ModalCreateSleeveLength = (props) => {
-  const { show, setShow } = props;
+    const { show, setShow } = props;
 
-  const [name, setName] = useState("");
-  const nameError = name.trim() === "" ? "Tên không được để trống!" : "";
-  const [deleted, setDeleted] = useState(false);
+    const [name, setName] = useState("");
+    const nameError = name.trim() === "" ? "Tên không được để trống!" : "";
+    const [deleted, setDeleted] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    setName("");
-    setDeleted(false);
-  };
+    const handleClose = () => {
+        setShow(false);
+        setName("");
+        setDeleted(false);
+    };
 
-  const handleSubmitCreateSleeveLength = () => {
-    Swal.fire({
-      title: "Thông báo",
-      text: "Xác nhận thêm!",
-      icon: "infor",
-      showCancelButton: true,
-      confirmButtonColor: "#000",
-      cancelButtonColor: "#000",
-      confirmButtonText: "Đồng ý",
-      cancelButtonText: "Hủy",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        if (nameError) {
-          return;
-        }
+    const handleSubmitCreateSleeveLength = () => {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Xác nhận thêm!",
+            icon: "infor",
+            showCancelButton: true,
+            confirmButtonColor: "#000",
+            cancelButtonColor: "#000",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (nameError) {
+                    return;
+                }
 
-        await postCreateProperty("sleeve-length", name, deleted);
-        toast.success("Thêm thành công!");
-        props.fetchListSleeveLength();
-        handleClose();
-      }
-    });
-  };
+                await postCreateProperty("sleeve-length", name, deleted);
+                toast.success("Thêm thành công!");
+                props.fetchListSleeveLength();
+                handleClose();
+            }
+        });
+    };
 
-  return (
-    <>
-      <Modal
-        title="Thêm Chiều Dài Tay"
-        open={show}
-        onOk={() => handleSubmitCreateSleeveLength()}
-        onCancel={handleClose}
-      >
-        <form className="row g-3">
-          <div className="col-md-12">
-            <label className="form-label">Tên</label>
-            <input
-              type="text"
-              className="form-control"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            {nameError && (
-              <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
-            )}
-          </div>
-          <div className="col-md-12">
-            <label className="form-label">Trạng thái</label>
-            <select
-              className="form-select"
-              onChange={(e) => setDeleted(e.target.value)}
+    return (
+        <>
+            <Modal
+                title="Thêm Chiều Dài Tay"
+                open={show}
+                onOk={() => handleSubmitCreateSleeveLength()}
+                onCancel={handleClose}
             >
-              <option value={false}>Hoạt động</option>
-              <option value={true}>Ngừng hoạt động</option>
-            </select>
-          </div>
-        </form>
-      </Modal>
-    </>
-  );
+                <form className="row g-3">
+                    <div className="col-md-12">
+                        <label className="form-label">Tên</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        {nameError && (
+                            <p style={{ color: "red", marginTop: "1px" }}>{nameError}</p>
+                        )}
+                    </div>
+                    <div className="col-md-12">
+                        <label className="form-label">Trạng thái</label>
+                        <select
+                            className="form-select"
+                            onChange={(e) => setDeleted(e.target.value)}
+                        >
+                            <option value={false}>Hoạt động</option>
+                            <option value={true}>Ngừng hoạt động</option>
+                        </select>
+                    </div>
+                </form>
+            </Modal>
+        </>
+    );
 };
 
 export default ModalCreateSleeveLength;

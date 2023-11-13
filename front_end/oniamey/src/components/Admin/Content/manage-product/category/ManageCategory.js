@@ -20,7 +20,6 @@ const ManageCategory = (props) => {
     const [dataUpdate, setDataUpdate] = useState({});
 
     const [listCategory, setListCategory] = useState([]);
-    const [categoryId, setCategoryId] = useState('');
 
     useEffect(() => {
         fetchListCategory();
@@ -29,8 +28,6 @@ const ManageCategory = (props) => {
     const fetchListCategory = async () => {
         let res = await getAllProperties('category');
         setListCategory(res.data);
-        setCategoryId(res.data[0].id)
-        console.log(res);
     }
 
     const handleShowModalUpdateCategory = (category) => {
@@ -173,7 +170,7 @@ const ManageCategory = (props) => {
                     highlightOnHover
                     pointerOnHover
                     paginationRowsPerPageOptions={[5, 10, 15]}
-                // onRowClicked={(row) => handleClickTable(row)}
+                    // onRowClicked={(row) => handleClickTable(row)}
                 />
             </div>
             <ModalCreateCategory

@@ -36,7 +36,7 @@ const UpdateProduct = (props) => {
   const [listColor, setListColor] = useState([]);
 
   const [showModalDetailProductDetail, setShowModalDetailProductDetail] =
-    useState(false);
+      useState(false);
 
   const [dataDetail, setDataDetail] = useState({});
 
@@ -148,15 +148,15 @@ const UpdateProduct = (props) => {
     {
       name: "Ảnh",
       cell: (row) => (
-        <div
-          className="text-center image-product-detail"
-          style={{ verticalAlign: "middle", width: "100px" }}
-        >
-          <img
-            style={{ width: "100%", padding: "5px" }}
-            src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
-          />
-        </div>
+          <div
+              className="text-center image-product-detail"
+              style={{ verticalAlign: "middle", width: "100px" }}
+          >
+            <img
+                style={{ width: "100%", padding: "5px" }}
+                src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
+            />
+          </div>
       ),
       center: "true",
     },
@@ -188,20 +188,20 @@ const UpdateProduct = (props) => {
     {
       name: "Trạng thái",
       selector: (row) =>
-        row.deleted === false ? "Hoạt động" : "Ngừng hoạt động",
+          row.deleted === false ? "Hoạt động" : "Ngừng hoạt động",
       center: "true",
     },
     {
       name: "Hành động",
       cell: (row) => (
-        <>
-          <button
-            className="btn-update btn btn-dark mx-3 short-button"
-            onClick={() => handleClickBtnDetail(row)}
-          >
-            <AiFillEye color="#ffffff" />
-          </button>
-        </>
+          <>
+            <button
+                className="btn-update btn btn-dark mx-3 short-button"
+                onClick={() => handleClickBtnDetail(row)}
+            >
+              <AiFillEye color="#ffffff" />
+            </button>
+          </>
       ),
       center: "true",
     },
@@ -215,186 +215,186 @@ const UpdateProduct = (props) => {
   };
 
   return (
-    <>
-      <div class="manage-product-update-container">
-        <div className="manage-product-detail-update-title">
-          <div className="title">
-            <FaProductHunt size={32} /> Sản phẩm: {productName}
-          </div>
-        </div>
-        <div className="manage-product-detail-update-search">
-          <div className="search-product-detail-update-title">
+      <>
+        <div class="manage-product-update-container">
+          <div className="manage-product-detail-update-title">
             <div className="title">
-              <FaFilter size={26} /> Bộ Lọc
+              <FaProductHunt size={32} /> Sản phẩm: {productName}
             </div>
           </div>
-          <Form>
-            <Row className="mb-3 justify-content-md-center ">
-              <Col lg="5">
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Tìm kiếm"
-                >
-                  <Form.Control type="text" placeholder="name@example.com" />
-                </FloatingLabel>
-              </Col>
-            </Row>
-            <Row className="mb-3 justify-content-md-center ">
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
-                  <Form.Select aria-label="Floating label select example">
-                    <option>Tất cả</option>
-                    {/* {listBrand.map(brand => (
+          <div className="manage-product-detail-update-search">
+            <div className="search-product-detail-update-title">
+              <div className="title">
+                <FaFilter size={26} /> Bộ Lọc
+              </div>
+            </div>
+            <Form>
+              <Row className="mb-3 justify-content-md-center ">
+                <Col lg="5">
+                  <FloatingLabel
+                      controlId="floatingInput"
+                      label="Tìm kiếm"
+                  >
+                    <Form.Control type="text" placeholder="name@example.com" />
+                  </FloatingLabel>
+                </Col>
+              </Row>
+              <Row className="mb-3 justify-content-md-center ">
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
+                    <Form.Select aria-label="Floating label select example">
+                      <option>Tất cả</option>
+                      {/* {listBrand.map(brand => (
                                             <option key={brand.id} value={brand.id}>
                                                 {brand.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Danh mục">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    {/* {listCategory.map(category => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Danh mục">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      {/* {listCategory.map(category => (
                                             <option key={category.id} value={category.id}>
                                                 {category.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Chất liệu">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    {/* {listMaterial.map(material => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Chất liệu">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      {/* {listMaterial.map(material => (
                                             <option key={material.id} value={material.id}>
                                                 {material.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Cổ áo">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    {/* {listCollar.map(collar => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Cổ áo">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      {/* {listCollar.map(collar => (
                                             <option key={collar.id} value={collar.id}>
                                                 {collar.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-            </Row>
-            <Row className="mb-3 justify-content-md-center ">
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    <option value="">Tất cả</option>
-                    {/* {listSleeveLength.map(sleeveLength => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+              </Row>
+              <Row className="mb-3 justify-content-md-center ">
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      <option value="">Tất cả</option>
+                      {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Màu sắc">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    {/* {listSleeveLength.map(sleeveLength => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Màu sắc">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2">
-                <FloatingLabel controlId="floatingSelect" label="Kích cỡ">
-                  <Form.Select aria-label="Floating label select example">
-                    <option value="">Tất cả</option>
-                    {/* {listSleeveLength.map(sleeveLength => (
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2">
+                  <FloatingLabel controlId="floatingSelect" label="Kích cỡ">
+                    <Form.Select aria-label="Floating label select example">
+                      <option value="">Tất cả</option>
+                      {/* {listSleeveLength.map(sleeveLength => (
                                             <option key={sleeveLength.id} value={sleeveLength.id}>
                                                 {sleeveLength.name}
                                             </option>
                                         ))} */}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col lg="2" className="mt-1">
-                Khoảng giá
-                <Slider
-                    range
-                    step={1}
-                    defaultValue={[0, 50]}
-                />
-              </Col>
-              <Col lg="2" className="mt-1">
-                Số lượng
-                <Slider defaultValue={0} />
-              </Col>
-            </Row>
-          </Form>
-        </div>
-        <div className="manage-product-detail-update-table">
-          <div className="list-product-detail-update-title">
-                  <div className="title">
-                      <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
-                  </div>
-                  <button type="button" class="btn btn-dark">
-                      <MdLibraryAdd/> Cập nhật
-                  </button>
+                    </Form.Select>
+                  </FloatingLabel>
+                </Col>
+                <Col lg="2" className="mt-1">
+                  Khoảng giá
+                  <Slider
+                      range
+                      step={1}
+                      defaultValue={[0, 50]}
+                  />
+                </Col>
+                <Col lg="2" className="mt-1">
+                  Số lượng
+                  <Slider defaultValue={0} />
+                </Col>
+              </Row>
+            </Form>
           </div>
-          <DataTable
-            rounded-3
-            columns={columnsProductDetail}
-            data={listProductDetail}
-            pagination
-            paginationComponentOptions={paginationComponentOptions}
-            highlightOnHover
-            pointerOnHover
-            paginationRowsPerPageOptions={[5, 10, 15]}
-            // onRowClicked={(row) => handleClickTable(row)}
-          />
+          <div className="manage-product-detail-update-table">
+            <div className="list-product-detail-update-title">
+              <div className="title">
+                <FaThList size={26} /> Danh Sách Sản Phẩm Chi Tiết
+              </div>
+              <button type="button" class="btn btn-dark">
+                <MdLibraryAdd/> Cập nhật
+              </button>
+            </div>
+            <DataTable
+                rounded-3
+                columns={columnsProductDetail}
+                data={listProductDetail}
+                pagination
+                paginationComponentOptions={paginationComponentOptions}
+                highlightOnHover
+                pointerOnHover
+                paginationRowsPerPageOptions={[5, 10, 15]}
+                // onRowClicked={(row) => handleClickTable(row)}
+            />
+          </div>
         </div>
-      </div>
-      <ModalDetailProductDetail
-        show={showModalDetailProductDetail}
-        setShow={setShowModalDetailProductDetail}
-        productName={productName}
-        productId={productId}
-        brandId={brandId}
-        setBrandId={setBrandId}
-        listBrand={listBrand}
-        categoryId={categoryId}
-        setCategoryId={setCategoryId}
-        listCategory={listCategory}
-        materialId={materialId}
-        setMaterialId={setMaterialId}
-        listMaterial={listMaterial}
-        collarId={collarId}
-        setCollarId={setCollarId}
-        listCollar={listCollar}
-        sleeveLengthId={sleeveLengthId}
-        setSleeveLengthId={setSleeveLengthId}
-        listSleeveLength={listSleeveLength}
-        sizeId={sizeId}
-        setSizeId={setSizeId}
-        listSize={listSize}
-        colorId={colorId}
-        setColorId={setColorId}
-        listColor={listColor}
-        fetchListProductDetailByProductId={fetchListProductDetailByProductId}
-        dataDetail={dataDetail}
-        resetDataDetail={resetDataDetail}
-      />
-    </>
+        <ModalDetailProductDetail
+            show={showModalDetailProductDetail}
+            setShow={setShowModalDetailProductDetail}
+            productName={productName}
+            productId={productId}
+            brandId={brandId}
+            setBrandId={setBrandId}
+            listBrand={listBrand}
+            categoryId={categoryId}
+            setCategoryId={setCategoryId}
+            listCategory={listCategory}
+            materialId={materialId}
+            setMaterialId={setMaterialId}
+            listMaterial={listMaterial}
+            collarId={collarId}
+            setCollarId={setCollarId}
+            listCollar={listCollar}
+            sleeveLengthId={sleeveLengthId}
+            setSleeveLengthId={setSleeveLengthId}
+            listSleeveLength={listSleeveLength}
+            sizeId={sizeId}
+            setSizeId={setSizeId}
+            listSize={listSize}
+            colorId={colorId}
+            setColorId={setColorId}
+            listColor={listColor}
+            fetchListProductDetailByProductId={fetchListProductDetailByProductId}
+            dataDetail={dataDetail}
+            resetDataDetail={resetDataDetail}
+        />
+      </>
   );
 };
 

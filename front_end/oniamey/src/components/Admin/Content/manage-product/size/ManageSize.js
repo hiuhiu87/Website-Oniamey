@@ -20,7 +20,6 @@ const ManageSize = (props) => {
     const [dataUpdate, setDataUpdate] = useState({});
 
     const [listSize, setListSize] = useState([]);
-    const [sizeId, setSizeId] = useState('');
 
     useEffect(() => {
         fetchListSize();
@@ -29,8 +28,6 @@ const ManageSize = (props) => {
     const fetchListSize = async () => {
         let res = await getAllProperties('size');
         setListSize(res.data);
-        setSizeId(res.data[0].id)
-        console.log(res);
     }
 
     const handleShowModalUpdateSize = (size) => {
@@ -173,7 +170,7 @@ const ManageSize = (props) => {
                     highlightOnHover
                     pointerOnHover
                     paginationRowsPerPageOptions={[5, 10, 15]}
-                // onRowClicked={(row) => handleClickTable(row)}
+                    // onRowClicked={(row) => handleClickTable(row)}
                 />
             </div>
             <ModalCreateSize

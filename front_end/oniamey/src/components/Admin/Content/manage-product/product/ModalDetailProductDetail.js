@@ -5,12 +5,6 @@ import { MdLibraryAdd } from 'react-icons/md';
 import _ from 'lodash';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ModalCreateProduct from './ModalCreateProduct';
-import ModalCreateBrand from '../brand/ModalCreateBrand';
-import ModalCreateMaterial from '../material/ModalCreateMaterial';
-import ModalCreateCategory from '../category/ModalCreateCategory';
-import ModalCreateCollar from '../collar/ModalCreateCollar';
-import ModalCreateSleeveLength from '../sleeve-length/ModalCreateSleeveLength';
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import {Form} from "react-bootstrap";
 import {putUpdateProductDetail} from "../../../../../services/apiService";
@@ -45,12 +39,6 @@ const ModalDetailProductDetail = (props) => {
     }, [dataDetail])
 
     const { show, setShow } = props;
-
-    const [showModalCreateBrand, setShowModalCreateBrand] = useState(false);
-    const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
-    const [showModalCreateMaterial, setShowModalCreateMaterial] = useState(false);
-    const [showModalCreateCollar, setShowModalCreateCollar] = useState(false);
-    const [showModalCreateSleeveLength, setShowModalCreateSleeveLength] = useState(false);
 
     const handleClose = () => {
         setShow(false);
@@ -98,7 +86,7 @@ const ModalDetailProductDetail = (props) => {
     return (
         <>
             <Modal width={1200} centered
-                open={show} onOk={() => handleSubmitUpdateProductDetail()} onCancel={handleClose}>
+                   open={show} onOk={() => handleSubmitUpdateProductDetail()} onCancel={handleClose}>
                 <Row className="mt-4 justify-content-md-center">
                     <Col lg="6">
                         <FloatingLabel
@@ -118,89 +106,87 @@ const ModalDetailProductDetail = (props) => {
                         {/*value={listProduct.find((product) => product.id === props.productId).description}*/}
                     </Col>
                 </Row>
-                    <Row className="mt-3 mb-3 justify-content-md-center">
-                        <Col lg="3">
-                            <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
-                                <Form.Select value={brandId} onChange={(e) => setBrandId(e.target.value)}>
-                                    {listBrand.map(brand => (
-                                        <option key={brand.id} value={brand.id}>
-                                            {brand.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <Col lg="3">
-                            <FloatingLabel controlId="floatingSelect" label="Danh mục">
-                                <Form.Select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
-                                    {listCategory.map(category => (
-                                        <option key={category.id} value={category.id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <Col lg="3">
-                            <FloatingLabel controlId="floatingSelect" label="Chất liệu">
-                                <Form.Select value={materialId} onChange={(e) => setMaterialId(e.target.value)}>
-                                    {listMaterial.map(material => (
-                                        <option key={material.id} value={material.id}>
-                                            {material.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                    <Row className="mt-3 mb-3 justify-content-md-center">
-                        <Col lg="3">
-                            <FloatingLabel controlId="floatingSelect" label="Cổ áo">
-                                <Form.Select value={collarId} onChange={(e) => setCollarId(e.target.value)}>
-                                    {listCollar.map(collar => (
-                                        <option key={collar.id} value={collar.id}>
-                                            {collar.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <Col lg="2">
-                            <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
-                                <Form.Select value={sleeveLengthId} onChange={(e) => setSleeveLengthId(e.target.value)}>
-                                    {listSleeveLength.map(sleeveLength => (
-                                        <option key={sleeveLength.id} value={sleeveLength.id}>
-                                            {sleeveLength.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <Col lg="2">
-                            <FloatingLabel controlId="floatingSelect" label="Màu sắc">
-                                <Form.Select value={colorId} onChange={(e) => setColorId(e.target.value)}>
-                                    {listColor.map(color => (
-                                        <option key={color.id} value={color.id}>
-                                            {color.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
-                        <Col lg="3">
-                            <FloatingLabel controlId="floatingSelect" label="Kích cỡ">
-                                <Form.Select value={sizeId} onChange={(e) => setSizeId(e.target.value)}>
-                                    {listSize.map(size => (
-                                        <option key={size.id} value={size.id}>
-                                            {size.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </FloatingLabel>
-                        </Col>
-                        <button type="button" className="btn btn-dark mt-3 me-3 btn-add-property" onClick={() => setShowModalCreateSleeveLength(true)}><MdLibraryAdd /></button>
-                    </Row>
+                <Row className="mt-3 mb-3 justify-content-md-center">
+                    <Col lg="3">
+                        <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
+                            <Form.Select value={brandId} onChange={(e) => setBrandId(e.target.value)}>
+                                {listBrand.map(brand => (
+                                    <option key={brand.id} value={brand.id}>
+                                        {brand.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col lg="3">
+                        <FloatingLabel controlId="floatingSelect" label="Danh mục">
+                            <Form.Select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+                                {listCategory.map(category => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col lg="3">
+                        <FloatingLabel controlId="floatingSelect" label="Chất liệu">
+                            <Form.Select value={materialId} onChange={(e) => setMaterialId(e.target.value)}>
+                                {listMaterial.map(material => (
+                                    <option key={material.id} value={material.id}>
+                                        {material.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
+                <Row className="mt-3 mb-3 justify-content-md-center">
+                    <Col lg="3">
+                        <FloatingLabel controlId="floatingSelect" label="Cổ áo">
+                            <Form.Select value={collarId} onChange={(e) => setCollarId(e.target.value)}>
+                                {listCollar.map(collar => (
+                                    <option key={collar.id} value={collar.id}>
+                                        {collar.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col lg="2">
+                        <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
+                            <Form.Select value={sleeveLengthId} onChange={(e) => setSleeveLengthId(e.target.value)}>
+                                {listSleeveLength.map(sleeveLength => (
+                                    <option key={sleeveLength.id} value={sleeveLength.id}>
+                                        {sleeveLength.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col lg="2">
+                        <FloatingLabel controlId="floatingSelect" label="Màu sắc">
+                            <Form.Select value={colorId} onChange={(e) => setColorId(e.target.value)}>
+                                {listColor.map(color => (
+                                    <option key={color.id} value={color.id}>
+                                        {color.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col lg="3">
+                        <FloatingLabel controlId="floatingSelect" label="Kích cỡ">
+                            <Form.Select value={sizeId} onChange={(e) => setSizeId(e.target.value)}>
+                                {listSize.map(size => (
+                                    <option key={size.id} value={size.id}>
+                                        {size.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
                 <Row className="mt-3 mb-3 justify-content-md-center">
 
                     <Col lg="4">
@@ -220,33 +206,33 @@ const ModalDetailProductDetail = (props) => {
                         </FloatingLabel>
                     </Col>
                 </Row>
-                    <Row>
-                        <Col className="d-flex justify-content-md-center">
-                                <img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${name}-QRCODE.png`} style={{width: "20%"}}/>
-                        </Col>
-                    </Row>
+                <Row>
+                    <Col className="d-flex justify-content-md-center">
+                        <img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${name}-QRCODE.png`} style={{width: "20%"}}/>
+                    </Col>
+                </Row>
                 <Row className="mt-3">
-                        <Col className='d-flex justify-content-md-center'>
-                            <Upload
-                                action="URL_API_TAI_LEN"
-                                listType="picture-card"
-                                fileList={fileList}
-                                onPreview={handlePreview}
-                                onChange={handleChange}
-                                multiple={true}
-                                className='d-flex justify-content-md-center'
-                            >
-                                {fileList.length >= 8 ? null : (
-                                    <div>
-                                        <PlusOutlined />
-                                        <div style={{ marginTop: 8 }}>Tải lên</div>
-                                    </div>
-                                )}
-                            </Upload>
-                            <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
-                                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                            </Modal>
-                        </Col>
+                    <Col className='d-flex justify-content-md-center'>
+                        <Upload
+                            action="URL_API_TAI_LEN"
+                            listType="picture-card"
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                            multiple={true}
+                            className='d-flex justify-content-md-center'
+                        >
+                            {fileList.length >= 8 ? null : (
+                                <div>
+                                    <PlusOutlined />
+                                    <div style={{ marginTop: 8 }}>Tải lên</div>
+                                </div>
+                            )}
+                        </Upload>
+                        <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel}>
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                    </Col>
                 </Row>
             </Modal >
         </>

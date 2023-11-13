@@ -50,7 +50,6 @@ const AddProduct = (props) => {
 
 
     const [listProduct, setListProduct] = useState([]);
-    const [productId, setProductId] = useState('');
     const [productName, setProductName] = useState('');
     const nameError = productName.trim() === "" ? "* Tên không được để trống!" : "";
     const [description, setDescription] = useState('');
@@ -86,37 +85,36 @@ const AddProduct = (props) => {
     const fetchListBrand = async () => {
         let response = await getAllProperties('brand');
         setListBrand(response.data);
-        setBrandId(response.data[0].id);
     }
 
     const fetchListCategory = async () => {
         let response = await getAllProperties('category');
         setListCategory(response.data);
-        setCategoryId(response.data[0].id)
     }
 
     const fetchListMaterial = async () => {
         let response = await getAllProperties('material');
         setListMaterial(response.data);
-        setMaterialId(response.data[0].id)
     }
 
     const fetchListCollar = async () => {
         let response = await getAllProperties('collar');
         setListCollar(response.data);
-        setCollarId(response.data[0].id)
     }
 
     const fetchListSleeveLength = async () => {
         let response = await getAllProperties('sleeve-length');
         setListSleeveLength(response.data);
-        setSleeveLengthId(response.data[0].id)
     }
 
     const fetchListColor = async () => {
         let response = await getAllProperties('color');
         setListColor(response.data);
-        setColorId(response.data[0].id)
+    }
+
+    const fetchListSize = async () => {
+        let res = await getAllProperties('size');
+        setListSize(res.data);
     }
 
     const showColorModal = () => {
@@ -142,7 +140,6 @@ const AddProduct = (props) => {
             setSelectedColors([...selectedColors, color]);
         }
         setProductDetails([]);
-        console.log('Mau',selectedSizes)
     };
 
     const handleSizeChange = (size) => {
@@ -152,7 +149,6 @@ const AddProduct = (props) => {
             setSelectedSizes([...selectedSizes, size]);
         }
         setProductDetails([]);
-        console.log('Size',selectedSizes)
     };
 
     const renderColorButtons = () => {
@@ -288,7 +284,7 @@ const AddProduct = (props) => {
         return (
             <tr>
                 <td colSpan={7}>
-                    <div className="ant-upload-wrapper ant-upload-picture-card-wrapper">
+                    <div className="d-flex justify-content-center">
                         <Row
                             fileList={fileList}
                             onChange={({ fileList }) => handleChange(colorId, fileList)}
@@ -368,7 +364,6 @@ const AddProduct = (props) => {
                 try {
                     setLoading(true);
                     const newProduct = await postCreateProduct(productName, description, false);
-                    setProductId(newProduct.data.id);
                     setListProduct([newProduct, ...listProduct]);
 
                     const quantities = quantityInput.map((quantity) => parseInt(quantity) || 10);
@@ -419,13 +414,6 @@ const AddProduct = (props) => {
     useEffect(() => {
         fetchListSize();
     }, []);
-
-    const fetchListSize = async () => {
-        let res = await getAllProperties('size');
-        setListSize(res.data);
-        setSizeId(res.data[0].id)
-        console.log(res);
-    }
     
     return (
         <Spin spinning={loading} delay={500}>
@@ -471,6 +459,9 @@ const AddProduct = (props) => {
                         <Col lg="2">
                             <FloatingLabel controlId="floatingSelect" label="Thương hiệu">
                                 <Form.Select value={brandId} onChange={handleBrandChange}>
+                                    <option key="no-value-option">
+                                        -- Chọn --
+                                    </option>
                                     {listBrand.map(brand => (
                                         <option key={brand.id} value={brand.id}>
                                             {brand.name}
@@ -483,6 +474,9 @@ const AddProduct = (props) => {
                             <Col lg="2">
                                 <FloatingLabel controlId="floatingSelect" label="Danh mục">
                                     <Form.Select value={categoryId} onChange={handleCategoryChange}>
+                                        <option key="no-value-option">
+                                            -- Chọn --
+                                        </option>
                                         {listCategory.map(category => (
                                             <option key={category.id} value={category.id}>
                                                 {category.name}
@@ -495,6 +489,9 @@ const AddProduct = (props) => {
                       <Col lg="2">
                         <FloatingLabel controlId="floatingSelect" label="Chất liệu">
                           <Form.Select value={materialId} onChange={handleMaterialChange}>
+                              <option key="no-value-option">
+                                  -- Chọn --
+                              </option>
                             {listMaterial.map(material => (
                                 <option key={material.id} value={material.id}>
                                   {material.name}
@@ -507,6 +504,9 @@ const AddProduct = (props) => {
                       <Col lg="2">
                         <FloatingLabel controlId="floatingSelect" label="Cổ áo">
                           <Form.Select value={collarId} onChange={handleCollarChange}>
+                              <option key="no-value-option">
+                                  -- Chọn --
+                              </option>
                             {listCollar.map(collar => (
                                 <option key={collar.id} value={collar.id}>
                                   {collar.name}
@@ -519,6 +519,9 @@ const AddProduct = (props) => {
                       <Col lg="2">
                         <FloatingLabel controlId="floatingSelect" label="Chiều dài tay">
                           <Form.Select value={sleeveLengthId} onChange={handleSleeveLengthChange}>
+                              <option key="no-value-option">
+                                  -- Chọn --
+                              </option>
                             {listSleeveLength.map(sleeveLength => (
                                 <option key={sleeveLength.id} value={sleeveLength.id}>
                                   {sleeveLength.name}

@@ -166,10 +166,14 @@
       align-items: center;
       margin-bottom: 20px;
       justify-content: space-between;
+
+      .title {
+        font-weight: bold;
+      }
     }
 
-    .title {
-      font-weight: bold;
+    .table {
+
     }
   }
 }
@@ -229,6 +233,10 @@
         font-weight: bold;
       }
     }
+
+
+
+
   }
 
   .rdt_TableCol_Sortable {
@@ -238,38 +246,26 @@
   .rdt_TableCol {
     background-color: #cc9966;
   }
-}
 
-
-.text-floating {
-  font-weight: bold;
-}
-
-.btn-add-property {
-  height: 30px;
-  width: 30px;
-  display: flex;
-  align-items: center;
-}
-
-.ant-modal-footer {
-  .ant-btn {
-    color: white;
-    background-color: black;
+  .text-floating {
+    font-weight: bold;
   }
+
+  .btn-add-property {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-modal-footer {
+    .ant-btn {
+      color: white;
+      background-color: black;
+    }
+  }
+
+
 }
-
-.ant-upload-wrapper .ant-upload-picture-card-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-
-
-
-
-
-
-
 
 

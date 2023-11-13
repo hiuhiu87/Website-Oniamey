@@ -4,6 +4,10 @@ public interface UserDetailResponse {
 
     Long getId();
 
+    String getUsername();
+
+    String getIdentityCard();
+
     String getFullName();
 
     String getEmail();

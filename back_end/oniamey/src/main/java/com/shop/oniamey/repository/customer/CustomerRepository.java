@@ -3,6 +3,7 @@ package com.shop.oniamey.repository.customer;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerDetailResponse;
 import com.shop.oniamey.core.admin.customer.model.response.CustomerResponse;
 import com.shop.oniamey.entity.Customer;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,37 +23,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.gender as gender
             ,c.deleted as status
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from customer c
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
                         """, nativeQuery = true)
-    List<CustomerResponse> getAllCustomers(Pageable pageable);
-
-    List<Customer> findAllByDeletedFalse(Pageable pageable);
-
-    List<Customer> findAllByDeletedTrue(Pageable pageable);
-
-    @Query(value = """
-            select c.id
-            ,c.full_name as fullName\s
-            ,c.email as email
-            ,c.phone_number as phoneNumber
-            ,c.gender as gender
-            ,c.deleted as status
-            ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt\s
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
-            ,uc.full_name AS createdBy
-            ,uu.full_name AS updatedBy
-            from customer c
-            left JOIN user AS uc ON c.created_by = uc.id
-            left JOIN user AS uu ON c.updated_by = uu.id
-                        """, nativeQuery = true)
-    List<CustomerResponse> getAllCustomers();
+    Page<List<CustomerResponse>> getAllCustomers(Pageable pageable);
 
     @Query(value = """
             select c.id
@@ -60,10 +39,32 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             ,c.email as email
             ,c.phone_number as phoneNumber
             ,c.gender as gender
-            ,c.deleted as isActive
+            ,c.deleted as status
             ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
-            ,date_format(c.created_date  , '%m-%d-%Y %H:%i') as createdAt
-            ,date_format(c.last_modified_date , '%m-%d-%Y %H:%i') as updatedAt
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt\s
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
+            ,uc.full_name AS createdBy
+            ,uu.full_name AS updatedBy
+            from customer c
+            left JOIN user AS uc ON c.created_by = uc.id
+            left JOIN user AS uu ON c.updated_by = uu.id
+            order by c.id desc
+                        """, nativeQuery = true)
+    List<CustomerResponse> getAllCustomers();
+
+    @Query(value = """
+            select c.id
+            ,c.full_name as fullName
+            ,c.identity_card as identityCard
+            ,c.username as username
+            ,c.email as email
+            ,c.phone_number as phoneNumber
+            ,c.gender as gender
+            ,c.deleted as isDeleted
+            ,c.avatar as avatar
+            ,date_format(c.birth_date, '%m-%d-%Y') as birthDate
+            ,date_format(c.created_at  , '%m-%d-%Y %H:%i') as createdAt
+            ,date_format(c.updated_at , '%m-%d-%Y %H:%i') as updatedAt
             ,uc.full_name AS createdBy
             ,uu.full_name AS updatedBy
             from customer c
