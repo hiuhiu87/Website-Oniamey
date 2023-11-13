@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { MdDashboard } from 'react-icons/md';
+import {MdDashboard} from 'react-icons/md';
 import './SideBar.scss';
 import {
     ProSidebar,
@@ -28,7 +28,7 @@ import logo_bg1 from "../../assets/logo_bg1.png";
 import logo_bg2 from "../../assets/logo_bg2.1.png";
 
 const SideBar = (props) => {
-    const { collapsed, toggled, handleToggleSidebar } = props;
+    const {collapsed, toggled, handleToggleSidebar} = props;
     return (
         <>
             <ProSidebar
@@ -122,7 +122,7 @@ const SideBar = (props) => {
                             suffix={<span className='badge red'>New</span>}
                         >
                             Quản Lý Hóa Đơn
-                            <Link to="/admins/manage-orders"></Link>
+                            <Link to="/admins/manage-orders/all"></Link>
                         </MenuItem>
                     </Menu>
                     <Menu iconShape="circle">
@@ -166,7 +166,7 @@ const SideBar = (props) => {
                 </SidebarContent>
                 
 
-                <SidebarFooter style={{ textAlign: 'center' }}>
+                <SidebarFooter style={{textAlign: 'center'}}>
                     <div
                         className="sidebar-btn-wrapper"
                         style={{
@@ -186,8 +186,8 @@ const SideBar = (props) => {
                             className="sidebar-btn"
                             rel="noopener noreferrer"
                         >
-                            <FaGithub />
-                            <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            <FaGithub/>
+                            <span style={{whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden'}}>
                                 Oniamey
                             </span>
                         </a>}

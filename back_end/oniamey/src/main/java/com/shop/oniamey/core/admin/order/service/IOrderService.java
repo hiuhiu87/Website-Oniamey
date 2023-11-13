@@ -11,11 +11,18 @@ import java.util.List;
 public interface IOrderService {
     List<OrderResponse> getAllOrder();
     Page<OrderResponse> getAllOrder(Pageable pageable);
+
     OrderResponse getOrderById(Long id);
+
     String createOrder(OrderRequest orderRequest);
+
     String deleteOrder(Long id);
+
     String updateOrder(Long id, OrderRequest orderRequest);
-    CountStatusResponse getCountStatus();
-    Page<OrderResponse> getOrdersByStatus(Pageable pageable,String status);
+
+    CountStatusResponse getCountStatus(String type, String search);
+
+    Page<OrderResponse> getOrdersByStatus(Pageable pageable, String status, String orderType,String keySearch);
+
     List<OrderResponse> getByStatus(String status);
 }

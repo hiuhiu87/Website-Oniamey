@@ -1,1 +1,10 @@
-{"version":3,"sources":["DashBoard.scss","DashBoard.css"],"names":[],"mappings":"AAAA;EACI,gBAAA;EACA,cAAA;EACA,aAAA;EACA,mBAAA;EACA,uCAAA;ACCJ;;ADEA;EACI,WAAA;EACA,yBAAA;ACCJ;;ADEA;EACI,aAAA;EACA,gBAAA;EACA,6BAAA;ACCJ;;ADEA;EACI,yBAAA;EACA,iBAAA;ACCJ;;ADEA,8BAAA;AACA;EACI,yBAAA;ACCJ","file":"DashBoard.css"}
+{
+  "version": 3,
+  "sources": [
+    "DashBoard.scss",
+    "DashBoard.css"
+  ],
+  "names": [],
+  "mappings": "AAAA;EACI,gBAAA;EACA,cAAA;EACA,aAAA;EACA,mBAAA;EACA,uCAAA;ACCJ;;ADEA;EACI,WAAA;EACA,yBAAA;ACCJ;;ADEA;EACI,aAAA;EACA,gBAAA;EACA,6BAAA;ACCJ;;ADEA;EACI,yBAAA;EACA,iBAAA;ACCJ;;ADEA,8BAAA;AACA;EACI,yBAAA;ACCJ",
+  "file": "DashBoard.css"
+}

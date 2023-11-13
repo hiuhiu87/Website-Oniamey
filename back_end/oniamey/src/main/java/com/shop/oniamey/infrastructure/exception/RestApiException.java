@@ -5,9 +5,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class RestApiException extends RuntimeException{
+public class RestApiException extends RuntimeException {
     private String message;
-    public RestApiException(String mess){
-        this.message= mess;
+
+    public RestApiException(String mess) {
+        this.message = mess;
     }
 }

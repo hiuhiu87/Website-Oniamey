@@ -21,7 +21,7 @@ public class QRCodeProduct {
 
     public static void generateQRCode(ProductDetail productDetail) throws IOException, WriterException {
         Path qrDir = Paths.get("qrcode");
-        if(!Files.exists(qrDir)) {
+        if (!Files.exists(qrDir)) {
             Files.createDirectories(qrDir);
         }
         String qrCodeName =productDetail.getName() + "-QRCODE.png";
