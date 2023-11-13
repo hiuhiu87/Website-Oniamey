@@ -1,0 +1,82 @@
+.rdt_Table {
+    background-color: #cc9966;
+    background-color: #cc9966;
+    // min-height: 460px;
+    border-radius: 10px;
+    // min-height: 460px;
+    // border: 1px solid #cc9966;
+}
+
+.rdt_TableRow {
+  background-color: #cc9966;
+  min-height: 80px !important;
+}
+
+.rdt_TableCol {
+    text-align: left;
+    background-color: #cc9966;
+}
+
+.rdt_TableCol_Sortable {
+  cursor: pointer;
+  background-color: #cc9966;
+
+}
+
+.rdt_TableCell {
+}
+
+.rdt_TableHeader {
+  background-color: #cc9966;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+
+}
+
+.rdt_TableFooter {
+  text-align: left;
+  border-radius: 10px;
+
+}
+
+.rdt_TableHead {
+  background-color: #cc9966;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+}
+
+.rdt_TableHeadRow {
+  border-radius: 10px;
+  background-color: #cc9966;
+}
+
+.rdt_TableBody {
+    border-radius: 10px;
+    // box-shadow: 0 0 10px gray;
+    min-height: 400px;
+}
+
+.rdt_ExpanderRow {
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  // /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+    // box-shadow: 0 0 10px gray;
+    border-radius: 10px;
+    // padding: 0 20px 20px 20px;
+    min-height: 460px;
+
+}
+
+button {
+  width: unset !important;
+}

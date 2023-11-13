@@ -5,8 +5,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.shop.oniamey.entity.Product;
-import org.springframework.stereotype.Component;
+import com.shop.oniamey.entity.ProductDetail;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,16 +19,22 @@ public class QRCodeProduct {
         return "Oniamey-" + UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public static void generateQRCode(Product product) throws IOException, WriterException {
+    public static void generateQRCode(ProductDetail productDetail) throws IOException, WriterException {
         Path qrDir = Paths.get("qrcode");
-        if(!Files.exists(qrDir)) {
+        if (!Files.exists(qrDir)) {
             Files.createDirectories(qrDir);
         }
-        String qrCodeName =product.getCode() + product.getName()  + "-QRCODE.png";
+        String qrCodeName =productDetail.getName() + "-QRCODE.png";
         var qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "Code: " + product.getCode() + "\n"
-                        + "Name: " + product.getName(), BarcodeFormat.QR_CODE, 400, 400);
+                "Code: " + productDetail.getCode() + "\n"
+                        + "Name: " + productDetail.getName() + "\n"
+                        + "Category: " + productDetail.getCategory().getName() + "\n"
+                        + "Brand: " + productDetail.getBrand().getName() + "\n"
+                        + "Material: " + productDetail.getMaterial().getName() + "\n"
+                        + "Color: " + productDetail.getColor().getName() + "\n"
+                        + "Size: " + productDetail.getSize().getName() + "\n"
+                , BarcodeFormat.QR_CODE, 400, 400);
         Path path = qrDir.resolve(qrCodeName);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }

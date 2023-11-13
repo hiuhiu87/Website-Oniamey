@@ -1,0 +1,62 @@
+.manage-color-container {
+  .manage-color-title {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-color-search {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    .search-color-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .manage-color-table {
+    max-width: 98%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+
+    .list-color-title {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: space-between;
+
+      .title {
+        font-weight: bold;
+      }
+    }
+  }
+  .rdt_TableCol_Sortable {
+    background-color: #cc9966;
+  }
+
+  .rdt_TableCol {
+    background-color: #cc9966;
+  }
+}

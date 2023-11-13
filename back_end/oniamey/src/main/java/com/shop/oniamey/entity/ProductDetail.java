@@ -51,11 +51,11 @@ public class ProductDetail extends BaseModel {
     @JoinColumn(name = "id_sleeve_length")
     private SleeveLength sleeveLength;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
-
-    @Column(name = "gender")
-    private Boolean gender;
 
     @Column(name = "price")
     private Float price;
@@ -66,6 +66,7 @@ public class ProductDetail extends BaseModel {
     @Column(name = "weight")
     private Float weight;
 
-//    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Image> images;
+    @Column(name = "cover")
+    private String cover;
+
 }

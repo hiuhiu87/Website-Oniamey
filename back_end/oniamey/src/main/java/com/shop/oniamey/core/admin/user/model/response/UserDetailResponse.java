@@ -4,19 +4,25 @@ public interface UserDetailResponse {
 
     Long getId();
 
+    String getUsername();
+
+    String getIdentityCard();
+
     String getFullName();
 
     String getEmail();
 
     String getPhoneNumber();
 
-    Long getRole();
+    String getRole();
 
-    String getGender();
+    Integer getGender();
 
     String getAddress();
 
     String getAvatar();
+
+    Boolean getIsDeleted();
 
     String getBirthDate();
 

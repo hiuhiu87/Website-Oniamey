@@ -38,8 +38,7 @@ public class CategoryService implements IPropertyService<Category, Long> {
     public Category create(PropertyRequest propertyRequest) {
         Category category = new Category();
         category.setName(propertyRequest.getName());
-        category.setCreatedBy(propertyRequest.getCreatedBy());
-        category.setUpdatedBy(propertyRequest.getUpdatedBy());
+        category.setDeleted(propertyRequest.getDeleted());
         return categoryRepository.save(category);
     }
 
@@ -47,7 +46,6 @@ public class CategoryService implements IPropertyService<Category, Long> {
     public Category update(Long id, PropertyRequest propertyRequest) {
         Category existingCategory = getById(id);
         existingCategory.setName(propertyRequest.getName());
-        existingCategory.setUpdatedBy(propertyRequest.getUpdatedBy());
         existingCategory.setDeleted(propertyRequest.getDeleted());
         categoryRepository.save(existingCategory);
         return existingCategory;

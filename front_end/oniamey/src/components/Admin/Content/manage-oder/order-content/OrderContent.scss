@@ -1,0 +1,130 @@
+.manage-order-content-table {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+.manage-order-all-content{
+  .order-content-form-search{
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+   .title-bo-loc{  
+    font-size: 20px;
+    font-weight: bold;
+   }
+  }
+  .nav-order-contentt{
+    margin-bottom: 20px;
+    }
+    .manager-order-title {
+      .order-title{
+        font-weight: bold;
+      }
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+}
+.manage-order-content-table {
+  
+  .btn-change-status-order {
+    position: absolute;
+    right: 20px;
+    display: flex;
+
+    .btn-change-status-order-item {
+      margin: 3px;
+    }
+  }
+
+  .nav-form-search {
+    position: absolute;
+    width: 100px;
+    left: 250px;
+  }
+
+  .form-search-order {
+    display: flex;
+    position: relative;
+  }
+
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  //   display: flex; flex-direction: column;
+
+  .or-title {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+  }
+
+  .page-footer {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .page-item {
+    display: flex;
+    position: absolute;
+    top: 30px;
+
+    .item {
+      margin: 2px;
+      border-radius: 5px;
+      // border: #806345 solid 1px;
+      text-align: center;
+      // width: 25px;
+    }
+  }
+
+  .page-active {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: #cc9966 solid 1px !important;
+    border-radius: 5px;
+    background-color: #cc9966;
+  }
+
+  // .table {
+  //     width: 100%;
+  //     border-collapse: collapse;
+  //     border-radius: 20px;
+
+  //     th, td {
+  //         padding: 12px;
+  //         text-align: left;
+  //         border-bottom: 1px solid #ddd;
+  //     }
+
+  //     th {
+  //         background-color: #cc9966;
+  //         font-weight: bold;
+  //     }
+
+  //     tbody tr {
+  //         &:hover {
+  //             background-color: rgba(207, 182, 156, 0.199);
+  //         }
+
+  //         &:nth-child(odd) {
+  //             background-color: $odd-row-color;
+  //         }
+  //     }
+  // }
+  .table {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+}

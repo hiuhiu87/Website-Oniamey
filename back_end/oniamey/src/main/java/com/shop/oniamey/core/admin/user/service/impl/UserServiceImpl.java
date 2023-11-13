@@ -1,13 +1,12 @@
 package com.shop.oniamey.core.admin.user.service.impl;
 
-import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.core.admin.user.model.request.ModifyUserRequest;
 import com.shop.oniamey.core.admin.user.model.response.UserDetailResponse;
 import com.shop.oniamey.core.admin.user.model.response.UserResponse;
 import com.shop.oniamey.core.admin.user.service.UserService;
-import com.shop.oniamey.entity.Role;
+import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.entity.User;
-import com.shop.oniamey.repository.user.RoleRepository;
+import com.shop.oniamey.infrastructure.constant.RoleType;
 import com.shop.oniamey.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +20,12 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private RoleRepository roleRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public List<UserResponse> getAllStaffs(Pageable pageable) {
@@ -42,6 +36,7 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAllUsers() {
         return userRepository.getAllUsers();
     }
+
     @Override
     public UserDetailResponse getUserById(Long id) {
         return userRepository.getUserDetailById(id);
@@ -50,7 +45,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createStaff(ModifyUserRequest modifyUserRequest) {
         Optional<User> checkUser = userRepository.findByEmail(modifyUserRequest.getEmail());
-        Optional<Role> role = roleRepository.findById(modifyUserRequest.getRoleId());
+        Optional<User> checkUserByUsername = userRepository.findByUsername(modifyUserRequest.getUsername());
+        Optional<User> checkUserByIdentityCard = userRepository.findByIdentityCard(modifyUserRequest.getIdentityCard());
+
+        if (checkUserByIdentityCard.isPresent()) {
+            return "Identity card already exists";
+        }
+
+        if (checkUserByUsername.isPresent()) {
+            return "Username already exists";
+        }
 
         if (checkUser.isPresent()) {
             return "Email already exists";
@@ -63,11 +67,10 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (role.isEmpty()) {
-            return "Role not found";
-        }
 
         User user = new User();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -76,7 +79,11 @@ public class UserServiceImpl implements UserService {
         user.setAddress(modifyUserRequest.getAddress());
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
-        user.setRole(role.get());
+        if (modifyUserRequest.getRole() == RoleType.ROLE_USER.ordinal()) {
+            user.setRole(RoleType.ROLE_USER);
+        } else {
+            user.setRole(RoleType.ROLE_ADMIN);
+        }
         user.setDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Create staff success";
@@ -85,17 +92,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updateStaff(Long id, ModifyUserRequest modifyUserRequest) {
         Optional<User> checkUser = userRepository.findById(id);
-        Optional<Role> role = roleRepository.findById(modifyUserRequest.getRoleId());
 
         if (checkUser.isEmpty()) {
             return "User not found";
         }
 
-        if (role.isEmpty()) {
-            return "Role not found";
-        }
-
         User user = checkUser.get();
+        user.setUsername(modifyUserRequest.getUsername());
+        user.setIdentityCard(modifyUserRequest.getIdentityCard());
         user.setFullName(modifyUserRequest.getFullName());
         user.setEmail(modifyUserRequest.getEmail());
         user.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -103,7 +107,11 @@ public class UserServiceImpl implements UserService {
         user.setAddress(modifyUserRequest.getAddress());
         user.setBirthDate(modifyUserRequest.getBirthDate());
         user.setAvatar(modifyUserRequest.getAvatar());
-        user.setRole(role.get());
+        if (modifyUserRequest.getRole() == RoleType.ROLE_USER.ordinal()) {
+            user.setRole(RoleType.ROLE_USER);
+        } else {
+            user.setRole(RoleType.ROLE_ADMIN);
+        }
         user.setDeleted(modifyUserRequest.getIsDeleted());
         userRepository.save(user);
         return "Update staff success";

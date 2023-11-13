@@ -25,7 +25,6 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
     private Long id;
 
     @Column(name = "created_at", updatable = false)

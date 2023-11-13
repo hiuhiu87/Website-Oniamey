@@ -2,14 +2,14 @@ body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   @media (min-width: 1400px) {
     .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-      max-width: 1800px !important;
+      max-width: 1800px;
     }
 
   }
@@ -24,68 +24,69 @@ body {
       padding: 0 15px;
       border: 1px solid #535353;
       height: 40px;
-  }
-
-  button.btn-signup {
-    color: white;
-    background: #303030;
-    padding: 0 15px;
-    border-radius: 5px;
-    height: 40px;
-
-    &:hover {
-      background: black;
     }
-}
+
+    button.btn-signup {
+      color: white;
+      background: #303030;
+      padding: 0 15px;
+      border-radius: 5px;
+      height: 40px;
+
+      &:hover {
+        background: black;
+      }
+    }
 
     .navbar {
       padding-top: 20px;
       z-index: 10;
-      background-color: (0, 0,0 ,0) !important;
+      background-color: (0, 0, 0, 0) !important;
+
       .nav-link {
         &.active {
           color: #00bfff;
         }
       }
-    } 
+    }
   }
 
   .homepage-container {
     .homepage-content {
-        padding: 100px;
-        width: 50%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
+      padding: 100px;
+      width: 50%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
 
-        .title-1 {
-          font-size: 60px;
-          font-weight: 600;
-        }
+      .title-1 {
+        font-size: 60px;
+        font-weight: 600;
+      }
 
-        .title-2 {
-          font-size: 35px;
-        }
+      .title-2 {
+        font-size: 35px;
+      }
 
-        .title-3 {
-          button {
-            height: 50px;
-            padding: 0 15px;
-            border-radius: 5px;
-            color: white;
-            background: #303030;
-            padding: 0 15px;
-            border-radius: 5px;
-            height: 40px;
-            border: none;
+      .title-3 {
+        button {
+          height: 50px;
+          padding: 0 15px;
+          border-radius: 5px;
+          color: white;
+          background: #303030;
+          padding: 0 15px;
+          border-radius: 5px;
+          height: 40px;
+          border: none;
 
-            &:hover {
-              background: black;
-            } 
+          &:hover {
+            background: black;
           }
         }
       }
+    }
   }
 }
 

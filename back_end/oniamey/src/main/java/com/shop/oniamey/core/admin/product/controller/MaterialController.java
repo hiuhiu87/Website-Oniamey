@@ -4,9 +4,11 @@ import com.shop.oniamey.core.admin.product.model.request.PropertyRequest;
 import com.shop.oniamey.core.admin.product.service.IPropertyService;
 import com.shop.oniamey.entity.Material;
 import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/material")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class MaterialController {
 
@@ -29,7 +32,7 @@ public class MaterialController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@ModelAttribute PropertyRequest propertyRequest) {
+    public ResponseEntity<?> create(@Valid @ModelAttribute PropertyRequest propertyRequest) {
         try {
             materialService.create(propertyRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
@@ -39,7 +42,7 @@ public class MaterialController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute PropertyRequest propertyRequest) throws DataNotFoundException {
+    public ResponseEntity<?> update(@Valid @PathVariable Long id, @ModelAttribute PropertyRequest propertyRequest) throws DataNotFoundException {
         try {
             materialService.update(id, propertyRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully!");
