@@ -30,9 +30,9 @@ $odd-row-color: #f2f2f2;
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 20px;
 
     th,
     td {
@@ -41,21 +41,11 @@ $odd-row-color: #f2f2f2;
         border-bottom: 1px solid #ddd;
     }
 
-    th {
-        background-color: #cc9966;
-        font-weight: bold;
+    &:nth-child(odd) {
+      background-color: $odd-row-color;
     }
+  }
 
-    tbody tr {
-        &:hover {
-            background-color: rgba(207, 182, 156, 0.199);
-        }
-
-        &:nth-child(odd) {
-            background-color: $odd-row-color;
-        }
-    }
-}
 
 .search-category-title {
     font-size: 20px;
@@ -73,11 +63,11 @@ $odd-row-color: #f2f2f2;
 }
 
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 button {
-    width: 180px;
+  width: 180px;
 }
 
 form {

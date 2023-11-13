@@ -20,67 +20,67 @@ $odd-row-color: #f2f2f2;
 }
 
 .manage-size-table {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    height: 560px;
-    border-radius: 5px;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 560px;
+  border-radius: 5px;
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 20px;
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #cc9966;
+    font-weight: bold;
+  }
+
+  tbody tr {
+    &:hover {
+      background-color: rgba(207, 182, 156, 0.199);
     }
 
-    th {
-        background-color: #cc9966;
-        font-weight: bold;
+    &:nth-child(odd) {
+      background-color: $odd-row-color;
     }
-
-    tbody tr {
-        &:hover {
-            background-color: rgba(207, 182, 156, 0.199);
-        }
-
-        &:nth-child(odd) {
-            background-color: $odd-row-color;
-        }
-    }
+  }
 }
 
 .search-size-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .list-size-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    justify-content: space-between;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
 }
 
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 button {
-    width: 180px;
+  width: 180px;
 }
 
 form {
-    // padding-left: 200px;
+  // padding-left: 200px;
 }
 
 

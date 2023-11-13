@@ -8,8 +8,8 @@
 }
 
 .rdt_TableRow {
-    background-color: #cc9966;
-    min-height: 80px !important;
+  background-color: #cc9966;
+  min-height: 80px !important;
 }
 
 .rdt_TableCol {
@@ -18,35 +18,36 @@
 }
 
 .rdt_TableCol_Sortable {
-    cursor: pointer;
-    background-color: #cc9966;
+  cursor: pointer;
+  background-color: #cc9966;
 
 }
 
-.rdt_TableCell {}
+.rdt_TableCell {
+}
 
 .rdt_TableHeader {
-    background-color: #cc9966;
-    box-shadow: 0 0 10px gray;
-    border-radius: 10px;
+  background-color: #cc9966;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
 
 }
 
 .rdt_TableFooter {
-    text-align: left;
-    border-radius: 10px;
+  text-align: left;
+  border-radius: 10px;
 
 }
 
 .rdt_TableHead {
-    background-color: #cc9966;
-    box-shadow: 0 0 10px gray;
-    border-radius: 10px;
+  background-color: #cc9966;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
 }
 
 .rdt_TableHeadRow {
-    border-radius: 10px;
-    background-color: #cc9966;
+  border-radius: 10px;
+  background-color: #cc9966;
 }
 
 .rdt_TableBody {
@@ -56,16 +57,16 @@
 }
 
 .rdt_ExpanderRow {
-    border-radius: 10px;
-    background-color: #f9f9f9;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #ffffff;
-    // /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  // /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .table-container {
@@ -77,5 +78,5 @@
 }
 
 button {
-    width: unset !important;
+  width: unset !important;
 }

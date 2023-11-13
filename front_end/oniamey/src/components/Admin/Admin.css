@@ -1,10 +1,19 @@
 .admin-container {
-  display: flex;
+    display: flex;
 }
+
 .admin-container .admin-sidebar .pro-sidebar {
+<<<<<<< HEAD
+    height: 120vh !important;
+=======
   height: 100vh !important;
+>>>>>>> develop_merge_branch
 }
+
 .admin-container .admin-content {
+<<<<<<< HEAD
+    width: 100%;
+=======
   transition: width 0.3s;
   position: absolute;
   right: 0;
@@ -16,32 +25,47 @@
 .admin-container .admin-content .cick :hover {
   color: #cc9966;
   transform: scaleY(4px);
+>>>>>>> develop_merge_branch
 }
+
 .admin-container .admin-content .admin-header {
-  height: 50px;
-  padding-top: 10px;
-  padding-left: 20px;
-  background-color: #ddd;
-  margin-bottom: 15px;
+    height: 50px;
+    padding-top: 10px;
+    padding-left: 20px;
+    background-color: #ddd;
+    margin-bottom: 15px;
 }
+<<<<<<< HEAD
+
+.admin-container .admin-content .admin-main {
+    height: 60px;
+}
+=======
+>>>>>>> develop_merge_branch
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+    background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
+<<<<<<< HEAD
+    background: #555;
+}
+
+/*# sourceMappingURL=Admin.css.map */
+=======
   background: #555;
 }
 
@@ -57,3 +81,4 @@
   width: 96vw;
   /* Add other styling as needed */
 }/*# sourceMappingURL=Admin.css.map */
+>>>>>>> develop_merge_branch

@@ -28,9 +28,9 @@ public class OrderPaymentMethod extends BaseModel {
     @JoinColumn(name = "id_order")
     private Orders order;
 
-    @Column (name = "total_money",nullable = false)
-    private Double totalMoney;
+    @Column(name = "money", nullable = false)
+    private Double money;
 
-    @Column (name = "code",length = 100)
-    private String code;
+    @Column(name = "note", length = 1000)
+    private String note;
 }

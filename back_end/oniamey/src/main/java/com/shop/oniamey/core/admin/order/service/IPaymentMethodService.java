@@ -4,6 +4,7 @@ import com.shop.oniamey.entity.PaymentMethod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface IPaymentMethodService extends JpaRepository<PaymentMethod,Long> {
+
+public interface IPaymentMethodService {
+    void generate2Method();
 }
