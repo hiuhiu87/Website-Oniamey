@@ -111,14 +111,7 @@ public class ProductDetailService implements IProductDetailService {
         String qrCodeName = productDetail.getName() + "-QRCODE.png";
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "Mã sản phẩm: " + productDetail.getCode() + "\n"
-                        + "Tên sản phẩm: " + productDetail.getName() + "\n"
-                        + "Thể loại: " + productDetail.getCategory().getName() + "\n"
-                        + "Thương hiệu: " + productDetail.getBrand().getName() + "\n"
-                        + "Chất liệu: " + productDetail.getMaterial().getName() + "\n"
-                        + "Màu sắc: " + productDetail.getColor().getName() + "\n"
-                        + "Kích cỡ: " + productDetail.getSize().getName() + "\n"
-                , BarcodeFormat.QR_CODE, 400, 400);
+                productDetail.getCode(), BarcodeFormat.QR_CODE, 400, 400);
 
         // Tạo ảnh từ BitMatrix
         BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
@@ -200,6 +193,7 @@ public class ProductDetailService implements IProductDetailService {
                         productDetail.setCode(generateRandomCode());
                         productDetail.setName(name);
                         productDetail.setPrice(price);
+                        productDetail.setSellPrice(price);
                         productDetail.setQuantity(quantity);
                         productDetail.setWeight(addProductDetailRequest.getWeight());
                         productDetail.setDeleted(false);

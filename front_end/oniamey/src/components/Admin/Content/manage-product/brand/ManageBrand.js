@@ -22,6 +22,8 @@ const ManageBrand = (props) => {
     const [listBrand, setListBrand] = useState([]);
     const [brandId, setBrandId] = useState("");
 
+    const [record, setRecord] = useState([]);
+
     useEffect(() => {
         fetchListBrand();
     }, []);
@@ -29,7 +31,23 @@ const ManageBrand = (props) => {
     const fetchListBrand = async () => {
         let res = await getAllProperties("brand");
         setListBrand(res.data);
+        setRecord(res.data);
     };
+
+    const handleFilterName = (e) => {
+        const value = e.target.value;
+        const filter = listBrand.filter((brand) => brand.name.toLowerCase().includes(value.toLowerCase()));
+        setRecord(filter);
+    }
+
+    const handleFilterStatus = (e) => {
+        const value = e.target.value;
+        const filter = listBrand.filter((brand) => brand.deleted.toString() === value.toString());
+        setRecord(filter);
+        if(value === 'all') {
+            setRecord(listBrand)
+        }
+    }
 
     const handleShowModalUpdateBrand = (brand) => {
         setShowModalUpdateBrand(true);
@@ -135,13 +153,13 @@ const ManageBrand = (props) => {
                     <Row className="mb-3 justify-content-md-center">
                         <Col lg="4">
                             <FloatingLabel controlId="floatingInput" label="Tìm kiếm">
-                                <Form.Control type="text" placeholder="name@example.com" />
+                                <Form.Control type="text" placeholder="name@example.com" onChange={(e) => handleFilterName(e)}/>
                             </FloatingLabel>
                         </Col>
                         <Col lg="2">
                             <FloatingLabel controlId="floatingSelect" label="Trạng thái">
-                                <Form.Select>
-                                    <option>Tất cả</option>
+                                <Form.Select onChange={(e) => handleFilterStatus(e)}>
+                                    <option value={"all"}>Tất cả</option>
                                     <option value={false}>Hoạt động</option>
                                     <option value={true}>Ngừng hoạt động</option>
                                 </Form.Select>
@@ -166,7 +184,7 @@ const ManageBrand = (props) => {
                 <DataTable
                     rounded-3
                     columns={columnsBrand}
-                    data={listBrand}
+                    data={record}
                     pagination
                     paginationComponentOptions={paginationComponentOptions}
                     highlightOnHover
