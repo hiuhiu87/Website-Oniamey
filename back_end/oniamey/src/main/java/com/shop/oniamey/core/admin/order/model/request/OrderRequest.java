@@ -1,9 +1,7 @@
 package com.shop.oniamey.core.admin.order.model.request;
 
-import com.shop.oniamey.entity.Customer;
-import com.shop.oniamey.entity.User;
-import com.shop.oniamey.entity.base.EnumStatus;
-import jakarta.persistence.*;
+import com.shop.oniamey.infrastructure.constant.OrderStatus;
+import com.shop.oniamey.infrastructure.constant.OrderType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -34,10 +32,10 @@ public class OrderRequest {
     @NotNull(message = "phone number is required")
     private String phoneNumber;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     private String address;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     private String userName;
 
     @NotNull(message = "total money is required")
@@ -57,18 +55,18 @@ public class OrderRequest {
     @Past
     private Date completionDate;
 
-    @NotEmpty (message = "address is required")
-    private String type;
+    @NotEmpty(message = "address is required")
+    private OrderType type;
 
-    @NotEmpty (message = "address is required")
+    @NotEmpty(message = "address is required")
     @Length(max = 1000)
     private String note;
 
     @NotNull(message = "money ship is required")
     private Double moneyShip;
 
-//    @NotNull(message = "status is required")
-//    private EnumStatus status;
+    @NotNull(message = "status is required")
+    private OrderStatus status;
 
     @NotNull(message = "voucher id is required")
     @Min(value = 1)

@@ -6,7 +6,7 @@ import com.shop.oniamey.infrastructure.exception.DataNotFoundException;
 
 import java.util.List;
 
-public interface IPropertyService<T, ID>{
+public interface IPropertyService<T, ID> {
 
     T getById(ID id) throws DataNotFoundException;
 

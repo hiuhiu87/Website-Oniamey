@@ -21,10 +21,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class Voucher extends BaseModel {
 
-    @Column(name="voucher_name",nullable = false,length = 100)
+    @Column(name = "voucher_name", nullable = false, length = 100)
     private String voucherName;
 
-    @Column(name = "voucher_code",nullable = false,length = 100, unique = true)
+    @Column(name = "voucher_code", nullable = false, length = 100, unique = true)
     private String voucherCode;
 
     @Column(name = "quantity", nullable = false)
@@ -33,6 +33,7 @@ public class Voucher extends BaseModel {
     @Column(name = "value", nullable = false)
     private Double value;
 
+    // Điều kiện
     @Column(name = "minimum_discount", nullable = false)
     private Double minimumDiscount;
 

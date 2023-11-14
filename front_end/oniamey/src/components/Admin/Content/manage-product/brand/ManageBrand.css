@@ -5,6 +5,7 @@
   margin-bottom: 20px;
   margin-left: 20px;
 }
+
 .manage-brand-container .manage-brand-search {
   max-width: 1800px;
   margin: 0 auto;
@@ -15,6 +16,7 @@
   height: 200px;
   border-radius: 5px;
 }
+
 .manage-brand-container .manage-brand-table {
   max-width: 1800px;
   margin: 0 auto;
@@ -24,12 +26,14 @@
   height: 560px;
   border-radius: 5px;
 }
+
 .manage-brand-container .search-brand-title {
   font-size: 20px;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .manage-brand-container .list-brand-title {
   font-size: 20px;
   display: flex;
@@ -37,9 +41,13 @@
   margin-bottom: 20px;
   justify-content: space-between;
 }
+
 .manage-brand-container .title {
   font-weight: bold;
 }
+
 .manage-brand-container button {
   width: 180px;
-}/*# sourceMappingURL=ManageBrand.css.map */
+}
+
+/*# sourceMappingURL=ManageBrand.css.map */

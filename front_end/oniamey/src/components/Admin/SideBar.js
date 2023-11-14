@@ -122,16 +122,30 @@ const SideBar = (props) => {
                             suffix={<span className='badge red'>New</span>}
                         >
                             Quản Lý Hóa Đơn
-                            <Link to="/admins/manage-orders"></Link>
+                            <Link to="/admins/manage-orders/all"></Link>
                         </MenuItem>
                     </Menu>
-                    <Menu iconShape="circle">
+                    {/* <Menu iconShape="circle">
                         <MenuItem
                             icon={<FaTag color='#CC9966' />}
                         >
                             Khuyến Mãi
                             <Link to="/admins/manage-vouchers"></Link>
                         </MenuItem>
+                    </Menu> */}
+                    <Menu iconShape="circle">
+                        <SubMenu
+                            icon={<FaTag />}
+                            title="Quản lý voucher">
+                            <MenuItem>
+                                Danh Sách Voucher
+                                <Link to="/admins/manage-vouchers"></Link>
+                            </MenuItem>
+                            <MenuItem>
+                                Tạo Voucher
+                                <Link to="/admins/create-vouchers"></Link>
+                            </MenuItem>
+                        </SubMenu>
                     </Menu>
                     <Menu iconShape="circle">
                         <SubMenu
@@ -157,14 +171,14 @@ const SideBar = (props) => {
                     <Menu iconShape="circle">
                         <MenuItem
                             icon={<FaTag color='#CC9966' />}
-                            
+
                         >
                             Quản Lý Khuyến Mãi
                             <Link to="/admins/manage-promotion"></Link>
                         </MenuItem>
                     </Menu>
                 </SidebarContent>
-                
+
 
                 <SidebarFooter style={{ textAlign: 'center' }}>
                     <div

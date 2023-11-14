@@ -1,18 +1,19 @@
 .container {
-  box-shadow: none;
+    box-shadow: none;
 }
 
 .active > .page-link,
 .active .page-link.active {
-  z-index: 3;
-  color: white;
-  background-color: black;
-  border-color: black;
+    z-index: 3;
+    color: white;
+    background-color: black;
+    border-color: black;
 }
 
 .page-link {
-  color: black;
+    color: black;
 }
+
 .page-link:hover {
   color: black;
 }
