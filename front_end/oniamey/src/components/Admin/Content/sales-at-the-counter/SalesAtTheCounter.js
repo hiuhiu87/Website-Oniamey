@@ -1,15 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Form, FormControl, InputGroup, Row, Tab, Table, Tabs } from "react-bootstrap";
-import { IoIosClose } from "react-icons/io";
-import axios from "axios"; // Import Axios
+import React, {useState, useEffect} from "react";
+import {Button, Col, Container, Form, FormControl, InputGroup, Row, Tab, Table, Tabs} from "react-bootstrap";
+import {IoIosClose} from "react-icons/io";
+import axios from "axios";
 import "./SalesAtTheCounter.scss";
-import { useRef } from "react";
+import {useRef} from "react";
+import DataTable from "react-data-table-component";
+import {format} from "date-fns";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye} from "@fortawesome/free-solid-svg-icons";
+import {AiFillCreditCard, AiOutlineSlack} from "react-icons/ai";
+import {Switch} from "antd";
 
 const SalesAtTheCounter = (props) => {
     const [activeTab, setActiveTab] = useState(1);
 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(''); // State để lưu phương thức thanh toán
     const [selectedInvoiceStatus, setSelectedInvoiceStatus] = useState(''); // State để lưu trạng thái hóa đơn
+
+    const paginationComponentOptions = {
+        rowsPerPageText: "Số Bản Ghi Một Trang",
+        rangeSeparatorText: "Trên",
+        selectAllRowsItem: true,
+        selectAllRowsItemText: "Tất Cả",
+    };
+
+    const noDataComponent = () => {
+        return (
+            <div className="no-data-component">
+                <h5>Không có dữ liệu</h5>
+            </div>
+        );
+    };
+
+    const columnsSanPham = [
+        {
+            name: "STT",
+            // selector: (row) => promotions.indexOf(row) + 1,
+            minWidth: "40px",
+            maxWidth: "80px",
+            center: "true",
+        },
+        {
+            name: "Sản phẩm",
+            // selector: (row) => row.promotionName,
+            center: "true",
+        },
+        {
+            name: "Số lượng",
+            // selector: (row) => row.promotionCode,
+            center: "true",
+        },
+        {
+            name: "Tổng tiền",
+            //         selector: (row) => {
+            //     const startDate = new Date(row.promotionStartDate);
+            //     return format(startDate, "HH:mm:ss dd/MM/yyyy");
+            // },
+            center: "true",
+        },
+        {
+            name: "Thao tác",
+            cell: (row) =>
+                <>
+                    <Button
+                        variant="dark"
+                        className="ms-2"
+                        // onClick={() => handleDetailPromotion(row.promotionID)}
+                    >
+                        <FontAwesomeIcon icon={faEye} color="white"/>
+                    </Button>
+                </>,
+            center: "true",
+        },
+    ]
+
 
     const [searchText, setSearchText] = useState('');
     const [tabs, setTabs] = useState([
@@ -45,19 +109,19 @@ const SalesAtTheCounter = (props) => {
         });
     }, []);
 
-    // Gọi API để lấy danh sách quận/huyện dựa trên tỉnh/thành phố đã chọn
-    const fetchDistricts = (provinceId) => {
-        axios.get(`https://provinces.open-api.vn/api/p/${provinceId}/d/`).then((response) => {
-            setDistricts(response.data);
-        });
-    };
-
-    // Gọi API để lấy danh sách phường/xã dựa trên quận/huyện đã chọn
-    const fetchWards = (districtId) => {
-        axios.get(`https://provinces.open-api.vn/api/d/${districtId}/w/`).then((response) => {
-            setWards(response.data);
-        });
-    };
+    // // Gọi API để lấy danh sách quận/huyện dựa trên tỉnh/thành phố đã chọn
+    // const fetchDistricts = (provinceId) => {
+    //     axios.get(`https://provinces.open-api.vn/api/p/${provinceId}/d/`).then((response) => {
+    //         setDistricts(response.data);
+    //     });
+    // };
+    //
+    // // Gọi API để lấy danh sách phường/xã dựa trên quận/huyện đã chọn
+    // const fetchWards = (districtId) => {
+    //     axios.get(`https://provinces.open-api.vn/api/d/${districtId}/w/`).then((response) => {
+    //         setWards(response.data);
+    //     });
+    // };
 
     const addTab = () => {
         if (tabs.length < 5) {
@@ -86,26 +150,26 @@ const SalesAtTheCounter = (props) => {
         }
     };
 
-    // Xử lý khi thay đổi trường hasAccount
-    const handleHasAccountChange = (tabId, newHasAccountValue) => {
-        const updatedTabs = tabs.map((tab) => {
-            if (tab.id === tabId) {
-                return { ...tab, customerInfo: { ...tab.customerInfo, hasAccount: newHasAccountValue } };
-            }
-            return tab;
-        });
-        setTabs(updatedTabs);
-    };
-
-    const handleIsDefaultChange = (tabId, newIsDefaultValue) => {
-        const updatedTabs = tabs.map((tab) => {
-            if (tab.id === tabId) {
-                return { ...tab, customerInfo: { ...tab.customerInfo, address: { ...tab.customerInfo.address, isDefault: newIsDefaultValue } } };
-            }
-            return tab;
-        });
-        setTabs(updatedTabs);
-    };
+    // // Xử lý khi thay đổi trường hasAccount
+    // const handleHasAccountChange = (tabId, newHasAccountValue) => {
+    //     const updatedTabs = tabs.map((tab) => {
+    //         if (tab.id === tabId) {
+    //             return { ...tab, customerInfo: { ...tab.customerInfo, hasAccount: newHasAccountValue } };
+    //         }
+    //         return tab;
+    //     });
+    //     setTabs(updatedTabs);
+    // };
+    //
+    // const handleIsDefaultChange = (tabId, newIsDefaultValue) => {
+    //     const updatedTabs = tabs.map((tab) => {
+    //         if (tab.id === tabId) {
+    //             return { ...tab, customerInfo: { ...tab.customerInfo, address: { ...tab.customerInfo.address, isDefault: newIsDefaultValue } } };
+    //         }
+    //         return tab;
+    //     });
+    //     setTabs(updatedTabs);
+    // };
 
     const closeTab = (tabId) => {
         const tabIndex = tabs.findIndex((tab) => tab.id === tabId);
@@ -130,19 +194,20 @@ const SalesAtTheCounter = (props) => {
                 console.error('Lỗi khi lấy dữ liệu từ backend:', error);
             });
     }, []); // [] để đảm bảo chỉ chạy một lần khi thành phần được tạo
-    // search product
-    const handleSearchTextChange = (e) => {
-        setSearchText(e.target.value);
-    };
 
+    // search product
+    // const handleSearchTextChange = (e) => {
+    //     setSearchText(e.target.value);
+    // };
+    //
     // Lọc danh sách sản phẩm dựa trên giá trị của ô tìm kiếm
-    const filteredProducts = products.filter((product) => {
-        return product.name.toLowerCase().includes(searchText.toLowerCase());
-    });
+    // const filteredProducts = products.filter((product) => {
+    //     return product.name.toLowerCase().includes(searchText.toLowerCase());
+    // });
 
     return (
         <Container className="sales-at-the-counter-manage">
-            <Row className="justify-content-md-center " >
+            <Row className="justify-content-md-center p-3">
                 <Col>
                     <h4>Bán Hàng Tại Quầy</h4>
                 </Col>
@@ -157,7 +222,7 @@ const SalesAtTheCounter = (props) => {
                 id="uncontrolled-tab-example"
                 activeKey={activeTab}
                 onSelect={(key) => setActiveTab(key)}
-                className="mb-3 mt-3"
+                className="mb-3 mt-3 p-3"
             >
                 {tabs.map((tab) => (
                     <Tab
@@ -166,477 +231,179 @@ const SalesAtTheCounter = (props) => {
                             <div>
                                 {`Hóa đơn ${tab.id}`}
                                 {tab.id !== 1 && (
-                                    <IoIosClose onClick={() => closeTab(tab.id)} />
+                                    <IoIosClose onClick={() => closeTab(tab.id)}/>
                                 )}
                             </div>
                         )}
                     >
-                        <Row>
-                            <Col>
-                                <Form className="padding-all">
-                                    <h5 className="text-center mb-4">
-                                        Thông tin khách hàng
-                                    </h5>
-                                    <Form.Group>
-                                        <Form.Check
-                                            type="switch"
-                                            id={`hasAccountSwitch-${tab.id}`}
-                                            label="Khách hàng có tài khoản?"
-                                            checked={tab.customerInfo.hasAccount}
-                                            onChange={(e) => handleHasAccountChange(tab.id, e.target.checked)}
-                                        />
-                                    </Form.Group>
-                                    {tab.customerInfo.hasAccount ? (
-                                        <>
-                                            <Row className="row_form mt-3">
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Người Bán</Form.Label>
-                                                        <Form.Control
-                                                            disabled
-                                                            type="text"
-                                                            value={tab.customerInfo.name}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.name = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Form.Group>
-
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Số điện thoại</Form.Label>
-                                                        <Form.Control
-                                                            type="number"
-                                                            value={tab.customerInfo.email}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.email = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                            <Row className="row_form mt-3">
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Quốc Gia</Form.Label>
-                                                        <Form.Control
-                                                            disabled
-                                                            as="select"
-                                                        >
-                                                            <option value="">Việt Nam</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                    <Form.Group className="col_form_address mt-3">
-                                                        <Form.Label>Tỉnh/Thành phố</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.city}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.city = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn tỉnh/thành phố</option>
-                                                            {provinces.map((province) => (
-                                                                <option key={province.code} value={province.name}>
-                                                                    {province.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col >
-                                                    <Form.Group>
-                                                        <Form.Label>Quận/Huyện</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.district}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.district = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn quận/huyện</option>
-                                                            {districts.map((district) => (
-                                                                <option key={district.code} value={district.name}>
-                                                                    {district.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                    <Form.Group className="col_form_address mt-3">
-                                                        <Form.Label>Phường/Xã</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.ward}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.ward = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn phường/xã</option>
-                                                            {wards.map((ward) => (
-                                                                <option key={ward.code} value={ward.name}>
-                                                                    {ward.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Form.Group className="mt-3">
-                                                    <Form.Label>Địa chỉ chi tiết</Form.Label>
-                                                    <Form.Control
-                                                        as="textarea" // Sử dụng Textarea
-                                                        rows={3} // Số dòng trong Textarea
-                                                        placeholder="Địa chỉ chi tiết" // Ghi chú cho Textarea
-                                                    />
-                                                </Form.Group>
-                                            </Row>
-                                            <Row className="mt-3">
-                                                <Col>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Tìm kiếm voucher</Form.Label>
-                                                        <Form.Control type="text" placeholder="Nhập tên voucher" />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Tổng tiền sản phẩm</Form.Label>
-                                                        <Form.Control type="text" value="500,000 VND" readOnly />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                            <Row className="mt-3">
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Phương thức thanh toán</Form.Label>
-                                                        <Form.Control as="select" value={selectedPaymentMethod} onChange={(e) => setSelectedPaymentMethod(e.target.value)}>
-                                                            <option value="">Chọn phương thức thanh toán</option>
-                                                            <option value="cash">Tiền mặt</option>
-                                                            <option value="creditCard">Thẻ tín dụng</option>
-                                                            <option value="paypal">PayPal</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Trạng thái hóa đơn</Form.Label>
-                                                        <Form.Control as="select" value={selectedInvoiceStatus} onChange={(e) => setSelectedInvoiceStatus(e.target.value)}>
-                                                            <option value="">Chọn trạng thái hóa đơn</option>
-                                                            <option value="pending">Chờ xử lý</option>
-                                                            <option value="processed">Đã xử lý</option>
-                                                            <option value="completed">Hoàn thành</option>
-                                                            <option value="cancelled">Hủy</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-
-                                            </Row>
-                                            <Row>
-                                                <Form.Group className="mt-3">
-                                                    <Form.Label>Ghi chú</Form.Label>
-                                                    <Form.Control
-                                                        as="textarea" // Sử dụng Textarea
-                                                        rows={3} // Số dòng trong Textarea
-                                                        placeholder="Ghi chú chi tiết" // Ghi chú cho Textarea
-                                                    />
-                                                </Form.Group>
-                                            </Row>
-                                            <Row>
-                                                <Col className="d-flex justify-content-center mt-4">
-                                                    <Button variant="outline-dark" onClick={addTab}>
-                                                        Tạo hóa đơn
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Form.Group className="mt-3">
-                                                <Form.Label>Tìm Kiếm</Form.Label>
-                                                <Form.Control
-
-                                                    type="text"
-                                                    value={tab.customerInfo.name}
-                                                    onChange={(e) => {
-                                                        const updatedTab = { ...tab };
-                                                        updatedTab.customerInfo.name = e.target.value;
-                                                        setTabs((prevTabs) => {
-                                                            const updatedTabs = [...prevTabs];
-                                                            updatedTabs[tab.id - 1] = updatedTab;
-                                                            return updatedTabs;
-                                                        });
-                                                    }}
-                                                />
-                                            </Form.Group>
-
-                                            <Row className="row_form mt-3">
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Người Bán</Form.Label>
-                                                        <Form.Control
-                                                            disabled
-                                                            type="text"
-                                                            value={tab.customerInfo.name}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.name = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Form.Group>
-
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Số điện thoại</Form.Label>
-                                                        <Form.Control
-                                                            type="number"
-                                                            value={tab.customerInfo.email}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.email = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                            <Row className="row_form mt-3">
-                                                <Col>
-                                                    <Form.Group>
-
-                                                        <Form.Label>Quốc Gia</Form.Label>
-                                                        <Form.Control
-                                                            disabled
-                                                            as="select"
-                                                        >
-                                                            <option value="">Việt Nam</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                    <Form.Group className="col_form_address mt-3">
-                                                        <Form.Label>Tỉnh/Thành phố</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.city}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.city = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn tỉnh/thành phố</option>
-                                                            {provinces.map((province) => (
-                                                                <option key={province.code} value={province.name}>
-                                                                    {province.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Quận/Huyện</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.district}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.district = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn quận/huyện</option>
-                                                            {districts.map((district) => (
-                                                                <option key={district.code} value={district.name}>
-                                                                    {district.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                    <Form.Group className="col_form_address mt-3">
-                                                        <Form.Label>Phường/Xã</Form.Label>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={tab.customerInfo.address.ward}
-                                                            onChange={(e) => {
-                                                                const updatedTab = { ...tab };
-                                                                updatedTab.customerInfo.address.ward = e.target.value;
-                                                                setTabs((prevTabs) => {
-                                                                    const updatedTabs = [...prevTabs];
-                                                                    updatedTabs[tab.id - 1] = updatedTab;
-                                                                    return updatedTabs;
-                                                                });
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn phường/xã</option>
-                                                            {wards.map((ward) => (
-                                                                <option key={ward.code} value={ward.name}>
-                                                                    {ward.name}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Form.Group className="mt-3">
-                                                    <Form.Label>Địa chỉ chi tiết</Form.Label>
-                                                    <Form.Control
-                                                        as="textarea" // Sử dụng Textarea
-                                                        rows={3} // Số dòng trong Textarea
-                                                        placeholder="Địa chỉ chi tiết" // Ghi chú cho Textarea
-                                                    />
-                                                </Form.Group>
-                                            </Row>
-                                            <Row className="mt-3">
-                                                <Col>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Tìm kiếm voucher</Form.Label>
-                                                        <Form.Control type="text" placeholder="Nhập tên voucher" />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Tổng tiền sản phẩm</Form.Label>
-                                                        <Form.Control type="text" value="500,000 VND" readOnly />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                            <Row className="mt-3">
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Phương thức thanh toán</Form.Label>
-                                                        <Form.Control as="select" value={selectedPaymentMethod} onChange={(e) => setSelectedPaymentMethod(e.target.value)}>
-                                                            <option value="">Chọn phương thức thanh toán</option>
-                                                            <option value="cash">Tiền mặt</option>
-                                                            <option value="creditCard">Thẻ tín dụng</option>
-                                                            <option value="paypal">PayPal</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group>
-                                                        <Form.Label>Trạng thái hóa đơn</Form.Label>
-                                                        <Form.Control as="select" value={selectedInvoiceStatus} onChange={(e) => setSelectedInvoiceStatus(e.target.value)}>
-                                                            <option value="">Chọn trạng thái hóa đơn</option>
-                                                            <option value="pending">Chờ xử lý</option>
-                                                            <option value="processed">Đã xử lý</option>
-                                                            <option value="completed">Hoàn thành</option>
-                                                            <option value="cancelled">Hủy</option>
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Col>
-
-                                            </Row>
-                                            <Row>
-                                                <Form.Group className="mt-3">
-                                                    <Form.Label>Ghi chú</Form.Label>
-                                                    <Form.Control
-                                                        as="textarea" // Sử dụng Textarea
-                                                        rows={3} // Số dòng trong Textarea
-                                                        placeholder="Ghi chú chi tiết" // Ghi chú cho Textarea
-                                                    />
-                                                </Form.Group>
-                                            </Row>
-                                            <Row>
-                                                <Col className="d-flex justify-content-center mt-4">
-                                                    <Button variant="outline-dark" onClick={addTab}>
-                                                        Tạo hóa đơn
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    )}
-                                </Form>
-                            </Col>
-                            <Col xs={7}>
-                                <div className="padding-all h-100">
-                                    <h5 className="text-center mb-4">
-                                        Sản phẩm khách mua
-                                    </h5>
-
-                                    <Form className="padding-all mb-4">
-                                        <Form.Group controlId="searchProduct">
-                                            <Form.Label>Tìm kiếm sản phẩm</Form.Label>
-                                            <FormControl
-                                                type="text"
-                                                value={searchText}
-                                                onChange={handleSearchTextChange}
-                                                placeholder="Nhập tên sản phẩm"
-                                            />
-                                        </Form.Group>
-                                    </Form>
-
-                                    <Table striped bordered hover>
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên Sản Phẩm</th>
-                                                <th>Giá</th>
-                                                <th>Số Lượng</th>
-                                                <th>Thành Tiền</th>
-                                                <th>Hành Động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {filteredProducts.map((product, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{product.name}</td>
-                                                    <td>{product.price} VND</td>
-                                                    <td>{product.quantity}</td>
-                                                    <td>{product.price * product.quantity} VND</td>
-                                                </tr>
-                                            ))}
-                                            {/* Thêm các hàng khác ở đây tương tự */}
-                                        </tbody>
-                                    </Table>
+                        <div className={"p-4 m-1"}>
+                            <div className={"san-pham"}>
+                                <div className={"d-flex justify-content-between p-4"}>
+                                    <div>
+                                        <Button variant="outline-dark">
+                                            Danh Sách
+                                        </Button>
+                                    </div>
+                                    <div className={"d-flex gap-3"}>
+                                        <Button variant="outline-dark">
+                                            QR Code Sản Phẩm
+                                        </Button>
+                                        <Button variant="outline-dark">
+                                            Thêm Sản Phẩm
+                                        </Button>
+                                    </div>
                                 </div>
-                            </Col>
-                        </Row>
+                                <div className={"pt-5 pb-lg-5"}>
+                                    <DataTable
+                                        columns={columnsSanPham}
+                                        // data={records}
+                                        pagination
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        highlightOnHover
+                                        pointerOnHover
+                                        paginationRowsPerPageOptions={[5, 10, 20]}
+                                        // onRowClicked={(row) => handleDetailPromotion(row.promotionID)}
+                                        noDataComponent={noDataComponent()}
+                                    />
+                                </div>
+                                <hr/>
+                                <div className={"d-flex justify-content-end gap-2 align-content-center pe-5"}>
+                                    Tổng tiền :
+                                    <h5 style={{color: "red"}}>
+                                        {} VNĐ
+                                    </h5>
+                                </div>
+                            </div>
+
+                            <div className={"tai-khoan pt-5"}>
+                                <div className={"d-flex justify-content-between pt-5 p-4 pb-0"}>
+                                    <div>
+                                        <h3>
+                                            Tài khoản
+                                        </h3>
+                                    </div>
+                                    <div>
+                                        <Button variant="outline-dark">
+                                            Chọn tài khoản
+                                        </Button>
+                                    </div>
+                                </div>
+                                <hr/>
+                                {/*// toán tử 3 ngôi*/}
+                                {
+                                    true ?
+                                    <div className={"d-flex align-items-center ps-5"}>
+                                        <div>
+                                            Tên khách hàng:
+                                        </div>
+                                        <div className={"pt-1 pb-1 pe-2 ps-2 ms-3 text-bg-secondary rounded-3"}>
+                                            khách lẻ
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+
+                                    </div>
+                                }
+                            </div>
+                            <div className={"khach-hang pt-5"}>
+                                <div className={"d-flex justify-content-between pt-5 p-4 pb-0"}>
+                                    <div>
+                                        <h3>
+                                            Khách hàng
+                                        </h3>
+                                    </div>
+                                    {/*// toán tử 3 ngôi*/}
+                                    {/*<div>*/}
+                                    {/*    <Button variant="outline-dark">*/}
+                                    {/*        Chọn địa chỉ*/}
+                                    {/*    </Button>*/}
+                                    {/*</div>*/}
+                                </div>
+                                <hr/>
+                                <Row className={" pb-5 mb-5"}>
+                                    <Col className={"col-md-6 p-3 bg-info"}>
+
+                                    </Col>
+                                    <Col className={"col-md-6 p-3"}>
+                                        <div className={"d-flex gap-2 align-items-center ps-3"}>
+                                            <AiOutlineSlack size={32}/>
+                                            <h4 className={"mb-0"}>
+                                                Thông tin thanh toán
+                                            </h4>
+                                        </div>
+                                        <div className={"d-flex justify-content-between align-items-center pt-5"}>
+                                            <div className={"d-flex align-items-center gap-5"}>
+                                                <div>
+                                                    khách thanh toán
+                                                </div>
+                                                <Button variant="outline-secondary" className={"d-flex align-items-center px-5 pt-2 pb-2"}>
+                                                    <AiFillCreditCard size={16}/>
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <h6 className={"mb-0"}>
+                                                    {/*//làm tính tiền đê*/}
+                                                    VNĐ
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div className={"pt-4 d-flex gap-5"}>
+                                            <Form.Control
+                                                // name="" điền tên Form đê
+                                                type="text"
+                                                placeholder="Tìm theo tên - mã - giá trị" // điền placehoder đê
+                                                // onChange={(e) => onChangeFilters(e)} // chon onchange đê
+                                            />
+                                            <Button variant={"outline-dark"} className={"w-25"}>
+                                                Chọn mã
+                                            </Button>
+                                        </div>
+                                        <div className={"d-flex gap-4 align-items-center pt-4"}>
+                                            <div>
+                                                Giao hàng:
+                                            </div>
+                                            <Switch defaultUnChecked  />
+                                        </div>
+                                        <div className={"d-flex gap-4 align-items-center justify-content-between pt-4"}>
+                                            <div>
+                                                Tiền hàng:
+                                            </div>
+                                            <div>
+                                                <h6 className={"pb-0"}>
+                                                    VNĐ
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div className={"d-flex gap-4 align-items-center justify-content-between pt-4"}>
+                                            <div>
+                                                Giảm giá:
+                                            </div>
+                                            <div>
+                                                <h6 className={"pb-0"}>
+                                                    VNĐ
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div className={"d-flex gap-4 align-items-center justify-content-between pt-4"}>
+                                            <div>
+                                                Tổng tiền:
+                                            </div>
+                                            <div>
+                                                <h4 className={"pb-0 "}>
+                                                    VNĐ
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div className={"d-flex justify-content-end pt-5 pe-3"}>
+                                            <Button variant={"outline-dark"}>
+                                                Xác nhận hóa đơn
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </div>
                     </Tab>
                 ))}
             </Tabs>
