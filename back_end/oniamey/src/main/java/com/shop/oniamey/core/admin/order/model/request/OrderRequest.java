@@ -42,21 +42,13 @@ public class OrderRequest {
     private Double totalMoney;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
-    private Date confirmationDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date shipDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date receiveDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
-    private Date completionDate;
-
-    @NotEmpty(message = "address is required")
+    @NotNull(message = "address is required")
     private OrderType type;
+
+    @NotNull(message = "money reduced is required")
+    private Double moneyReduced;
 
     @NotEmpty(message = "address is required")
     @Length(max = 1000)
@@ -68,7 +60,6 @@ public class OrderRequest {
     @NotNull(message = "status is required")
     private OrderStatus status;
 
-    @NotNull(message = "voucher id is required")
     @Min(value = 1)
     private Long voucherId;
 }
