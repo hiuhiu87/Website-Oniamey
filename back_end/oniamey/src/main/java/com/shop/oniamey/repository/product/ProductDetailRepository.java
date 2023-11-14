@@ -31,6 +31,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
              sl.name as sleeveLength,
              pd.name as name,
              pd.price as price,
+             pd.sell_price as sellPrice,
              pd.quantity as quantity,
              pd.weight as weight,
              pd.created_at as createdAt,
@@ -68,6 +69,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
              sl.name as sleeveLength,
              pd.name as name,
              pd.price as price,
+             pd.sell_price as sellPrice,
              pd.quantity as quantity,
              pd.weight as weight,
              pd.created_at as createdAt,
@@ -101,6 +103,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
                              pd.name,
                              pd.code,
                              pd.price,
+                             pd.sell_price,
                              pd.quantity,
                              pd.weight,
                              pd.created_at,
@@ -126,6 +129,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             pd.id_sleeve_length as sleeveLength,
             pd.name as name,
             pd.price as price,
+            pd.sell_price as sellPrice,
             pd.quantity as quantity,
             pd.weight as weight,
             pd.cover as cover,
@@ -153,6 +157,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
                             pd.name,
                             pd.code,
                             pd.price,
+                            pd.sell_price,
                             pd.quantity,
                             pd.weight,
                             pd.created_at,
@@ -185,7 +190,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
                     SELECT 
                      pd.id, pd.id_product, pd.id_category, pd.id_size, pd.id_material, pd.id_brand,
                      pd.id_color, pd.id_collar, pd.id_sleeve_length, pd.code, pd.name,
-                     pd.price, pd.quantity, pd.weight, pd.cover, pd.created_at, pd.updated_at, pd.created_by,
+                     pd.price, pd.sell_price, pd.quantity, pd.weight, pd.cover, pd.created_at, pd.updated_at, pd.created_by,
                      pd.updated_by, pd.deleted
                      FROM product_detail pd
                     WHERE pd.id_product = :productId

@@ -12,6 +12,9 @@ import DataTable from "react-data-table-component";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import QrReader from "react-qr-scanner";
+import {Modal} from "antd";
+import FormatString from "../../../../../utils/FormatString";
 
 const ManageBrand = (props) => {
     const [showModalCreateBrand, setShowModalCreateBrand] = useState(false);
@@ -23,6 +26,33 @@ const ManageBrand = (props) => {
     const [brandId, setBrandId] = useState("");
 
     const [record, setRecord] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const delay = 100;
+
+    const handleCancelScan = () => {
+        stopStreamedVideo(document.querySelector("video"));
+        setOpen(false);
+    };
+
+    const handleScan = (data) => {
+        console.log(data)
+    };
+
+    const stopStreamedVideo = (videoElem) => {
+        const stream = videoElem.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => {
+            track.stop();
+        });
+
+        videoElem.srcObject = null;
+    };
+
+    const handleError = (err) => {
+        console.error(err);
+    };
 
     useEffect(() => {
         fetchListBrand();
@@ -180,6 +210,13 @@ const ManageBrand = (props) => {
                     >
                         <MdLibraryAdd /> Thêm
                     </Button>
+                    <Button
+                        type="button"
+                        variant="dark"
+                        onClick={() => setOpen(true)}
+                    >
+                        <MdLibraryAdd /> Scan QR
+                    </Button>
                 </div>
                 <DataTable
                     rounded-3
@@ -207,6 +244,18 @@ const ManageBrand = (props) => {
                 dataUpdate={dataUpdate}
                 resetDataUpdate={resetDataUpdate}
             />
+            <Modal
+                title="Quét Mã QR"
+                open={open}
+                onCancel={handleCancelScan}
+                onOk={handleCancelScan}
+            >
+                <div className="qrcode-container">
+                    {open ? (
+                        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+                    ) : null}
+                </div>
+            </Modal>
         </div>
     );
 };

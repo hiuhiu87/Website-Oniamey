@@ -194,6 +194,7 @@ public class ProductDetailService implements IProductDetailService {
                         productDetail.setName(name);
                         productDetail.setPrice(price);
                         productDetail.setSellPrice(price);
+                        System.out.println(price);
                         productDetail.setQuantity(quantity);
                         productDetail.setWeight(addProductDetailRequest.getWeight());
                         productDetail.setDeleted(false);

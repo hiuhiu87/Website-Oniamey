@@ -36,6 +36,8 @@ public interface ProductDetailResponse {
 
     Float getPrice();
 
+    Float getSellPrice();
+
     Long getQuantity();
 
     Float getWeight();
