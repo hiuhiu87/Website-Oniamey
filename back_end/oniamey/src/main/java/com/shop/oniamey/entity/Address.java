@@ -37,7 +37,7 @@ public class Address extends BaseModel {
     @Column(name = "province", nullable = false)
     private String province; // tỉnh / thành phố
 
-    @Column(name = "country", nullable = false)
+    @Column(name = "country", nullable = true)
     private String country; // quốc gia
 
     @Column(name = "is_default", nullable = false)
