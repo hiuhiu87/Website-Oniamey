@@ -12,4 +12,10 @@
         box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
         border-radius: 10px;
     }
+    .no-data-component{
+        .table-order-detail{
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+    }
 }

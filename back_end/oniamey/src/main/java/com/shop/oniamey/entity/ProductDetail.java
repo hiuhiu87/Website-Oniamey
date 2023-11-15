@@ -60,6 +60,9 @@ public class ProductDetail extends BaseModel {
     @Column(name = "price")
     private Float price;
 
+    @Column(name = "sell_price")
+    private Float sellPrice;
+
     @Column(name = "quantity")
     private Long quantity;
 

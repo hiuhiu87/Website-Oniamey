@@ -15,17 +15,24 @@ import {
 import { IoIosClose } from "react-icons/io";
 import axios from "axios";
 import "./SalesAtTheCounter.scss";
-import { useRef } from "react";
-import DataTable from "react-data-table-component";
-import { format } from "date-fns";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { AiFillCreditCard, AiOutlineSlack } from "react-icons/ai";
-import { Switch, Select } from "antd";
 import { BiPlus, BiSearch } from "react-icons/bi";
-
 import customerService from "../../../../services/CustomerService";
 import { BsPerson } from "react-icons/bs";
+import {useRef} from "react";
+import * as OrderApi from '../../../../services/OderApi';
+import * as OrderDetailApi from '../../../../services/OrderDetailApi';
+import DataTable from "react-data-table-component";
+import {format} from "date-fns";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye} from "@fortawesome/free-solid-svg-icons";
+import {AiFillCreditCard, AiOutlineSlack} from "react-icons/ai";
+import {Switch} from "antd";
+import QrReader from "react-qr-scanner";
+import {Modal} from "antd";
+import {toast} from "react-toastify";
+import Swal from "sweetalert2";
+import {FaPenSquare} from "react-icons/fa";
+import {MdDeleteSweep} from "react-icons/md";
 
 const SalesAtTheCounter = (props) => {
   const [activeTab, setActiveTab] = useState(1);
@@ -115,6 +122,36 @@ const SalesAtTheCounter = (props) => {
   ]);
 
   const nextTabId = useRef(2);
+
+    //Luật order info
+    const [userId,setUserId]=useState(0);
+    const [customerId,setCustomerId]=useState(0);
+    const [phoneNumber,setPhoneNumber]=useState("");
+    const [address,setAddress]=useState("");
+    const [userName,setUserName]=useState("");
+    const [totalMoney,setTotalMoney]=useState(0);
+    const [shipDate,setShipDate]=useState("");
+    const [type,setType]= useState(false);
+    const [moneyReduced,setMoneyReduced]=useState(0);
+    const [note,setNote]=useState("");
+    const [moneyShip,setMoneyShip]=useState(0);
+    const status= 'PENDING';
+    const [voucherId,setVoucherId]=useState(0);
+    const [orderDetailData,setOrderDetailData]=useState([]);
+
+    const onChangeType = (checked) => {
+        setType(checked);
+    };
+
+
+    const [listProduct,setListProduct]= useState([{
+        cover:"",
+        name :"Cường ĐB",
+        quantity :2,
+        sellPrice :2000,
+        size:43,
+        color :"red"
+    }]);
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -320,7 +357,6 @@ const SalesAtTheCounter = (props) => {
                   Tổng tiền :<h5 style={{ color: "red" }}>{} VNĐ</h5>
                 </div>
               </div>
-
               <div className={"tai-khoan pt-5"}>
                 <div className={"d-flex justify-content-between pt-5 p-4 pb-0"}>
                   <div>

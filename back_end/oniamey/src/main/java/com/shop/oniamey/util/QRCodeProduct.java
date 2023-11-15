@@ -27,14 +27,8 @@ public class QRCodeProduct {
         String qrCodeName =productDetail.getName() + "-QRCODE.png";
         var qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "Code: " + productDetail.getCode() + "\n"
-                        + "Name: " + productDetail.getName() + "\n"
-                        + "Category: " + productDetail.getCategory().getName() + "\n"
-                        + "Brand: " + productDetail.getBrand().getName() + "\n"
-                        + "Material: " + productDetail.getMaterial().getName() + "\n"
-                        + "Color: " + productDetail.getColor().getName() + "\n"
-                        + "Size: " + productDetail.getSize().getName() + "\n"
-                , BarcodeFormat.QR_CODE, 400, 400);
+                "Code: " + productDetail.getCode(),
+                BarcodeFormat.QR_CODE, 400, 400);
         Path path = qrDir.resolve(qrCodeName);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }

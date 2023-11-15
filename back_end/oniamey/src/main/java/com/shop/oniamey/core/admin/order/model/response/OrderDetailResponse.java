@@ -25,4 +25,5 @@ public interface OrderDetailResponse {
 
     String getProductDetailName();
 
+    String getImg();
 }
