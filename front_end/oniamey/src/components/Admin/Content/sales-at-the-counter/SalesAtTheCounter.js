@@ -4,33 +4,95 @@ import {IoIosClose} from "react-icons/io";
 import axios from "axios";
 import "./SalesAtTheCounter.scss";
 import {useRef} from "react";
+import * as OrderApi from '../../../../services/OderApi';
+import * as OrderDetailApi from '../../../../services/OrderDetailApi';
 import DataTable from "react-data-table-component";
 import {format} from "date-fns";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye} from "@fortawesome/free-solid-svg-icons";
 import {AiFillCreditCard, AiOutlineSlack} from "react-icons/ai";
 import {Switch} from "antd";
+import QrReader from "react-qr-scanner";
+import {Modal} from "antd";
+import {toast} from "react-toastify";
+import Swal from "sweetalert2";
+import {FaPenSquare} from "react-icons/fa";
+import {MdDeleteSweep} from "react-icons/md";
 
 const SalesAtTheCounter = (props) => {
     const [activeTab, setActiveTab] = useState(1);
 
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(''); // State để lưu phương thức thanh toán
-    const [selectedInvoiceStatus, setSelectedInvoiceStatus] = useState(''); // State để lưu trạng thái hóa đơn
+    //Luật order info
+    const [userId,setUserId]=useState(0);
+    const [customerId,setCustomerId]=useState(0);
+    const [phoneNumber,setPhoneNumber]=useState("");
+    const [address,setAddress]=useState("");
+    const [userName,setUserName]=useState("");
+    const [totalMoney,setTotalMoney]=useState(0);
+    const [shipDate,setShipDate]=useState("");
+    const [type,setType]= useState(false);
+    const [moneyReduced,setMoneyReduced]=useState(0);
+    const [note,setNote]=useState("");
+    const [moneyShip,setMoneyShip]=useState(0);
+    const status= 'PENDING';
+    const [voucherId,setVoucherId]=useState(0);
+    const [orderDetailData,setOrderDetailData]=useState([]);
 
-    const paginationComponentOptions = {
-        rowsPerPageText: "Số Bản Ghi Một Trang",
-        rangeSeparatorText: "Trên",
-        selectAllRowsItem: true,
-        selectAllRowsItemText: "Tất Cả",
+    const onChangeType = (checked) => {
+        setType(checked);
     };
 
-    const noDataComponent = () => {
-        return (
-            <div className="no-data-component">
-                <h5>Không có dữ liệu</h5>
-            </div>
-        );
+    //Cường
+    const [record, setRecord] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const delay = 100;
+
+    const handleCancelScan = () => {
+        stopStreamedVideo(document.querySelector("video"));
+        setOpen(false);
     };
+
+    const handleScan = (data) => {
+        if(data) {
+            console.log(data.text)
+            stopStreamedVideo(document.querySelector("video"));
+            setOpen(false);
+        }
+
+    };
+
+    const stopStreamedVideo = (videoElem) => {
+        const stream = videoElem.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => {
+            track.stop();
+        });
+
+        videoElem.srcObject = null;
+    };
+
+    const handleError = (err) => {
+        console.error(err);
+    };
+
+    // const paginationComponentOptions = {
+    //     rowsPerPageText: "Số Bản Ghi Một Trang",
+    //     rangeSeparatorText: "Trên",
+    //     selectAllRowsItem: true,
+    //     selectAllRowsItemText: "Tất Cả",
+    // };
+
+    const [listProduct,setListProduct]= useState([{
+        cover:"",
+         name :"Cường ĐB",
+         quantity :2,
+         sellPrice :2000,
+         size:43,
+         color :"red"
+    }]);
+
 
     const columnsSanPham = [
         {
@@ -150,27 +212,6 @@ const SalesAtTheCounter = (props) => {
         }
     };
 
-    // // Xử lý khi thay đổi trường hasAccount
-    // const handleHasAccountChange = (tabId, newHasAccountValue) => {
-    //     const updatedTabs = tabs.map((tab) => {
-    //         if (tab.id === tabId) {
-    //             return { ...tab, customerInfo: { ...tab.customerInfo, hasAccount: newHasAccountValue } };
-    //         }
-    //         return tab;
-    //     });
-    //     setTabs(updatedTabs);
-    // };
-    //
-    // const handleIsDefaultChange = (tabId, newIsDefaultValue) => {
-    //     const updatedTabs = tabs.map((tab) => {
-    //         if (tab.id === tabId) {
-    //             return { ...tab, customerInfo: { ...tab.customerInfo, address: { ...tab.customerInfo.address, isDefault: newIsDefaultValue } } };
-    //         }
-    //         return tab;
-    //     });
-    //     setTabs(updatedTabs);
-    // };
-
     const closeTab = (tabId) => {
         const tabIndex = tabs.findIndex((tab) => tab.id === tabId);
         if (tabIndex !== -1) {
@@ -180,31 +221,101 @@ const SalesAtTheCounter = (props) => {
         }
     };
 
-    // prodcut
-
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        // Thực hiện yêu cầu mạng tới backend ở đây
-        axios.get('URL_BACKEND/products') // Điều chỉnh URL tới API của bạn
-            .then(response => {
-                setProducts(response.data); // Cập nhật mảng products với dữ liệu từ backend
-            })
-            .catch(error => {
-                console.error('Lỗi khi lấy dữ liệu từ backend:', error);
+    const handleTaoHoaDon =async ()=>{
+        const handleSubmitCreateOrder = () => {
+            Swal.fire({
+                title: "Thông báo",
+                text: "Tạo hóa đơn?",
+                icon: "infor",
+                showCancelButton: true,
+                confirmButtonColor: "#000",
+                cancelButtonColor: "#000",
+                confirmButtonText: "Đồng ý",
+                cancelButtonText: "Hủy",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    //tạo hóa đơn, lấy ra id hóa đơn
+                    const idOrder = await OrderApi.createOrder({
+                        userId,
+                        customerId,
+                        phoneNumber,
+                        address,
+                        userName,
+                        totalMoney,
+                        shipDate,
+                        type,
+                        moneyReduced,
+                        note,
+                        moneyShip,
+                        status,
+                        voucherId
+                    });
+                    //tạo hóa đơn detail
+                    const result = await OrderDetailApi.createOrderDetail(orderDetailData);
+                    if (result.length === 0){
+                        toast.success("Tạo hóa đơn thành công");
+                    }else{
+                        toast.error("Có lỗi xảy ra");
+                    }
+                }
             });
-    }, []); // [] để đảm bảo chỉ chạy một lần khi thành phần được tạo
+        };
+        handleSubmitCreateOrder();
+    }
 
-    // search product
-    // const handleSearchTextChange = (e) => {
-    //     setSearchText(e.target.value);
-    // };
-    //
-    // Lọc danh sách sản phẩm dựa trên giá trị của ô tìm kiếm
-    // const filteredProducts = products.filter((product) => {
-    //     return product.name.toLowerCase().includes(searchText.toLowerCase());
-    // });
+    const columnsProductDetail = [
+        {
+            name: "STT",
+            selector: (row) => listProduct.indexOf(row) + 1,
+            minWidth: "40px",
+            maxWidth: "80px",
+            center: "true",
+        },
+        {
+            name: "Ảnh",
+            cell: (row) => (
+                <div
+                    className="text-center image-product-detail"
+                    style={{ verticalAlign: "middle", width: "100px" }}
+                >
+                    <img
+                        style={{ width: "100%", padding: "5px" }}
+                        src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
+                    />
+                </div>
+            ),
+            center: "true",
+        },
+        {
+            name: "Ngày cập nhật",
+            selector: (row) => row.quantity,
+            center: "true",
+        },
+        {
+            name: "Ngày cập nhật",
+            selector: (row) => row.sellPrice,
+            center: "true",
+        },{
+            name: "Ngày cập nhật",
+            selector: (row) => row.size,
+            center: "true",
+        },{
+            name: "Ngày cập nhật",
+            selector: (row) => row.color,
+            center: "true",
+        },{
+            name: "Ngày cập nhật",
+            selector: (row) => row.sellPrice*row.quantity,
+            center: "true",
+        },
+    ];
 
+    const paginationComponentOptions = {
+        rowsPerPageText: "Số Bản Ghi Một Trang",
+        rangeSeparatorText: "Trên",
+        selectAllRowsItem: true,
+        selectAllRowsItemText: "Tất Cả",
+    };
     return (
         <Container className="sales-at-the-counter-manage">
             <Row className="justify-content-md-center p-3">
@@ -245,7 +356,7 @@ const SalesAtTheCounter = (props) => {
                                         </Button>
                                     </div>
                                     <div className={"d-flex gap-3"}>
-                                        <Button variant="outline-dark">
+                                        <Button variant="outline-dark" onClick={() => setOpen(true)}>
                                             QR Code Sản Phẩm
                                         </Button>
                                         <Button variant="outline-dark">
@@ -253,17 +364,20 @@ const SalesAtTheCounter = (props) => {
                                         </Button>
                                     </div>
                                 </div>
-                                <div className={"pt-5 pb-lg-5"}>
+                                <div className={"pt-5 pb-lg-5"} >
+
                                     <DataTable
-                                        columns={columnsSanPham}
-                                        // data={records}
+                                        rounded-3
+                                        columns={columnsProductDetail}
+                                        data={listProduct}
                                         pagination
                                         paginationComponentOptions={paginationComponentOptions}
                                         highlightOnHover
                                         pointerOnHover
-                                        paginationRowsPerPageOptions={[5, 10, 20]}
-                                        // onRowClicked={(row) => handleDetailPromotion(row.promotionID)}
-                                        noDataComponent={noDataComponent()}
+                                        paginationRowsPerPageOptions={[5, 10, 15]}
+                                        paginationPerPage={5}
+                                        paginationDefaultPage={1}
+                                        // onRowClicked={(row) => handleClickTable(row)}
                                     />
                                 </div>
                                 <hr/>
@@ -363,7 +477,7 @@ const SalesAtTheCounter = (props) => {
                                             <div>
                                                 Giao hàng:
                                             </div>
-                                            <Switch defaultUnChecked  />
+                                            <Switch defaultUnChecked onChange={onChangeType}  />
                                         </div>
                                         <div className={"d-flex gap-4 align-items-center justify-content-between pt-4"}>
                                             <div>
@@ -396,8 +510,8 @@ const SalesAtTheCounter = (props) => {
                                             </div>
                                         </div>
                                         <div className={"d-flex justify-content-end pt-5 pe-3"}>
-                                            <Button variant={"outline-dark"}>
-                                                Xác nhận hóa đơn
+                                            <Button variant={"outline-dark"} onClick={handleTaoHoaDon}>
+                                                Tạo hóa đơn
                                             </Button>
                                         </div>
                                     </Col>
@@ -407,7 +521,20 @@ const SalesAtTheCounter = (props) => {
                     </Tab>
                 ))}
             </Tabs>
+            <Modal
+                title="Quét Mã QR"
+                open={open}
+                onCancel={handleCancelScan}
+                onOk={handleCancelScan}
+            >
+                <div className="qrcode-container">
+                    {open ? (
+                        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+                    ) : null}
+                </div>
+            </Modal>
         </Container>
+
     );
 };
 

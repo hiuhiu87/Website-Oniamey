@@ -60,6 +60,5 @@ public class OrderRequest {
     @NotNull(message = "status is required")
     private OrderStatus status;
 
-    @Min(value = 1)
     private Long voucherId;
 }

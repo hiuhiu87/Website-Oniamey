@@ -57,6 +57,6 @@ public class OrderDetailService implements IOrderDetailService {
             }
             orderDetailRepository.save(orderDetail);
         }
-        return "create order detail success";
+        return "";
     }
 }

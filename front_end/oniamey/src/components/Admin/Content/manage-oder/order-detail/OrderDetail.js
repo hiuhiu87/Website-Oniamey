@@ -260,8 +260,8 @@ const OrderContent = (props) => {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Ảnh</th>
                                     <th>STT</th>
+                                    <th>Ảnh</th>
                                     <th>Tên Sản Phẩm</th>
                                     <th>Kích Cỡ</th>
                                     <th>Màu Sắc</th>
@@ -273,8 +273,8 @@ const OrderContent = (props) => {
                             <tbody>
                                 {listProduct && listProduct.map((item, index) => {
                                     return (<tr key={index}>
-                                        <td style={{width:'10px'}}><img src='./OrderDetail.js' width={80} height={80} /></td>
                                         <td>{index + 1}</td>
+                                        <td style={{width:'10px'}}><img src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${item.img}`} width={80} height={80} /></td>
                                         <td>{item.productDetailName}</td>
                                         <td>{item.sizeName}</td>
                                         <td>{item.colorName}</td>
