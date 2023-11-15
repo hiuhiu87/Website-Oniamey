@@ -1,5 +1,6 @@
 package com.shop.oniamey.core.admin.order.service.impl;
 
+import com.shop.oniamey.core.admin.order.model.request.OrderHistoryRequest;
 import com.shop.oniamey.core.admin.order.model.request.OrderRequest;
 import com.shop.oniamey.core.admin.order.model.response.CountStatusResponse;
 import com.shop.oniamey.core.admin.order.model.response.OrderResponse;
@@ -8,6 +9,7 @@ import com.shop.oniamey.entity.Orders;
 import com.shop.oniamey.infrastructure.constant.OrderStatus;
 import com.shop.oniamey.infrastructure.exception.RestApiException;
 import com.shop.oniamey.repository.customer.CustomerRepository;
+import com.shop.oniamey.repository.order.OrderHistoryRepository;
 import com.shop.oniamey.repository.order.OrderRepository;
 import com.shop.oniamey.repository.user.UserRepository;
 import com.shop.oniamey.repository.voucher.VoucherRepository;
@@ -34,6 +36,10 @@ public class OrderService implements IOrderService {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    @Autowired
+    private OrderDetailService orderDetailService;
+    @Autowired
+    private OrderHistoryService orderHistoryService;
     @Override
     public List<OrderResponse> getAllOrder() {
         return orderRepository.findAllOrder();
@@ -80,8 +86,13 @@ public class OrderService implements IOrderService {
         orders.setNote(orderRequest.getNote());
         orders.setMoneyShip(orderRequest.getMoneyShip());
         orders.setStatus(orderRequest.getStatus());
-        orderRepository.save(orders);
-        return "Create order success";
+        Orders order =orderRepository.save(orders);
+
+        //tạo history đơn hàng
+        OrderHistoryRequest orderHistoryRequest= new OrderHistoryRequest(order.getId(),"Tạo hóa đơn",OrderStatus.PENDING);
+        orderHistoryService.createOrderHistory(orderHistoryRequest);
+
+        return order.getId()+"";
     }
 
     @Transactional

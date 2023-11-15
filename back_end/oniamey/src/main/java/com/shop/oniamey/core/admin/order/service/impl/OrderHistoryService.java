@@ -34,7 +34,6 @@ public class OrderHistoryService implements IOrderHistoryService {
     @Transactional
     @Override
     public List<OrderHistoryResponse> createOrderHistory(OrderHistoryRequest orderHistoryRequest ) {
-
         Optional<Orders> order = orderRepository.findById(orderHistoryRequest.getIdOrder());
         if (order.isEmpty()) {
             return new ArrayList<>();
