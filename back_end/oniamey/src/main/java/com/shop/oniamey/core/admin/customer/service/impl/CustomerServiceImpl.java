@@ -7,6 +7,7 @@ import com.shop.oniamey.core.admin.customer.service.CustomerService;
 import com.shop.oniamey.core.common.model.request.ChangePasswordRequest;
 import com.shop.oniamey.entity.Customer;
 import com.shop.oniamey.repository.customer.CustomerRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
         System.out.println(id);
         return id;
     }
+
 
     /**
      * @param id                - nhận id của user cần update
@@ -137,6 +139,23 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(newPassword);
         customerRepository.save(customer);
         return "Change password successfully";
+    }
+
+    @Override
+    public Long createTemporaryCustomer() {
+        Customer customer = new Customer();
+        String randomInfor = RandomStringUtils.randomAlphanumeric(10);
+        customer.setUsername(randomInfor);
+        customer.setIdentityCard(randomInfor);
+        customer.setFullName("Khách Lẻ " + randomInfor);
+        customer.setEmail(randomInfor);
+        customer.setPhoneNumber(randomInfor);
+        customer.setGender(3);
+        customer.setAvatar("");
+        customer.setBirthDate(null);
+        customer.setDeleted(false);
+        customerRepository.save(customer);
+        return customerRepository.getNewId();
     }
 
     @Override

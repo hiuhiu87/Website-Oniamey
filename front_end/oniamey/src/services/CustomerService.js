@@ -59,6 +59,10 @@ class CustomerService {
     return axios.put(BASE_API_URL_ADDRESS + "/delete-address/" + id);
   }
 
+  createTemporaryCustomer() {
+      return axios.post(BASE_API_URL_CUSTOMER + "/create-temporary-customer");
+  }
+
 }
 
 const service = new CustomerService();
