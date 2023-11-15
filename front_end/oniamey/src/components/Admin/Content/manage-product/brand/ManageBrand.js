@@ -36,7 +36,12 @@ const ManageBrand = (props) => {
     };
 
     const handleScan = (data) => {
-        console.log(data)
+        if(data) {
+            console.log(data.text)
+            stopStreamedVideo(document.querySelector("video"));
+            setOpen(false);
+        }
+
     };
 
     const stopStreamedVideo = (videoElem) => {

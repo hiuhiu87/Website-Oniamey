@@ -87,6 +87,11 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
+    public ProductDetailResponse getByCode(String code) {
+        return productDetailRepository.getByCode(code);
+    }
+
+    @Override
     public List<ProductDetailResponse> getAllByProductId(Long productId) {
         return productDetailRepository.getAllByProductId(productId);
     }

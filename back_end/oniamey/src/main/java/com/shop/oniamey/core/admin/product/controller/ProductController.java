@@ -128,6 +128,11 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/product-details/product-detail/{code}")
+    public ResponseEntity<?> getByCode(@PathVariable String code) {
+        return ResponseEntity.ok(productDetailService.getByCode(code));
+    }
+
     @DeleteMapping("/product-details/{id}")
     public ResponseEntity<String> deleteProductDetail(@PathVariable Long id) {
         try {
