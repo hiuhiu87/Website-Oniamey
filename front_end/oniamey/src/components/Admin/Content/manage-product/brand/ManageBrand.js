@@ -30,34 +30,7 @@ const ManageBrand = (props) => {
     const [open, setOpen] = useState(false);
     const delay = 100;
 
-    const handleCancelScan = () => {
-        stopStreamedVideo(document.querySelector("video"));
-        setOpen(false);
-    };
 
-    const handleScan = (data) => {
-        if(data) {
-            console.log(data.text)
-            stopStreamedVideo(document.querySelector("video"));
-            setOpen(false);
-        }
-
-    };
-
-    const stopStreamedVideo = (videoElem) => {
-        const stream = videoElem.srcObject;
-        const tracks = stream.getTracks();
-
-        tracks.forEach((track) => {
-            track.stop();
-        });
-
-        videoElem.srcObject = null;
-    };
-
-    const handleError = (err) => {
-        console.error(err);
-    };
 
     useEffect(() => {
         fetchListBrand();
@@ -215,13 +188,6 @@ const ManageBrand = (props) => {
                     >
                         <MdLibraryAdd /> Thêm
                     </Button>
-                    <Button
-                        type="button"
-                        variant="dark"
-                        onClick={() => setOpen(true)}
-                    >
-                        <MdLibraryAdd /> Scan QR
-                    </Button>
                 </div>
                 <DataTable
                     rounded-3
@@ -249,18 +215,6 @@ const ManageBrand = (props) => {
                 dataUpdate={dataUpdate}
                 resetDataUpdate={resetDataUpdate}
             />
-            <Modal
-                title="Quét Mã QR"
-                open={open}
-                onCancel={handleCancelScan}
-                onOk={handleCancelScan}
-            >
-                <div className="qrcode-container">
-                    {open ? (
-                        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
-                    ) : null}
-                </div>
-            </Modal>
         </div>
     );
 };
