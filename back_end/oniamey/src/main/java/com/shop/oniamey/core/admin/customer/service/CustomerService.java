@@ -25,4 +25,6 @@ public interface CustomerService {
 
     String changePassword(Long id, ChangePasswordRequest changePasswordRequest);
 
+    Long createTemporaryCustomer();
+
 }

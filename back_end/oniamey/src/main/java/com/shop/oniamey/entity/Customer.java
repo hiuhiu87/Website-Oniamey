@@ -34,16 +34,16 @@ public class Customer extends BaseModel {
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email",  nullable = true , unique = true)
     private String email;
 
-    @Column(name = "gender", nullable = true)
+    @Column(name = "gender")
     private Integer gender;
 
     @Column(name = "avatar")

@@ -66,4 +66,9 @@ public class CustomerRestController {
         return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 
+    @PostMapping("/create-temporary-customer")
+    public ResponseEntity<?> createTemporaryCustomer() {
+        return new ResponseEntity<>(customerService.createTemporaryCustomer(), HttpStatus.OK);
+    }
+
 }

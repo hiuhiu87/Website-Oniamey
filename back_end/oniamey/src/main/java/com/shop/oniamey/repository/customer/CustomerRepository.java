@@ -30,6 +30,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             from customer c
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
+            where c.full_name not like "%Khách Lẻ%"
                         """, nativeQuery = true)
     Page<List<CustomerResponse>> getAllCustomers(Pageable pageable);
 
@@ -48,7 +49,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             from customer c
             left JOIN user AS uc ON c.created_by = uc.id
             left JOIN user AS uu ON c.updated_by = uu.id
+            where c.full_name not like "%Khách Lẻ%"
             order by c.id desc
+            
                         """, nativeQuery = true)
     List<CustomerResponse> getAllCustomers();
 
@@ -77,5 +80,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByEmail(String email);
 
     Optional<Customer> findByPhoneNumber(String phoneNumber);
+
+    @Query(
+            value = """
+                    SELECT Max(c.id) FROM customer c where c.full_name like "%Khách Lẻ%"
+                    """, nativeQuery = true
+    )
+    Long getNewId();
 
 }

@@ -3,6 +3,7 @@ import {
   Button,
   Col,
   Container,
+  Dropdown,
   Form,
   FormControl,
   InputGroup,
@@ -20,12 +21,17 @@ import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { AiFillCreditCard, AiOutlineSlack } from "react-icons/ai";
-import { Switch, Input, Space } from "antd";
-import {BiSearch} from "react-icons/bi";
+import { Switch, Select } from "antd";
+import { BiPlus, BiSearch } from "react-icons/bi";
+
+import customerService from "../../../../services/CustomerService";
+import { BsPerson } from "react-icons/bs";
 
 const SalesAtTheCounter = (props) => {
   const [activeTab, setActiveTab] = useState(1);
-
+  const [allCustomer, setAllCustomer] = useState([]);
+  const [customerId, setCustomerId] = useState();
+  const [detailInforCustomer, setDetailInforCustomer] = useState({});
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // State để lưu phương thức thanh toán
   const [selectedInvoiceStatus, setSelectedInvoiceStatus] = useState(""); // State để lưu trạng thái hóa đơn
 
@@ -35,10 +41,6 @@ const SalesAtTheCounter = (props) => {
     selectAllRowsItem: true,
     selectAllRowsItemText: "Tất Cả",
   };
-
-  const onSearch = (value) => console.log(value);
-
-  const { Search } = Input;
 
   const noDataComponent = () => {
     return (
@@ -125,6 +127,30 @@ const SalesAtTheCounter = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    customerService
+      .getAllCustomerSearch()
+      .then((res) => {
+        setAllCustomer(res.data);
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    customerService
+      .getCustomerById(customerId)
+      .then((res) => {
+        console.log(res.data);
+        setDetailInforCustomer(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [customerId]);
+
   // // Gọi API để lấy danh sách quận/huyện dựa trên tỉnh/thành phố đã chọn
   // const fetchDistricts = (provinceId) => {
   //     axios.get(`https://provinces.open-api.vn/api/p/${provinceId}/d/`).then((response) => {
@@ -196,7 +222,16 @@ const SalesAtTheCounter = (props) => {
     }
   };
 
-  // prodcut
+  const handleChoseKhachLe = () => {
+    customerService
+      .createTemporaryCustomer()
+      .then((res) => {
+        setCustomerId(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const [products, setProducts] = useState([]);
 
@@ -221,7 +256,6 @@ const SalesAtTheCounter = (props) => {
   // const filteredProducts = products.filter((product) => {
   //     return product.name.toLowerCase().includes(searchText.toLowerCase());
   // });
-
   return (
     <Container className="sales-at-the-counter-manage">
       <Row className="justify-content-md-center p-3">
@@ -293,28 +327,55 @@ const SalesAtTheCounter = (props) => {
                     <h3>Tài khoản</h3>
                   </div>
                   <div className={"d-flex align-items-center"}>
-                      <Search
-                          placeholder="input search text"
-                          allowClear
-                          enterButton={<BiSearch />}
-                          size="large"
-                          onSearch={onSearch}
-                          className={"me-3"}
-                      />
-                    <Button variant="outline-dark">Chọn tài khoản</Button>
+                    <Button className={"me-4"} onClick={handleChoseKhachLe}>
+                      <BsPerson size={15} />
+                      Khách Lẻ
+                    </Button>
+                    <Select
+                      showSearch
+                      className={"me-3"}
+                      style={{
+                        width: 500,
+                        height: 50,
+                      }}
+                      placeholder="Search to Select"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
+                      size={"large"}
+                      options={allCustomer.map((customer) => ({
+                        value: customer.id,
+                        label: customer.fullName + " - " + customer.phoneNumber,
+                      }))}
+                      onChange={(value) => {
+                        setCustomerId(value);
+                      }}
+                    />
+                    <Button variant="outline-dark">
+                      <BiPlus size={15} />
+                      Thêm Nhanh Khách Hàng
+                    </Button>
                   </div>
                 </div>
                 <hr />
                 {/*// toán tử 3 ngôi*/}
                 {true ? (
                   <div className={"d-flex align-items-center ps-5"}>
-                    <div>Tên khách hàng:</div>
+                    <div> </div>
                     <div
                       className={
                         "pt-1 pb-1 pe-2 ps-2 ms-3 text-bg-secondary rounded-3"
                       }
                     >
-                      khách lẻ
+                      {detailInforCustomer && `Tên khách hàng: ${detailInforCustomer.fullName} - ${detailInforCustomer.phoneNumber}`}
                     </div>
                   </div>
                 ) : (
