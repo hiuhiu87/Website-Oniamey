@@ -16,6 +16,8 @@ public interface IProductDetailService {
 
     ProductDetail getById(Long id) throws DataNotFoundException;
 
+    ProductDetailResponse getByCode(String code);
+
     List<ProductDetailResponse> getAllByProductId(Long productId);
 
     List<ProductDetailResponse> getAllByColorId(Long colorId);

@@ -1,8 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { Modal } from "antd";
-import _ from "lodash";
 import {
-    postCreateProperty,
     putUpdateProperty,
 } from "../../../../../services/apiService";
 import Swal from "sweetalert2";

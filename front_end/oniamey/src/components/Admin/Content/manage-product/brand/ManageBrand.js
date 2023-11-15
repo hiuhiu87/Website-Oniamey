@@ -12,6 +12,9 @@ import DataTable from "react-data-table-component";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import QrReader from "react-qr-scanner";
+import {Modal} from "antd";
+import FormatString from "../../../../../utils/FormatString";
 
 const ManageBrand = (props) => {
     const [showModalCreateBrand, setShowModalCreateBrand] = useState(false);
@@ -22,6 +25,40 @@ const ManageBrand = (props) => {
     const [listBrand, setListBrand] = useState([]);
     const [brandId, setBrandId] = useState("");
 
+    const [record, setRecord] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const delay = 100;
+
+    const handleCancelScan = () => {
+        stopStreamedVideo(document.querySelector("video"));
+        setOpen(false);
+    };
+
+    const handleScan = (data) => {
+        if(data) {
+            console.log(data.text)
+            stopStreamedVideo(document.querySelector("video"));
+            setOpen(false);
+        }
+
+    };
+
+    const stopStreamedVideo = (videoElem) => {
+        const stream = videoElem.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => {
+            track.stop();
+        });
+
+        videoElem.srcObject = null;
+    };
+
+    const handleError = (err) => {
+        console.error(err);
+    };
+
     useEffect(() => {
         fetchListBrand();
     }, []);
@@ -29,7 +66,23 @@ const ManageBrand = (props) => {
     const fetchListBrand = async () => {
         let res = await getAllProperties("brand");
         setListBrand(res.data);
+        setRecord(res.data);
     };
+
+    const handleFilterName = (e) => {
+        const value = e.target.value;
+        const filter = listBrand.filter((brand) => brand.name.toLowerCase().includes(value.toLowerCase()));
+        setRecord(filter);
+    }
+
+    const handleFilterStatus = (e) => {
+        const value = e.target.value;
+        const filter = listBrand.filter((brand) => brand.deleted.toString() === value.toString());
+        setRecord(filter);
+        if(value === 'all') {
+            setRecord(listBrand)
+        }
+    }
 
     const handleShowModalUpdateBrand = (brand) => {
         setShowModalUpdateBrand(true);
@@ -135,13 +188,13 @@ const ManageBrand = (props) => {
                     <Row className="mb-3 justify-content-md-center">
                         <Col lg="4">
                             <FloatingLabel controlId="floatingInput" label="Tìm kiếm">
-                                <Form.Control type="text" placeholder="name@example.com" />
+                                <Form.Control type="text" placeholder="name@example.com" onChange={(e) => handleFilterName(e)}/>
                             </FloatingLabel>
                         </Col>
                         <Col lg="2">
                             <FloatingLabel controlId="floatingSelect" label="Trạng thái">
-                                <Form.Select>
-                                    <option>Tất cả</option>
+                                <Form.Select onChange={(e) => handleFilterStatus(e)}>
+                                    <option value={"all"}>Tất cả</option>
                                     <option value={false}>Hoạt động</option>
                                     <option value={true}>Ngừng hoạt động</option>
                                 </Form.Select>
@@ -162,11 +215,18 @@ const ManageBrand = (props) => {
                     >
                         <MdLibraryAdd /> Thêm
                     </Button>
+                    <Button
+                        type="button"
+                        variant="dark"
+                        onClick={() => setOpen(true)}
+                    >
+                        <MdLibraryAdd /> Scan QR
+                    </Button>
                 </div>
                 <DataTable
                     rounded-3
                     columns={columnsBrand}
-                    data={listBrand}
+                    data={record}
                     pagination
                     paginationComponentOptions={paginationComponentOptions}
                     highlightOnHover
@@ -189,6 +249,18 @@ const ManageBrand = (props) => {
                 dataUpdate={dataUpdate}
                 resetDataUpdate={resetDataUpdate}
             />
+            <Modal
+                title="Quét Mã QR"
+                open={open}
+                onCancel={handleCancelScan}
+                onOk={handleCancelScan}
+            >
+                <div className="qrcode-container">
+                    {open ? (
+                        <QrReader delay={delay} onError={handleError} onScan={handleScan} />
+                    ) : null}
+                </div>
+            </Modal>
         </div>
     );
 };
