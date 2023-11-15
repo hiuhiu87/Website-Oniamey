@@ -9,7 +9,7 @@ import {
     deleteProperty,
     getAllProperties,
 } from "../../../../../services/apiService";
-import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Swal from "sweetalert2";
