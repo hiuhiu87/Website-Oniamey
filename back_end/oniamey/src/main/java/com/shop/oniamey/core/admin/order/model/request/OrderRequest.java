@@ -41,7 +41,6 @@ public class OrderRequest {
     @NotNull(message = "total money is required")
     private Double totalMoney;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date shipDate;
 
     @NotNull(message = "address is required")
