@@ -8,14 +8,15 @@ import DataTable from "react-data-table-component";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import {Modal} from "antd";
+import { Modal } from "antd";
+import { template } from "lodash";
 
 const ListProductDetail = (props) => {
 
-  const {show, setShow } = props;
+  const { show, setShow } = props;
 
   const [listProductDetail, setListProductDetail] = useState([]);
-
+  const [listProductTemp, setListProductTemp] = useState([]);
   useEffect(() => {
     fetchListProductDetail();
   }, []);
@@ -24,11 +25,13 @@ const ListProductDetail = (props) => {
     let res = await getAllProductDetails();
     setListProductDetail(res.data);
   }
-
+  const handleOk = () => {
+    props.setListProduct(listProductTemp);
+    setShow(false);
+  }
   const handleClose = () => {
     setShow(false);
   }
-
   const columnsProductDetail = [
     {
       name: "STT",
@@ -40,15 +43,15 @@ const ListProductDetail = (props) => {
     {
       name: "Ảnh",
       cell: (row) => (
-          <div
-              className="text-center image-product-detail"
-              style={{ verticalAlign: "middle", width: "100px" }}
-          >
-            <img
-                style={{ width: "100%", padding: "5px" }}
-                src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
-            />
-          </div>
+        <div
+          className="text-center image-product-detail"
+          style={{ verticalAlign: "middle", width: "100px" }}
+        >
+          <img
+            style={{ width: "100%", padding: "5px" }}
+            src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
+          />
+        </div>
       ),
       center: "true",
     },
@@ -80,7 +83,7 @@ const ListProductDetail = (props) => {
     {
       name: "Trạng thái",
       selector: (row) =>
-          row.deleted === false ? "Hoạt động" : "Ngừng hoạt động",
+        row.deleted === false ? "Hoạt động" : "Ngừng hoạt động",
       center: "true",
     }
   ];
@@ -90,28 +93,32 @@ const ListProductDetail = (props) => {
     rangeSeparatorText: "Trên",
     selectAllRowsItem: true,
     selectAllRowsItemText: "Tất Cả",
-  };
+  }; const [selectedRows, setSelectedRows] = useState([]);
 
   return <>
     <Modal
-        title="Danh sách sản phẩm"
-        open={show}
-        onCancel={handleClose}
-        width={1200}
+      title="Danh sách sản phẩm"
+      open={show}
+      onCancel={handleClose}
+      width={1200}
+      onOk={handleOk}
     >
       <DataTable
-          rounded-3
-          columns={columnsProductDetail}
-          data={listProductDetail}
-          pagination
-          selectableRows={true}
-          paginationComponentOptions={paginationComponentOptions}
-          highlightOnHover
-          pointerOnHover
-          paginationRowsPerPageOptions={[5, 10, 15]}
-          paginationPerPage={5}
-          paginationDefaultPage={1}
-          // onRowClicked={(row) => handleClickTable(row)}
+        rounded-3
+        columns={columnsProductDetail}
+        data={listProductDetail}
+        pagination
+        selectableRows={true}
+        paginationComponentOptions={paginationComponentOptions}
+        highlightOnHover
+        pointerOnHover
+        paginationRowsPerPageOptions={[5, 10, 15]}
+        paginationPerPage={5}
+        paginationDefaultPage={1}
+        onSelectedRowsChange={({ selectedRows }) => {
+          setListProductTemp(selectedRows);
+        }}
+      // onRowClicked={(row) => handleClickTable(row)}
       />
     </Modal>
   </>;

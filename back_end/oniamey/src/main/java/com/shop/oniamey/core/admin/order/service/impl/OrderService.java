@@ -64,19 +64,16 @@ public class OrderService implements IOrderService {
         Orders orders = new Orders();
         String randomCode = QRCodeProduct.generateRandomCode();
         orders.setDeleted(false);
-        if (UserRepository.findById(orderRequest.getUserId()).isEmpty()) {
-            return "user not found";
+        if (UserRepository.findById(orderRequest.getUserId()).isPresent()) {
+            orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
         }
-        if (customerRepository.findById(orderRequest.getCustomerId()).isEmpty()) {
-            return "customer not found";
+        if (customerRepository.findById(orderRequest.getCustomerId()).isPresent()) {
+            orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
         }
-        if (voucherRepository.findById(orderRequest.getVoucherId()).isEmpty()) {
-            return "voucher not found";
+        if (voucherRepository.findById(orderRequest.getVoucherId()).isPresent()) {
+            orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());
         }
         orders.setCode(randomCode);
-        orders.setUser(UserRepository.findById(orderRequest.getUserId()).get());
-        orders.setCustomer(customerRepository.findById(orderRequest.getCustomerId()).get());
-        orders.setVoucher(voucherRepository.findById(orderRequest.getVoucherId()).get());
         orders.setPhoneNumber(orderRequest.getPhoneNumber());
         orders.setAddress(orderRequest.getAddress());
         orders.setUserName(orderRequest.getUserName());
