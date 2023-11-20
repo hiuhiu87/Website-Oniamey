@@ -89,7 +89,6 @@ public class CustomerServiceImpl implements CustomerService {
      */
     private void getDataRequest(ModifyCustomerRequest modifyUserRequest, Customer customer) {
         customer.setUsername(modifyUserRequest.getUsername());
-        customer.setIdentityCard(modifyUserRequest.getIdentityCard());
         customer.setFullName(modifyUserRequest.getFullName());
         customer.setEmail(modifyUserRequest.getEmail());
         customer.setPhoneNumber(modifyUserRequest.getPhoneNumber());
@@ -146,7 +145,6 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         String randomInfor = RandomStringUtils.randomAlphanumeric(10);
         customer.setUsername(randomInfor);
-        customer.setIdentityCard(randomInfor);
         customer.setFullName("Khách Lẻ " + randomInfor);
         customer.setEmail(randomInfor);
         customer.setPhoneNumber(randomInfor);

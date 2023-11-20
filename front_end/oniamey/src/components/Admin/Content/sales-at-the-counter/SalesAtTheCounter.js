@@ -19,8 +19,8 @@ import { BiPlus, BiSearch } from "react-icons/bi";
 import customerService from "../../../../services/CustomerService";
 import { BsPerson } from "react-icons/bs";
 import { useRef } from "react";
-import * as OrderApi from '../../../../services/OderApi';
-import * as OrderDetailApi from '../../../../services/OrderDetailApi';
+import * as OrderApi from "../../../../services/OderApi";
+import * as OrderDetailApi from "../../../../services/OrderDetailApi";
 import DataTable from "react-data-table-component";
 import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,11 +36,12 @@ import { MdDeleteSweep } from "react-icons/md";
 import { getProductDetailsByCode } from "../../../../../src/services/apiService";
 import { getAllProductDetails } from "../../../../../src/services/apiService";
 import ListProductDetail from "./ListProductDetail";
+
 const SalesAtTheCounter = (props) => {
   const [activeTab, setActiveTab] = useState(1);
   const [allCustomer, setAllCustomer] = useState([]);
   const [customerId, setCustomerId] = useState();
-  const [detailInforCustomer, setDetailInforCustomer] = useState({});
+  const [detailInforCustomer, setDetailInforCustomer] = useState(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // State để lưu phương thức thanh toán
   const [selectedInvoiceStatus, setSelectedInvoiceStatus] = useState(""); // State để lưu trạng thái hóa đơn
 
@@ -51,8 +52,6 @@ const SalesAtTheCounter = (props) => {
   const [show, setShow] = useState(false);
 
   const delay = 100;
-
-
 
   const columnsSanPham = [
     {
@@ -87,7 +86,7 @@ const SalesAtTheCounter = (props) => {
           <Button
             variant="dark"
             className="ms-2"
-          // onClick={() => handleDetailPromotion(row.promotionID)}
+            // onClick={() => handleDetailPromotion(row.promotionID)}
           >
             <FontAwesomeIcon icon={faEye} color="white" />
           </Button>
@@ -128,36 +127,27 @@ const SalesAtTheCounter = (props) => {
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalMoneyProduct, setTotalMoneyProduct] = useState(0);
   const [shipDate, setShipDate] = useState("-");
-  const [type, setType] = useState('OFFLINE');
+  const [type, setType] = useState("OFFLINE");
   const [moneyReduced, setMoneyReduced] = useState(0);
   const [note, setNote] = useState("");
   const [moneyShip, setMoneyShip] = useState(0);
-  const status = 'PENDING';
+  const status = "PENDING";
   const [voucherId, setVoucherId] = useState(0);
 
   const onChangeType = (checked) => {
     setType(checked);
   };
 
-
   const [listProduct, setListProduct] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-
-  // Gọi API để lấy danh sách tỉnh/thành phố
-  useEffect(() => {
-    axios.get("https://provinces.open-api.vn/api/p/").then((response) => {
-      setProvinces(response.data);
-    });
-  }, []);
 
   useEffect(() => {
     customerService
       .getAllCustomerSearch()
       .then((res) => {
         setAllCustomer(res.data);
-        // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -175,20 +165,6 @@ const SalesAtTheCounter = (props) => {
         console.log(err);
       });
   }, [customerId]);
-
-  // // Gọi API để lấy danh sách quận/huyện dựa trên tỉnh/thành phố đã chọn
-  // const fetchDistricts = (provinceId) => {
-  //     axios.get(`https://provinces.open-api.vn/api/p/${provinceId}/d/`).then((response) => {
-  //         setDistricts(response.data);
-  //     });
-  // };
-  //
-  // // Gọi API để lấy danh sách phường/xã dựa trên quận/huyện đã chọn
-  // const fetchWards = (districtId) => {
-  //     axios.get(`https://provinces.open-api.vn/api/d/${districtId}/w/`).then((response) => {
-  //         setWards(response.data);
-  //     });
-  // };
 
   const addTab = () => {
     if (tabs.length < 5) {
@@ -257,8 +233,6 @@ const SalesAtTheCounter = (props) => {
       });
   };
 
-
-
   const handleDataOrderDetail = (idOrder) => {
     const newListProduct = listProduct.map((item, index) => {
       return {
@@ -266,27 +240,27 @@ const SalesAtTheCounter = (props) => {
         quantity: item.quantity,
         price: item.sellPrice,
         idProductDetail: item.id,
-        totalMoney: item.sellPrice * item.quantity
-      }
+        totalMoney: item.sellPrice * item.quantity,
+      };
     });
     return newListProduct;
-  }
+  };
   useEffect(() => {
     let tongTien = 0;
     listProduct.map((item) => {
       tongTien += item.sellPrice * item.quantity;
-    })
+    });
     setTotalMoneyProduct(tongTien);
-  }, [listProduct])
+  }, [listProduct]);
   useEffect(() => {
     setTotalMoney(totalMoneyProduct - moneyReduced + moneyShip);
-  }, [totalMoneyProduct])
+  }, [totalMoneyProduct]);
   useEffect(() => {
     setTotalMoney(totalMoneyProduct - moneyReduced + moneyShip);
-  }, [moneyReduced])
+  }, [moneyReduced]);
   useEffect(() => {
     setTotalMoney(totalMoneyProduct - moneyReduced + moneyShip);
-  }, [moneyShip])
+  }, [moneyShip]);
   const handleTaoHoaDon = async () => {
     const handleSubmitCreateOrder = () => {
       Swal.fire({
@@ -299,7 +273,6 @@ const SalesAtTheCounter = (props) => {
         confirmButtonText: "Đồng ý",
         cancelButtonText: "Hủy",
       }).then(async (result) => {
-
         if (result.isConfirmed) {
           //tạo hóa đơn, lấy ra id hóa đơn
           const idOrder = await OrderApi.createOrder({
@@ -315,7 +288,7 @@ const SalesAtTheCounter = (props) => {
             note,
             moneyShip,
             status,
-            voucherId
+            voucherId,
           });
           console.log({
             userId,
@@ -330,11 +303,13 @@ const SalesAtTheCounter = (props) => {
             note,
             moneyShip,
             status,
-            voucherId
-          })
+            voucherId,
+          });
           //tạo hóa đơn detail
-          console.log(handleDataOrderDetail(idOrder))
-          const result = await OrderDetailApi.createOrderDetail(handleDataOrderDetail(idOrder));
+          console.log(handleDataOrderDetail(idOrder));
+          const result = await OrderDetailApi.createOrderDetail(
+            handleDataOrderDetail(idOrder),
+          );
           if (result.length === 0) {
             toast.success("Tạo hóa đơn thành công");
           } else {
@@ -344,7 +319,7 @@ const SalesAtTheCounter = (props) => {
       });
     };
     handleSubmitCreateOrder();
-  }
+  };
   const columnsProductDetail = [
     {
       name: "STT",
@@ -363,6 +338,7 @@ const SalesAtTheCounter = (props) => {
           <img
             style={{ width: "100%", padding: "5px" }}
             src={`https://upload-product-image-file.s3.us-west-2.amazonaws.com/${row.cover}`}
+            alt={"Ảnh sản phẩm"}
           />
         </div>
       ),
@@ -382,15 +358,18 @@ const SalesAtTheCounter = (props) => {
       name: "Giá",
       selector: (row) => row.sellPrice,
       center: "true",
-    }, {
+    },
+    {
       name: "Kích cỡ",
       selector: (row) => row.size,
       center: "true",
-    }, {
+    },
+    {
       name: "Màu ",
       selector: (row) => row.color,
       center: "true",
-    }, {
+    },
+    {
       name: "Thành tiền",
       selector: (row) => row.sellPrice * row.quantity,
       center: "true",
@@ -399,7 +378,7 @@ const SalesAtTheCounter = (props) => {
   //cường
   const handleShowListProductDetail = () => {
     setShow(true);
-  }
+  };
 
   const handleCancelScan = () => {
     stopStreamedVideo(document.querySelector("video"));
@@ -486,7 +465,12 @@ const SalesAtTheCounter = (props) => {
                     >
                       QR Code Sản Phẩm
                     </Button>
-                    <Button variant="outline-dark" onClick={() => setShow(true)}>Thêm Sản Phẩm</Button>
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => setShow(true)}
+                    >
+                      Thêm Sản Phẩm
+                    </Button>
                   </div>
                 </div>
                 <div className={"pt-5 pb-lg-5"}>
@@ -501,7 +485,7 @@ const SalesAtTheCounter = (props) => {
                     paginationRowsPerPageOptions={[5, 10, 15]}
                     paginationPerPage={5}
                     paginationDefaultPage={1}
-                  // onRowClicked={(row) => handleClickTable(row)}
+                    // onRowClicked={(row) => handleClickTable(row)}
                   />
                 </div>
                 <hr />
@@ -510,7 +494,8 @@ const SalesAtTheCounter = (props) => {
                     "d-flex justify-content-end gap-2 align-content-center pe-5"
                   }
                 >
-                  Tổng tiền :<h5 style={{ color: "red" }}>{totalMoneyProduct} VNĐ</h5>
+                  Tổng tiền :
+                  <h5 style={{ color: "red" }}>{totalMoneyProduct} VNĐ</h5>
                 </div>
               </div>
               <div className={"tai-khoan pt-5"}>
@@ -519,7 +504,11 @@ const SalesAtTheCounter = (props) => {
                     <h3>Tài khoản</h3>
                   </div>
                   <div className={"d-flex align-items-center"}>
-                    <Button className={"me-4"} onClick={handleChoseKhachLe}>
+                    <Button
+                      className={"me-4"}
+                      onClick={handleChoseKhachLe}
+                      variant={"warning"}
+                    >
                       <BsPerson size={15} />
                       Khách Lẻ
                     </Button>
@@ -550,41 +539,34 @@ const SalesAtTheCounter = (props) => {
                       onChange={(value) => {
                         setCustomerId(value);
                       }}
+                      allowClear={true}
                     />
-                    <Button variant="outline-dark">
-                      <BiPlus size={15} />
+                    <Button variant="warning">
+                      <BiPlus size={16} />
                       Thêm Nhanh Khách Hàng
                     </Button>
                   </div>
                 </div>
                 <hr />
-                {/*// toán tử 3 ngôi*/}
-                {true ? (
-                  <div className={"d-flex align-items-center ps-5"}>
-                    <div> </div>
-                    <div
-                      className={
-                        "pt-1 pb-1 pe-2 ps-2 ms-3 text-bg-secondary rounded-3"
-                      }
-                    >
-                      {detailInforCustomer && `Tên khách hàng: ${detailInforCustomer.fullName} - ${detailInforCustomer.phoneNumber}`}
+                <div className={"d-flex align-items-center ms-4"}>
+                  <div>
+                    <h5>Thông tin khách hàng</h5>
+                    <div className={"pb-4 pt-4"}>
+                      <h6>Tên khách hàng:{" "}</h6>
+                      {detailInforCustomer?.fullName ?? "Khách lẻ"}
+                    </div>
+                    <div>
+                      <h6>Số Điện Thoại:{" "}</h6>
+                      {detailInforCustomer?.phoneNumber ?? "Khách lẻ"}
                     </div>
                   </div>
-                ) : (
-                  <div></div>
-                )}
+                </div>
               </div>
               <div className={"khach-hang pt-5"}>
                 <div className={"d-flex justify-content-between pt-5 p-4 pb-0"}>
                   <div>
                     <h3>Khách hàng</h3>
                   </div>
-                  {/*// toán tử 3 ngôi*/}
-                  {/*<div>*/}
-                  {/*    <Button variant="outline-dark">*/}
-                  {/*        Chọn địa chỉ*/}
-                  {/*    </Button>*/}
-                  {/*</div>*/}
                 </div>
                 <hr />
                 <Row className={" pb-5 mb-5"}>
@@ -620,7 +602,7 @@ const SalesAtTheCounter = (props) => {
                         // name="" điền tên Form đê
                         type="text"
                         placeholder="Tìm theo tên - mã - giá trị" // điền placehoder đê
-                      // onChange={(e) => onChangeFilters(e)} // chon onchange đê
+                        // onChange={(e) => onChangeFilters(e)} // chon onchange đê
                       />
                       <Button variant={"outline-dark"} className={"w-25"}>
                         Chọn mã
@@ -661,7 +643,12 @@ const SalesAtTheCounter = (props) => {
                       </div>
                     </div>
                     <div className={"d-flex justify-content-end pt-5 pe-3"}>
-                      <Button variant={"outline-dark"} onClick={handleTaoHoaDon}>Tạo hóa đơn</Button>
+                      <Button
+                        variant={"outline-dark"}
+                        onClick={handleTaoHoaDon}
+                      >
+                        Tạo hóa đơn
+                      </Button>
                     </div>
                   </Col>
                 </Row>

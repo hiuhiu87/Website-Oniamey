@@ -46,7 +46,6 @@ const DetailCustomer = () => {
   const [customer, setCustomer] = useState({
     username: "",
     fullName: "",
-    identityCard: "",
     phoneNumber: "",
     birthDate: "",
     gender: 1,
@@ -97,14 +96,6 @@ const DetailCustomer = () => {
       messageValidate.fullName = "Họ và Tên phải có ít nhất 6 ký tự";
     } else if (customer.fullName.length > 32) {
       messageValidate.fullName = "Họ và Tên phải có ít hơn 32 ký tự";
-    }
-
-    if (validator.isEmpty(customer.identityCard + "")) {
-      messageValidate.identityCard = "Mã Định Danh không được để trống";
-    } else if (customer.identityCard.length < 9) {
-      messageValidate.identityCard = "Mã Định Danh phải có ít nhất 9 ký tự";
-    } else if (customer.identityCard.length > 12) {
-      messageValidate.identityCard = "Mã Định Danh phải có ít hơn 12 ký tự";
     }
 
     if (validator.isEmpty(customer.phoneNumber + "")) {
@@ -209,7 +200,6 @@ const DetailCustomer = () => {
       let gender = parts[3];
       setCustomer({
         ...customer,
-        identityCard: identityCard,
         fullName: fullName,
         birthDate: birthDate,
         gender: gender === "Nam" ? 1 : 2,
@@ -444,7 +434,6 @@ const DetailCustomer = () => {
           setCustomer({
             username: response.data.username,
             fullName: response.data.fullName,
-            identityCard: response.data.identityCard,
             phoneNumber: response.data.phoneNumber,
             birthDate: formatDate(response.data.birthDate),
             gender: response.data.gender,
@@ -596,24 +585,6 @@ const DetailCustomer = () => {
                 />
                 <Form.Control.Feedback type="invalid">
                   {messageValidate.fullName}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="indentifyCardInput" className="mb-4">
-                <Form.Label>Mã Định Danh</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="0123*********"
-                  name="identityCard"
-                  value={customer.identityCard}
-                  onChange={handleInputChange}
-                  isValid={
-                    !messageValidate.identityCard &&
-                    customer.identityCard !== ""
-                  }
-                  isInvalid={messageValidate.identityCard}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {messageValidate.identityCard}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="phoneNumberInput" className="mb-4">

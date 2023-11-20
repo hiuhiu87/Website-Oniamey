@@ -6,8 +6,6 @@ public interface CustomerDetailResponse {
 
     String getUsername();
 
-    String getIdentityCard();
-
     String getFullName();
 
     String getEmail();

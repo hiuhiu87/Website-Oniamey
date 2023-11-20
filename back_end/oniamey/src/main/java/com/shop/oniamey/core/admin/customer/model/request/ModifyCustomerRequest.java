@@ -23,8 +23,6 @@ public class ModifyCustomerRequest {
 
     private String username;
 
-    private String identityCard;
-
     @NotEmpty(message = "Full name is required")
     private String fullName;
 

@@ -24,23 +24,25 @@ public class OrderDetailService implements IOrderDetailService {
     private PaymentMethodService paymentMethodService;
     @Autowired
     private ProductDetailRepository productDetailRepository;
+
     @Override
     public List<OrderDetailResponse> getOderDetailByOrderId(Long id) {
         paymentMethodService.generate2Method();
-        if(orderRepository.findById(id).isPresent()){
+        if (orderRepository.findById(id).isPresent()) {
             return orderDetailRepository.getOrderDetailByOrderId(id);
         }
         return null;
     }
+
     @Transactional
     @Override
-    public String createOrderDetail(List<OrderDetailRequest> listOrderDetail){
-        for (OrderDetailRequest  orderDetailRequest:
+    public String createOrderDetail(List<OrderDetailRequest> listOrderDetail) {
+        for (OrderDetailRequest orderDetailRequest :
                 listOrderDetail) {
-            if(orderRepository.findById(orderDetailRequest.getIdOrder()).isEmpty()){
+            if (orderRepository.findById(orderDetailRequest.getIdOrder()).isEmpty()) {
                 return "id order không tồn tại";
             }
-            if(productDetailRepository.findById(orderDetailRequest.getIdProductDetail()).isEmpty()){
+            if (productDetailRepository.findById(orderDetailRequest.getIdProductDetail()).isEmpty()) {
                 return "id product detail không tồn tại";
             }
             OrderDetail orderDetail = new OrderDetail();
@@ -49,10 +51,10 @@ public class OrderDetailService implements IOrderDetailService {
             orderDetail.setPrice(orderDetailRequest.getPrice());
             orderDetail.setQuantity(orderDetailRequest.getQuantity());
             orderDetail.setTotalMoney(orderDetailRequest.getTotalMoney());
-            ProductDetail productDetail=productDetailRepository.findById(orderDetailRequest.getIdProductDetail()).get();
-            if (productDetail.getQuantity()-orderDetailRequest.getQuantity()>=0){
-                productDetail.setQuantity(productDetail.getQuantity()-orderDetailRequest.getQuantity());
-            }else {
+            ProductDetail productDetail = productDetailRepository.findById(orderDetailRequest.getIdProductDetail()).get();
+            if (productDetail.getQuantity() - orderDetailRequest.getQuantity() >= 0) {
+                productDetail.setQuantity(productDetail.getQuantity() - orderDetailRequest.getQuantity());
+            } else {
                 return "số lượng trong kho không đủ";
             }
             orderDetailRepository.save(orderDetail);
